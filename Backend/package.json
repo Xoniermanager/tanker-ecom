@@ -1,0 +1,44 @@
+{
+  "name": "tanker-ecom-backend",
+  "version": "1.0.0",
+  "description": "backend for tanker solutions e-commerce platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "queue:dev": "nodemon queues/worker.js",
+    "queue:prod": "pm2 start queues/worker.js --name queue-worker",
+    "queue:stop": "pm2 stop queue-worker",
+    "queue:restart": "pm2 restart queue-worker",
+    "queue:logs": "pm2 logs queue-worker",
+    "test": "jest"
+  },
+  "author": "Siddharth Pandey",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.56.4",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.6.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^7.0.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2"
+  }
+}
