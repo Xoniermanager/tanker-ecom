@@ -29,8 +29,8 @@ const Counter = () => {
       <div className="max-w-7xl mx-auto flex gap-12 items-start w-full">
         <CounterItem end={99}  suffix="%+" label="Delivery on time" />
         <CounterItem end={500} suffix="+" label="Custom Tankers Delivered" />
-        <CounterItem end={100} suffix="+" label="Years of Combined Industry Experience" />
-        <CounterItem end={2} suffix="+ " label="Fully Equipped Facilities" />
+        <CounterItem end={200} suffix="+" label="Years of Combined Industry Experience" />
+        <CounterItem end={3} suffix="+ " label="Fully Equipped Facilities" />
       </div>
     </div>
   );

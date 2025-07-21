@@ -63,13 +63,39 @@ const OurProducts = () => {
       <div className="flex flex-col gap-4 items-center mb-20">
         <div className="flex items-center gap-2">
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-          <span className="text-orange-400 font-bold">WHAT WE OFFER</span>
+          <span className="text-orange-400 font-semibold text-[22px]">WHAT WE OFFER</span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
         <h2 className="font-black text-7xl text-purple-950">Our Products</h2>
         <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
           Tanker Solutions is the New Zealand distributor for some of the very best global petroleum equipment suppliers for tankers and tank trailers.
         </p>
+      </div>
+      <div className="grid grid-cols-4 gap-5 border-1 border-gray-200 rounded-lg max-w-7xl mx-auto w-full p-3">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-sm font-semibold text-gray-700">Brand</label>
+          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
+          <option value="">All Brands</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-sm font-semibold text-gray-700">Categories</label>
+          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
+          <option value="">All Categories</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-sm font-semibold text-gray-700">Sub-Categories</label>
+          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
+          <option value="">All Sub-Categories</option>
+          </select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="" className="text-sm font-semibold text-gray-700">Made In</label>
+          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
+          <option value="">All Origins</option>
+          </select>
+        </div>
       </div>
 
      

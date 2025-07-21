@@ -3,7 +3,8 @@ import PageBanner from '../../../../components/user/common/PageBanner'
 import OurProducts from '../../../../components/user/Products/OurProducts'
 import WorkProcess from '../../../../components/user/about/WorkProcess'
 import WhoWeAre from '../../../../components/user/home/WhoWeAre'
-import Counter from '../../../../components/user/home/Counter'
+import Counter from '../../../../components/user/Products/Counter'
+
 
 const page = () => {
   return (
@@ -11,7 +12,7 @@ const page = () => {
       <PageBanner heading={"our products"}/>
       <OurProducts/>
       <WorkProcess/>
-      <WhoWeAre/>
+      {/* <WhoWeAre/> */}
       <Counter/>
     </>
   )

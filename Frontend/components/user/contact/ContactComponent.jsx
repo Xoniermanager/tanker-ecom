@@ -7,9 +7,11 @@ import { RiCustomerService2Fill } from "react-icons/ri";
 import { FaUser, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import api from "../common/api";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactComponent = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [captchaToken, setCaptchaToken] = useState(null)
     const [errMessage, setErrMessage] = useState(null)
     const [formData, setFormData] = useState({
         firstName:"",
@@ -24,10 +26,15 @@ const ContactComponent = () => {
         setFormData({...formData, [name]: value})
     }
 
+    const handleCaptcha = (token)=>{
+      setCaptchaToken(token)
+    }
+
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
         try {
+          if(!captchaToken) return setErrMessage('Please verify that you are not a robot')
             const response = await api.post('');
             if(response.status === 200){
                 setFormData({
@@ -129,6 +136,7 @@ const ContactComponent = () => {
                     <label htmlFor="message" className="flex items-center gap-1.5 text-purple-950 font-medium"><BiSolidMessageRounded /> Message</label>
                     <textarea type="text" name="message" className="border-stone-200 border-1 rounded-lg outline-none px-6 py-3.5" value={formData.message} placeholder="Write Message..." onChange={handleChange} rows={5}/>
                 </div>
+                <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={handleCaptcha}/>
                 <div className="flex justify-end">
                    <p className="text-red-500 ">{errMessage}</p>
                 </div>

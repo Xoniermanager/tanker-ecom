@@ -15,7 +15,7 @@
 
 
 body {
-  background: var(--background);
+  
   color: var(--foreground);
   font-family: "Instrument Sans", sans-serif;
   transition: all;
@@ -28,7 +28,7 @@ body {
 }
 
 .btn-one {
-    font-size: 16px;
+    
     color: #fff;
     text-transform: capitalize;
     font-weight: 600;
@@ -255,9 +255,9 @@ line-height: 30px;
     height: 100%;
     top: 0;
     left: -6%;
-    background: url(../../public/images/strip-img.jpg) no-repeat right center;
-    background-size: cover;
-    transform: skew(30deg);
+    background: url(../../public/images/img_17.jpg) no-repeat right center;
+    /* background-size: cover; */
+    /* transform: skew(30deg); */
     z-index: 1; 
 }
 
@@ -357,6 +357,21 @@ content: "";
     transform: translateX(-50%);
 }
 
+
+.people-card::after{
+  content: "";
+    position: absolute;
+    width: 285px;
+    height: 285px;
+    border: 1px solid #e3d6c5;
+    border-top: 0;
+    border-radius: 50%;
+    z-index: -1;
+    bottom: -176px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .line::before, .line::after{
   content: "";
     position: absolute;
@@ -394,11 +409,17 @@ content: "";
     height: 3px;
     top: calc(50% - 1px);
     left: 0;
+
 }
 
 .slick-dots::after{
   right: 0;
     left: auto;
+}
+
+
+.wavy{
+  animation: wavy 3s linear infinite;
 }
 
 @keyframes updown {
@@ -438,4 +459,23 @@ content: "";
     transform: translateX(0);
   }
 }
+
+
+@keyframes wavy {
+  0%{
+    transform: translateY(0);
+
+  }
+  50%{
+    transform: translateY(-7px);
+  }
+
+ 
+  
+  100%{
+    transform: translateY(0) ;
+  }
+}
+
+
 

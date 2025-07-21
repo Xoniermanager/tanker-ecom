@@ -16,7 +16,7 @@ const AboutCompany = () => {
                 <div className="h-20 w-20 absolute -top-9 -right-4 rounded-full bg-orange-400 text-white text-4xl font-bold flex items-center justify-center"> 18 </div>
             </div>
             <div className="w-[55%] flex flex-col gap-4">
-               <div className='flex items-center gap-2'><h4 className='text-orange-400 font-black text-lg uppercase'>About Company </h4> <Image src={'/images/arrows.png'} height={11} width={43} alt='arrrow'/></div>
+               <div className='flex items-center gap-2'><h4 className='text-orange-400 font-black font-semibold text-[22px] uppercase'>About Company </h4> <Image src={'/images/arrows.png'} height={11} width={43} alt='arrrow'/></div>
                <h2 className='font-black text-7xl text-purple-950'> About Us</h2>
                <p className='text-zinc-500   text-lg font-medium'> Tanker Solutions Ltd is New Zealand's leading supplier of tankers and tank trailers to the New Zealand petroleum industry. We can supply anything from a dustcap to a complete turnkey new built tanker and trailer ready to take to the road, fully certified to deliver fuel.</p>
 

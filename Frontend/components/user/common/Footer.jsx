@@ -47,13 +47,13 @@ const Footer = () => {
             </div>
             <div className='flex flex-col gap-6 w-[20%]'>
              <h4 className='text-[22px] font-semibold capitalize text-white tracking-wide'>Services</h4>
-            <ul className='flex flex-col gap-4'>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Automobile</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Machineries</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Export Import</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Cargo Freight</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Frozen Food</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400'>Transporters</Link></li>
+            <ul className='flex flex-col gap-2'>
+                <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Specialist Fuel System Design</Link></li>
+                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Specialist Welding and Vehicle Fabrication</Link></li>
+                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Final assembly and certification</Link></li>
+                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Laser Cutting Services</Link></li>
+                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Testing, Inspection and Compliance</Link></li>
+            
             </ul>
             </div>
 
@@ -65,7 +65,7 @@ const Footer = () => {
                 <button type="submit" className='bg-orange-400 p-3 group'> <FaPaperPlane className='text-lg group-hover:rotate-25'/></button>
                
             </form>
-            <Link href={''} className="flex items-center gap-4 bg-[#222627] text-white font-semibold hover:underline group "><span className='bg-orange-400 h-10 w-10 flex items-center text-lg justify-center '><FaRegEnvelope className='group-hover:scale-110'/></span> scott@tankersolutions.co.nz  </Link>
+            <Link href={'mailto:sales@tankersolutions.co.nz'} className="flex items-center gap-4 bg-[#222627] text-white font-semibold hover:underline group rounded-lg overflow-hidden hover:text-orange-100"><span className='bg-orange-400 h-11 w-11 flex items-center text-lg justify-center '><FaRegEnvelope className='group-hover:scale-110'/></span> sales@tankersolutions.co.nz  </Link>
             </div>
            
             

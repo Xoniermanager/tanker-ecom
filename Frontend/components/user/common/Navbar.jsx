@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <>
       
-      <div className='w-full bg-white shadow-[5px_0_20px_#00000025]'>
+      <div className='w-full bg-white shadow-[5px_0_20px_#00000025] '>
         <div className=" bg-purple-950 py-2.5" >
             <div className='max-w-7xl mx-auto flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
@@ -30,20 +30,22 @@ const Navbar = () => {
                      height={20}
                      alt='box'
                      /> 
-                     <span className='text-white'>Tanker Solutions, Tank Wagons and Tank Trailers</span>
+                     <span className='text-white'>Tanker Solutions NZ-made and international offerings</span>
                 </div>
-                <Link href={'tel:+6440274281896'} className='flex items-center gap-4 group'>
+                <Link href={'tel:+64274281896'} className='flex items-center gap-4 group'>
                 <span className='h-11 w-11 bg-black rounded-full text-white flex items-center justify-center text-2xl '> <FiPhoneCall /> </span>
                 <div className='flex flex-col gap-0'>
                     <h4 className='uppercase font-semibold text-white'>support</h4>
-                    <p className='group-hover:text-orange-400 text-white'>+64 4 027 428 1896</p>
+                    <p className='group-hover:text-orange-400 text-white'>+64 27428 1896</p>
                 </div>
 
              </Link>
                
             </div>
         </div>
-        <div className='max-w-7xl mx-auto py-3 flex items-center sticky top-0 left-0 z-100'>
+      <div className='max-w-7xl mx-auto py-3 flex items-center sticky top-0 left-0 z-[500] bg-white mid-nav'>
+
+
           <div className="w-[20%]">
             <Link href={'/'}>
             <Image
@@ -80,7 +82,7 @@ const Navbar = () => {
               <li><Link href={'/gallery'} className={`${pathname === "/gallery" && "text-orange-400"} text-neutral-900  text-lg hover:text-orange-400`}>
                  Gallery
                  </Link></li>
-              <li><Link href={'/contact'} className={`${pathname === "/gallery" && "text-orange-400"} text-neutral-900 text-lg hover:text-orange-400`}>
+              <li><Link href={'/contact'} className={`${pathname === "/contact" && "text-orange-400"} text-neutral-900 text-lg hover:text-orange-400`}>
                  Contact Us
                  </Link></li>
             </ul>

@@ -54,6 +54,9 @@ const LoginForm = () => {
                             <div className="flex justify-end">
                                 <Link href={''} className='text-orange-500 hover:underline font-medium'> Forgot your password?</Link>
                             </div>
+                            {errMessage && <div className="flex justify-end">
+                                <p className='text-red-500'>{errMessage}</p>
+                            </div>}
                             <div className='flex'>
                                 <button style={{borderRadius: "8px"}} type="submit" className='btn-two uppercase'>
                                  Login
@@ -65,7 +68,6 @@ const LoginForm = () => {
                             
                         </form>
                     </div>
-
         </div>
 
       </div>

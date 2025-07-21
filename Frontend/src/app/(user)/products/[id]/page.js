@@ -4,7 +4,7 @@ import ProductDetailComponents from '../../../../../components/user/Products/Pro
 
 const page = ({params}) => {
 
-  const {id} = params
+  const id = params?.id
   console.log(id)
   return (
     <>

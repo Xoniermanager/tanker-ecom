@@ -8,7 +8,7 @@ const WhoWeAre = () => {
         <div className="max-w-7xl mx-auto flex items-center gap-12">
             <div className="w-1/2 flex flex-col gap-3">
               <div className='flex items-center gap-2'> 
-                <h4 className='text-lg font-bold text-orange-400 uppercase'>Who we are</h4>
+                <h4 className='text-lg font-semibold text-[22px] text-orange-400 uppercase'>Who we are</h4>
                 <Image src={'/images/arrows.png'} width={43} height={11}/></div>
                 <h2 className='font-black text-7xl text-purple-950'>Fueling New Zealand — One Tanker at a Time</h2>
                 <p className='text-zinc-500  mt-8 text-lg font-medium'>At Tanker Solutions, we put your transport and delivery needs first. With a focus on reliability and performance, our mission is to deliver certified, road-ready tankers that meet the highest safety and compliance standards — every time.</p>

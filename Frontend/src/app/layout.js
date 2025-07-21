@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${InstrumentSans.variable}  antialiased`}
+        className={`${InstrumentSans.variable}  antialiased h-screen `}
       >
         {children}
       </body>
