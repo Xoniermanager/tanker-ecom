@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "config": "node config/appConfig.js",
     "queue:dev": "nodemon queues/worker.js",
     "queue:prod": "pm2 start queues/worker.js --name queue-worker",
     "queue:stop": "pm2 stop queue-worker",

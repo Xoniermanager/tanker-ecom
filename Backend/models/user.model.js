@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema(
         },
         designation: {
             type: String,
-            required: true,
             trim: true,
+            required: false,
         },
         mobileNumber: {
             type: String,
@@ -40,22 +40,22 @@ const userSchema = new mongoose.Schema(
             lowercase: true,
             trim: true,
             match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            required: false, // ✅ optional field now
+            required: false,
         },
 
         // Preferences
         country: {
             type: String,
-            required: true,
+            required: false,
         },
         preferredLanguage: {
             type: String,
-            required: true,
+            required: false,
         },
         communicationPreference: {
             type: String,
             enum: Object.values(ENUMS.COMMUNICATION_PREFERENCE),
-            required: true,
+            required: false,
         },
 
         // Auth
