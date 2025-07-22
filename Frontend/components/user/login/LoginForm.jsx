@@ -4,6 +4,9 @@ import Link from 'next/link';
 import React, {useState, useEffect} from 'react'
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import api from '../common/api';
 
 const LoginForm = () => {
     const [isLoading, setIsLoading]  = useState(false)
@@ -14,18 +17,33 @@ const LoginForm = () => {
         password:""
     })
 
+
+    const router = useRouter();
+
      const handleChange = (e)=>{
      const {name, value} = e.target
      setFormData({...formData, [name]: value})
   }
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
         try {
-            
+            const response = await api.post(`/auth/request-login-otp`, {email: formData.companyEmail, password: formData.password})
+            if(response.status === 200){
+                toast.success("Credentials accepted, please verify otp")
+                window.localStorage.setItem('verify-login-email', formData.companyEmail)
+                window.localStorage.setItem('verify-login-password', formData.password)
+                setFormData({companyEmail: "", password: ""})
+                setErrMessage("")
+                router.push("/login/verify-otp")
+            }
+
         } catch (error) {
             console.error(error)
+             const message = (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
+  error?.response?.data?.message ||  "Something went wrong";
+  setErrMessage(message)
         }
         finally{
             setIsLoading(false)
@@ -49,7 +67,7 @@ const LoginForm = () => {
                             <div className='w-full flex flex-col gap-3'>
                                 <label htmlFor="password" className='text-purple-950 flex gap-1.5 items-center font-medium'> < RiLockPasswordFill className='text-xl'/> Password</label>
                                 <div className='border-1 border-neutral-200 rounded py-3.5 px-5 outline-none flex items-center'>
-                                              {passShow ? <input type='text' name='number' className='w-full outline-none' placeholder='Enter Password' value={formData.number} onChange={handleChange}/> : <input type='password' name='number' className='w-full outline-none' placeholder='Enter Password' value={formData.number} onChange={handleChange}/>} {passShow ? <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(false)}> <FaEye/></span> :  <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(true)}> <FaEyeSlash/></span>} </div>
+                                              {passShow ? <input type='text' name='password' className='w-full outline-none' placeholder='Enter Password' value={formData.password} onChange={handleChange}/> : <input type='password' name='password' className='w-full outline-none' placeholder='Enter Password' value={formData.password} onChange={handleChange}/>} {passShow ? <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(false)}> <FaEye/></span> :  <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(true)}> <FaEyeSlash/></span>} </div>
                             </div>
                             <div className="flex justify-end">
                                 <Link href={''} className='text-orange-500 hover:underline font-medium'> Forgot your password?</Link>
@@ -59,7 +77,7 @@ const LoginForm = () => {
                             </div>}
                             <div className='flex'>
                                 <button style={{borderRadius: "8px"}} type="submit" className='btn-two uppercase'>
-                                 Login
+                                 {isLoading ? "Submitting..." :  "Login"}
                             </button>
                             </div>
                             <div className="flex">

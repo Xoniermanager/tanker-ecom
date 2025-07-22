@@ -10,6 +10,7 @@ export default function UserLayout({ children }) {
       <body
         
       >
+        
         <Navbar/>
         {children}
         <Footer/>

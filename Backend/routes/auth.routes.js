@@ -7,6 +7,7 @@ const {
     validateRequestPasswordReset,
     validateResetPassword,
     validateRequestVerifyEmailOtp,
+    validateVerifyEmailOtp,
 } = require("../middlewares/validation");
 
 const router = express.Router();
@@ -16,7 +17,7 @@ const authController = new AuthController();
 router.post("/register", validateUserRegistration, authController.register);
 router.post(
     "/verify-email",
-    validateVerifyLogin,
+    validateVerifyEmailOtp,
     authController.verifyEmailOtp
 );
 router.post(

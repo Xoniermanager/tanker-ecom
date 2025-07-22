@@ -68,6 +68,8 @@ class UserService {
             otp,
             "email_verification"
         );
+        console.log('isOtpValid', isOtpValid, otp);
+        
         if (!isOtpValid) throw customError("Invalid or expired OTP", 400);
 
         const user = await userRepository.findOne({ companyEmail: email });
@@ -270,13 +272,12 @@ class UserService {
             type
         );
 
-        if (process.env.NODE_ENV === "development") {
-            return otp === "123456";
-        }
+        console.log('otpData', otpData, otp);
+        
 
         if (
             !otpData ||
-            otpData.otp !== otp ||
+            otpData.otp != otp ||
             Date.now() > otpData.expiration
         ) {
             return false;

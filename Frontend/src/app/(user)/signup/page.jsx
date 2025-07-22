@@ -3,6 +3,8 @@ import Image from "next/image";
 import { FaEnvelope } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
 import api from "../../../../components/user/common/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import {
@@ -25,18 +27,18 @@ const page = () => {
   const [formData, setFormData] = useState({
     companyEmail: "",
     companyName: "",
-    name: "",
+    fullName: "",
     designation: "",
-    number: "",
+    mobileNumber: "",
     alternativeEmail: "",
     country: "",
-    language: "",
-    communication: "",
+    preferredLanguage: "",
+    communicationPreference: "",
     password: "",
-    cpassword: "",
+    confirmPassword: "",
   });
 
-
+  const router = useRouter()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,22 +49,47 @@ const page = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      if (formData.password.trim() !== formData.cpassword.trim())
+      if (formData.password.trim() !== formData.confirmPassword.trim())
         return setErrMessage(
           "Your password does not matching please fill again"
         );
 
-	   if (formData.password.trim().length < 8) return setErrMessage("Password should be above 7 words")
-      alert("submit");
+      if (formData.password.trim().length < 8)
+        return setErrMessage("Password should be 8 words or above");
+      const response = await api.post(`/auth/register`, formData, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        window.localStorage.setItem("verify-email", formData.companyEmail)
+        setFormData({
+          companyEmail: "",
+          companyName: "",
+          fullName: "",
+          designation: "",
+          mobileNumber: "",
+          alternativeEmail: "",
+          country: "",
+          preferredLanguage: "",
+          communicationPreference: "",
+          password: "",
+          confirmPassword: "",
+        });
+        toast.success("Your account created successfully");
+        router.push("/signup/verify-otp")
+       ;
+      }
     } catch (error) {
       console.error(error);
+      const message = (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
+  error?.response?.data?.message ||  "Something went wrong";
+
+setErrMessage(message);
     } finally {
       setIsLoading(false);
     }
   };
 
-
-  const passLength = formData.password.trim().length
+  const passLength = formData.password.trim().length;
 
   return (
     <>
@@ -128,7 +155,7 @@ const page = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="w-full flex flex-col gap-2">
                 <label
-                  htmlFor="name"
+                  htmlFor="fullName"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
                 >
                   <FaUser />
@@ -136,10 +163,10 @@ const page = () => {
                 </label>
                 <input
                   type="text"
-                  name="name"
+                  name="fullName"
                   className="border-1 border-neutral-200 rounded py-3.5 px-5 outline-none"
                   placeholder="Enter Full Name"
-                  value={formData.name}
+                  value={formData.fullName}
                   onChange={handleChange}
                   required
                 />
@@ -164,7 +191,7 @@ const page = () => {
               </div>
               <div className="w-full flex flex-col gap-2">
                 <label
-                  htmlFor="number"
+                  htmlFor="mobileNumber"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
                 >
                   <FaPhoneAlt />
@@ -172,10 +199,10 @@ const page = () => {
                 </label>
                 <input
                   type="number"
-                  name="number"
+                  name="mobileNumber"
                   className="border-1 border-neutral-200 rounded py-3.5 px-5 outline-none"
                   placeholder="Enter Mobile Number"
-                  value={formData.number}
+                  value={formData.mobileNumber}
                   onChange={handleChange}
                   required
                 />
@@ -399,15 +426,15 @@ const page = () => {
               </div>
               <div className="w-full flex flex-col gap-2">
                 <label
-                  htmlFor="language"
+                  htmlFor="preferredLanguage"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
                 >
                   <FaLanguage className="text-xl" />
                   Preferred Language
                 </label>
                 <select
-                  name="language"
-                  id="language"
+                  name="preferredLanguage"
+                  id="preferredLanguage"
                   className="border-1 border-neutral-200 rounded py-3.5 px-5 outline-none"
                   onChange={handleChange}
                   required
@@ -420,17 +447,17 @@ const page = () => {
               </div>
               <div className="w-full flex flex-col gap-2 col-span-2">
                 <label
-                  htmlFor="communication"
+                  htmlFor="communicationPreference"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
                 >
                   <BiSolidMessageCheck />
                   Communication Preference
                 </label>
                 <select
-                  name="communication"
-                  id="communication"
+                  name="communicationPreference"
+                  id="communicationPreference"
                   className="border-1 border-neutral-200 rounded py-3.5 px-5 outline-none"
-                  value={formData.communication}
+                  value={formData.communicationPreference}
                   onChange={handleChange}
                   required
                 >
@@ -448,14 +475,20 @@ const page = () => {
                   <RiLockPasswordFill />
                   Password
                 </label>
-                <div className={`border-1 border-neutral-200 focus-within:border-2 rounded py-3.5 px-5 ${passLength< 8 ? "focus-within:border-red-400 " : "focus-within:border-green-500"} flex items-center`}>
+                <div
+                  className={`border-1 border-neutral-200 focus-within:border-2 rounded py-3.5 px-5 ${
+                    passLength < 8
+                      ? "focus-within:border-red-400 "
+                      : "focus-within:border-green-500"
+                  } flex items-center`}
+                >
                   {passShow ? (
                     <input
                       type="text"
                       name="password"
                       className="w-full outline-none "
                       placeholder="Enter Password"
-                      value={formData.number}
+                      value={formData.password}
                       onChange={handleChange}
                       required
                     />
@@ -492,7 +525,7 @@ const page = () => {
 
               <div className="w-full flex flex-col gap-2">
                 <label
-                  htmlFor="cpassword"
+                  htmlFor="confirmPassword"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
                 >
                   <RiLockPasswordFill />
@@ -500,8 +533,8 @@ const page = () => {
                 </label>
                 <input
                   type="password"
-                  name="cpassword"
-                  value={formData.cpassword}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
                   className="border-1 border-neutral-200 rounded py-3.5 px-5 outline-none"
                   placeholder="Re-enter Password"
@@ -519,7 +552,7 @@ const page = () => {
                 style={{ borderRadius: "8px" }}
                 className="btn-two"
               >
-                Sign Up
+                {isLoading ? "Submitting..." : "Sign Up"}
               </button>
             </div>
 
