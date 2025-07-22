@@ -11,8 +11,6 @@ class AuthController {
      */
     register = async (req, res, next) => {
         try {
-            console.log('sss');
-            
             const payload = req.body;
             payload.role = "user";
             const response = await this.userService.register(payload);
@@ -31,8 +29,8 @@ class AuthController {
      */
     verifyEmailOtp = async (req, res, next) => {
         try {
-            
-            
+
+
             const { email, otp } = req.body;
             const response = await this.userService.verifyEmailOtp(email, otp);
             customResponse(res, response.message);
@@ -88,7 +86,7 @@ class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000, 
+                maxAge: 7 * 24 * 60 * 60 * 1000,
             });
 
             customResponse(res, "Login successful", response.returnData);
