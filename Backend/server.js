@@ -25,14 +25,17 @@ const startServer = async () => {
         app.use(helmet());
         app.use(
             cors({
-                origin: "*",
+                origin: 'http://localhost:3001',
                 methods: ["GET", "POST", "PUT", "DELETE"],
                 allowedHeaders: ["Content-Type", "Authorization"],
+                credentials: true
             })
         );
         app.use(morgan("dev"));
         app.use(express.json());
         app.use(cookieParser());
+        app.use(express.urlencoded({extended: true}))
+        
 
         // Routes
         app.use("/docs", swaggerDocsRoute);
