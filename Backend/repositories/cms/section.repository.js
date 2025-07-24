@@ -1,4 +1,5 @@
 const Section = require("../../models/cms/section.model");
+const { getPublicFileUrl } = require("../../utils/storage");
 const BaseRepository = require("../base.repository");
 
 /**
@@ -16,7 +17,16 @@ class SectionRepository extends BaseRepository {
      * @returns {Promise<Object|null>}
      */
     async findBySectionId(sectionId, session = null) {
-        return this.model.findOne({ section_id: sectionId }).session(session);
+        const section = await this.model.findOne({ section_id: sectionId }).session(session);
+        if (!section) return null;
+
+        const sectionObj = section.toObject();
+
+        if (sectionObj.thumbnail && sectionObj.thumbnail.source) {
+            sectionObj.thumbnail.fullPath = getPublicFileUrl(sectionObj.thumbnail.source);
+        }
+
+        return sectionObj;
     }
 
     /**
