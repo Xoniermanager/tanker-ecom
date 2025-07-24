@@ -49,7 +49,7 @@ const seedAppConfig = async () => {
                 siteDetails: {
                     logo: "logo",
                     title: "Tanker Solutions",
-                    slogan: "We Offer Global Solutions",
+                    slogan: "Tanker Solutions NZ-made and international offerings",
                     description: "Tanker Solutions is dedicated to providing the best quality cost effective solution to your fuel and dry bulk transport and delivery needs.",
                 },
                 contactDetails: {

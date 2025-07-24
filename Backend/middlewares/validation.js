@@ -1,5 +1,9 @@
 const { z } = require("zod");
 const ENUMS = require("../constants/enums");
+const {
+    upsertPageSchema,
+    updateSectionSchema,
+} = require("../requestSchemas/pageAndSection.schema");
 
 // Reusable password schema
 const passwordSchema = z
@@ -213,6 +217,10 @@ const validateResetPassword = (req, res, next) =>
     validateSchema(req, res, next, resetPasswordSchema);
 const validateSiteSetting = (req, res, next) =>
     validateSchema(req, res, next, siteSettingSchema);
+const validateUpsertPageWithSections = (req, res, next) =>
+    validateSchema(req, res, next, upsertPageSchema);
+const validateUpdateSection = (req, res, next) =>
+    validateSchema(req, res, next, updateSectionSchema);
 
 module.exports = {
     validateUserRegistration,
@@ -223,4 +231,6 @@ module.exports = {
     validateResetPassword,
     validateRequestVerifyEmailOtp,
     validateSiteSetting,
+    validateUpsertPageWithSections,
+    validateUpdateSection,
 };

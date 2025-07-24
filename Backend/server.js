@@ -10,8 +10,9 @@ const mongoDB = require("./config/database");
 const errorHandler = require("./middlewares/errorHandler");
 const responseHandler = require("./middlewares/responseHandler");
 const AuthRoutes = require("./routes/auth.routes");
-const SiteSettingRoutes = require("./routes/siteSetting.routes");
 const swaggerDocsRoute = require("./routes/docs.routes");
+const SiteSettingRoutes = require("./routes/siteSetting.routes");
+const CmsRoutes = require("./routes/cms.routes");
 
 const startServer = async () => {
     try {
@@ -43,6 +44,7 @@ const startServer = async () => {
         app.use("/docs", swaggerDocsRoute);
         app.use("/api/auth", AuthRoutes);
         app.use("/api/site-settings", SiteSettingRoutes);
+        app.use("/api/cms", CmsRoutes);
 
         // Global middleware for standardized errors
         app.use(errorHandler);
