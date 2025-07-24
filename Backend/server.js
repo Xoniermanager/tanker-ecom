@@ -13,6 +13,9 @@ const AuthRoutes = require("./routes/auth.routes");
 const swaggerDocsRoute = require("./routes/docs.routes");
 const SiteSettingRoutes = require("./routes/siteSetting.routes");
 const CmsRoutes = require("./routes/cms.routes");
+const upload = require("./config/multer");
+const { uploadImage, getPublicFileUrl } = require("./utils/storage");
+const customResponse = require("./utils/response");
 
 const startServer = async () => {
     try {
@@ -45,6 +48,20 @@ const startServer = async () => {
         app.use("/api/auth", AuthRoutes);
         app.use("/api/site-settings", SiteSettingRoutes);
         app.use("/api/cms", CmsRoutes);
+
+        // Route to upload files
+        app.put("/api/upload-files", upload.single("file"), async (req, res) => {
+            if (!req.file) {
+                return res.status(400).json({ message: "file is required." });
+            }
+
+            const file = await uploadImage(req.file.buffer, req.file.originalname, "uploads", req.file.mimetype);
+            const fullFilePath = getPublicFileUrl(file.key);
+            customResponse(res, "File uploaded successfully", {
+                file,
+                fullPath: fullFilePath
+            });
+        });
 
         // Global middleware for standardized errors
         app.use(errorHandler);
