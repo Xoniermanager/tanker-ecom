@@ -1,5 +1,9 @@
 const { z } = require("zod");
 const ENUMS = require("../constants/enums");
+const {
+    upsertPageSchema,
+    updateSectionSchema,
+} = require("../requestSchemas/pageAndSection.schema");
 
 // Reusable password schema
 const passwordSchema = z
@@ -8,6 +12,13 @@ const passwordSchema = z
     .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, {
         message:
             "Password must include uppercase, lowercase, number, and special character.",
+    });
+
+const optionalUrl = z
+    .string()
+    .optional()
+    .refine((val) => !val || /^https?:\/\/\S+$/.test(val), {
+        message: "Invalid url"
     });
 
 /**
@@ -98,6 +109,58 @@ const resetPasswordSchema = z.object({
 });
 
 /**
+ ** Site Setting Schema
+ */
+const siteSettingSchema = z.object({
+    contactDetails: z.object({
+        emails: z.object({
+            sales_enquiry: z
+                .string()
+                .email({ message: "Invalid email for Sales Enquiry." }),
+            bdm: z.string().email({ message: "Invalid email for BDM." }),
+            footer: z.string().email({ message: "Invalid email for Footer." }),
+        }),
+        phoneNumbers: z.object({
+            service_depot: z
+                .string()
+                .min(5, { message: "Service Depot phone number is required." }),
+            contact_one: z
+                .string()
+                .min(5, { message: "Contact One phone number is required." }),
+            contact_two: z
+                .string()
+                .min(5, { message: "Contact Two phone number is required." }),
+        }),
+        addresses: z.object({
+            head_office: z
+                .string()
+                .min(5, { message: "Head Office address is required." }),
+            service_depot: z
+                .string()
+                .min(5, { message: "Service Depot address is required." }),
+        }),
+        socialMediaLinks: z.object({
+            facebook: optionalUrl,
+            twitter: optionalUrl,
+            instagram: optionalUrl,
+            linkedin: optionalUrl,
+            youtube: optionalUrl
+        }),
+    }),
+    siteDetails: z.object({
+        logo: z.string().url({ message: "Logo must be a valid URL." }).optional(),
+        title: z.string().min(1, { message: "Site title is required." }),
+        slogan: z.string().optional(),
+        description: z.string().optional(),
+    }),
+    seoDetails: z.object({
+        metaTitle: z.string().optional(),
+        metaDescription: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
+    }),
+});
+
+/**
  ** Helper for body schema
  */
 const validateSchema = async (req, res, next, schema) => {
@@ -152,6 +215,12 @@ const validateRequestPasswordReset = (req, res, next) =>
     validateSchema(req, res, next, requestPasswordResetSchema);
 const validateResetPassword = (req, res, next) =>
     validateSchema(req, res, next, resetPasswordSchema);
+const validateSiteSetting = (req, res, next) =>
+    validateSchema(req, res, next, siteSettingSchema);
+const validateUpsertPageWithSections = (req, res, next) =>
+    validateSchema(req, res, next, upsertPageSchema);
+const validateUpdateSection = (req, res, next) =>
+    validateSchema(req, res, next, updateSectionSchema);
 
 module.exports = {
     validateUserRegistration,
@@ -161,4 +230,7 @@ module.exports = {
     validateRequestPasswordReset,
     validateResetPassword,
     validateRequestVerifyEmailOtp,
+    validateSiteSetting,
+    validateUpsertPageWithSections,
+    validateUpdateSection,
 };
