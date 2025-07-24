@@ -218,6 +218,68 @@ const Sidebar = () => {
           </li>
           <li>
             {" "}
+            <div
+              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl group cursor-pointer ${
+                pathname.includes("cms")
+                  ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
+                  : "bg-transparent  "
+              } `}
+              onClick={() => handleActive(3)}
+            >
+              <span
+                className={`h-9 w-9 flex items-center justify-center rounded-full  text-lg ${
+                  pathname.includes("products") && "text-orange-600 bg-white "
+                }`}
+              >
+                <FiTruck className="group-hover:scale-110 group-hover:text-orange-600 text-lg" />
+              </span>
+              <span
+                className={`font-medium ${
+                  pathname.includes("products") && "text-orange-600"
+                } group-hover:text-orange-600`}
+              >
+                CMS
+              </span>
+              <span
+                className={`text-slate-500 group-hover:text-orange-600 ${
+                  active === 3 && "rotate-90"
+                }`}
+              >
+                <HiArrowLongRight />
+              </span>
+            </div>
+            <ul
+              className={`flex flex-col gap-4 pl-16  h-0 overflow-hidden ${
+                active === 3 && "h-auto my-4"
+              }`}
+            >
+              <li className="">
+                <Link
+                  href={`/dashboard/cms/home`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("home") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  Home
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/dashboard/cms/about`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("about") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  About Us
+                </Link>
+              </li>
+              
+            </ul>
+          </li>
+          <li>
+            {" "}
             <Link
               href={`/dashboard/customers`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${

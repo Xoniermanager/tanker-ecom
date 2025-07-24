@@ -1,5 +1,5 @@
 "use client";
-
+import Cookies from "js-cookie";
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
@@ -75,7 +75,8 @@ const VerifyOtpPage = () => {
     try {
       
       const response = await api.post(`/auth/login`, {email:verifyCredentials.email, password: verifyCredentials.password, otp: enteredOtp}, {withCredentials: true})
-      if(response.status === 200){
+      if(response?.status === 200){
+         
          toast.success("OTP verify successfully")
          setOtp(Array(6).fill(""));
          setVerifyCredentials({
@@ -84,8 +85,16 @@ const VerifyOtpPage = () => {
   })
          window.localStorage.removeItem('verify-login-email')
          window.localStorage.removeItem('verify-login-password')
-
-         router.push('/dashboard')
+          console.log("data: ", response?.data);
+          console.log("response status: ", response?.status)
+          const accessToken = response?.data?.data?.accessToken
+          console.log("accessToken: ", accessToken)
+          Cookies.set("accessToken", accessToken, {
+            secure: true,
+            sameSite: "Strict",
+            
+          })
+         router.push('/')
       }
 
       
@@ -101,10 +110,11 @@ const VerifyOtpPage = () => {
     try {
         const response = await api.post(`/auth/resend-login-otp`, {email: verifyCredentials.email, password: verifyCredentials.password })
         if(response.status === 200){
-            toast.success("OTP resend successfully")
+          
+            toast.success("OTP resend successfully");
             setOtp(Array(6).fill(""));
-            setErrMessage(null)
-            setIsVerificationOTPSend(true)
+            setErrMessage(null);
+            setIsVerificationOTPSend(true);
         }
     } catch (error) {
         console.error(error)

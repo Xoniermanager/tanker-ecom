@@ -118,6 +118,8 @@ class UserService {
         const accessToken = generateAccessToken(user._id, role);
         const refreshToken = generateRefreshToken(user._id);
 
+        console.log("accessToken: ", accessToken)
+
         return {
             returnData: { user, accessToken },
             refreshToken,

@@ -65,9 +65,9 @@ const OurProducts = () => {
           <span className="text-orange-400  font-semibold text-[22px]">WHAT WE OFFER</span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-7xl text-purple-950">Our Services</h2>
+        <h2 className="font-black text-7xl text-purple-950 capitalize">Our products</h2>
         <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
-          Tanker Solutions provides a comprehensive range of services...
+          Tanker Solutions is the New Zealand distributor for some of the very best global petroleum equipment suppliers for tankers and tank trailers.
         </p>
       </div>
 
