@@ -1,6 +1,7 @@
 const Page = require("../../models/cms/pages.model");
 const BaseRepository = require("../base.repository");
 const Section = require("../../models/cms/section.model");
+const { getPublicFileUrl } = require("../../utils/storage");
 
 /**
  * Repository for managing pages.
@@ -26,16 +27,24 @@ class PageRepository extends BaseRepository {
         // Build enriched sections
         const enrichedSections = page.sections.map(sectionRef => {
             const data = sectionMap[sectionRef.section_id];
-            return data
-                ? {
-                    order: sectionRef.order,
-                    section_id: sectionRef.section_id,
-                    heading: data.heading,
-                    subheading: data.subheading,
-                    thumbnail: data.thumbnail || undefined,
-                    contents: data.contents || []
-                }
-                : sectionRef.toObject();
+            if (!data) return sectionRef.toObject();
+
+            let thumbnail = undefined;
+            if (data.thumbnail && data.thumbnail.source) {
+                thumbnail = {
+                    ...data.thumbnail,
+                    fullPath: getPublicFileUrl(data.thumbnail.source),
+                };
+            }
+
+            return {
+                order: sectionRef.order,
+                section_id: sectionRef.section_id,
+                heading: data.heading,
+                subheading: data.subheading,
+                thumbnail,
+                contents: data.contents || []
+            };
         });
 
         return {
