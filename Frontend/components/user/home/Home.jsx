@@ -2,7 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-const HomePage = () => {
+const HomePage = ({bannerData}) => {
+  console.log("bannerData: ", bannerData)
+
+ const para = bannerData?.contents?.find(item=> item.label === "Description").text
+ const btnName = bannerData?.contents?.find(item=>(item.type === "link" && item.label === "Call To Action")).text
+ const btnLink = bannerData?.contents?.find(item=>(item.type === "link" && item.label === "Call To Action")).link
   return (
     <div className="banner relative w-full py-28 overflow-hidden ">
       
@@ -20,14 +25,14 @@ const HomePage = () => {
        <div className="w-3/4 flex flex-col gap-7">
         <div className="border-white border-1 w-fit text-white uppercase font-semibold flex items-center gap-2 p-1 px-2">
             <Image src={'/images/left-wing.png'} width={15} height={15} alt='left wing'/> 
-            <span className='text-lg'>We Offer Global Solutions</span>
+            <span className='text-lg'>{bannerData?.subheading || "N/A"}</span>
              <Image src={'/images/right-wing.png'} width={15} height={15} alt='left wing'/> 
         </div>
-        <h1 className='text-[110px] text-white font-black leading-28'>Welcome to Tanker Solutions</h1>
-        <p className='text-white w-3/4 leading-relaxed text-lg'>Tanker Solutions is dedicated to providing the best quality cost effective solution to your fuel and dry bulk transport and delivery needs.</p>
+        <h1 className='text-[110px] text-white font-black leading-28'>{bannerData?.heading || "N/A"}</h1>
+        <p className='text-white w-3/4 leading-relaxed text-lg'>{para || "N/A"}</p>
          <div className='flex'>
-        <Link href={'/contact'} className='btn-one text-xl tracking-wide'>
-             Contact us
+        <Link href={btnLink} className='btn-one text-xl tracking-wide'>
+             {btnName || "N/A"}
              </Link>
              </div>
 

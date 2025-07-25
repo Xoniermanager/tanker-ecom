@@ -65,6 +65,7 @@ class CmsController {
         try {
             const { sectionId } = req.params;
             const updateData = req.body;
+            console.log("data", updateData)
 
             if (req.file) {
                 const thumbnailUrl = await uploadImage(req.file, "section-thumbnails");

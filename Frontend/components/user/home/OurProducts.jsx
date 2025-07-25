@@ -8,10 +8,13 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
 
-const OurProducts = () => {
+const OurProducts = ({productData}) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [swiperInstance, setSwiperInstance] = useState(null);
+
+
+  const para = productData?.contents?.find(item=>item.type === 'text').text
 
   const slides = [
     {
@@ -50,7 +53,7 @@ const OurProducts = () => {
       swiperInstance.params.navigation.prevEl = prevRef.current;
       swiperInstance.params.navigation.nextEl = nextRef.current;
 
-      swiperInstance.navigation.destroy(); // important: destroy first
+      swiperInstance.navigation.destroy(); 
       swiperInstance.navigation.init();
       swiperInstance.navigation.update();
     }
@@ -62,12 +65,12 @@ const OurProducts = () => {
       <div className="flex flex-col gap-4 items-center mb-20">
         <div className="flex items-center gap-2">
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-          <span className="text-orange-400  font-semibold text-[22px]">WHAT WE OFFER</span>
+          <span className="text-orange-400  font-semibold text-[22px] uppercase">{productData?.subheading || "N/A"}</span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-7xl text-purple-950 capitalize">Our products</h2>
+        <h2 className="font-black text-7xl text-purple-950 capitalize">{productData?.heading || "N/A"}</h2>
         <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
-          Tanker Solutions is the New Zealand distributor for some of the very best global petroleum equipment suppliers for tankers and tank trailers.
+          {para || "N/A"}
         </p>
       </div>
 

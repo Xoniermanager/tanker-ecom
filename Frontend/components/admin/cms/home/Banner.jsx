@@ -1,11 +1,14 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import api from '../../../user/common/api'
+import { toast } from 'react-toastify'
 
 const Banner = ({ homeData }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [errMessage, setErrMessage] = useState(null)
   const [webOrigin, setWebOrigin] = useState(null)
   const [preview, setPreview] = useState(null)
+  const [sectionId, setSectionId] = useState(null)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -41,6 +44,7 @@ const Banner = ({ homeData }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
+     
     if (!file) return
 
     const validImageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml']
@@ -62,7 +66,7 @@ const Banner = ({ homeData }) => {
     setErrMessage(null)
     const fileURL = URL.createObjectURL(file)
     setPreview(fileURL)
-   
+    
 
     setFormData(prev => ({
       ...prev,
@@ -71,9 +75,11 @@ const Banner = ({ homeData }) => {
         source: file
       }
     }))
+    console.log("source file: ", file)
   }
 
   useEffect(() => {
+    
     setFormData({
       title: homeData?.contents?.find(item => item.label === "Headline")?.text || "",
       subHeading: homeData?.contents?.find(item => item.label === "Tagline")?.text || "",
@@ -82,29 +88,87 @@ const Banner = ({ homeData }) => {
       buttonName: homeData?.contents?.find(item => item.label === "Call To Action")?.text || "",
       buttonLink: homeData?.contents?.find(item => item.label === "Call To Action")?.link || ""
     })
+    setSectionId(homeData?.section_id || "")
+    
+    
   }, [])
 
   useEffect(() => {
     setWebOrigin(window?.location?.origin || null)
   }, [formData.buttonLink])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-     
-      console.log(formData)
-    } catch (error) {
-      console.error(error)
-      const message =
-        (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
-        error?.response?.data?.message ||
-        "Something went wrong"
-      setErrMessage(message)
-    } finally {
-      setIsLoading(false)
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
+    const fileFormData = new FormData();
+    
+    fileFormData.append('file', formData.thumbnail.source);
+    const thumbRes = await api.put("/upload-files", fileFormData); 
+    
+    const uploadedThumbnailUrl = thumbRes.data.data.file.url;
+
+    
+    const formContents = [
+      {
+        order: 1,
+        type: "text",
+        label: "Headline",
+        text: formData.title,
+      },
+      {
+        order: 2,
+        type: "text",
+        label: "Tagline",
+        text: formData.subHeading,
+      },
+      {
+        order: 3,
+        type: "text",
+        label: "Description",
+        text: formData.description,
+      },
+      {
+        order: 4,
+        type: "link",
+        label: "Call To Action",
+        text: formData.buttonName,
+        link: formData.buttonLink,
+      },
+    ];
+
+    
+    const payload = {
+      section_id: sectionId,
+      heading: formData.title,
+      subheading: formData.subHeading,
+      order: 1, 
+      thumbnail: {
+        type: formData.thumbnail.type,
+        source: uploadedThumbnailUrl,
+      },
+      contents: formContents,
+    };
+
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    if(response.status === 201 || response.status === 200){
+      toast.success("Data updated successfully");
+      setErrMessage(null);
     }
+  } catch (error) {
+    console.error(error);
+    const message =
+      (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
+      error?.response?.data?.message ||
+      "Something went wrong";
+    setErrMessage(message);
+  } finally {
+    setIsLoading(false);
   }
+};
+
+
 
   return (
     <div className='bg-white p-7 rounded-lg flex flex-col gap-5'>

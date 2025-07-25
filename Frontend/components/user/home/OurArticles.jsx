@@ -5,7 +5,7 @@ import React from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaUser, FaComment } from "react-icons/fa";
 
-const OurArticles = () => {
+const OurArticles = ({articleData}) => {
 
     const data = [
         {
@@ -47,10 +47,10 @@ const OurArticles = () => {
         <div className="flex flex-col gap-4 items-center mb-20">
                 <div className="flex items-center gap-2">
                   <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-                  <span className="text-orange-400 font-semibold text-[22px] uppercase">Our Articles</span>
+                  <span className="text-orange-400 font-semibold text-[22px] uppercase">{articleData?.subheading || "N/A"}</span>
                   <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
                 </div>
-                <h2 className="font-black text-7xl text-purple-950 w-[60%] text-center">Our Latest Articles Post From Blog</h2>
+                <h2 className="font-black text-7xl text-purple-950 w-[60%] text-center">{articleData?.heading || "N/A"}</h2>
                 
               </div>
               <div className="grid grid-cols-4 items-start gap-7">

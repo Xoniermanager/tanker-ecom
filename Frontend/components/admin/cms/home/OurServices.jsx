@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { FaXmark, FaPlus } from 'react-icons/fa6';
 import { MdOutlineCloudUpload } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import api from '../../../user/common/api';
 
 const OurServices = ({serviceData}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
+  const [sectionId, setSectionId] = useState(null)
   
 
   const [formData, setFormData] = useState({
@@ -31,6 +33,7 @@ const OurServices = ({serviceData}) => {
     para: serviceData.contents.find(item=>item.type === "text")?.text || "",
     services: serviceData?.contents.find(item=>item?.type === "cards").contents?.map(item=>item) || []
     })
+    setSectionId(serviceData?.section_id || "")
   }, [])
 
 
@@ -42,8 +45,15 @@ const OurServices = ({serviceData}) => {
   const handleServiceChange = (index, e) => {
     const { name, value } = e.target;
     const updatedServices = [...formData.services];
+    if(name === "order"){
+      updatedServices[index][name] = Number(value);
     
-    updatedServices[index][name] = value;
+    }
+    else{
+
+      updatedServices[index][name] = value;
+    }
+    
     setFormData({ ...formData, services: updatedServices });
   };
 
@@ -59,6 +69,7 @@ const OurServices = ({serviceData}) => {
         description: '',
           order: '',
           link: '',
+          type: "card"
         },
       ],
     });
@@ -75,8 +86,33 @@ const OurServices = ({serviceData}) => {
     setIsLoading(true);
     setErrMessage(null);
 
+    const formContents = [
+      {
+        order: 1,
+        type:"text",
+        text:formData.para
+      },
+      {
+        order: 2,
+        type:"cards",
+        contents: formData.services.map((item=>item))
+      }
+    ]
+
     try {
-      
+      const payload = {
+      section_id: sectionId,
+      order: 2,
+      heading: formData.heading,
+      subheading: formData.subHeading,
+      contents: formContents,
+    };
+    console.log("service payload: ", payload)
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    if(response.status === 201 || response.status === 200){
+          toast.success("Data updated successfully");
+          setErrMessage(null);
+    }
     } catch (error) {
       console.error(error);
       const message =
@@ -223,9 +259,11 @@ const OurServices = ({serviceData}) => {
           </button>
         </div>
 
+      <div className='flex items-center justify-end'>
         {errMessage && (
           <p className="text-red-500 font-medium mt-2">{errMessage}</p>
         )}
+        </div>
       </form>
     </div>
   );

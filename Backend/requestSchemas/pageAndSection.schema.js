@@ -3,7 +3,7 @@ const { z } = require("zod");
 const thumbnailSchema = z
     .object({
         type: z.enum(["video", "image"]),
-        source: z.string().url({ message: "Thumbnail source must be a valid URL." }),
+        source: z.string(),
     })
     .optional();
 
@@ -29,12 +29,14 @@ const contentSchema = z.lazy(() =>
             type: z.literal("text"),
             label: z.string().optional(),
             text: z.string().min(1),
+            suffix: z.string().optional()
         }),
         z.object({
             order: z.number(),
             type: z.literal("list"),
             label: z.string().optional(),
             contents: z.array(contentSchema).min(1),
+            
         }),
         z.object({
             order: z.number(),
