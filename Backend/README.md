@@ -63,23 +63,28 @@ npm start
 
 ```
 Backend/
-├── config/             # App-level configuration (e.g., DB, app settings)
-├── constants/          # Reusable constants and enums
-├── controllers/        # Express route controllers (AuthController, etc.)
-├── docs/               # API documentation (e.g., Swagger YAML/JSON files)
-├── middlewares/        # Express middleware functions (auth, validation, etc.)
-├── models/             # Mongoose schemas and models
-├── plugins/            # Custom plugins (e.g., encryption, hooks)
-├── queues/             # BullMQ queue setup
-│   ├── index.js        # Queue instance (BullMQ)
-│   ├── redis.js        # Redis client config
-│   └── worker.js       # Job processing worker
-├── repositories/       # BaseRepository + specialized repositories (User, OTP, etc.)
-├── routes/             # Express route definitions and middlewares
-├── services/           # Business logic layer (e.g., UserService)
-├── utils/              # Helper utilities (JWT, OTP, email, etc.)
-├── .env                # Environment variables
-└── server.js           # Express app bootstrap/entry point
+├── config/               # App-level configuration (e.g., DB, app settings)
+├── constants/            # Reusable constants and enums
+├── controllers/          # Express route controllers (AuthController, etc.)
+├── docs/                 # API documentation (e.g., Swagger YAML/JSON files)
+├── middlewares/          # Express middleware functions (auth, validation, etc.)
+├── models/               # Mongoose schemas and models
+│   ├── cms/              # CMS-specific models (if needed)
+├── plugins/              # Custom plugins (e.g., encryption, hooks)
+├── public/               # Static assets (uploads, files, etc.)
+├── queues/               # BullMQ queue setup
+│   ├── index.js          # Queue instance (BullMQ)
+│   ├── redis.js          # Redis client config
+│   └── worker.js         # Job processing worker
+├── repositories/         # Data access layer
+│   ├── cms/              # CMS-specific repositories
+├── requestSchemas/       # Zod validation schemas
+├── routes/               # Express route definitions and middlewares
+├── services/             # Business logic layer (e.g., UserService)
+├── utils/                # Helper utilities (JWT, OTP, email, etc.)
+├── .env                  # Environment variables
+├── .env.example          # Sample environment config
+└── server.js             # Express app bootstrap/entry point
 ```
 
 ---
