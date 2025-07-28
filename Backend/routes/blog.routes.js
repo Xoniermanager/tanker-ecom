@@ -32,5 +32,10 @@ router.patch(
     authorize(['admin']),
     blogController.setPublishStatus
 );
+router.delete(
+    "/:id",
+    authorize(['admin']),
+    blogController.deleteBlog
+)
 
 module.exports = router;

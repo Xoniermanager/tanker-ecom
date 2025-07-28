@@ -120,6 +120,19 @@ class BlogController {
             next(error);
         }
     };
+
+    /**
+     * Delete a blog.
+     */
+    deleteBlog = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            await blogService.deleteBlog(id);
+            customResponse(res, "Blog deleted successfully", null);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 exports.BlogController = BlogController;

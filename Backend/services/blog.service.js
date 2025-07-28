@@ -105,6 +105,16 @@ class BlogService {
         if (!result) throw customError("Blog not found", 404);
         return result;
     }
+
+    /**
+     * Deletes a blog by its MongoDB ObjectId.
+     * @param {String|ObjectId} id - The ID of the blog to delete.
+     * @returns {Promise<Object|null>} The deleted blog document, or null if not found.
+     */
+    async deleteBlog(id) {
+        const result = await blogRepository.deleteById(id);
+        return result;
+    }
 }
 
 module.exports = new BlogService();
