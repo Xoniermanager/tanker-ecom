@@ -16,6 +16,7 @@ const CmsRoutes = require("./routes/cms.routes");
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
+const authorize = require('./middlewares/auth');
 
 const startServer = async () => {
     try {
@@ -50,7 +51,7 @@ const startServer = async () => {
         app.use("/api/cms", CmsRoutes);
 
         // Route to upload files
-        app.put("/api/upload-files", upload.single("file"), async (req, res) => {
+        app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {
             if (!req.file) {
                 return res.status(400).json({ message: "file is required." });
             }
