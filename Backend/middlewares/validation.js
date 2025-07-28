@@ -4,6 +4,10 @@ const {
     upsertPageSchema,
     updateSectionSchema,
 } = require("../requestSchemas/pageAndSection.schema");
+const {
+    upsertBlogSchema,
+    setPublishStatusSchema,
+} = require("../requestSchemas/blog.schema");
 
 // Reusable password schema
 const passwordSchema = z
@@ -221,6 +225,10 @@ const validateUpsertPageWithSections = (req, res, next) =>
     validateSchema(req, res, next, upsertPageSchema);
 const validateUpdateSection = (req, res, next) =>
     validateSchema(req, res, next, updateSectionSchema);
+const validateUpsertBlog = (req, res, next) =>
+    validateSchema(req, res, next, upsertBlogSchema);
+const validatePublishStatus = (req, res, next) =>
+    validateSchema(req, res, next, setPublishStatusSchema);
 
 module.exports = {
     validateUserRegistration,
@@ -233,4 +241,6 @@ module.exports = {
     validateSiteSetting,
     validateUpsertPageWithSections,
     validateUpdateSection,
+    validateUpsertBlog,
+    validatePublishStatus
 };
