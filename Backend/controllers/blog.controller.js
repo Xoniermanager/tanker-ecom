@@ -8,8 +8,9 @@ class BlogController {
      */
     getAllBlogs = async (req, res, next) => {
         try {
-            const blogs = await blogService.getAllBlogs();
-            customResponse(res, "All blogs fetched successfully", blogs);
+            const { page = 1, limit = 10 } = req.query;
+            const blogs = await blogService.getAllBlogs(+page, +limit);
+            customResponse(res, "Blogs fetched successfully", blogs);
         } catch (error) {
             next(error);
         }
@@ -20,7 +21,8 @@ class BlogController {
      */
     getPublishedBlogs = async (req, res, next) => {
         try {
-            const blogs = await blogService.getPublishedBlogs();
+            const { page = 1, limit = 10 } = req.query;
+            const blogs = await blogService.getPublishedBlogs(+page, +limit);
             customResponse(res, "Published blogs fetched successfully", blogs);
         } catch (error) {
             next(error);

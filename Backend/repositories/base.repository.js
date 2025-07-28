@@ -128,12 +128,15 @@ class BaseRepository {
      * @param {number} [limit=10] - Number of documents per page.
      * @param {Object|null} [sort=null] - Sorting object.
      * @param {Object|null} [session=null] - Optional Mongoose session.
+     * @param {String|Object} [projection=null] - Fields to include or exclude.
      * @returns {Promise<{ data: Array<Object>, total: number, page: number, limit: number }>}
      */
-    async paginate(filter = {}, page = 1, limit = 10, sort = null, session = null) {
+    async paginate(filter = {}, page = 1, limit = 10, sort = null, session = null, projection = null) {
+        console.log(projection);
+
         const skip = (page - 1) * limit;
         const query = this.model
-            .find(filter)
+            .find(filter, projection)
             .sort(sort)
             .skip(skip)
             .limit(limit);

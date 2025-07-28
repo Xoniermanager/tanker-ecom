@@ -6,11 +6,14 @@ const summaryFields = 'title subtitle slug thumbnail tags publishedAt author';
 
 class BlogService {
     /**
-     * Get all blogs (admin view).
-     * @returns {Promise<Array>}
+     * Fetch all blogs with pagination support (admin view).
+     *
+     * @param {number} page - Current page number (default is 1).
+     * @param {number} limit - Number of blogs per page (default is 10).
+     * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>} Paginated list of blogs.
      */
-    async getAllBlogs() {
-        return await blogRepository.findAll({}, summaryFields);
+    async getAllBlogs(page = 1, limit = 10) {
+        return await blogRepository.paginate({}, page, limit, { createdAt: -1 }, null, summaryFields);
     }
 
     /**
@@ -87,11 +90,15 @@ class BlogService {
     }
 
     /**
-     * Get all published blogs (public).
-     * @returns {Promise<Array>}
+     * Fetch all published blogs with pagination support (public view).
+     *
+     * @param {number} page - Current page number (default is 1).
+     * @param {number} limit - Number of blogs per page (default is 10).
+     * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>} Paginated list of published blogs.
      */
-    async getPublishedBlogs() {
-        return await blogRepository.findPublished({}, summaryFields);
+    async getPublishedBlogs(page = 1, limit = 10) {
+        const filter = { isPublished: true };
+        return await blogRepository.paginate(filter, page, limit, { publishedAt: -1 }, null, summaryFields);
     }
 
     /**
