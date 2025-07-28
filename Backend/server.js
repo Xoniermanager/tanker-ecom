@@ -14,6 +14,7 @@ const swaggerDocsRoute = require("./routes/docs.routes");
 const SiteSettingRoutes = require("./routes/siteSetting.routes");
 const CmsRoutes = require("./routes/cms.routes");
 const BlogRoutes = require("./routes/blog.routes");
+const GalleryRoutes = require("./routes/gallery.routes");
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
@@ -51,6 +52,7 @@ const startServer = async () => {
         app.use("/api/site-settings", SiteSettingRoutes);
         app.use("/api/cms", CmsRoutes);
         app.use("/api/blogs", BlogRoutes);
+        app.use("/api/gallery", GalleryRoutes);
 
         // Route to upload files
         app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {

@@ -8,6 +8,11 @@ const {
     upsertBlogSchema,
     setPublishStatusSchema,
 } = require("../requestSchemas/blog.schema");
+const {
+    bulkInsertGallerySchema,
+    bulkUpdateGallerySchema,
+    bulkDeleteGallerySchema
+} = require("../requestSchemas/gallery.schema");
 
 // Reusable password schema
 const passwordSchema = z
@@ -229,6 +234,12 @@ const validateUpsertBlog = (req, res, next) =>
     validateSchema(req, res, next, upsertBlogSchema);
 const validatePublishStatus = (req, res, next) =>
     validateSchema(req, res, next, setPublishStatusSchema);
+const validateBulkInsertGalleryItems = (req, res, next) =>
+    validateSchema(req, res, next, bulkInsertGallerySchema);
+const validateBulkUpdateGalleryItems = (req, res, next) =>
+    validateSchema(req, res, next, bulkUpdateGallerySchema);
+const validateBulkDeleteGalleryItems = (req, res, next) =>
+    validateSchema(req, res, next, bulkDeleteGallerySchema);
 
 module.exports = {
     validateUserRegistration,
@@ -242,5 +253,8 @@ module.exports = {
     validateUpsertPageWithSections,
     validateUpdateSection,
     validateUpsertBlog,
-    validatePublishStatus
+    validatePublishStatus,
+    validateBulkInsertGalleryItems,
+    validateBulkUpdateGalleryItems,
+    validateBulkDeleteGalleryItems
 };

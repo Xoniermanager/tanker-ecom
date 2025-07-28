@@ -150,6 +150,23 @@ class BaseRepository {
 
         return { data, total, page, limit };
     }
+
+    /**
+    * Deletes multiple items by their IDs.
+    * @param {string[]} ids - Array of item IDs to delete.
+    * @param {mongoose.ClientSession} [session=null] - Optional mongoose session for transaction support.
+    * @returns {Promise<Object>} Result of the bulk delete operation.
+    */
+    async bulkDelete(ids = [], session = null) {
+        if (!Array.isArray(ids) || ids.length === 0) return { deletedCount: 0 };
+
+        const result = await this.model.deleteMany(
+            { _id: { $in: ids } },
+            { session }
+        );
+
+        return result;
+    }
 }
 
 module.exports = BaseRepository;
