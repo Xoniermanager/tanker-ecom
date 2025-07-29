@@ -33,7 +33,6 @@ const uploadImage = async (buffer, filename, folder = "uploads", mimetype = "ima
         if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
 
         const fullPath = path.join(uploadPath, uniqueName);
-        console.log('fullPath', fullPath, folder);
 
         await fs.promises.writeFile(fullPath, buffer);
         return { url: `/public/${folder}/${uniqueName}`, key: `${folder}/${uniqueName}` };
