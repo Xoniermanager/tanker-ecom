@@ -21,6 +21,7 @@ const {
     requestPasswordResetSchema,
     resetPasswordSchema
 } = require("../requestSchemas/auth.schema");
+const { contactSchema } = require("../requestSchemas/contact.schema");
 
 const optionalUrl = z
     .string()
@@ -150,6 +151,8 @@ const validateBulkUpdateGalleryItems = (req, res, next) =>
     validateSchema(req, res, next, bulkUpdateGallerySchema);
 const validateBulkDeleteGalleryItems = (req, res, next) =>
     validateSchema(req, res, next, bulkDeleteGallerySchema);
+const validateContact = (req, res, next) =>
+    validateSchema(req, res, next, contactSchema);
 
 module.exports = {
     validateUserRegistration,
@@ -166,5 +169,6 @@ module.exports = {
     validatePublishStatus,
     validateBulkInsertGalleryItems,
     validateBulkUpdateGalleryItems,
-    validateBulkDeleteGalleryItems
+    validateBulkDeleteGalleryItems,
+    validateContact
 };
