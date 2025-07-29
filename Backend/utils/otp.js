@@ -1,3 +1,4 @@
+const queueManager = require("../queues/manager");
 const { sendEmail } = require("./email");
 
 /**
@@ -51,16 +52,19 @@ function getOtpEmailContent(otp, type = "generic") {
  * @returns {Promise<void>}
  */
 async function sendOtpEmail(email, otp, type = "generic") {
-    const { subject, text } = getOtpEmailContent(otp, type);
-
-    const mailOptions = {
-        to: email,
-        subject,
-        text,
-    };
-
     try {
-        await sendEmail(mailOptions);
+        const { subject, text } = getOtpEmailContent(otp, type);
+
+        const mailOptions = {
+            to: email,
+            subject,
+            text,
+        };
+
+        // await sendEmail(mailOptions);
+        const queue = queueManager.getQueue('general');
+        await queue.addJob('sendEmail', mailOptions);
+
         console.log(`[OTP:${type}] sent to ${email}`);
     } catch (error) {
         console.error(

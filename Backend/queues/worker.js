@@ -1,14 +1,23 @@
 const { Worker } = require('bullmq');
 const { redisConfig } = require('../config/redis');
 const queueLogger = require('./logger');
-const logger = require('./logger')
+const logger = require('../config/logger');
+const { mailTransporter } = require('../utils/email');
 
 const jobProcessors = {
     sendEmail: async (job) => {
-        console.log(job.data);
+        const { to, subject, text, html } = job.data;
 
-        logger.info(`Email sent`);
-        return { messageId: `msg_${Date.now()}`, status: 'sent' };
+        const info = await mailTransporter.sendMail({
+            from: process.env.EMAIL_FROM || '"Tanker Solution" <admin@abc.com>',
+            to,
+            subject,
+            text: text,
+            html: html,
+        });
+
+        logger.info(`Email sent to ${to}: ${subject}`);
+        return { messageId: info.messageId, status: 'sent' };
     },
 };
 
