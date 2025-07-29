@@ -20,13 +20,12 @@ const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
 const authorize = require('./middlewares/auth');
+const queueManager = require("./queues/manager");
 
 const startServer = async () => {
     try {
         // Connect to MongoDB
         await mongoDB.connect();
-
-        // TODO: Reload persisted jobs on server startup
 
         const app = express();
         const PORT = process.env.PORT || 3000;
@@ -76,7 +75,10 @@ const startServer = async () => {
         // Global middleware for standardized responses
         app.use(responseHandler);
 
-        app.listen(PORT, () => {
+        // Initialize queue manager to process background jobs
+        await queueManager.initialize();
+
+        app.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);
         });
 
