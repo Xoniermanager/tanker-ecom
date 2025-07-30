@@ -9,7 +9,7 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import api from "../common/api";
 import ReCAPTCHA from "react-google-recaptcha";
 
-const ContactComponent = () => {
+const ContactComponent = ({addressData, contactsData}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [captchaToken, setCaptchaToken] = useState(null)
     const [errMessage, setErrMessage] = useState(null)
@@ -55,6 +55,9 @@ const ContactComponent = () => {
         }
     }
 
+    const listData = addressData?.contents.sort((a,b)=>a.order - b.order)
+    const contactData = contactsData.contents.sort((a,b)=>a.order - b.order)
+
 
   return (
     <>
@@ -64,38 +67,28 @@ const ContactComponent = () => {
             <div className="w-[43%] flex flex-col gap-10">
                 <div className="flex flex-col gap-4">
               <h2 className="text-5xl font-bold text-purple-950 w-[85%] leading-14">
-                Let's Contact For Better Result
+                {addressData?.heading || "N/A"}
               </h2>
               <p className="text-zinc-500 text-lg font-medium">
-                You can also reach out to us by phone or email
+               {addressData?.subheading || "N/A"}
               </p>
               </div>
-              <Link href={'/'} className="bg-white rounded-4xl p-5 px-7 flex items-center gap-8 hover:shadow-[0_0_16px_#00000012] hover:scale-103 group">
-                <div className="flex flex-col gap-2">
+              {listData.map((item,i)=>(
+                <Link href={'/'} className="bg-white rounded-4xl p-5 px-7 flex items-center gap-8 hover:shadow-[0_0_16px_#00000012] hover:scale-103 group">
+               
+                <div className="flex flex-col gap-2 w-full">
                   <h4 className="font-black text-purple-950 text-2xl tracking-wide">
-                    Head Office
+                    {item?.title || "N/A"}
                   </h4>
                   <p className="text-zinc-500 text-lg font-medium">
-                    8-10 Makaro Street, Porirua, 5022, NEW ZEALAND
+                   {item?.description || "N/A"}
                   </p>
                 </div>
                 <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
                        <IoLocationOutline className="group-hover:scale-108 duration-500"/>
                 </div>
               </Link>
-              <Link href={'/'} className="bg-white rounded-4xl p-5 px-7 flex items-center gap-8 hover:shadow-[0_0_16px_#00000012] hover:scale-103 group">
-                <div className="flex flex-col gap-2">
-                  <h4 className="font-black text-purple-950 text-2xl tracking-wide">
-                    Service Depot
-                  </h4>
-                  <p className="text-zinc-500 text-lg font-medium">
-                    21A Barnes Street, Seaview, Lower Hutt, 5010
-                  </p>
-                </div>
-                <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
-                       <RiCustomerService2Fill className="group-hover:scale-108 duration-500"/>
-                </div>
-              </Link>
+              ))}
             </div>
             <div className="w-[57%] flex flex-col gap-4">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3176.9699898533486!2d174.8303477!3d-41.1384791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6d3f531165bb3595%3A0xa90c817be87ab284!2s8%20Makaro%20Street%2C%20Elsdon%2C%20Porirua%205022%2C%20New%20Zealand!5e1!3m2!1sen!2sin!4v1751610971477!5m2!1sen!2sin" width="600" height="550" style={{border:"8"}} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="rounded-2xl border-8 border-white w-full"></iframe>
@@ -105,10 +98,10 @@ const ContactComponent = () => {
           <div className="flex items-center gap-12">
             <div className="w-[43%] flex flex-col gap-5">
   <h2 className="text-5xl font-bold text-purple-950 w-[85%] leading-14">
-                Please Contact To Speak With Our Kind Staff
+               {contactsData?.heading || "N/A"}
               </h2>
               <p className="text-zinc-500 text-lg font-medium">
-                Drop us a line and we will ensure the appropriate team responds to your enquiry.
+                 {contactsData?.subheading || "N/A" }
               </p>
               <Image src={'/images/contact-img.png'} className="w-full object-contain" height={300} width={300} alt="contact"/>
             </div>
@@ -116,7 +109,7 @@ const ContactComponent = () => {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white rounded-xl p-10">
                 <div className="flex flex-col gap-3">
                     <label htmlFor="firstName" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaUser /> First Name</label>
-                    <input type="text" name="firstName" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.firstName} placeholder="First Name" onChange={handleChange}/>
+                    <input type="text" name="firstName" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.firstName} placeholder="First Name" onChange={handleChange} required/>
                 </div>
                 <div className="flex flex-col gap-3">
                     <label htmlFor="lastName" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaUser /> Last Last</label>
@@ -125,23 +118,23 @@ const ContactComponent = () => {
                 <div className="flex items-center gap-5 ">
                     <div className="flex w-1/2 flex-col gap-3">
                     <label htmlFor="number" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaPhoneAlt /> Phone</label>
-                    <input type="number" name="number" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.number} placeholder="Your Contact Number" onChange={handleChange}/>
+                    <input type="number" name="number" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.number} placeholder="Your Contact Number" onChange={handleChange} required/>
                 </div>
                     <div className="flex w-1/2 flex-col gap-3">
                     <label htmlFor="email" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaEnvelope /> Email</label>
-                    <input type="email" name="email" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.email} placeholder="Your Email" onChange={handleChange}/>
+                    <input type="email" name="email" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.email} placeholder="Your Email" onChange={handleChange} required/>
                 </div>
                 </div>
                  <div className="flex flex-col gap-3">
                     <label htmlFor="message" className="flex items-center gap-1.5 text-purple-950 font-medium"><BiSolidMessageRounded /> Message</label>
-                    <textarea type="text" name="message" className="border-stone-200 border-1 rounded-lg outline-none px-6 py-3.5" value={formData.message} placeholder="Write Message..." onChange={handleChange} rows={5}/>
+                    <textarea type="text" name="message" className="border-stone-200 border-1 rounded-lg outline-none px-6 py-3.5" value={formData.message} placeholder="Write Message..." onChange={handleChange} rows={5} required/>
                 </div>
                 <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} onChange={handleCaptcha}/>
                 <div className="flex justify-end">
                    <p className="text-red-500 ">{errMessage}</p>
                 </div>
                 <div className="flex">
-                    <button type="submit" disabled={formData.number === "" || formData.firstName === "" || formData.lastName === "" || formData.email === ""} className="uppercase font-bold tracking-wide  disabled:bg-black/60 bg-black hover:bg-orange-400 text-white px-9 py-4 rounded-md">Send message</button>
+                    <button type="submit" disabled={formData.number === "" || formData.firstName === "" ||  formData.email === "" || formData.message === ""} className="uppercase font-bold tracking-wide  disabled:bg-black/60 bg-black hover:bg-orange-400 text-white px-9 py-4 rounded-md">Send message</button>
                 </div>
                 </form>
 
@@ -149,16 +142,25 @@ const ContactComponent = () => {
             
           </div>
           <div className="grid grid-cols-3 gap-12">
-                <Link href={'mailto:mark@tankersolutions.co.nz'} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
+            {contactData.map((item,i)=>{
+              let link
+              if(item.description.includes("@")){
+                 link = `mailto:${item.description}`
+              }
+              else{
+                link = `tel:${item.description}`
+              }
+              return <Link href={`${link}`} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-2xl font-bold text-purple-950">Sales Enquiry</h2>
-                        <p className="text-zinc-500 text-lg font-medium">mark@tankersolutions.co.nz</p>
+                        <h2 className="text-2xl font-bold text-purple-950">{item.title || "N/A"}</h2>
+                        <p className="text-zinc-500 text-lg font-medium">{item.description|| "N/A"}</p>
                     </div>
                     <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
                        <RiCustomerService2Fill className="group-hover:scale-108 duration-500"/>
                 </div>
                 </Link>
-                <Link href={'mailto:scott@tankersolutions.co.nz'} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
+            })}
+                {/* <Link href={'mailto:scott@tankersolutions.co.nz'} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
                     <div className="flex flex-col gap-2">
                         <h2 className="text-2xl font-bold text-purple-950">BDM</h2>
                         <p className="text-zinc-500 text-lg font-medium">scott@tankersolutions.co.nz</p>
@@ -175,7 +177,7 @@ const ContactComponent = () => {
                     <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
                        <RiCustomerService2Fill className="group-hover:scale-108 duration-500"/>
                 </div>
-                </Link>
+                </Link> */}
             </div>
         </div>
       </div>

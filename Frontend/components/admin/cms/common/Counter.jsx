@@ -33,9 +33,10 @@ const Counter = ({ counterData }) => {
 
     const mapGroupToBox = (group) => {
       const count = group.contents?.find((c) => c.label === "Number")?.text || "";
+      const suffix = group.contents?.find((c) => c.label === "Number")?.suffix || "";
       const description = group.contents?.find((c) => c.label === "Text")?.text || "";
       const order = group.order?.toString() || "";
-      return { count, description, order };
+      return { count, suffix, description, order };
     };
 
     setFormData({

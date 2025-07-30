@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 import { GoDotFill } from "react-icons/go";
 
-const ClientFeedback = () => {
+const ClientFeedback = ({testimonialData}) => {
   const [show, setShow] = useState(0);
 
   const data = [
@@ -39,10 +39,10 @@ const ClientFeedback = () => {
           <div className="w-[42%] flex flex-col gap-8">
             <div className='flex flex-col gap-2'>
               <div className='flex items-center gap-2'>
-                <h4 className='text-orange-400 font-black text-lg uppercase'>Client Feedback </h4>
+                <h4 className='text-orange-400 font-black text-lg uppercase'>{testimonialData?.subheading || "N/A"} </h4>
                 <Image src={'/images/arrows.png'} height={11} width={43} alt='arrow' />
               </div>
-              <h2 className='font-black text-6xl text-purple-950'> Words from Our Customers Trust Our Client</h2>
+              <h2 className='font-black text-6xl text-purple-950'> {testimonialData?.heading || "N/A"}</h2>
             </div>
 
             <div className="meta-img relative w-fit inline-block">

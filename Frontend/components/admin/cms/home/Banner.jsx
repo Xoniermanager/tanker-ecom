@@ -196,7 +196,16 @@ const Banner = ({ homeData }) => {
           
           <div className="flex flex-col gap-2 ">
             <label htmlFor='buttonLink'>Button Link</label>
-            <input type="text" name='buttonLink' className='border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3' placeholder='Button Link' value={formData.buttonLink} onChange={handleChange} required />
+            
+            <select name="buttonLink" id="buttonLink" value={formData.buttonLink} onChange={handleChange} className='border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3' required>
+              <option hidden>Choose Pages</option>
+              <option value="/contact">Contact Page</option>
+              <option value="/about">About Us Page</option>
+              <option value="/products">Products Page</option>
+              <option value="/news">News Page</option>
+              <option value="/gallery">Gallery Page</option>
+              <option value="/services">Services Page</option>
+            </select>
             {webOrigin && <div className='flex items-center gap-2'>
               <span className='font-medium text-sm'>Preview:</span>
               <Link href={`${webOrigin}${formData.buttonLink}`} target='_blank' className='text-green-500'>{webOrigin}{formData.buttonLink}</Link>

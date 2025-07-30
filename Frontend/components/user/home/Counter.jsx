@@ -23,7 +23,7 @@ const CounterItem = ({ end, suffix = '', label }) => {
 };
 
 const Counter = ({counterData}) => {
-   const data = counterData.contents.sort((a,b)=>a.order - b.order)
+   const data = counterData?.contents?.sort((a,b)=>a.order - b.order)
    
   return (
     <div
@@ -31,7 +31,7 @@ const Counter = ({counterData}) => {
       className='w-full py-22 pb-18 flex items-center bg-cover bg-center'
     >
       <div className="max-w-7xl mx-auto flex gap-12 items-start w-full">
-        {data.map((item, i)=>(
+        {data?.map((item, i)=>(
           <CounterItem end={item.contents.find(item=>item.label === "Number").text}  suffix={item.contents.find(item=>item.label === "Number").suffix} label={item.contents.find(item=>item.label === "Text").text} key={i}/>
 
         ))

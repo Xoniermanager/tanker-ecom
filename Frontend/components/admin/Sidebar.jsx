@@ -10,6 +10,7 @@ import { FaRegUser } from "react-icons/fa";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
+import { MdContentPaste } from "react-icons/md";
 
 const Sidebar = () => {
   const [active, setActive] = useState(0);
@@ -231,7 +232,7 @@ const Sidebar = () => {
                   pathname.includes("products") && "text-orange-600 bg-white "
                 }`}
               >
-                <FiTruck className="group-hover:scale-110 group-hover:text-orange-600 text-lg" />
+                <MdContentPaste  className="group-hover:scale-110 group-hover:text-orange-600 text-lg" />
               </span>
               <span
                 className={`font-medium ${
@@ -273,6 +274,28 @@ const Sidebar = () => {
                 >
                   {" "}
                   About Us
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/dashboard/cms/services`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("services") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  Services
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/dashboard/cms/contact`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("contact") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  Contact Us
                 </Link>
               </li>
               

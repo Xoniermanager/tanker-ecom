@@ -39,10 +39,12 @@ const Page = () => {
   
 
   const bannerData = homePageData?.sections?.find(item=>item?.order === 1)
+  const aboutData = homePageData?.sections?.find(item=>item?.order === 3)
   const productData = homePageData?.sections?.find(item=>item?.order === 4 )
   const counterData = homePageData?.sections?.find(item=>item?.order === 5 )
   const articleData = homePageData?.sections?.find(item=>item?.order === 6 )
   
+  console.log("about data: ", aboutData)
 
   return (
     <>
@@ -118,7 +120,7 @@ const Page = () => {
           {active === 2 && (
     <OurServices serviceData={homePageData?.sections.find(item => item?.order === 2)} />
   )}
-          {active === 3 && <AboutUs aboutData={homePageData?.sections?.find(item=>item?.order === 3)}/>}
+          {active === 3 && (aboutData && <AboutUs aboutData={aboutData}/>)}
           {active === 4 && (productData && <Products productData={productData} />)}
           {active === 5 && (counterData && <Counter counterData={counterData}/>)}
           {active === 6 && (articleData && <Article articleData={articleData}/>)}

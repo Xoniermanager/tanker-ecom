@@ -29,7 +29,7 @@ const HomePage = ({bannerData}) => {
              <Image src={'/images/right-wing.png'} width={15} height={15} alt='left wing'/> 
         </div>
         <h1 className='text-[110px] text-white font-black leading-28'>{bannerData?.heading || "N/A"}</h1>
-        <p className='text-white w-3/4 leading-relaxed text-lg'>{para || "N/A"}</p>
+        <p className='text-white w-3/4 leading-relaxed text-lg first-letter:uppercase'>{para || "N/A"}</p>
          <div className='flex'>
         <Link href={btnLink} className='btn-one text-xl tracking-wide'>
              {btnName || "N/A"}

@@ -56,6 +56,8 @@ const contentSchema = z.lazy(() =>
             label: z.string().optional(),
             title: z.string().min(1),
             description: z.string().min(1),
+            subtitle: z.string().optional(),
+            thumbnail: thumbnailSchema
         }),
         z.object({
             order: z.number(),

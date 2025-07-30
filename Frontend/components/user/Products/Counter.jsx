@@ -20,17 +20,18 @@ const CounterItem = ({ end, suffix = '', label }) => {
   );
 };
 
-const Counter = () => {
+const Counter = ({counterData}) => {
+  const data = counterData?.contents?.sort((a,b)=>a.order - b.order)
   return (
     <div
       style={{ backgroundImage: "url('/images/bg_08.jpg')" }}
       className='w-full py-20 pb-18 flex items-center bg-cover bg-center'
     >
       <div className="max-w-7xl mx-auto flex gap-12 items-start w-full">
-        <CounterItem end={99}  suffix="%+" label="Delivery on time" />
-        <CounterItem end={500} suffix="+" label="Custom Tankers Delivered" />
-        <CounterItem end={200} suffix="+" label="Years of Combined Industry Experience" />
-        <CounterItem end={3} suffix="" label="Fully Equipped Facilities" />
+       {data?.map((item, i)=>(
+          <CounterItem end={item.contents.find(item=>item.label === "Number").text}  suffix={item.contents.find(item=>item.label === "Number").suffix} label={item.contents.find(item=>item.label === "Text").text} key={i}/>
+
+        ))}
       </div>
     </div>
   );

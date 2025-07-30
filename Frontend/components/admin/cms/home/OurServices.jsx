@@ -30,8 +30,8 @@ const OurServices = ({serviceData}) => {
     setFormData({
         heading: serviceData?.heading || "",
     subHeading: serviceData?.subheading || "",
-    para: serviceData.contents.find(item=>item.type === "text")?.text || "",
-    services: serviceData?.contents.find(item=>item?.type === "cards").contents?.map(item=>item) || []
+    para: serviceData?.contents?.find(item=>item.type === "text")?.text || "",
+    services: serviceData?.contents?.find(item=>item?.type === "cards").contents?.map(item=>item) || []
     })
     setSectionId(serviceData?.section_id || "")
   }, [])

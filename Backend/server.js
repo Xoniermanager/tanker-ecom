@@ -56,7 +56,8 @@ const startServer = async () => {
             }
 
             const file = await uploadImage(req.file.buffer, req.file.originalname, "uploads", req.file.mimetype);
-            const fullFilePath = getPublicFileUrl(file.key);
+            console.log("file url: ", file.url)
+            const fullFilePath = getPublicFileUrl(file.url);
             customResponse(res, "File uploaded successfully", {
                 file,
                 fullPath: fullFilePath

@@ -4,21 +4,21 @@ import React from 'react'
 
 const WhatWeOffer = ({serviceData}) => {
   const para = serviceData?.contents?.find(item=> item.type === "text").text
-  const cardsData = serviceData.contents?.find(item=> item.type === "cards").contents.sort((a,b)=> a.order - b.order)
+  const cardsData = serviceData?.contents?.find(item=> item.type === "cards").contents.sort((a,b)=> a.order - b.order)
   return (
     <div className='w-full py-28'>
         <div className="max-w-7xl mx-auto flex flex-col gap-12 ">
             <div className="flex flex-col gap-4 items-center">
                 <div className='flex items-center gap-2'>
                     <Image src="/images/arrows.png" width={43} height={11} alt='arrow' />
-                    <span className='text-orange-400 font-semibold text-[22px]'>{serviceData?.subheading || "N/A"}</span>
+                    <span className='text-orange-400 font-semibold text-[22px] uppercase'>{serviceData?.subheading || "N/A"}</span>
                     <Image src="/images/arrows.png" width={43} height={11} alt='arrow' />
                 </div>
                 <h2 className='font-black text-7xl text-purple-950 capitalize'>{serviceData?.heading || "N/A"}</h2>
-                <p className='text-zinc-500 w-1/2 text-center text-lg font-medium'>{para || "N/A"}</p>
+                <p className='text-zinc-500 w-1/2 text-center text-lg font-medium first-letter:uppercase'>{para || "N/A"}</p>
             </div>
             <div className="flex item-center justify-center flex-wrap gap-8 justify-items-center">
-              {cardsData.map((item, i)=>(
+              {cardsData?.map((item, i)=>(
               <div key={item.order} className='w-[31%] px-10 py-16   service-box overflow-hidden relative group'>
                   <Link href={''} className='flex flex-col justify-center items-center gap-4 '>
                     <h2 className='text-2xl font-black text-purple-950  text-center group-hover:text-white capitalize'>{item?.title || "N/A"}</h2>

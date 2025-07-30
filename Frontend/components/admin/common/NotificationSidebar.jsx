@@ -118,9 +118,9 @@ const NotificationSidebar = ({showNotification, setShowNotification}) => {
        
         
         <ul className="flex flex-col px-10 overflow-y-scroll h-[75vh]">
-             {notificationsData.length > 0 && notifications.map((item,index)=>(
+             {notificationsData?.length > 0 && notifications.map((item,index)=>(
               
-               <li className='border-b-1 w-full border-stone-200'> <button className='flex w-full items-center gap-4 py-4  hover:bg-slate-50' onClick={()=>handleActive(index)}>
+               <li className='border-b-1 w-full border-stone-200' key={index}> <button className='flex w-full items-center gap-4 py-4  hover:bg-slate-50' onClick={()=>handleActive(index)}>
                 <span className={`h-12 w-12 rounded-full flex items-center justify-center bg-blue-400 text-white text-xl`}><MdOutlineNotificationsActive /></span>
                 <div className="flex flex-col gap-1">
                     <h3 className='text-orange-500 font-semibold'>{item.title}</h3>

@@ -1,19 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaXmark, FaPlus } from "react-icons/fa6";
 import { MdOutlineCloudUpload } from "react-icons/md";
+import api from "../../../user/common/api";
+import { toast } from "react-toastify";
 
 
-const WhoWeAre = () => {
+const WhoWeAre = ({whoWeAreData}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
+  const [sectionId, setSectionId] = useState(null)
   const [formData, setFormData] = useState({
     heading: "",
     subHeading: "",
     para: "",
     list: [
       {
+        order: "",
         icon: null,
         iconPreview: null,
         listHeading: "",
@@ -21,6 +25,55 @@ const WhoWeAre = () => {
       },
     ],
   });
+
+useEffect(() => {
+  setSectionId(whoWeAreData?.section_id || null);
+  if (!whoWeAreData) return;
+
+  const paraItem = whoWeAreData?.contents?.find(
+    (item) => item.type === "text" && item.label === "Description"
+  );
+
+  const listItem = whoWeAreData?.contents?.find(
+    (item) => item.type === "list" && item.label === "Highlights"
+  );
+
+  const highlightList = listItem?.contents?.map((groupItem) => {
+    const headingObj = groupItem.contents.find(
+      (item) => item.label === "Heading"
+    );
+    const descriptionObj = groupItem.contents.find(
+      (item) => item.label === "Description"
+    );
+
+    return {
+      icon: null,
+      iconPreview: null,
+      order: groupItem.order || 0,
+      listHeading: headingObj?.text || "",
+      listDescription: descriptionObj?.text || "",
+    };
+  });
+
+  setFormData({
+    heading: whoWeAreData?.heading || "",
+    subHeading: whoWeAreData?.subheading || "",
+    para: paraItem?.text || "",
+    list: highlightList?.length
+      ? highlightList
+      : [
+          {
+            icon: null,
+            iconPreview: null,
+            order: 1,
+            listHeading: "",
+            listDescription: "",
+          },
+        ],
+  });
+}, [whoWeAreData]);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +83,13 @@ const WhoWeAre = () => {
   const handleListChange = (e, index) => {
     const { name, value } = e.target;
     const updatedList = [...formData.list];
-    updatedList[index][name] = value;
+    if(name === "order"){
+
+      updatedList[index][name] = Number(value);
+    }
+    else{
+      updatedList[index][name] = value;
+    }
     setFormData({ ...formData, list: updatedList });
   };
 
@@ -77,25 +136,75 @@ const WhoWeAre = () => {
     setFormData({ ...formData, list: updatedList });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrMessage(null);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setErrMessage(null);
 
-    try {
-      console.log("Submitted data:", formData);
-    } catch (error) {
-      console.error(error);
-      const message =
-        (Array.isArray(error?.response?.data?.errors) &&
-          error.response.data.errors[0]?.message) ||
-        error?.response?.data?.message ||
-        "Something went wrong";
-      setErrMessage(message);
-    } finally {
-      setIsLoading(false);
+  try {
+    
+    const descriptionBlock = {
+      order: 1,
+      type: "text",
+      label: "Description",
+      text: formData.para,
+    };
+
+   
+    const highlightGroups = formData.list.map((item, index) => ({
+      order: item.order,
+      type: "group",
+      
+      contents: [
+        {
+          order: 1,
+          type: "text",
+          label: "Heading",
+          text: item.listHeading,
+        },
+        {
+          order: 2,
+          type: "text",
+          label: "Description",
+          text: item.listDescription,
+        },
+        
+      ],
+    }));
+
+    const highlightsBlock = {
+      order: 2,
+      type: "list",
+      label: "Highlights",
+      contents: highlightGroups,
+    };
+
+    const payload = {
+      section_id: sectionId,
+      heading: formData.heading,
+      subheading: formData.subHeading,
+      order: 3,
+      contents: [descriptionBlock, highlightsBlock],
+    };
+
+    const response = await api.put(`/cms/sections/${sectionId}`, payload);
+    if (response.status === 201 || response.status === 200) {
+      toast.success("Data updated successfully");
+      setErrMessage(null);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    const message =
+      (Array.isArray(error?.response?.data?.errors) &&
+        error.response.data.errors[0]?.message) ||
+      error?.response?.data?.message ||
+      "Something went wrong";
+    setErrMessage(message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="bg-white p-6 rounded-xl border  border-gray-200">
@@ -160,7 +269,7 @@ const WhoWeAre = () => {
                   </button>
                 )}
               </div>
-
+               <div className="grid grid-cols-2 gap-6">
                <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">List Heading</label>
                 <input
@@ -171,6 +280,18 @@ const WhoWeAre = () => {
                   className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
                   placeholder="Enter list heading"
                 />
+              </div>
+               <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium">Order</label>
+                <input
+                  type="text"
+                  name="order"
+                  value={item.order}
+                  onChange={(e) => handleListChange(e, index)}
+                  className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
+                  placeholder="Order"
+                />
+              </div>
               </div>
 
                <div className="flex flex-col gap-2">
