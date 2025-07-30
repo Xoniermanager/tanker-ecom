@@ -33,8 +33,6 @@ export default function Home() {
 
   }, []);
 
-  console.log("homedata: ", homeData)
-
   
   const bannerData = homeData?.sections?.find(item=>item?.section_id === "section-banner") || null
   const whatWeOfferData = homeData?.sections?.find(item=>item?.section_id === "section-our-services") || null
