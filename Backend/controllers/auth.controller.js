@@ -194,11 +194,15 @@ class AuthController {
     refreshToken = async (req, res, next) => {
         try {
             const response = await this.userService.refreshToken(req);
-            customResponse(
-                res,
-                "Access token refreshed successfully.",
-                response
-            );
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+            });
+
+            customResponse(res,"Access token refreshed successfully.");
         } catch (error) {
             next(error);
         }
