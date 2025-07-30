@@ -74,7 +74,6 @@ const Page = () => {
         <div className="">
         
 
-            
             <>
           {active === 1 && (addressData && <Address addressData={addressData}/> )}
           {active === 2 && (contactsData && <Contact contactsData={contactsData}/> )}
