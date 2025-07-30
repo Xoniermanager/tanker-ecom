@@ -118,8 +118,9 @@ class UserService {
         const refreshToken = generateRefreshToken(user._id);
 
         return {
-            returnData: { user, accessToken },
+            returnData: { user },
             refreshToken,
+            accessToken,
         };
     }
 

@@ -86,7 +86,14 @@ class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
+                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+            });
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
             customResponse(res, "Login successful", response.returnData);
@@ -109,8 +116,15 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "Strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                sameSite: "strict",
+                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+            });
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
             customResponse(res, "Admin login successful", response.returnData);
