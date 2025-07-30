@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "config": "node config/appConfig.js",
+    "config": "node config/app-config.js",
     "queue:dev": "nodemon queues/worker.js",
     "queue:prod": "pm2 start queues/worker.js --name queue-worker",
     "queue:stop": "pm2 stop queue-worker",
@@ -33,9 +33,11 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
     "sharp": "^0.34.3",
+    "slugify": "^1.6.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0",
+    "winston": "^3.17.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

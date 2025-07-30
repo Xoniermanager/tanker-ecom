@@ -27,7 +27,7 @@ const seedAppConfig = async () => {
                 "designation": "Admin",
                 "mobileNumber": "+919192939495",
                 "country": "India",
-                "password": "StrongPassword123",
+                "password": "StrongPassword@123",
                 "role": ENUMS.USER_ROLES.ADMIN,
                 "emailVerifiedAt": new Date(),
             });

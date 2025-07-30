@@ -1093,13 +1093,13 @@ module.exports = {
             }
         ]
     },
-    product:{
+    product: {
         "seo": {
             "metaTitle": "...",
             "metaDescription": "...",
             "ogImage": "..."
         },
-        "sections":[
+        "sections": [
             {
                 "order": 2,
                 "section_id": "section-our-work-process",
@@ -1235,7 +1235,5 @@ module.exports = {
                 ]
             }
         ]
-
     }
-
 }
