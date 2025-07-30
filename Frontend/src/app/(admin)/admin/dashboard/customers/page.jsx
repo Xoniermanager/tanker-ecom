@@ -1,7 +1,7 @@
 import React from 'react'
-import PageBar from '../../../../../components/admin/common/PageBar'
-import CustomerGraphRow from '../../../../../components/admin/customers/CustomerGraphRow'
-import CustomerTable from '../../../../../components/admin/customers/CustomerTable'
+import PageBar from '../../../../../../components/admin/common/PageBar'
+import CustomerGraphRow from '../../../../../../components/admin/customers/CustomerGraphRow'
+import CustomerTable from '../../../../../../components/admin/customers/CustomerTable'
 
 const page = () => {
   return (

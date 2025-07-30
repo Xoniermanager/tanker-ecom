@@ -165,7 +165,7 @@ class AuthController {
         try {
             const payload = {
                 ...req.body,
-                role: "user",
+                role: req.body.role || "user",
             };
             await this.userService.resendLoginOtp(payload);
             customResponse(res, "Login OTP resent successfully.");

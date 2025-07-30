@@ -150,7 +150,7 @@ const ContactComponent = ({addressData, contactsData}) => {
               else{
                 link = `tel:${item.description}`
               }
-              return <Link href={`${link}`} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
+              return <Link href={`${link}`} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]" key={i}>
                     <div className="flex flex-col gap-2">
                         <h2 className="text-2xl font-bold text-purple-950">{item.title || "N/A"}</h2>
                         <p className="text-zinc-500 text-lg font-medium">{item.description|| "N/A"}</p>

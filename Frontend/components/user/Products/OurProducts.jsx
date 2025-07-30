@@ -140,7 +140,7 @@ const OurProducts = () => {
         <div className="flex items-center gap-4 justify-center">
 
         {[...Array(totalPages)].map((item, index)=>(
-            <button className={` ${activePage === (index + 1) ? "bg-orange-400 text-white" : "bg-[#f6e7d3]"} hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}>{index + 1}</button>
+            <button className={` ${activePage === (index + 1) ? "bg-orange-400 text-white" : "bg-[#f6e7d3]"} hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`} key={index}>{index + 1}</button>
         ))}
         <button className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl" > <IoArrowForward /> </button>
         </div>

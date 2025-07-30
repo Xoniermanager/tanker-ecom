@@ -1,6 +1,6 @@
 "use client"
 import React, {useState, useEffect} from 'react'
-import ProductList from '../../../../../components/admin/products/ProductList'
+import ProductList from '../../../../../../components/admin/products/ProductList'
 
 
 const page = () => {

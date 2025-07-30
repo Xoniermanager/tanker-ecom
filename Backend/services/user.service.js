@@ -252,7 +252,7 @@ class UserService {
             );
         }
 
-        const isValid = await user.comparePassword(password);
+        const isValid =  await user.comparePassword(password);
         if (!isValid) throw customError("Invalid password", 400);
 
         return user;

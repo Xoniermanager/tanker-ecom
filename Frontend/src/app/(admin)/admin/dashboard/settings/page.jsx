@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileSettingComponent from '../../../../../components/admin/settings/ProfileSettingComponent'
+import ProfileSettingComponent from '../../../../../../components/admin/settings/ProfileSettingComponent'
 
 const page = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import OrderlistTable from '../../../../../components/admin/orders/OrderlistTable'
+import OrderlistTable from '../../../../../../components/admin/orders/OrderlistTable'
 
 const page = () => {
   return (

@@ -1,8 +1,8 @@
 "use client"
 import React, {useEffect, useState} from 'react'
-import AddCategoryForm from '../../../../../../components/admin/products/AddCategoryForm'
-import api from '../../../../../../components/user/common/api'
-import CategoryList from '../../../../../../components/admin/products/CategoryList'
+import AddCategoryForm from '../../../../../../../components/admin/products/AddCategoryForm'
+import api from '../../../../../../../components/user/common/api'
+import CategoryList from '../../../../../../../components/admin/products/CategoryList'
 
 const page = () => {
     const [categoryData, setCategoryData] = useState(null)

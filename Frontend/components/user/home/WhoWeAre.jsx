@@ -16,7 +16,7 @@ const WhoWeAre = ({whoWeAreData}) => {
             <div className="w-1/2 flex flex-col gap-3">
               <div className='flex items-center gap-2'> 
                 <h4 className='text-lg font-semibold text-[22px] text-orange-400 uppercase'>{whoWeAreData?.subheading || "N/A"}</h4>
-                <Image src={'/images/arrows.png'} width={43} height={11}/></div>
+                <Image src={'/images/arrows.png'} width={43} height={11} alt='arrow'/></div>
                 <h2 className='font-black text-7xl text-purple-950 capitalize'>{whoWeAreData?.heading || "N/A"}</h2>
                 <p className='text-zinc-500  mt-8 text-lg font-medium'>{para || "N/A"}</p>
 
