@@ -1092,5 +1092,148 @@ module.exports = {
                 ]
             }
         ]
+    },
+    product: {
+        "seo": {
+            "metaTitle": "...",
+            "metaDescription": "...",
+            "ogImage": "..."
+        },
+        "sections": [
+            {
+                "order": 2,
+                "section_id": "section-our-work-process",
+                "heading": "Your One-Stop Tanker Partner",
+                "subheading": "OUR WORK PROCESS",
+                "contents": [
+                    {
+                        "order": 1,
+                        "type": "cards",
+                        "label": "Process",
+                        "contents": [
+                            {
+                                "order": 1,
+                                "type": "card",
+                                "label": "#1",
+                                "title": "Design & Planning",
+                                "subtitle": "First",
+                                "description": "We are collaborate with you to understand your needs and engineer with a custom solutions using advanced CAD and industry standards.",
+                                "thumbnail": {
+                                    "type": "image",
+                                    "source": "https://example.com/image.jpg"
+                                }
+                            },
+                            {
+                                "order": 2,
+                                "type": "card",
+                                "label": "#2",
+                                "title": "Fabrication & Integration",
+                                "subtitle": "Second",
+                                "description": "Our skilled team builds your tanker or trailer in-house, integrating certified parts and systems from trusted global partners like HEIL.",
+                                "thumbnail": {
+                                    "type": "image",
+                                    "source": "https://example.com/image.jpg"
+                                }
+                            },
+                            {
+                                "order": 3,
+                                "type": "card",
+                                "label": "#3",
+                                "title": "Testing & Delivery",
+                                "subtitle": "Third",
+                                "description": "We complete rigorous inspections, obtain certifications, and deliver your tanker fully road-ready and compliant with NZ regulations.",
+                                "thumbnail": {
+                                    "type": "image",
+                                    "source": "https://example.com/image.jpg"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "order": 3,
+                "section_id": "section-track-record",
+                "heading": "Track Record",
+                "subheading": "N/A",
+                "contents": [
+                    {
+                        "order": 1,
+                        "type": "group",
+                        "label": "Highlight #1",
+                        "contents": [
+                            {
+                                "order": 1,
+                                "type": "text",
+                                "label": "Number",
+                                "text": "99%+"
+                            },
+                            {
+                                "order": 2,
+                                "type": "text",
+                                "label": "Text",
+                                "text": "Delivery on time"
+                            }
+                        ]
+                    },
+                    {
+                        "order": 2,
+                        "type": "group",
+                        "label": "Highlight #2",
+                        "contents": [
+                            {
+                                "order": 1,
+                                "type": "text",
+                                "label": "Number",
+                                "text": "500+"
+                            },
+                            {
+                                "order": 2,
+                                "type": "text",
+                                "label": "Text",
+                                "text": "Custom Tankers Delivered"
+                            }
+                        ]
+                    },
+                    {
+                        "order": 3,
+                        "type": "group",
+                        "label": "Highlight #3",
+                        "contents": [
+                            {
+                                "order": 1,
+                                "type": "text",
+                                "label": "Number",
+                                "text": "200+"
+                            },
+                            {
+                                "order": 2,
+                                "type": "text",
+                                "label": "Text",
+                                "text": "Years of Combined Industry Experience"
+                            }
+                        ]
+                    },
+                    {
+                        "order": 4,
+                        "type": "group",
+                        "contents": [
+                            {
+                                "order": 1,
+                                "type": "text",
+                                "label": "Number",
+                                "text": "3+"
+                            },
+                            {
+                                "order": 2,
+                                "type": "text",
+                                "label": "Text",
+                                "text": "Fully Equipped Facilities"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 }

@@ -5,6 +5,7 @@ const SectionContentSchema = new mongoose.Schema({
     type: { type: String, enum: ["text", "list", "group", "cards", "card", "reference_content", "phone", "link"], required: true },
     label: { type: String, required: true },
     suffix: String,
+    subtitle: String,
     text: String,
     title: String,
     description: String,
