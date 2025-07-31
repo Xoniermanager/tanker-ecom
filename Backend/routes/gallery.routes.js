@@ -2,10 +2,10 @@ const express = require("express");
 const { GalleryController } = require("../controllers/gallery.controller");
 const authorize = require("../middlewares/auth");
 const {
-    validateBulkInsertGalleryItems,
-    validateBulkUpdateGalleryItems,
-    validateBulkDeleteGalleryItems
+    validateBulkDeleteGalleryItems,
+    validateBulkInsertUpdateGalleryItems
 } = require("../middlewares/validation");
+const upload = require("../config/multer");
 
 const router = express.Router();
 const galleryController = new GalleryController();
@@ -15,13 +15,15 @@ router.get("/", galleryController.getGallery);
 router.post(
     "/",
     authorize(['admin']),
-    validateBulkInsertGalleryItems,
+    upload.any(),
+    validateBulkInsertUpdateGalleryItems,
     galleryController.addGalleryItems
 );
 router.put(
     "/",
     authorize(['admin']),
-    validateBulkUpdateGalleryItems,
+    upload.any(),
+    validateBulkInsertUpdateGalleryItems,
     galleryController.updateGalleryItems
 );
 router.delete(
