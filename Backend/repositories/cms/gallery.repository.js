@@ -37,7 +37,7 @@ class GalleryRepository extends BaseRepository {
         if (updateItems.length) {
             const updateOps = updateItems.map(item => ({
                 updateOne: {
-                    filter: { _id: item._id },
+                    filter: { _id: item.clientId },
                     update: { $set: item },
                     upsert: true,
                 }
@@ -45,7 +45,7 @@ class GalleryRepository extends BaseRepository {
 
             const updateResult = await this.model.bulkWrite(updateOps, { session });
 
-            const updatedIds = updateItems.map(item => item._id);
+            const updatedIds = updateItems.map(item => item.clientId);
             const upsertedIds = Object.values(updateResult.upsertedIds);
 
             finalIds.push(...updatedIds, ...upsertedIds);

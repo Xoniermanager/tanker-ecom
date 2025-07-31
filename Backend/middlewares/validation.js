@@ -8,9 +8,8 @@ const {
     setPublishStatusSchema,
 } = require("../requestSchemas/blog.schema");
 const {
-    bulkInsertGallerySchema,
-    bulkUpdateGallerySchema,
-    bulkDeleteGallerySchema
+    bulkDeleteGallerySchema,
+    bulkInsertUpdateGallerySchema
 } = require("../requestSchemas/gallery.schema");
 const {
     userRegistrationSchema,
@@ -120,6 +119,36 @@ const validateQuery = async (req, res, next, schema) => {
     }
 };
 
+/**
+ **  Helper function for multipart json validation
+ */
+const validateMultipartJsonField = (req, res, next, schema, fieldName = 'items') => {
+    try {
+        if (typeof req.body[fieldName] === 'string') {
+            req.body[fieldName] = JSON.parse(req.body[fieldName]);
+        }
+
+        const result = schema.safeParse(req.body);
+
+        if (!result.success) {
+            return res.status(422).json({
+                success: false,
+                message: "Validation error",
+                errors: result.error.errors,
+            });
+        }
+
+        req.body = result.data;
+        next();
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: `Invalid JSON in '${fieldName}'`,
+            error: err.message,
+        });
+    }
+};
+
 // Middleware exports
 const validateUserRegistration = (req, res, next) =>
     validateSchema(req, res, next, userRegistrationSchema);
@@ -145,10 +174,8 @@ const validateUpsertBlog = (req, res, next) =>
     validateSchema(req, res, next, upsertBlogSchema);
 const validatePublishStatus = (req, res, next) =>
     validateSchema(req, res, next, setPublishStatusSchema);
-const validateBulkInsertGalleryItems = (req, res, next) =>
-    validateSchema(req, res, next, bulkInsertGallerySchema);
-const validateBulkUpdateGalleryItems = (req, res, next) =>
-    validateSchema(req, res, next, bulkUpdateGallerySchema);
+const validateBulkInsertUpdateGalleryItems = (req, res, next) =>
+    validateMultipartJsonField(req, res, next, bulkInsertUpdateGallerySchema, 'items');
 const validateBulkDeleteGalleryItems = (req, res, next) =>
     validateSchema(req, res, next, bulkDeleteGallerySchema);
 const validateContact = (req, res, next) =>
@@ -167,8 +194,7 @@ module.exports = {
     validateUpdateSection,
     validateUpsertBlog,
     validatePublishStatus,
-    validateBulkInsertGalleryItems,
-    validateBulkUpdateGalleryItems,
+    validateBulkInsertUpdateGalleryItems,
     validateBulkDeleteGalleryItems,
     validateContact
 };
