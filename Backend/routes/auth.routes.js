@@ -58,7 +58,7 @@ router.post(
 );
 router.post(
     "/refresh-token",
-    validateRequestLoginOtp,
+    // validateRequestLoginOtp,
     authController.refreshToken
 );
 

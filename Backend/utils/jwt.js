@@ -59,9 +59,12 @@ function verifyAccessToken(token) {
  */
 function verifyRefreshToken(token) {
     try {
+        console.log("token: ", token)
         const decoded = jwt.verify(token, JWT_REFRESH_SECRET);
+        console.log("decoded: ",decoded)
         return decoded;
     } catch (error) {
+        
         return null;
     }
 }

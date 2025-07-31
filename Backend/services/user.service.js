@@ -219,6 +219,7 @@ class UserService {
      */
     async refreshToken(req) {
         const refreshToken = req.cookies.refreshToken;
+        
         if (!refreshToken) throw customError("No refresh token provided", 400);
 
         const decoded = verifyRefreshToken(refreshToken);
