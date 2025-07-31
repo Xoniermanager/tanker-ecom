@@ -18,6 +18,19 @@ class GalleryController {
     };
 
     /**
+     * Get all gallery items for frontend (only active one).
+     */
+    getFrontendGallery = async (req, res, next) => {
+        try {
+            const { page = 1, limit = 10 } = req.query;
+            const gallery = await galleryService.getGallery(page, limit, { status: "active" });
+            customResponse(res, "Gallery items fetched successfully", gallery);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    /**
      * Get gallery items filtered by tag.
      */
     getGalleryByTags = async (req, res, next) => {
@@ -127,6 +140,16 @@ class GalleryController {
             const { ids = [] } = req.body;
             const result = await galleryService.bulkDeleteGallery(ids);
             customResponse(res, "Gallery items deleted successfully", result);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    updateGalleryItemStatus = async (req, res, next) => {
+        try {
+            const itemId = req.params.id;
+            const status = await galleryService.updateGalleryItemStatus(itemId);
+            customResponse(res, `Gallery item status changes to ${status} successfully`, null);
         } catch (error) {
             next(error);
         }

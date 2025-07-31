@@ -50,7 +50,7 @@ const deleteImage = async (key) => {
         };
         await s3.deleteObject(params).promise();
     } else {
-        const fullPath = path.join(__dirname, "..", "public", key);
+        const fullPath = path.join(__dirname, "..", key);
         if (fs.existsSync(fullPath)) {
             await fs.promises.unlink(fullPath);
         }
