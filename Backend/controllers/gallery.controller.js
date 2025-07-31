@@ -130,6 +130,16 @@ class GalleryController {
             next(error);
         }
     };
+
+    updateGalleryItemStatus = async (req, res, next) => {
+        try {
+            const itemId = req.params.id;
+            const status = await galleryService.updateGalleryItemStatus(itemId);
+            customResponse(res, `Gallery item status changes to ${status} successfully`, null);
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 exports.GalleryController = GalleryController;

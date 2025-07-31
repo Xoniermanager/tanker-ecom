@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const galleryRepository = require("../repositories/cms/gallery.repository");
 const { deleteImage } = require("../utils/storage");
+const customError = require("../utils/error");
 
 /**
  * Service for managing gallery items.
@@ -82,6 +83,29 @@ class GalleryService {
         } finally {
             session.endSession();
         }
+    }
+
+    /**
+     * Toggles the status of a gallery item between 'active' and 'inactive'.
+     *
+     * @param {string} itemId - The ID of the gallery item to update.
+     * @returns {Promise<string>} The updated status of the gallery item ('active' or 'inactive').
+     */
+    async updateGalleryItemStatus(itemId) {
+        if (!mongoose.Types.ObjectId.isValid(itemId)) {
+            throw customError("Invalid gallery item ID");
+        }
+
+        const item = await galleryRepository.findById(itemId);
+        if (!item) {
+            throw customError("Gallery item not found");
+        }
+
+        const newStatus = item.status === 'active' ? 'inactive' : 'active';
+        item.status = newStatus;
+        await item.save();
+
+        return newStatus;
     }
 }
 

@@ -32,5 +32,10 @@ router.delete(
     validateBulkDeleteGalleryItems,
     galleryController.deleteGalleryItems
 );
+router.patch(
+    "/:id/status",
+    authorize(['admin']),
+    galleryController.updateGalleryItemStatus
+);
 
 module.exports = router;
