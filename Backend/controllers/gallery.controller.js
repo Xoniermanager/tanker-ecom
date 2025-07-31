@@ -18,6 +18,19 @@ class GalleryController {
     };
 
     /**
+     * Get all gallery items for frontend (only active one).
+     */
+    getFrontendGallery = async (req, res, next) => {
+        try {
+            const { page = 1, limit = 10 } = req.query;
+            const gallery = await galleryService.getGallery(page, limit, { status: "active" });
+            customResponse(res, "Gallery items fetched successfully", gallery);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    /**
      * Get gallery items filtered by tag.
      */
     getGalleryByTags = async (req, res, next) => {

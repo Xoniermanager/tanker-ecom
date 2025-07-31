@@ -13,8 +13,8 @@ class GalleryService {
      * @param {number} limit - Number of items per page.
      * @returns {Promise<Object>} Paginated gallery items.
      */
-    async getGallery(page = 1, limit = 10) {
-        return await galleryRepository.paginate({}, page, limit, { createdAt: -1 }, null);
+    async getGallery(page = 1, limit = 10, filters = {}) {
+        return await galleryRepository.paginate({ ...filters }, page, limit, { createdAt: -1 }, null);
     }
 
     /**
