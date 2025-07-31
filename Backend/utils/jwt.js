@@ -4,67 +4,78 @@
  */
 
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'yourJwtSecret';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'yourRefreshJwtSecret';
+const JWT_SECRET = process.env.JWT_SECRET || '9cc4b70317785be8125e38adb11c7c4aee17cb78c0a6de9b4a0f254db6f24572';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || '9cc4b70317785be8125e38adb11c7c4aee17cb78c0a6de9b4a0f254db6f24572';
+const JWT_ISSUER = process.env.JWT_ISSUER || "9cc4b70317785be8125e38adb11c7c4aee17cb78c0a6de9b4a0f254db6f24572";
+const JWT_AUDIENCE = process.env.JWT_AUDIENCE || "9cc4b70317785be8125e38adb11c7c4aee17cb78c0a6de9b4a0f254db6f24572";
 
 /**
- * Generates an access token for the user.
- * The access token is used to authenticate the user for a limited period (1 hour).
- * @param {string} userId - The ID of the user for whom the token is generated.
+ * Generates a JWT access token with dynamic expiry, issuer, and audience.
+ * @param {string} userId - The ID of the user.
  * @param {string} role - The role of the user (e.g., 'user', 'admin').
- * @returns {string} - The generated access token.
+ * @param {number} expiresInMinutes - Expiry time in minutes.
+ * @returns {string} - Signed JWT access token.
  */
-function generateAccessToken(userId, role) {
+function generateAccessToken(userId, role, expiresInMinutes = 60) {
     const token = jwt.sign(
         { id: userId, role },
         JWT_SECRET,
-        { expiresIn: '7d' }
+        {
+            expiresIn: `${expiresInMinutes}m`,
+            issuer: JWT_ISSUER,
+            audience: JWT_AUDIENCE,
+        }
     );
     return token;
 }
 
 /**
- * Generates a refresh token for the user.
- * The refresh token is used to obtain a new access token when the current one expires (expires in 7 days).
- * @param {string} userId - The ID of the user for whom the token is generated.
- * @returns {string} - The generated refresh token.
+ * Generates a JWT refresh token with dynamic expiry, issuer, and audience.
+ * @param {string} userId - The ID of the user.
+ * @param {number} expiresInDays - Expiry time in days (default: 30).
+ * @returns {string} - Signed JWT refresh token.
  */
-function generateRefreshToken(userId) {
+function generateRefreshToken(userId, expiresInDays = 30) {
     const refreshToken = jwt.sign(
         { id: userId },
         JWT_REFRESH_SECRET,
-        { expiresIn: '30d' }
+        {
+            expiresIn: `${expiresInDays}d`,
+            issuer: JWT_ISSUER,
+            audience: JWT_AUDIENCE,
+        }
     );
     return refreshToken;
 }
 
 /**
- * Verifies an access token by decoding and checking its validity.
- * @param {string} token - The access token to be verified.
- * @returns {Object|null} - Returns the decoded payload if the token is valid, or null if invalid.
+ * Verifies and decodes a JWT access token.
+ * @param {string} token - The access token to verify.
+ * @returns {Object|null} - Decoded token payload or null if invalid.
  */
 function verifyAccessToken(token) {
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return decoded;
+        return jwt.verify(token, JWT_SECRET, {
+            issuer: JWT_ISSUER,
+            audience: JWT_AUDIENCE,
+        });
     } catch (error) {
         return null;
     }
 }
 
 /**
- * Verifies a refresh token by decoding and checking its validity.
- * @param {string} token - The refresh token to be verified.
- * @returns {Object|null} - Returns the decoded payload if the token is valid, or null if invalid.
+ * Verifies and decodes a JWT refresh token.
+ * @param {string} token - The refresh token to verify.
+ * @returns {Object|null} - Decoded token payload or null if invalid.
  */
 function verifyRefreshToken(token) {
     try {
-        console.log("token: ", token)
-        const decoded = jwt.verify(token, JWT_REFRESH_SECRET);
-        console.log("decoded: ",decoded)
-        return decoded;
+        return jwt.verify(token, JWT_REFRESH_SECRET, {
+            issuer: JWT_ISSUER,
+            audience: JWT_AUDIENCE,
+        });
     } catch (error) {
-        
         return null;
     }
 }
