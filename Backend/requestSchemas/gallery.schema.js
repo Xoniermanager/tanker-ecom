@@ -21,6 +21,7 @@ const baseGallerySchema = z.object({
 
     tags: z.array(z.string()).default([]),
     image: imageSchema.optional(),
+    alt: z.string(),
 });
 
 const bulkInsertUpdateGallerySchema = z.object({

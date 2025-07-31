@@ -20,6 +20,10 @@ const GallerySchema = new mongoose.Schema(
                 default: "image",
             },
         },
+        alt: {
+            type: String,
+            required: true,
+        }
     },
     {
         timestamps: true,

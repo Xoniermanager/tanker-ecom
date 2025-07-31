@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const galleryRepository = require("../repositories/cms/gallery.repository");
+const { deleteImage } = require("../utils/storage");
 
 /**
  * Service for managing gallery items.
@@ -66,6 +67,12 @@ class GalleryService {
             session.startTransaction();
 
             const result = await galleryRepository.bulkDelete(ids, session);
+
+            // remove images from storage also
+            for (const id of ids) {
+                const item = await galleryRepository.findById(id);
+                deleteImage(item.image.source);
+            }
 
             await session.commitTransaction();
             return result;
