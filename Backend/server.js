@@ -57,6 +57,7 @@ const startServer = async () => {
 
         // Route to upload files
         app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {
+            
             if (!req.file) {
                 return res.status(400).json({ message: "file is required." });
             }

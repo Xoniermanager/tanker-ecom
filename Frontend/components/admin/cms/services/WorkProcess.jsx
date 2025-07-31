@@ -5,6 +5,7 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 import api from "../../../user/common/api";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const WorkProcess = ({ workProcessData }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,12 +73,16 @@ const WorkProcess = ({ workProcessData }) => {
 
     try {
   let finalProcess = [];
-
+  const accessToken = Cookies.get("accessToken")
 for (let item of formData.process) {
         const fileFormData = new FormData();
       fileFormData.append('file', item.thumbnail.source);
 
-    const thumbRes = await api.put("/upload-files", fileFormData); 
+    const thumbRes = await api.put("/upload-files", fileFormData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    }); 
     finalProcess.push({
         ...item,
         thumbnail: {

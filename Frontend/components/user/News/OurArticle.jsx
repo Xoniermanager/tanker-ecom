@@ -72,7 +72,7 @@ const OurArticle = () => {
               </div>
               <div className="grid grid-cols-3 items-start gap-7 max-w-7xl mx-auto">
                 {data.map((item, index)=>(
-                    <Link href={""} className="bg-white group" key={index}>
+                    <div className="bg-white group" key={index}>
 
                      <div className='w-full h-60 overflow-hidden'><Image src={item.img} width={200} height={200} alt='img' className='w-full h-60 object-cover group-hover:scale-110' quality={100} /></div>
                      <div className="post-info">
@@ -94,7 +94,7 @@ const OurArticle = () => {
                             </div>
                             <h3 className='text-xl font-semibold text-purple-950 line-clamp-2 group-hover:underline'> {item.heading}</h3>
                         </div>
-                    </Link>
+                    </div>
                 ))
                
 

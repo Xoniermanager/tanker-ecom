@@ -8,7 +8,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import Image from 'next/image';
 
 const Footer = () => {
-    const [email, setEmail] = useState(null)
+    const [email, setEmail] = useState("")
 
     const handleSubmit = ()=>{
 

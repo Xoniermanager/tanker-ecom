@@ -11,7 +11,7 @@ const router = express.Router();
 const galleryController = new GalleryController();
 
 // ==================== Gallery Routes ====================
-router.get("/", authorize(['admin']), galleryController.getGallery);
+router.get("/", galleryController.getGallery);
 router.post(
     "/",
     authorize(['admin']),

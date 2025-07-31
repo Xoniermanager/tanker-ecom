@@ -53,6 +53,7 @@ const userRegistrationSchema = z
  */
 const requestLoginOtpSchema = z.object({
     email: z.string().email({ message: "Invalid email address." }),
+    role: z.string().optional(),
     password: passwordSchema,
 });
 

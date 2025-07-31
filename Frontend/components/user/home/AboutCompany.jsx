@@ -60,7 +60,7 @@ const AboutCompany = ({ aboutData }) => {
 
           <ul className="mt-5 flex flex-col gap-5">
             {listData?.map((item, i) => (
-              <li className=" text-purple-950 font-semibold text-lg flex gap-2">
+              <li className=" text-purple-950 font-semibold text-lg flex gap-2" key={i}>
                 {" "}
                 <span className="text-purple-950 text-xl mt-1.5">
                   <FaCheckCircle />{" "}
