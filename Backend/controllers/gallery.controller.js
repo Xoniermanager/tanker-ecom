@@ -38,6 +38,7 @@ class GalleryController {
         try {
             const items = req.body.items || "[]";
             const files = req.files || [];
+            console.log("files data", files)
 
             // Build a map of clientId -> file using fieldname pattern: files[item-123]
             const filesMap = {};

@@ -4,58 +4,16 @@ import React, { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
-const dummyGallery = [
-  {
-    id: 1,
-    image: "https://source.unsplash.com/random/300x200?sig=1",
-    title: "Beach Sunset",
-    description: "A beautiful sunset by the sea.",
-    active: true,
-  },
-  {
-    id: 2,
-    image: "https://source.unsplash.com/random/300x200?sig=2",
-    title: "Mountain View",
-    description: "Snow-capped mountains in the background.",
-    active: false,
-  },
-  {
-    id: 3,
-    image: "https://source.unsplash.com/random/300x200?sig=3",
-    title: "City Lights",
-    description: "City skyline during the night.",
-    active: true,
-  },
-  {
-    id: 4,
-    image: "https://source.unsplash.com/random/300x200?sig=4",
-    title: "Forest Path",
-    description: "A peaceful trail through the forest.",
-    active: false,
-  },
-  {
-    id: 5,
-    image: "https://source.unsplash.com/random/300x200?sig=5",
-    title: "Desert Dunes",
-    description: "Rolling sand dunes under the sun.",
-    active: true,
-  },
-  {
-    id: 6,
-    image: "https://source.unsplash.com/random/300x200?sig=6",
-    title: "River Stream",
-    description: "A gentle stream flowing through rocks.",
-    active: false,
-  },
-];
 
-export default function GalleryAdmin() {
-  const [galleryData, setGalleryData] = useState(dummyGallery);
+
+export default function GalleryAdmin({galleryData}) {
+  console.log("data: ", galleryData)
+  
   const [isOpen, setIsOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
 
   const handleDelete = (id) => {
-    setGalleryData(galleryData.filter((item) => item.id !== id));
+    // setGalleryData(galleryData.filter((item) => item.id !== id));
   };
 
   const handleEdit = (item) => {
@@ -67,21 +25,16 @@ export default function GalleryAdmin() {
     const updatedGallery = galleryData.map((item) =>
       item.id === id ? { ...item, active: !item.active } : item
     );
-    setGalleryData(updatedGallery);
+    // setGalleryData(updatedGallery);
   };
 
-  const handleSaveEdit = () => {
-    setGalleryData((prev) =>
-      prev.map((item) => (item.id === editItem.id ? editItem : item))
-    );
-    setIsOpen(false);
-  };
+  
 
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Gallery Admin Panel</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {galleryData.map((item) => (
+        {galleryData?.map((item) => (
           <div
             key={item.id}
             className="bg-white shadow rounded-lg overflow-hidden"
@@ -183,7 +136,7 @@ export default function GalleryAdmin() {
                       Cancel
                     </button>
                     <button
-                      onClick={handleSaveEdit}
+                      onClick={""}
                       className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
                     >
                       Save
