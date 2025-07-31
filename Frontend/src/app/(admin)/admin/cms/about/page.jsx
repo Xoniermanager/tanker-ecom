@@ -1,15 +1,15 @@
 "use client"
 import React, {useState, useEffect} from 'react'
-import Banner from '../../../../../../../components/admin/cms/home/Banner';
-import OurServices from '../../../../../../../components/admin/cms/home/OurServices';
-import AboutUs from '../../../../../../../components/admin/cms/home/AboutUs';
-import Products from '../../../../../../../components/admin/cms/home/Products';
-import Counter from '../../../../../../../components/admin/cms/common/Counter';
-import Article from '../../../../../../../components/admin/cms/home/Article';
-import Employees from '../../../../../../../components/admin/cms/about/Employees';
-import WhoWeAre from '../../../../../../../components/admin/cms/about/WhoWeAre';
-import { getPageData } from '../../../../../../../components/admin/cms/common/getPageData';
-import Testimonial from '../../../../../../../components/admin/cms/about/Testimonial';
+import Banner from '../../../../../../components/admin/cms/home/Banner';
+import OurServices from '../../../../../../components/admin/cms/home/OurServices';
+import AboutUs from '../../../../../../components/admin/cms/home/AboutUs';
+import Products from '../../../../../../components/admin/cms/home/Products';
+import Counter from '../../../../../../components/admin/cms/common/Counter';
+import Article from '../../../../../../components/admin/cms/home/Article';
+import Employees from '../../../../../../components/admin/cms/about/Employees';
+import WhoWeAre from '../../../../../../components/admin/cms/about/WhoWeAre';
+import { getPageData } from '../../../../../../components/admin/cms/common/getPageData';
+import Testimonial from '../../../../../../components/admin/cms/about/Testimonial';
 
 const page = () => {
     const [active, setActive] = useState(1);

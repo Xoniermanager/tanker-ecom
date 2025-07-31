@@ -20,7 +20,7 @@ const baseGallerySchema = z.object({
     }).min(1, { message: "Title cannot be empty." }),
 
     tags: z.array(z.string()).default([]),
-    image: imageSchema.optional(),
+    // image: imageSchema.optional(),
     alt: z.string(),
 });
 

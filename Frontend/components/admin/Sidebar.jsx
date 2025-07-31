@@ -256,7 +256,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/home`}
+                  href={`/admin/cms/home`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("home") && "text-orange-600"
                   } `}
@@ -267,7 +267,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/about`}
+                  href={`/admin/cms/about`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("about") && "text-orange-600"
                   } `}
@@ -278,7 +278,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/services`}
+                  href={`/admin/cms/services`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("services") && "text-orange-600"
                   } `}
@@ -289,7 +289,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/gallery`}
+                  href={`/admin/cms/gallery`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("gallery") && "text-orange-600"
                   } `}
@@ -300,7 +300,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/blogs`}
+                  href={`/admin/cms/blogs`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("blogs") && "text-orange-600"
                   } `}
@@ -311,7 +311,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/cms/contact`}
+                  href={`/admin/cms/contact`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("contact") && "text-orange-600"
                   } `}

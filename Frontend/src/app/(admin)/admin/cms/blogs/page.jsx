@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import BlogManagement from "../../../../../../../components/admin/cms/blog/BlogManagement";
-import api from "../../../../../../../components/user/common/api";
+import BlogManagement from "../../../../../../components/admin/cms/blog/BlogManagement";
+import api from "../../../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import BlogView from "../../../../../../../components/admin/cms/blog/BlogView";
+import BlogView from "../../../../../../components/admin/cms/blog/BlogView";
 
 const Page = () => {
   const [blogData, setBlogData] = useState(null)

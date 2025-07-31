@@ -1,16 +1,16 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Banner from "../../../../../../../components/admin/cms/home/Banner";
-import OurServices from "../../../../../../../components/admin/cms/home/OurServices";
-import AboutUs from "../../../../../../../components/admin/cms/home/AboutUs";
-import Products from "../../../../../../../components/admin/cms/home/Products";
-import Counter from "../../../../../../../components/admin/cms/common/Counter";
-import Article from "../../../../../../../components/admin/cms/home/Article";
-import api from "../../../../../../../components/user/common/api";
+import Banner from "../../../../../../components/admin/cms/home/Banner";
+import OurServices from "../../../../../../components/admin/cms/home/OurServices";
+import AboutUs from "../../../../../../components/admin/cms/home/AboutUs";
+import Products from "../../../../../../components/admin/cms/home/Products";
+import Counter from "../../../../../../components/admin/cms/common/Counter";
+import Article from "../../../../../../components/admin/cms/home/Article";
+import api from "../../../../../../components/user/common/api";
 
-import {getPageData} from '../../../../../../../components/admin/cms/common/getPageData'
-import Address from "../../../../../../../components/admin/cms/contact/Address";
-import Contact from "../../../../../../../components/admin/cms/contact/Contact";
+import {getPageData} from '../../../../../../components/admin/cms/common/getPageData'
+import Address from "../../../../../../components/admin/cms/contact/Address";
+import Contact from "../../../../../../components/admin/cms/contact/Contact";
 
 const Page = () => {
   const [active, setActive] = useState(1);

@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Banner from "../../../../../../../components/admin/cms/home/Banner";
-import {getPageData} from '../../../../../../../components/admin/cms/common/getPageData'
-import Address from "../../../../../../../components/admin/cms/contact/Address";
-import Contact from "../../../../../../../components/admin/cms/contact/Contact";
-import OurServices from "../../../../../../../components/admin/cms/home/OurServices";
-import WhoWeAre from "../../../../../../../components/admin/cms/about/WhoWeAre";
-import Counter from "../../../../../../../components/admin/cms/common/Counter";
-import WorkProcess from "../../../../../../../components/admin/cms/services/WorkProcess";
+import Banner from "../../../../../../components/admin/cms/home/Banner";
+import {getPageData} from '../../../../../../components/admin/cms/common/getPageData'
+import Address from "../../../../../../components/admin/cms/contact/Address";
+import Contact from "../../../../../../components/admin/cms/contact/Contact";
+import OurServices from "../../../../../../components/admin/cms/home/OurServices";
+import WhoWeAre from "../../../../../../components/admin/cms/about/WhoWeAre";
+import Counter from "../../../../../../components/admin/cms/common/Counter";
+import WorkProcess from "../../../../../../components/admin/cms/services/WorkProcess";
 
 const Page = () => {
   const [active, setActive] = useState(1);
