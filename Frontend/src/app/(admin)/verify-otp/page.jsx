@@ -1,7 +1,7 @@
 "use client";
 import Cookies from "js-cookie";
 import React, { useState, useEffect, useRef } from "react";
-import api from "../../../../../components/user/common/api";
+import api from "../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
@@ -90,16 +90,12 @@ const Page = () => {
           password: null,
         });
        
-
-        const accessToken = response?.data?.data?.accessToken;
-        if(!accessToken){
-            setErrMessage("Please regenerate otp and try again")
-            return
-        }
-        window.localStorage.setItem("accessToken", accessToken);
+        console.log("userData: ", response.data)
 
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
+
+
 
         toast.success("OTP verify successfully");
         router.push("/admin/dashboard");
@@ -155,7 +151,7 @@ const Page = () => {
       <div className="bg-white shadow-xl rounded-2xl p-10 max-w-xl w-full flex flex-col gap-7">
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-1 capitalize text-purple-950">
-            Verify Your Email for login
+            Hey Admin, please verify Your Email for login
           </h2>
           <p className="text-gray-600 text-sm">
             We sent a 6-digit OTP to{" "}

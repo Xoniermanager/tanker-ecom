@@ -37,7 +37,7 @@ const Page = () => {
                 window.localStorage.setItem('verify-login-password', formData.password)
                 setFormData({companyEmail: "", password: ""})
                 setErrMessage("")
-                router.push("/admin/verify-otp")
+                router.push("/verify-otp")
             }
 
         } catch (error) {

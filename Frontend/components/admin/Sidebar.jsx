@@ -289,6 +289,28 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
+                  href={`/admin/dashboard/cms/gallery`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("gallery") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                 Gallery
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/admin/dashboard/cms/blogs`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("blogs") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                 Blogs
+                </Link>
+              </li>
+              <li className="">
+                <Link
                   href={`/admin/dashboard/cms/contact`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("contact") && "text-orange-600"

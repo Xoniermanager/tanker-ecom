@@ -9,27 +9,30 @@ import { FaCheckCircle } from "react-icons/fa";
 const VerifyOtpPage = () => {
   const [verifyCredentials, setVerifyCredentials] = useState({
     email: null,
-    password: null
+    password: null,
   });
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isVerificationOTPSend, setIsVerificationOTPSend] = useState(false)
-  const [timer, setTimer] = useState(60); 
+  const [isVerificationOTPSend, setIsVerificationOTPSend] = useState(false);
+  const [timer, setTimer] = useState(60);
   const [resendActive, setResendActive] = useState(false);
   const inputRefs = useRef([]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const getVerifyLoginEmail = localStorage.getItem("verify-login-email");
-    const getVerifyLoginPassword = localStorage.getItem('verify-login-password');
+    const getVerifyLoginPassword = localStorage.getItem(
+      "verify-login-password"
+    );
 
-    setVerifyCredentials({email: getVerifyLoginEmail, password: getVerifyLoginPassword})
+    setVerifyCredentials({
+      email: getVerifyLoginEmail,
+      password: getVerifyLoginPassword,
+    });
   }, []);
 
-  
-  
   useEffect(() => {
     let countdown;
     if (timer > 0) {
@@ -61,7 +64,7 @@ const VerifyOtpPage = () => {
     }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setErrMessage(null);
@@ -73,31 +76,27 @@ const VerifyOtpPage = () => {
     }
 
     try {
-      
-      const response = await api.post(`/auth/login`, {email:verifyCredentials.email, password: verifyCredentials.password, otp: enteredOtp}, {withCredentials: true})
-      if(response?.status === 200){
-         
-         toast.success("OTP verify successfully")
-         setOtp(Array(6).fill(""));
-         setVerifyCredentials({
-    email: null,
-    password: null
-  })
-         window.localStorage.removeItem('verify-login-email')
-         window.localStorage.removeItem('verify-login-password')
-          console.log("data: ", response?.data);
-          console.log("response status: ", response?.status)
-          const accessToken = response?.data?.data?.accessToken
-          console.log("accessToken: ", accessToken)
-          Cookies.set("accessToken", accessToken, {
-            secure: true,
-            sameSite: "Strict",
-            
-          })
-         router.push('/')
-      }
+      const response = await api.post(
+        `/auth/login`,
+        {
+          email: verifyCredentials.email,
+          password: verifyCredentials.password,
+          otp: enteredOtp,
+        },
+        { withCredentials: true }
+      );
+      if (response?.status === 200) {
+        toast.success("OTP verify successfully");
+        setOtp(Array(6).fill(""));
+        setVerifyCredentials({
+          email: null,
+          password: null,
+        });
+        window.localStorage.removeItem("verify-login-email");
+        window.localStorage.removeItem("verify-login-password");
 
-      
+        router.push("/");
+      }
     } catch (error) {
       setErrMessage("Verification failed. Try again.");
     } finally {
@@ -105,25 +104,29 @@ const VerifyOtpPage = () => {
     }
   };
 
-  const handleResend = async() => {
-    if(!verifyCredentials.email) return setErrMessage(`Email id not found`)
+  const handleResend = async () => {
+    if (!verifyCredentials.email) return setErrMessage(`Email id not found`);
     try {
-        const response = await api.post(`/auth/resend-login-otp`, {email: verifyCredentials.email, password: verifyCredentials.password })
-        if(response.status === 200){
-          
-            toast.success("OTP resend successfully");
-            setOtp(Array(6).fill(""));
-            setErrMessage(null);
-            setIsVerificationOTPSend(true);
-        }
+      const response = await api.post(`/auth/resend-login-otp`, {
+        email: verifyCredentials.email,
+        password: verifyCredentials.password,
+      });
+      if (response.status === 200) {
+        toast.success("OTP resend successfully");
+        setOtp(Array(6).fill(""));
+        setErrMessage(null);
+        setIsVerificationOTPSend(true);
+      }
     } catch (error) {
-        console.error(error)
-         const message = (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
-  error?.response?.data?.message ||  "Something went wrong";
+      console.error(error);
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
 
-setErrMessage(message);
+      setErrMessage(message);
     }
-    
   };
 
   const isOtpFilled = otp.every((digit) => digit !== "");
@@ -132,9 +135,14 @@ setErrMessage(message);
     <div className="py-36 flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-10 max-w-xl w-full flex flex-col gap-7">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-1 capitalize text-purple-950">Verify Your Email for login</h2>
+          <h2 className="text-2xl font-semibold mb-1 capitalize text-purple-950">
+            Verify Your Email for login
+          </h2>
           <p className="text-gray-600 text-sm">
-            We sent a 6-digit OTP to <span className="font-medium text-orange-400">{verifyCredentials.email}</span>
+            We sent a 6-digit OTP to{" "}
+            <span className="font-medium text-orange-400">
+              {verifyCredentials.email}
+            </span>
           </p>
         </div>
 
@@ -155,7 +163,9 @@ setErrMessage(message);
             ))}
           </div>
 
-          {errMessage && <p className="text-red-500 text-sm text-right">{errMessage}</p>}
+          {errMessage && (
+            <p className="text-red-500 text-sm text-right">{errMessage}</p>
+          )}
 
           <button
             type="submit"
