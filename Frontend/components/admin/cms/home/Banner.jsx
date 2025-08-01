@@ -115,7 +115,6 @@ const Banner = ({ homeData }) => {
     
     const uploadedThumbnailUrl = thumbRes.data.data.file.url;
 
-    
     const formContents = [
       {
         order: 1,

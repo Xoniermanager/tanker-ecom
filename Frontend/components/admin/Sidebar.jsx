@@ -43,7 +43,7 @@ const Sidebar = () => {
           alt="user"
         />
         <div className="flex flex-col gap-0.5">
-          <h3 className="text-orange-600 font-bold">Mridul Saklani</h3>
+          <h3 className="text-orange-600 font-bold">John Doe</h3>
           <span className="text-sm text-gray-500 font-medium">Admin</span>
         </div>
       </div>
