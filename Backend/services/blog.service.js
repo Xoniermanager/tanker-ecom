@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const blogRepository = require("../repositories/cms/blog.repository");
 const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
-const summaryFields = 'title subtitle slug thumbnail tags publishedAt author';
+const summaryFields = 'title subtitle slug thumbnail tags createdAt author';
 
 class BlogService {
     /**
@@ -98,7 +98,7 @@ class BlogService {
      */
     async getPublishedBlogs(page = 1, limit = 10) {
         const filter = { isPublished: true };
-        return await blogRepository.paginate(filter, page, limit, { publishedAt: -1 }, null, summaryFields);
+        return await blogRepository.paginate(filter, page, limit, { createdAt: -1 }, null, summaryFields);
     }
 
     /**

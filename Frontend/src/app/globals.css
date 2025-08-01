@@ -417,6 +417,46 @@ content: "";
     left: auto;
 }
 
+.post-author{
+  
+  margin: 0 -8px;
+    background: #fff;
+    padding: 0 12px 0 0;
+    position: relative;
+    border-radius: 0 30px 30px 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: fit-content;
+}
+
+.post-author::before{
+  content: "";
+    position: absolute;
+    width: 40px;
+    height: 100%;
+    left: -40px;
+    top: 0;
+    background: #fff;
+}
+
+.blog-content h1{
+    font-weight: 700;
+    font-size: 32px;
+    color:#3C0367;
+} 
+.blog-content h2{
+    font-weight: 700;
+    font-size: 22px;
+    color:#3C0367;
+    margin: 15px 0;
+} 
+
+.blog-content p {
+  background-color: #fcf9ff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  margin: 12px 0;
+}
 
 .wavy{
   animation: wavy 3s linear infinite;

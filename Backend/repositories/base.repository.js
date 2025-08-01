@@ -148,7 +148,9 @@ class BaseRepository {
             this.count(filter, session)
         ]);
 
-        return { data, total, page, limit };
+        const totalPages = Math.ceil(total / limit);
+
+        return { data, total, page, limit, totalPages };
     }
 
     /**

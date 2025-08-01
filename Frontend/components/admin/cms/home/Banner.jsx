@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import api from '../../../user/common/api'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 const Banner = ({ homeData }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -102,10 +103,15 @@ const Banner = ({ homeData }) => {
   setIsLoading(true);
 
   try {
+    const accessToken = Cookies.get("accessToken")
     const fileFormData = new FormData();
     
     fileFormData.append('file', formData.thumbnail.source);
-    const thumbRes = await api.put("/upload-files", fileFormData); 
+    const thumbRes = await api.put("/upload-files", fileFormData, {
+      headers:{
+        Authorization: `Bearer ${accessToken}`
+      }
+    }); 
     
     const uploadedThumbnailUrl = thumbRes.data.data.file.url;
 
@@ -151,7 +157,11 @@ const Banner = ({ homeData }) => {
       contents: formContents,
     };
 
-    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload ,{
+      headers:{
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
     if(response.status === 201 || response.status === 200){
       toast.success("Data updated successfully");
       setErrMessage(null);

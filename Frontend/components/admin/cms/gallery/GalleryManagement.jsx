@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import api from "../../../user/common/api";
 import { toast } from "react-toastify";
 
-const GalleryManagement = () => {
+const GalleryManagement = ({getGalleryData}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   
@@ -164,6 +164,7 @@ const GalleryManagement = () => {
       },
     ],
       })
+      getGalleryData()
     }
   } catch (error) {
     const message =

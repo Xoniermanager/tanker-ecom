@@ -9,11 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^2.2.7",
+    "@mui/material": "^7.2.0",
     "apexcharts": "^5.2.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.23.6",
+    "html-react-parser": "^5.2.6",
     "js-cookie": "^3.0.5",
     "next": "15.3.4",
     "react": "^19.0.0",
