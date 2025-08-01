@@ -202,11 +202,20 @@ class AuthController {
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
-            customResponse(res,"Access token refreshed successfully.");
+            customResponse(res, "Access token refreshed successfully.");
         } catch (error) {
             next(error);
         }
     };
+
+    getMe = async (req, res, next) => {
+        try {
+            const user = await this.userService.getMe(req);
+            customResponse(res, user);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 exports.AuthController = AuthController;

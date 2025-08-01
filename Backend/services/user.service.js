@@ -219,7 +219,7 @@ class UserService {
      */
     async refreshToken(req) {
         const refreshToken = req.cookies.refreshToken;
-        
+
         if (!refreshToken) throw customError("No refresh token provided", 400);
 
         const decoded = verifyRefreshToken(refreshToken);
@@ -231,6 +231,12 @@ class UserService {
         const accessToken = generateAccessToken(user._id, user.role || "user");
 
         return { accessToken };
+    }
+
+    async getMe(req) {
+        const user = await userRepository.findById(req.user._id, null, { __v: 0, password: 0 });
+        if (!user) throw customError("User not found", 400);
+        return user.toJSON();
     }
 
     // ========== Helper Methods ==========
@@ -254,7 +260,7 @@ class UserService {
             );
         }
 
-        const isValid =  await user.comparePassword(password);
+        const isValid = await user.comparePassword(password);
         if (!isValid) throw customError("Invalid password", 400);
 
         return user;
