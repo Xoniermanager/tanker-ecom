@@ -88,15 +88,17 @@ class AuthController {
                 secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
+                path:"/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
             res.cookie("accessToken", response.accessToken, {
-                httpOnly: false,
+                httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
                 secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
+                path:"/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
