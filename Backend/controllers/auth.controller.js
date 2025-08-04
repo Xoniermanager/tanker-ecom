@@ -85,14 +85,16 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                // sameSite: "strict",
+                sameSite: "None",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: false,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "Lax",
+                // sameSite: "Lax",
+                sameSite: "None",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
