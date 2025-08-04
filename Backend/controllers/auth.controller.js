@@ -126,7 +126,7 @@ class AuthController {
                 // sameSite: "strict",
                 sameSite: "None",
                 
-                // path:"/",
+                path:"/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
@@ -137,7 +137,7 @@ class AuthController {
                 // sameSite: "Lax",
                 sameSite: "None",
                 
-                // path:"/",
+                path:"/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
