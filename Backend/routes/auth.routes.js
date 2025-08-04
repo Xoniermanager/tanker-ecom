@@ -9,6 +9,7 @@ const {
     validateRequestVerifyEmailOtp,
     validateVerifyEmailOtp,
 } = require("../middlewares/validation");
+const authorize = require("../middlewares/auth");
 
 const router = express.Router();
 const authController = new AuthController();
@@ -56,10 +57,7 @@ router.post(
     validateRequestLoginOtp,
     authController.resendLoginOtp
 );
-router.post(
-    "/refresh-token",
-    validateRequestLoginOtp,
-    authController.refreshToken
-);
+router.post("/refresh-token", authController.refreshToken);
+router.get('/me', authorize(['admin', 'user']), authController.getMe);
 
 module.exports = router;

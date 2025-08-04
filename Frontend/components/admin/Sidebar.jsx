@@ -24,7 +24,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full">
+    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full ">
       <div className="">
         <Image
           className="bg-contain"
@@ -43,17 +43,18 @@ const Sidebar = () => {
           alt="user"
         />
         <div className="flex flex-col gap-0.5">
-          <h3 className="text-orange-600 font-bold">Mridul Saklani</h3>
+          <h3 className="text-orange-600 font-bold">John Doe</h3>
           <span className="text-sm text-gray-500 font-medium">Admin</span>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="h-[100vh] overflow-y-scroll">
+      <div className="flex flex-col gap-2 " >
         <span className="text-sm text-gray-500 font-medium">E-Commerce</span>
         <ul className="flex flex-col gap-0">
           <li>
             {" "}
             <Link
-              href={`/dashboard`}
+              href={`/admin/dashboard`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
                 pathpop === "dashboard"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
@@ -115,7 +116,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/dashboard/orders`}
+                  href={`/admin/dashboard/orders`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("orders") && "text-orange-600"
                   } `}
@@ -126,7 +127,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/detail`}
+                  href={`/admin/dashboard/detail`}
                   className="font-medium hover:text-orange-600"
                 >
                   {" "}
@@ -174,7 +175,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/dashboard/products/add-category`}
+                  href={`/admin/dashboard/products/add-category`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("add-category") && "text-orange-600"
                   } `}
@@ -185,7 +186,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/products/add-product`}
+                  href={`/admin/dashboard/products/add-product`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("add-product") && "text-orange-600"
                   } `}
@@ -197,7 +198,7 @@ const Sidebar = () => {
               
               <li className="">
                 <Link
-                  href={`/dashboard/products`}
+                  href={`/admin/dashboard/products`}
                   className={`font-medium hover:text-orange-600 ${
                     pathpop === "products" && "text-orange-600"
                   } `}
@@ -208,7 +209,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/detail`}
+                  href={`/admin/dashboard/detail`}
                   className="font-medium hover:text-orange-600"
                 >
                   {" "}
@@ -256,7 +257,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/dashboard/cms/home`}
+                  href={`/admin/cms/home`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("home") && "text-orange-600"
                   } `}
@@ -267,7 +268,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/cms/about`}
+                  href={`/admin/cms/about`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("about") && "text-orange-600"
                   } `}
@@ -278,7 +279,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/cms/services`}
+                  href={`/admin/cms/services`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("services") && "text-orange-600"
                   } `}
@@ -289,7 +290,29 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/cms/contact`}
+                  href={`/admin/cms/gallery`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("gallery") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                 Gallery
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/admin/cms/blogs`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("blogs") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                 Blogs
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/admin/cms/contact`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("contact") && "text-orange-600"
                   } `}
@@ -304,7 +327,7 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              href={`/dashboard/customers`}
+              href={`/admin/dashboard/customers`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
                 pathpop === "customers"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
@@ -330,7 +353,7 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              href={`/dashboard/invoice`}
+              href={`/admin/dashboard/invoice`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
                 pathpop === "invoices"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
@@ -399,7 +422,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/dashboard/profile`}
+                  href={`/admin/dashboard/profile`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("profile") && "text-orange-600"
                   } `}
@@ -410,7 +433,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/dashboard/detail`}
+                  href={`/admin/dashboard/detail`}
                   className="font-medium hover:text-orange-600"
                 >
                   {" "}
@@ -422,7 +445,7 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              href={`/dashboard/settings`}
+              href={`/admin/dashboard/settings`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
                 pathpop === "settings"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
@@ -448,7 +471,7 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              href={`/dashboard/faqs`}
+              href={`/admin/dashboard/faqs`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
                 pathpop === "faqs"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
@@ -472,6 +495,7 @@ const Sidebar = () => {
             </Link>
           </li>
         </ul>
+      </div>
       </div>
     </div>
   );

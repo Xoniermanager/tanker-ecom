@@ -9,7 +9,7 @@ const DeletePopup = ({message, onCancel, onDelete, isLoading, errMessage}) => {
          <button className='hover:text-red-500 hover:rotate-90 absolute top-3 right-3 text-xl' onClick={onCancel}><FaXmark /></button>
          <h3 className='text-xl font-medium '><span className='text-red-500'>*</span>{message}</h3>
          {errMessage && <div className="flex justify-end"><p className='text-red-500 text-sm'>{errMessage}</p></div>}
-         <div className="flex justify-end gap-3"> <button className='bg-red-400 px-5 py-2 text-white rounded-lg' onClick={onDelete}> {isLoading ? "Deleting" :"Delete"}</button> <button className='bg-green-400 px-5 py-2 text-white rounded-lg' onClick={onCancel}>Cancel</button> </div>
+         <div className="flex justify-end gap-3"> <button className='bg-red-500 px-5 py-2 text-white rounded-lg hover:bg-red-600' onClick={onDelete}> {isLoading ? "Deleting" :"Delete"}</button> <button className='bg-green-500 hover:bg-green-600 px-5 py-2 text-white rounded-lg' onClick={onCancel}>Cancel</button> </div>
       </div>
     </>
   )

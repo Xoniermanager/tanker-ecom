@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import api from '../../../user/common/api'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 const Banner = ({ homeData }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,6 +23,8 @@ const Banner = ({ homeData }) => {
     buttonLink: ""
   })
 
+  console.log("homedata: ",homeData)
+
   const handleChange = (e) => {
     const { name, value } = e.target
 
@@ -40,6 +43,7 @@ const Banner = ({ homeData }) => {
         [name]: value
       }))
     }
+    console.log("formdata: ",formData)
   }
 
   const handleFileChange = (e) => {
@@ -84,7 +88,7 @@ const Banner = ({ homeData }) => {
       title: homeData?.contents?.find(item => item.label === "Headline")?.text || "",
       subHeading: homeData?.contents?.find(item => item.label === "Tagline")?.text || "",
       description: homeData?.contents?.find(item => item.label === "Description")?.text || "",
-      thumbnail: homeData?.thumbnail || { type: "", source: "" },
+      thumbnail: {type : homeData?.thumbnail?.type, source: homeData?.thumbnail?.source }|| { type: "", source: "" },
       buttonName: homeData?.contents?.find(item => item.label === "Call To Action")?.text || "",
       buttonLink: homeData?.contents?.find(item => item.label === "Call To Action")?.link || ""
     })
@@ -102,14 +106,18 @@ const Banner = ({ homeData }) => {
   setIsLoading(true);
 
   try {
+    const accessToken = Cookies.get("accessToken")
     const fileFormData = new FormData();
     
     fileFormData.append('file', formData.thumbnail.source);
-    const thumbRes = await api.put("/upload-files", fileFormData); 
+    const thumbRes = await api.put("/upload-files", fileFormData, {
+      headers:{
+        Authorization: `Bearer ${accessToken}`
+      }
+    }); 
     
     const uploadedThumbnailUrl = thumbRes.data.data.file.url;
 
-    
     const formContents = [
       {
         order: 1,
@@ -151,7 +159,11 @@ const Banner = ({ homeData }) => {
       contents: formContents,
     };
 
-    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload ,{
+      headers:{
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
     if(response.status === 201 || response.status === 200){
       toast.success("Data updated successfully");
       setErrMessage(null);

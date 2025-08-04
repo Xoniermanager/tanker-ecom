@@ -86,7 +86,14 @@ class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
+                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+            });
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
             customResponse(res, "Login successful", response.returnData);
@@ -109,8 +116,15 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "Strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                sameSite: "strict",
+                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+            });
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
             customResponse(res, "Admin login successful", response.returnData);
@@ -165,7 +179,7 @@ class AuthController {
         try {
             const payload = {
                 ...req.body,
-                role: "user",
+                role: req.body.role || "user",
             };
             await this.userService.resendLoginOtp(payload);
             customResponse(res, "Login OTP resent successfully.");
@@ -180,15 +194,28 @@ class AuthController {
     refreshToken = async (req, res, next) => {
         try {
             const response = await this.userService.refreshToken(req);
-            customResponse(
-                res,
-                "Access token refreshed successfully.",
-                response
-            );
+
+            res.cookie("accessToken", response.accessToken, {
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+            });
+
+            customResponse(res, "Access token refreshed successfully.");
         } catch (error) {
             next(error);
         }
     };
+
+    getMe = async (req, res, next) => {
+        try {
+            const user = await this.userService.getMe(req);
+            customResponse(res, user);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 exports.AuthController = AuthController;

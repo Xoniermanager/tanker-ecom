@@ -31,10 +31,10 @@ const startServer = async () => {
         const PORT = process.env.PORT || 3000;
 
         // Middleware
-        app.use(helmet());
+        app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
         app.use(
             cors({
-                origin: 'http://localhost:3001',
+                origin: process.env.CLIENT_URL,
                 methods: ["GET", "POST", "PUT", "DELETE"],
                 allowedHeaders: ["Content-Type", "Authorization"],
                 credentials: true
@@ -57,6 +57,7 @@ const startServer = async () => {
 
         // Route to upload files
         app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {
+            
             if (!req.file) {
                 return res.status(400).json({ message: "file is required." });
             }

@@ -9,29 +9,24 @@ const imageSchema = z.object({
 });
 
 const baseGallerySchema = z.object({
-    title: z
-        .string({
-            required_error: "Title is required.",
-            invalid_type_error: "Title must be a string.",
-        })
-        .min(1, { message: "Title cannot be empty." }),
+    clientId: z.string({
+        required_error: "clientId is required.",
+        invalid_type_error: "clientId must be a string.",
+    }).min(1, { message: "clientId cannot be empty." }),
+
+    title: z.string({
+        required_error: "Title is required.",
+        invalid_type_error: "Title must be a string.",
+    }).min(1, { message: "Title cannot be empty." }),
+
     tags: z.array(z.string()).default([]),
-    image: imageSchema,
+    // image: imageSchema.optional(),
+    alt: z.string(),
 });
 
-const bulkInsertGallerySchema = z.object({
+const bulkInsertUpdateGallerySchema = z.object({
     items: z.array(baseGallerySchema).min(1, {
         message: "At least one gallery item must be provided for insertion.",
-    }),
-});
-
-const bulkUpdateGallerySchema = z.object({
-    items: z.array(baseGallerySchema.extend({
-        _id: z.string({
-            required_error: "_id is required for updating gallery item.",
-        }),
-    })).min(1, {
-        message: "At least one gallery item must be provided for update.",
     }),
 });
 
@@ -45,7 +40,6 @@ const bulkDeleteGallerySchema = z.object({
 });
 
 module.exports = {
-    bulkInsertGallerySchema,
-    bulkUpdateGallerySchema,
+    bulkInsertUpdateGallerySchema,
     bulkDeleteGallerySchema
 };

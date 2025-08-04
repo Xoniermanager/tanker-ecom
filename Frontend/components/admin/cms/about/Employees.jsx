@@ -75,6 +75,7 @@ for (let item of formData.employees) {
     const thumbRes = await api.put("/upload-files", fileFormData); 
     finalProcess.push({
         ...item,
+        
         thumbnail: {
             ...item.thumbnail,
             source: thumbRes.data.data.fullPath

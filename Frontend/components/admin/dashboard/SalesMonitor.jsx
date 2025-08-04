@@ -39,7 +39,7 @@ const SalesMonitor = () => {
 
 
   return (
-    <Link href={'/dashboard/orders'} className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col gap-4.5 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
+    <div  className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col gap-4.5 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
       <div className="flex items-center justify-between gap-2">
         <span className='text-3xl'><BsCreditCard2Front /></span>
         <div className='relative' onMouseEnter={()=>setSpecShow(true)} onMouseLeave={()=>setSpecShow(false)}><button ><BsThreeDots /></button>
@@ -48,7 +48,7 @@ const SalesMonitor = () => {
          transition={{ duration: .3}}
          viewport={{ once: true }}
         className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-20 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
-           <li><Link href={''} className="hover:text-orange-500">View Detail</Link></li>
+           <li><Link href={'/dashboard/orders'} className="hover:text-orange-500">View Detail</Link></li>
            <li><button className="hover:text-orange-500">Download</button></li>
         </motion.ul>
         </div>
@@ -73,7 +73,7 @@ const SalesMonitor = () => {
         Over last month 1.4% 
         <IoIosArrowRoundUp className='text-xl wavy'/>
       </p>
-    </Link>
+    </div>
   )
 }
 

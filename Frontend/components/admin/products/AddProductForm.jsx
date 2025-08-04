@@ -24,17 +24,17 @@ const AddProductForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await api.get('/categories'); 
-        setCategories(response.data || []);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await api.get('/categories'); 
+  //       setCategories(response.data || []);
+  //     } catch (error) {
+  //       console.error('Error fetching categories:', error);
+  //     }
+  //   };
+  //   fetchCategories();
+  // }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

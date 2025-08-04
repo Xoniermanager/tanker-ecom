@@ -4,6 +4,7 @@ import { FaXmark, FaPlus } from 'react-icons/fa6';
 import { MdOutlineCloudUpload } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import api from '../../../user/common/api';
+import Cookies from 'js-cookie';
 
 const OurServices = ({serviceData}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -100,6 +101,7 @@ const OurServices = ({serviceData}) => {
     ]
 
     try {
+      const accessToken = Cookies.get("accessToken")
       const payload = {
       section_id: sectionId,
       order: 2,
@@ -107,8 +109,12 @@ const OurServices = ({serviceData}) => {
       subheading: formData.subHeading,
       contents: formContents,
     };
-    console.log("service payload: ", payload)
-    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload , {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
     if(response.status === 201 || response.status === 200){
           toast.success("Data updated successfully");
           setErrMessage(null);

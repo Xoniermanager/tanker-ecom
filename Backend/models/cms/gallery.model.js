@@ -20,6 +20,15 @@ const GallerySchema = new mongoose.Schema(
                 default: "image",
             },
         },
+        alt: {
+            type: String,
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["active", "inactive"],
+            default: "active",
+        },
     },
     {
         timestamps: true,

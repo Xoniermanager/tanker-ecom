@@ -24,13 +24,15 @@ const AboutCompany = ({ aboutData }) => {
     ?.find((item) => item.type === "group")
     .contents.find((item) => item.type === "link" && item.order === 2);
 
+    
+
  
   return (
     <div className="bg-[#f2edf6] py-28 relative">
       <div className="max-w-7xl mx-auto flex items-center  gap-16 relative z-1">
         <div className="w-[45%] relative">
-          <video className="rounded-2xl w-[95%]" autoPlay muted loop>
-            <source src="/videos/about-video.mp4" />
+          <video className="rounded-2xl w-[95%] aspect-3/5 object-cover object-center" autoPlay muted loop>
+            <source src={aboutData.thumbnail.fullPath} />
           </video>
           <div className="h-20 w-20 absolute -top-9 -right-4 rounded-full bg-orange-400 text-white text-4xl font-bold flex items-center justify-center">
             {" "}
@@ -60,7 +62,7 @@ const AboutCompany = ({ aboutData }) => {
 
           <ul className="mt-5 flex flex-col gap-5">
             {listData?.map((item, i) => (
-              <li className=" text-purple-950 font-semibold text-lg flex gap-2">
+              <li className=" text-purple-950 font-semibold text-lg flex gap-2" key={i}>
                 {" "}
                 <span className="text-purple-950 text-xl mt-1.5">
                   <FaCheckCircle />{" "}
@@ -70,7 +72,7 @@ const AboutCompany = ({ aboutData }) => {
             ))}
           </ul>
 
-          {/* <div className="flex items-center gap-6 mt-8">
+          <div className="flex items-center gap-6 mt-8">
             <Link
               href={`tel:${phoneBtn?.phone_number}`}
               className="flex items-center gap-4 group"
@@ -96,7 +98,7 @@ const AboutCompany = ({ aboutData }) => {
             >
               {redirectBtn?.text || "N/A"}
             </Link>
-          </div> */}
+          </div>
           <p className="text-zinc-500 font-medium text-lg leading-8 group-hover:text-white pt-8">
             {secondPara || "N/A"}
           </p>
