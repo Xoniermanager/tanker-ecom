@@ -91,7 +91,13 @@ const Page = () => {
         });
        
         console.log("userData: ", response.data)
-        // Cookies.set("accessToken", response.data.accessToken)
+        Cookies.set("accessToken", response.data.accessToken, {
+          httpOnly: true,
+  secure: true,               // only over HTTPS
+  sameSite: 'None',         // or 'None' if cross-domain
+  expires: 2,                 // days, or use a Date object
+  path: '/',                  // root path
+})
 
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
