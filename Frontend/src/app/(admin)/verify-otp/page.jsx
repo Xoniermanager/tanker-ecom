@@ -91,7 +91,7 @@ const Page = () => {
         });
        
         console.log("userData: ", response.data)
-        Cookies.set("accessToken", response.data.accessToken)
+        // Cookies.set("accessToken", response.data.accessToken)
 
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");

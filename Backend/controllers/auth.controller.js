@@ -139,7 +139,7 @@ class AuthController {
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
-            customResponse(res, "Admin login successful", response.returnData);
+            customResponse(res, "Admin login successful", response.returnData, response.accessToken);
         } catch (error) {
             next(error);
         }
