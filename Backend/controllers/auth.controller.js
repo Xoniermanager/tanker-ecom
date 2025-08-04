@@ -125,6 +125,7 @@ class AuthController {
                 secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
+                domain:"vercel.app",
                 path:"/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
@@ -135,6 +136,7 @@ class AuthController {
                 secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
+                domain:"vercel.app",
                 path:"/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
