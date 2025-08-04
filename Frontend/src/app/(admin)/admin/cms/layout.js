@@ -1,8 +1,8 @@
-import Navbar from "../../../../components/admin/Navbar";
-import Sidebar from "../../../../components/admin/Sidebar";
+import Navbar from "../../../../../components/admin/Navbar";
+import Sidebar from "../../../../../components/admin/Sidebar";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import NotificationSidebar from "../../../../components/admin/common/NotificationSidebar";
+import NotificationSidebar from "../../../../../components/admin/common/NotificationSidebar";
 
 
 
@@ -18,7 +18,6 @@ export default function AdminLayout({ children }) {
       <body className="bg-violet-50 h-screen overflow-x-visible"
         
       >
-        
         <Sidebar/>
         <Navbar/>
         {children}

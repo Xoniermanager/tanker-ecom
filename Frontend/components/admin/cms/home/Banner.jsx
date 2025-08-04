@@ -23,6 +23,8 @@ const Banner = ({ homeData }) => {
     buttonLink: ""
   })
 
+  console.log("homedata: ",homeData)
+
   const handleChange = (e) => {
     const { name, value } = e.target
 
@@ -41,6 +43,7 @@ const Banner = ({ homeData }) => {
         [name]: value
       }))
     }
+    console.log("formdata: ",formData)
   }
 
   const handleFileChange = (e) => {
@@ -85,7 +88,7 @@ const Banner = ({ homeData }) => {
       title: homeData?.contents?.find(item => item.label === "Headline")?.text || "",
       subHeading: homeData?.contents?.find(item => item.label === "Tagline")?.text || "",
       description: homeData?.contents?.find(item => item.label === "Description")?.text || "",
-      thumbnail: homeData?.thumbnail || { type: "", source: "" },
+      thumbnail: {type : homeData?.thumbnail?.type, source: homeData?.thumbnail?.source }|| { type: "", source: "" },
       buttonName: homeData?.contents?.find(item => item.label === "Call To Action")?.text || "",
       buttonLink: homeData?.contents?.find(item => item.label === "Call To Action")?.link || ""
     })

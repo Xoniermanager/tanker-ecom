@@ -5,6 +5,7 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 import api from "../../../user/common/api";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const AboutUs = ({aboutData}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -142,11 +143,13 @@ updatedList[index][name] = Number(value);
 
     try {
         const fileFormData = new FormData();
+
+        const accessToken = Cookies.get(`accessToken`)
     
     fileFormData.append('file', formData.thumbnail.source);
     console.log("file: ", fileFormData)
     if(!fileFormData) return setErrMessage("Thumbnail File not found")
-    const thumbRes = await api.put("/upload-files", fileFormData); 
+    const thumbRes = await api.put("/upload-files", fileFormData, {headers: {Authorization: `Bearer ${accessToken}`}}); 
     
     const uploadedThumbnailUrl = thumbRes.data.data.file.url;
 
@@ -199,7 +202,7 @@ updatedList[index][name] = Number(value);
       contents: aboutContents,
     };
 
-    const response =  await api.put(`/cms/sections/${sectionId}`, payload);
+    const response =  await api.put(`/cms/sections/${sectionId}`, payload, {headers: {Authorization: `Bearer ${accessToken}`}});
     if(response.status === 201 || response.status === 200){
       toast.success("Data updated successfully");
       setErrMessage(null);
@@ -296,14 +299,15 @@ updatedList[index][name] = Number(value);
 
             <div className="flex flex-col gap-2">
               <label htmlFor="redirectBtnLink">Redirect Button Link</label>
-              <input
-                type="text"
-                name="redirectBtnLink"
-                className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
-                placeholder="Ex: /about"
-                value={formData.redirectBtnLink}
-                onChange={handleChange}
-              />
+              <select name="redirectBtnLink" id="redirectBtnLink" value={formData.redirectBtnLink} onChange={handleChange} className='border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3' required>
+              <option hidden>Choose Pages</option>
+              <option value="/contact">Contact Page</option>
+              <option value="/about">About Us Page</option>
+              <option value="/products">Products Page</option>
+              <option value="/news">News Page</option>
+              <option value="/gallery">Gallery Page</option>
+              <option value="/services">Services Page</option>
+            </select>
               {webOrigin && <div className='flex items-center gap-2'>
               <span className='font-medium text-sm'>Preview:</span>
               <Link href={`${webOrigin}${formData.redirectBtnLink}`} target='_blank' className='text-green-500'>{webOrigin}{formData.redirectBtnLink}</Link>

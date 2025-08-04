@@ -24,7 +24,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full">
+    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full ">
       <div className="">
         <Image
           className="bg-contain"
@@ -47,7 +47,8 @@ const Sidebar = () => {
           <span className="text-sm text-gray-500 font-medium">Admin</span>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="h-[100vh] overflow-y-scroll">
+      <div className="flex flex-col gap-2 " >
         <span className="text-sm text-gray-500 font-medium">E-Commerce</span>
         <ul className="flex flex-col gap-0">
           <li>
@@ -494,6 +495,7 @@ const Sidebar = () => {
             </Link>
           </li>
         </ul>
+      </div>
       </div>
     </div>
   );
