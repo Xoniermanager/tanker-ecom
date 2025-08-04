@@ -36,7 +36,7 @@ const CustomerRating = () => {
   ]
   return (
     <>
-      <Link href={'/dashboard/orders'} className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col  gap-6 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
+      <div  className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col  gap-6 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
       <div className="flex items-center justify-between gap-2">
         <h3 className='text-2xl font-medium'>Customer Rating</h3>
         <div className='relative' onMouseEnter={()=>setSpecShow(true)} onMouseLeave={()=>setSpecShow(false)}><button ><BsThreeDots /></button>
@@ -45,7 +45,7 @@ const CustomerRating = () => {
          transition={{ duration: .3}}
          viewport={{ once: true }}
         className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-20 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
-           <li><Link href={''} className="hover:text-orange-500">View Detail</Link></li>
+           <li><Link href={'/dashboard/orders'} className="hover:text-orange-500">View Detail</Link></li>
            <li><button className="hover:text-orange-500">Download</button></li>
         </motion.ul>
         </div>
@@ -71,7 +71,7 @@ const CustomerRating = () => {
             <BsDownload /> Download Report
           </button>
         </div>
-      </Link>
+      </div>
     </>
   )
 }

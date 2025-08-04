@@ -38,7 +38,7 @@ const page = () => {
       if (response.status === 200) {
         setBlogData(response.data.data.data);
         setTotalPages(response.data.data.totalPages);
-        currentPage(response.data.data.page);
+        setCurrentPage(response?.data?.data.page);
         
       }
     } catch (error) {

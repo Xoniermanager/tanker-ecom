@@ -21,19 +21,19 @@ const page = () => {
 
     // get category data
 
-    const getCategory = async()=>{
-        try {
-            const response = await api.get(``, {withCredentials: true});
+    // const getCategory = async()=>{
+    //     try {
+    //         const response = await api.get(``, {withCredentials: true});
             
 
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
 
-    useEffect(() => {
-      getCategory()
-    }, [])
+    // useEffect(() => {
+    //   getCategory()
+    // }, [])
 
     // handle delete
 

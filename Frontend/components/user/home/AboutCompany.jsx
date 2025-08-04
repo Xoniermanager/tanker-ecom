@@ -24,7 +24,7 @@ const AboutCompany = ({ aboutData }) => {
     ?.find((item) => item.type === "group")
     .contents.find((item) => item.type === "link" && item.order === 2);
 
-    console.log("About Data: ", aboutData)
+    
 
  
   return (

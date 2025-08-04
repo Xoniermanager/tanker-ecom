@@ -5,7 +5,7 @@ import DeletePopup from '../common/DeletePopup';
 import api from '../../user/common/api';
 
 const CategoryList = ({categoryData, }) => {
-    const [showPopup, setShowPopup] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
     
     const [deleteCat, setDeleteCat] = useState({id:null, name:null})
     const [errMessage, setErrMessage] = useState(null)

@@ -1,3 +1,4 @@
+"use client"
 const { default: api } = require("../../../user/common/api");
 
 export const getPageData = async () => {
