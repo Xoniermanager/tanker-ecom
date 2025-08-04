@@ -11,9 +11,11 @@ import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdContentPaste } from "react-icons/md";
+import Logout from "./common/Logout";
 
 const Sidebar = () => {
   const [active, setActive] = useState(0);
+  const [logoutPopup, setLogoutPopup] = useState(false)
 
   const path = usePathname();
   const pathname = path.split("/");
@@ -24,6 +26,8 @@ const Sidebar = () => {
   };
 
   return (
+    <>
+    {logoutPopup && <Logout close={()=>setLogoutPopup(false)}/>}
     <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full ">
       <div className="">
         <Image
@@ -391,7 +395,7 @@ const Sidebar = () => {
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
                   : "bg-transparent  "
               } `}
-              onClick={() => handleActive(3)}
+              onClick={() => handleActive(4)}
             >
               <span
                 className={`h-9 w-9 flex items-center justify-center rounded-full  text-lg ${
@@ -409,7 +413,7 @@ const Sidebar = () => {
               </span>
               <span
                 className={`text-slate-500 group-hover:text-orange-600 ${
-                  active === 3 && "rotate-90"
+                  active === 4 && "rotate-90"
                 }`}
               >
                 <HiArrowLongRight />
@@ -417,7 +421,7 @@ const Sidebar = () => {
             </div>
             <ul
               className={`flex flex-col gap-4 pl-16  h-0 overflow-hidden ${
-                active === 3 && "h-auto my-4"
+                active === 4 && "h-auto my-4"
               }`}
             >
               <li className="">
@@ -439,6 +443,15 @@ const Sidebar = () => {
                   {" "}
                   Details{" "}
                 </Link>
+              </li>
+              <li className="">
+                <button
+                 
+                  className="font-medium hover:text-orange-600"
+                  onClick={()=>setLogoutPopup(true)}
+                >
+                  Logout
+                </button>
               </li>
             </ul>
           </li>
@@ -498,6 +511,7 @@ const Sidebar = () => {
       </div>
       </div>
     </div>
+    </>
   );
 };
 
