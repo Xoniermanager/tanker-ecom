@@ -13,11 +13,12 @@
  *   "data": { ... }
  * }
  */
-const customResponse = (res, message, data = null) => {
+const customResponse = (res, message, data = null, accessToken = null) => {
     const response = {
         status: true,
         message: message,
-        data: data
+        data: data,
+        accessToken: accessToken
     };
 
     res.json(response);

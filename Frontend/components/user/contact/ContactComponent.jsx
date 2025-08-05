@@ -8,6 +8,7 @@ import { FaUser, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import api from "../common/api";
 import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "react-toastify";
 
 const ContactComponent = ({addressData, contactsData}) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -16,7 +17,7 @@ const ContactComponent = ({addressData, contactsData}) => {
     const [formData, setFormData] = useState({
         firstName:"",
         lastName:"",
-        number:"",
+        phone:"",
         email:"",
         message:""
     })
@@ -34,20 +35,26 @@ const ContactComponent = ({addressData, contactsData}) => {
         e.preventDefault()
         setIsLoading(true)
         try {
-          if(!captchaToken) return setErrMessage('Please verify that you are not a robot')
-            const response = await api.post('');
+          // if(!captchaToken) return setErrMessage('Please verify that you are not a robot')
+            const response = await api.post(`/contact`, formData);
             if(response.status === 200){
+               toast.success("Your query send successfully")
                 setFormData({
                     firstName:"",
                     lastName:"",
-                    number:"",
+                    phone:"",
                     email:"",
                     message:""
                 })
             }
         } catch (error) {
             console.error(error)
-            setErrMessage(error?.response?.data?.message || "something went wrong")
+            const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+      setErrMessage(message);
 
         }
         finally{
@@ -117,8 +124,8 @@ const ContactComponent = ({addressData, contactsData}) => {
                 </div>
                 <div className="flex items-center gap-5 ">
                     <div className="flex w-1/2 flex-col gap-3">
-                    <label htmlFor="number" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaPhoneAlt /> Phone</label>
-                    <input type="number" name="number" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.number} placeholder="Your Contact Number" onChange={handleChange} required/>
+                    <label htmlFor="phone" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaPhoneAlt /> Phone</label>
+                    <input type="phone" name="phone" className="border-stone-200 border-1 rounded-md outline-none px-6 py-3.5" value={formData.phone} placeholder="Your Contact Number" onChange={handleChange} required/>
                 </div>
                     <div className="flex w-1/2 flex-col gap-3">
                     <label htmlFor="email" className="flex items-center gap-1.5 text-purple-950 font-medium"><FaEnvelope /> Email</label>
@@ -134,7 +141,7 @@ const ContactComponent = ({addressData, contactsData}) => {
                    <p className="text-red-500 ">{errMessage}</p>
                 </div>
                 <div className="flex">
-                    <button type="submit" disabled={formData.number === "" || formData.firstName === "" ||  formData.email === "" || formData.message === ""} className="uppercase font-bold tracking-wide  disabled:bg-black/60 bg-black hover:bg-orange-400 text-white px-9 py-4 rounded-md">Send message</button>
+                    <button type="submit" disabled={formData.phone === "" || formData.firstName === "" ||  formData.email === "" || formData.message === ""} className="uppercase font-bold tracking-wide  disabled:bg-black/60 bg-black hover:bg-orange-400 text-white px-9 py-4 rounded-md">Send message</button>
                 </div>
                 </form>
 
@@ -160,24 +167,7 @@ const ContactComponent = ({addressData, contactsData}) => {
                 </div>
                 </Link>
             })}
-                {/* <Link href={'mailto:scott@tankersolutions.co.nz'} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
-                    <div className="flex flex-col gap-2">
-                        <h2 className="text-2xl font-bold text-purple-950">BDM</h2>
-                        <p className="text-zinc-500 text-lg font-medium">scott@tankersolutions.co.nz</p>
-                    </div>
-                    <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
-                       <RiCustomerService2Fill className="group-hover:scale-108 duration-500"/>
-                </div>
-                </Link>
-                <Link href={'tel:027 525 0551'} className="bg-white p-7 px-9 rounded-4xl hover:scale-103 flex items-center justify-between gap-5 hover:shadow-[0_0_18px_#00000020]">
-                    <div className="flex flex-col gap-2">
-                        <h2 className="text-2xl font-bold text-purple-950">Service Depot</h2>
-                        <p className="text-zinc-500 text-lg font-medium">027 525 0551</p>
-                    </div>
-                    <div className="h-18 w-18 min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-4xl">
-                       <RiCustomerService2Fill className="group-hover:scale-108 duration-500"/>
-                </div>
-                </Link> */}
+                
             </div>
         </div>
       </div>

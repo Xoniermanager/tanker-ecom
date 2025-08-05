@@ -84,19 +84,25 @@ class AuthController {
 
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                // secure: process.env.NODE_ENV === "production",
+                secure: true,
+                // sameSite: "strict",
+                sameSite: "None",
+                path:"/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
             res.cookie("accessToken", response.accessToken, {
-                httpOnly: false,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "Lax",
+                httpOnly: true,
+                // secure: process.env.NODE_ENV === "production",
+                secure: true,
+                // sameSite: "Lax",
+                sameSite: "None",
+                path:"/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
-            customResponse(res, "Login successful", response.returnData);
+            customResponse(res, "Login successful", response.returnData, response.accessToken);
         } catch (error) {
             next(error);
         }
@@ -115,19 +121,27 @@ class AuthController {
 
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                // secure: process.env.NODE_ENV === "production",
+                secure: true,
+                // sameSite: "strict",
+                sameSite: "None",
+                
+                path:"/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
             res.cookie("accessToken", response.accessToken, {
-                httpOnly: false,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "Lax",
+                httpOnly: true,
+                // secure: process.env.NODE_ENV === "production",
+                secure: true,
+                // sameSite: "Lax",
+                sameSite: "None",
+                
+                path:"/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
-            customResponse(res, "Admin login successful", response.returnData);
+            customResponse(res, "Admin login successful", response.returnData, response.accessToken);
         } catch (error) {
             next(error);
         }

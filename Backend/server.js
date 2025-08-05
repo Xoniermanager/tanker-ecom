@@ -77,7 +77,7 @@ const startServer = async () => {
         app.use(responseHandler);
 
         // Initialize queue manager to process background jobs
-        await queueManager.initialize();
+        // await queueManager.initialize();
 
         app.listen(PORT, async () => {
             console.log(`Server is running on port ${PORT}`);

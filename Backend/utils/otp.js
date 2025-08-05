@@ -61,9 +61,9 @@ async function sendOtpEmail(email, otp, type = "generic") {
             text,
         };
 
-        // await sendEmail(mailOptions);
-        const queue = queueManager.getQueue('general');
-        await queue.addJob('sendEmail', mailOptions);
+        await sendEmail(mailOptions);
+        // const queue = queueManager.getQueue('general');
+        // await queue.addJob('sendEmail', mailOptions);
 
         console.log(`[OTP:${type}] sent to ${email}`);
     } catch (error) {

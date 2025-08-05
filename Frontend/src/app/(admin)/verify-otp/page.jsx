@@ -80,7 +80,7 @@ const Page = () => {
         email: verifyCredentials.email,
         password: verifyCredentials.password,
         otp: enteredOtp,
-      });
+      },{withCredentials: true});
 
       if (response?.status === 200) {
         
@@ -91,10 +91,11 @@ const Page = () => {
         });
        
         console.log("userData: ", response.data)
+        
 
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
-
+        
 
 
         toast.success("OTP verify successfully");
