@@ -168,9 +168,10 @@ const Page = () => {
 
       const payload = ({
         ...formData,
+        isPublished: true,
         thumbnail: {
           ...formData.thumbnail,
-          source: upload.data.data.fullPath,
+          source: upload.data.data.url,
         },
       });
     

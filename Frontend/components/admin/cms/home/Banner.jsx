@@ -154,7 +154,7 @@ const Banner = ({ homeData }) => {
       order: 1, 
       thumbnail: {
         type: formData.thumbnail.type,
-        source: uploadedThumbnailUrl,
+        source: uploadedThumbnailUrl && uploadedThumbnailUrl,
       },
       contents: formContents,
     };
