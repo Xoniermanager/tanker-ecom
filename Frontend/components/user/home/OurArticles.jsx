@@ -9,6 +9,7 @@ import api from "../common/api";
 const OurArticles = ({ articleData }) => {
   const [blogData, setBlogData] = useState(null);
 
+  console.log("article blog data: ", blogData)
   
 
   const getBlogsData = async () => {

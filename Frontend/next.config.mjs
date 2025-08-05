@@ -2,7 +2,7 @@
 const nextConfig = {
     images:{
         remotePatterns:[
-            new URL("http://localhost:3000/public/uploads/**")
+            new URL("https://tanker-ecom.onrender.com/public/uploads/**")
            
         ],
         unoptimized: true,

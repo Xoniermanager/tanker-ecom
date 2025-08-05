@@ -45,7 +45,7 @@ const OurArticle = ({ blogData }) => {
               <div className="bg-white group" key={index}>
                 <div className="w-full h-60 overflow-hidden">
                   <Image
-                    src={item?.thumbnail?.fullPath || "N/A"}
+                    src={item?.thumbnail?.fullUrl || "N/A"}
                     width={300}
                     height={300}
                     alt="img"
