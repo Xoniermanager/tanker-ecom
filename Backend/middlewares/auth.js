@@ -9,14 +9,21 @@ const User = require('../models/user.model');
 const authorize = (allowedRoles = []) => {
     return async (req, res, next) => {
         try {
-            const authHeader = req.headers.authorization;
-            if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            // const authHeader = req.headers.authorization;
+            // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            // const error = new Error("Unauthorized: Token not provided");
+            // error.statusCode = 401;
+            // next(error)
+            // }
+
+            // const token = authHeader.split(" ")[1] || null;
+            const token = req.cookies.accessToken;
+            if (!token) {
                 const error = new Error("Unauthorized: Token not provided");
                 error.statusCode = 401;
                 next(error)
             }
 
-            const token = authHeader.split(" ")[1] || null;
             const decoded = verifyAccessToken(token);
             if (!decoded) {
                 const error = new Error("Unauthorized: Invalid token");
