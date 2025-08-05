@@ -14,7 +14,7 @@ const Footer = () => {
 
     }
   return (
-    <div style={{backgroundImage: "url('/images/footer-img.jpg')"}} className='w-full py-28 pb-16 footer relative'>
+    <div style={{backgroundImage: "url('/images/footer-img.jpg')"}} className='w-full py-28 pb-16 footer object-cover object-center relative'>
         <div className='flex  gap-12 max-w-7xl mx-auto relative z-20'>
             <ul className="bg-black px-6 py-12 flex flex-col gap-7 w-[28%]">
                 <li className='flex items-center gap-3 text-white' > <span className='min-w-8 text-2xl'> <FiPhoneCall /> </span> <div className="flex flex-col gap-1">
@@ -75,7 +75,7 @@ const Footer = () => {
         <div className='border-t-[1] border-white/50 mt-24 pt-16 max-w-7xl mx-auto relative z-2 flex justify-center'>
            
             <p className='text-white'>&copy; 2025 All Rights Reserved</p>
-            <Image src={'/images/gaddi.png'}  width={70} height={70} alt='car' className='absolute left-right -top-19'/>
+            {/* <Image src={'/images/gaddi.png'}  width={70} height={70} alt='car' className='absolute left-right -top-19'/> */}
         </div>
       
     </div>
