@@ -7,14 +7,14 @@ const api = axios.create({
     withCredentials: true
 })
 
-api.interceptors.request.use((config)=>{
-    const token = Cookies.get("accessToken")
-    if(token){
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-},(err)=>{
-    return Promise.reject(err)
-})
+// api.interceptors.request.use((config)=>{
+//     const token = Cookies.get("accessToken")
+//     if(token){
+//         config.headers.Authorization = `Bearer ${token}`
+//     }
+//     return config
+// },(err)=>{
+//     return Promise.reject(err)
+// })
 
 export default api
