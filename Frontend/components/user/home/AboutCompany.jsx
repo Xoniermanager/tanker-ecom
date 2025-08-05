@@ -104,7 +104,7 @@ const AboutCompany = ({ aboutData }) => {
           </p>
         </div>
       </div>
-      <Image
+      {/* <Image
         src={"/images/boxes.png"}
         height={150}
         width={150}
@@ -117,7 +117,7 @@ const AboutCompany = ({ aboutData }) => {
         width={230}
         alt="boxes"
         className=" absolute top-2/3 right-16 "
-      />
+      /> */}
     </div>
   );
 };

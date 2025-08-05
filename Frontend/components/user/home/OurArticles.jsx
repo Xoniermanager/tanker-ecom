@@ -63,7 +63,7 @@ const OurArticles = ({ articleData }) => {
            return <div className="bg-white group w-full" key={index}>
               <div className="w-full h-60 overflow-hidden">
                 <Image
-                  src={item.thumbnail.source}
+                  src={item.thumbnail.fullUrl}
                   width={200}
                   height={200}
                   alt="img"
