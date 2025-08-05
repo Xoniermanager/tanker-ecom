@@ -171,7 +171,7 @@ const Page = () => {
         isPublished: true,
         thumbnail: {
           ...formData.thumbnail,
-          source: upload.data.data.url,
+          source: upload.data.data.file.url,
         },
       });
     
