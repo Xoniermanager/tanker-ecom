@@ -143,11 +143,12 @@ class BaseRepository {
 
         if (session) query.session(session);
 
-        const [data, total] = await Promise.all([
+        const [docs, total] = await Promise.all([
             query,
             this.count(filter, session)
         ]);
 
+        const data = docs.map(doc => doc.toJSON());
         const totalPages = Math.ceil(total / limit);
 
         return { data, total, page, limit, totalPages };

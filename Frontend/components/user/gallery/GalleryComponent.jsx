@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { IoArrowForward } from "react-icons/io5";
 
-const GalleryComponent = ({blogData, currentPage, totalPages}) => {
+const GalleryComponent = ({blogData, currentPage, totalPages, setTotalPages, setCurrentPage}) => {
   
     
   return (
@@ -24,9 +24,9 @@ const GalleryComponent = ({blogData, currentPage, totalPages}) => {
         <div className="flex items-center gap-4 justify-center w-full">
         
                 {[...Array(totalPages)].map((item, index)=>(
-                    <button className={` ${currentPage === (index + 1) ? "bg-orange-400 text-white" : "bg-[#f6e7d3]"} hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`} key={index}>{index + 1}</button>
+                    <button className={` ${Number(currentPage) === (index + 1) ? "bg-orange-400 text-white" : "bg-[#f6e7d3]"} hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`} key={index} onClick={()=>setCurrentPage(index+1)}>{index + 1}</button>
                 ))}
-                <button disabled={totalPages < 2} className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl" > <IoArrowForward /> </button>
+                <button disabled={totalPages < 2} className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl" onClick={()=>setCurrentPage(Number(currentPage) + 1)}> <IoArrowForward /> </button>
                 </div>
       </div>
     </>

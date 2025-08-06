@@ -41,12 +41,15 @@ const BlogSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+BlogSchema.set("toJSON", { virtuals: true });
+BlogSchema.set("toObject", { virtuals: true });
+
 // virtual for thumbnail full URL
 BlogSchema.virtual("thumbnail.fullUrl").get(function () {
     if (this.thumbnail?.source) {
         return getPublicFileUrl(this.thumbnail.source);
     }
-    return null;
+    return null; 
 });
 
 module.exports = mongoose.model("Blog", BlogSchema);

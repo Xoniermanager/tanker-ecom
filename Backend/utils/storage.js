@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const AWS = require("aws-sdk");
 const { v4: uuid } = require("uuid");
+const CloudUpload = require('../config/cloudinary')
 require("dotenv").config();
 
 const STORAGE_DRIVER = process.env.STORAGE_DRIVER || "local";
@@ -28,7 +29,15 @@ const uploadImage = async (buffer, filename, folder = "uploads", mimetype = "ima
 
         const result = await s3.upload(params).promise();
         return { url: result.Location, key: result.Key };
-    } else {
+    }
+    else if(STORAGE_DRIVER === "cloudinary"){
+         const result = await CloudUpload(buffer, uniqueName, folder);
+         console.log("url", result.secure_url)
+        return { url: result.secure_url, key: result.public_id };
+
+      
+    }
+    else {
         const uploadPath = path.join(__dirname, "..", "public", folder);
         if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
 
@@ -67,6 +76,8 @@ function getPublicFileUrl(keyOrUrl) {
         const bucketBaseUrl = process.env.AWS_PUBLIC_URL;
         return `${bucketBaseUrl}/${keyOrUrl}`;
     }
+
+    if ( storageDriver === "cloudinary") return keyOrUrl
 
     const baseUrl = process.env.LOCAL_PUBLIC_URL;
     const filePath = keyOrUrl.startsWith("/") ? keyOrUrl : `/${keyOrUrl}`;

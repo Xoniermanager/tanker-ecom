@@ -20,7 +20,7 @@ const Navbar = () => {
       
       <div className='w-full bg-white shadow-[5px_0_20px_#00000025] '>
         <div className=" bg-purple-950 py-2.5" >
-            <div className='max-w-7xl mx-auto flex items-center justify-between'>
+            <div className='max-w-full px-8 mx-auto flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
                     <Link href={'/'} className='text-white'> <FaFacebookF /> </Link>
                      <span className='h-[20px] border-r-1 border-white'></span>
@@ -43,7 +43,7 @@ const Navbar = () => {
                
             </div>
         </div>
-      <div className='max-w-7xl mx-auto py-3 flex items-center sticky top-0 left-0 z-[500] bg-white mid-nav'>
+      <div className='max-w-full px-8 py-3 flex items-center sticky top-0 left-0 z-[500] bg-white mid-nav'>
 
 
           <div className="w-[20%]">
