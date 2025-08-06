@@ -29,11 +29,13 @@ const BlogSchema = new mongoose.Schema(
             required: true,
             validate: [array => array.length > 0, "At least one tag is required"]
         },
-        categories: {
-            type: [String],
-            required: true,
-            validate: [array => array.length > 0, "At least one category is required"]
-        },
+        categories: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "BlogCategory",
+                required: true,
+            }
+        ],
         content: {
             type: mongoose.Schema.Types.Mixed,
             required: true,
