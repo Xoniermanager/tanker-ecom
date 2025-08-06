@@ -142,7 +142,7 @@ const ResetPasswordPage = () => {
         </button>
         <div className="flex items-center justify-between gap-4">
           <button className="capitalize tracking-wide hover:text-purple-900 flex items-center gap-1 cursor-pointer" onClick={()=>router.back()}><IoPlayBackOutline className="text-purple-900"/> Step Back</button>
-          <button className="capitalize hover:text-orange-500 flex items-center gap-1 cursor-pointer" onClick={()=>router.push('/')}> <AiOutlineHome /> Back to home</button>
+          <button  className="capitalize hover:text-orange-500 flex items-center gap-1 cursor-pointer" onClick={()=>router.push('/')}> <AiOutlineHome /> Back to home</button>
         </div>
       </div>
     </div>

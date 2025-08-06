@@ -16,12 +16,12 @@ const JWT_AUDIENCE = process.env.JWT_AUDIENCE || "9cc4b70317785be8125e38adb11c7c
  * @param {number} expiresInMinutes - Expiry time in minutes.
  * @returns {string} - Signed JWT access token.
  */
-function generateAccessToken(userId, role, expiresInMinutes = 60) {
+function generateAccessToken(userId, role, expiresInDays = 2) {
     const token = jwt.sign(
         { id: userId, role },
         JWT_SECRET,
         {
-            expiresIn: `${expiresInMinutes}m`,
+            expiresIn: `${expiresInDays}d`,
             issuer: JWT_ISSUER,
             audience: JWT_AUDIENCE,
         }
@@ -35,7 +35,7 @@ function generateAccessToken(userId, role, expiresInMinutes = 60) {
  * @param {number} expiresInDays - Expiry time in days (default: 30).
  * @returns {string} - Signed JWT refresh token.
  */
-function generateRefreshToken(userId, expiresInDays = 30) {
+function generateRefreshToken(userId, expiresInDays = 15) {
     const refreshToken = jwt.sign(
         { id: userId },
         JWT_REFRESH_SECRET,

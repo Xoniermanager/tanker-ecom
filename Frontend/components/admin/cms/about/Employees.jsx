@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const Employees = ({ EmployeeData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
-  const [sectionId, setSectionId] = useState(null)
+  const [sectionId, setSectionId] = useState(null);
 
   const [formData, setFormData] = useState({
     heading: "",
@@ -22,18 +22,18 @@ const Employees = ({ EmployeeData }) => {
         description: "",
         image: null,
         previewUrl: "",
-        subtitle:""
+        subtitle: "",
       },
     ],
   });
 
   useEffect(() => {
-    setSectionId(EmployeeData?.section_id || "")
+    setSectionId(EmployeeData?.section_id || "");
     setFormData({
       heading: EmployeeData?.heading || "N/A",
       subHeading: EmployeeData?.subheading || "N/A",
-      employees: EmployeeData.contents.find((item) => item.type === "cards")
-        .contents,
+      employees: EmployeeData.contents.find((item) => item.type === "cards").contents,
+      
     });
   }, []);
 
@@ -63,34 +63,37 @@ const Employees = ({ EmployeeData }) => {
     setIsLoading(true);
     setErrMessage(null);
 
-    
-
     try {
-        let finalProcess = [];
-
-for (let item of formData.employees) {
+      let finalProcess = [];
+       
+      for (let item of formData.employees) {
         const fileFormData = new FormData();
-      fileFormData.append('file', item.thumbnail.source);
+        fileFormData.append("file", item.thumbnail.source);
 
-    const thumbRes = await api.put("/upload-files", fileFormData); 
-    finalProcess.push({
-        ...item,
+        let thumbRes;
         
-        thumbnail: {
+        if(item.thumbnail.source.name){
+          thumbRes = await api.put("/upload-files", fileFormData);
+           }
+          finalProcess.push({
+          ...item,
+
+         ...(thumbRes && { thumbnail: {
             ...item.thumbnail,
             source: thumbRes.data.data.fullPath
-        }
-    });
-    console.log("thumb Res: ", thumbRes)
-}
+          }}),
+        });
+       
+        
+      }
 
-    const formContents = [
-      {
-        order: 1,
-        type: "cards",
-        contents: finalProcess
-      },
-    ];
+      const formContents = [
+        {
+          order: 1,
+          type: "cards",
+          contents: finalProcess,
+        },
+      ];
 
       const payload = {
         section_id: sectionId,
@@ -237,7 +240,7 @@ for (let item of formData.employees) {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
           >
             {isLoading ? "Submitting..." : "Submit"} <MdOutlineCloudUpload />
           </button>
