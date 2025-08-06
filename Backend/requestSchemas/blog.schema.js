@@ -37,7 +37,14 @@ const setPublishStatusSchema = z.object({
     }),
 });
 
+const filterBlogSchema = z.object({
+    title: z.string().optional(),
+    tags: z.union([z.string(), z.array(z.string())]).optional(),
+    categories: z.union([z.string(), z.array(z.string())]).optional(),
+});
+
 module.exports = {
     upsertBlogSchema,
     setPublishStatusSchema,
+    filterBlogSchema,
 };

@@ -6,6 +6,7 @@ const {
 const {
     upsertBlogSchema,
     setPublishStatusSchema,
+    filterBlogSchema,
 } = require("../requestSchemas/blog.schema");
 const {
     bulkDeleteGallerySchema,
@@ -175,6 +176,8 @@ const validateUpsertBlog = (req, res, next) =>
     validateSchema(req, res, next, upsertBlogSchema);
 const validatePublishStatus = (req, res, next) =>
     validateSchema(req, res, next, setPublishStatusSchema);
+const validateBlogFilterQuery = (req, res, next) =>
+    validateQuery(req, res, next, filterBlogSchema);
 const validateBulkInsertUpdateGalleryItems = (req, res, next) =>
     validateMultipartJsonField(req, res, next, bulkInsertUpdateGallerySchema, 'items');
 const validateBulkDeleteGalleryItems = (req, res, next) =>
@@ -197,6 +200,7 @@ module.exports = {
     validateUpdateSection,
     validateUpsertBlog,
     validatePublishStatus,
+    validateBlogFilterQuery,
     validateBulkInsertUpdateGalleryItems,
     validateBulkDeleteGalleryItems,
     validateContact,

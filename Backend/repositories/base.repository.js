@@ -132,8 +132,6 @@ class BaseRepository {
      * @returns {Promise<{ data: Array<Object>, total: number, page: number, limit: number }>}
      */
     async paginate(filter = {}, page = 1, limit = 10, sort = null, session = null, projection = null) {
-        console.log(projection);
-
         const skip = (page - 1) * limit;
         const query = this.model
             .find(filter, projection)
