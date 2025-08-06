@@ -64,7 +64,7 @@ const Page = () => {
               Work Process
             </button>
           </li>
-          <li>
+          {/* <li>
             <button
               className={`${
                 active === 3 ? "border-orange-500" : "border-transparent"
@@ -73,13 +73,13 @@ const Page = () => {
             >
               Our Services
             </button>
-          </li>
+          </li> */}
           <li>
             <button
               className={`${
                 active === 4 ? "border-orange-500" : "border-transparent"
               } px-8 py-2 bg-yellow-400/20 border-2  rounded-lg text-orange-500 font-semibold`}
-              onClick={() => handleActive(3)}
+              onClick={() => handleActive(4)}
             >
               Who We Are
             </button>
@@ -89,7 +89,7 @@ const Page = () => {
               className={`${
                 active === 5 ? "border-orange-500" : "border-transparent"
               } px-8 py-2 bg-yellow-400/20 border-2  rounded-lg text-orange-500 font-semibold`}
-              onClick={() => handleActive(4)}
+              onClick={() => handleActive(5)}
             >
               Counter
             </button>
@@ -102,7 +102,7 @@ const Page = () => {
             <>
           {active === 1 && (serviceSecData && <OurServices serviceData={serviceSecData}/> )}
           {active === 2 && (workProcessData && <WorkProcess workProcessData={workProcessData}/> )}
-          {active === 3 && (contactsData && <Contact contactsData={contactsData}/> )}
+          {/* {active === 3 && (contactsData && <Contact contactsData={contactsData}/> )} */}
           {active === 4 && (whoWeAreData && <WhoWeAre whoWeAreData={whoWeAreData}/> )}
           {active === 5 && (counterData && <Counter counterData={counterData}/> )}
 

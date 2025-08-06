@@ -139,7 +139,11 @@ const page = () => {
               <Skeleton height={200} />
             </>
           ) : (
-            <div className="prose max-w-none blog-content">{parse(htmlString)}</div>
+            <div className="prose max-w-none blog-contents ">
+              <h1>{blogData.title}</h1>
+              <p>{blogData.subtitle}</p>
+              <span>{parse(blogData.content)}</span>
+              </div>
           )}
           
           <div className="flex items-center justify-between flex-wrap gap-y-2">

@@ -113,7 +113,7 @@ const Address = ({ addressData }) => {
         </div>
         <div className=" flex flex-col gap-6">
           {formData.address.map((item, i) => (
-            <div className="grid grid-cols-2 gap-5 bg-blue-50  p-6 rounded-lg">
+            <div className="grid grid-cols-2 gap-5 bg-blue-50  p-6 rounded-lg" key={i}>
               <div className="flex flex-col gap-2">
                 <label htmlFor="title">Title</label>
                 <input
@@ -159,7 +159,7 @@ const Address = ({ addressData }) => {
         <div className="col-span-2 flex justify-end">
           <button
             type="submit"
-            disabled={formData.title === "" || formData.subHeading === ""}
+            disabled={formData.title === "" || formData.subHeading === "" || isLoading}
             className="px-8 py-2.5 rounded-lg disabled:bg-purple-300 bg-purple-900 hover:bg-purple-950 font-medium text-white "
           >
             {isLoading ? "Updating..." : "Update"}

@@ -220,7 +220,7 @@ const OurServices = ({serviceData}) => {
                     onChange={(e) => handleServiceChange(index, e)}
                   />
                 </div>
-                <div className="flex flex-col gap-2 col-span-2">
+                {/* <div className="flex flex-col gap-2 col-span-2">
                   <label>Link</label>
                   <input
                     type="text"
@@ -230,7 +230,7 @@ const OurServices = ({serviceData}) => {
                     value={service.link}
                     onChange={(e) => handleServiceChange(index, e)}
                   />
-                </div>
+                </div> */}
               </div>
 
               {formData?.services?.length > 1 && (

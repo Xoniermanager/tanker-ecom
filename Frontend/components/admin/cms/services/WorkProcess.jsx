@@ -243,7 +243,7 @@ const WorkProcess = ({ workProcessData }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
           >
             {isLoading ? "Submitting..." : "Submit"} <MdOutlineCloudUpload />
           </button>

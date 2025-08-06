@@ -49,10 +49,10 @@ const Footer = () => {
              <h4 className='text-[22px] font-semibold capitalize text-white tracking-wide'>Services</h4>
             <ul className='flex flex-col gap-2'>
                 <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Specialist Fuel System Design</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Specialist Welding and Vehicle Fabrication</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Final assembly and certification</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Laser Cutting Services</Link></li>
-                <li><Link href={''} className='text-white tracking-wide hover:text-orange-400 leading-7'>Testing, Inspection and Compliance</Link></li>
+                <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Specialist Welding and Vehicle Fabrication</Link></li>
+                <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Final assembly and certification</Link></li>
+                <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Laser Cutting Services</Link></li>
+                <li><Link href={'/services'} className='text-white tracking-wide hover:text-orange-400 leading-7'>Testing, Inspection and Compliance</Link></li>
             
             </ul>
             </div>

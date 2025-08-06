@@ -160,7 +160,7 @@ const Contact = ({contactsData}) => {
         <div className="col-span-2 flex justify-end">
           <button
             type="submit"
-            disabled={formData.title === "" || formData.subHeading === ""}
+            disabled={formData.title === "" || formData.subHeading === "" || isLoading}
             className="px-8 py-2.5 rounded-lg disabled:bg-purple-300 bg-purple-900 hover:bg-purple-950 font-medium text-white "
           >
             {isLoading ? "Updating..." : "Update"}

@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { MdOutlineCloudUpload } from "react-icons/md";
+import dynamic from 'next/dynamic';
+import parse from 'html-react-parser';
+import { FaEye } from "react-icons/fa";
+
+const BlogEditor = dynamic(() => import('./BlogEditor'), { ssr: false });
+
 
 const BlogManagement = ({
   formData,
@@ -14,7 +20,10 @@ const BlogManagement = ({
   tagInput,
   setTagInput,
 }) => {
+
+  console.log("formdata: ", formData)
   return (
+    <>
     <div className="bg-white p-7 rounded-lg flex flex-col gap-5">
       <h2 className="font-semibold text-2xl">Blog Management</h2>
       <form
@@ -122,18 +131,7 @@ const BlogManagement = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="content">Blog Content</label>
-          <textarea
-            name="content"
-            rows={6}
-            placeholder="Write the blog content here..."
-            className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
-            value={formData.content}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        
 
         <div className="grid grid-cols-2 gap-5">
           <div className="flex flex-col gap-2">
@@ -172,6 +170,22 @@ const BlogManagement = ({
           
         </div>
 
+        <div className="flex flex-col gap-2">
+          <label htmlFor="content">Blog Content</label>
+          <BlogEditor
+  onChange={(html) => handleChange({ target: { name: 'content', value: html } })}
+/>
+          {/* <textarea
+            name="content"
+            rows={6}
+            placeholder="Write the blog content here..."
+            className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
+            value={formData.content}
+            onChange={handleChange}
+            required
+          /> */}
+        </div>
+
         {errMessage && (
           <div className="col-span-2 flex justify-end">
             <p className="text-red-600 text-sm font-medium">{errMessage}</p>
@@ -198,6 +212,15 @@ const BlogManagement = ({
         </div>
       </form>
     </div>
+
+    {formData.content && <div className="bg-white p-7 rounded-lg flex flex-col gap-6">
+      <h2 className="font-semibold text-2xl text-purple-950 flex items-center gap-2"> <FaEye className="text-purple-500 text-lg"/> Preview</h2>
+
+     <span className=" blog-contents list-disc">{parse(formData.content)}</span> 
+      
+
+    </div> }
+    </>
   );
 };
 
