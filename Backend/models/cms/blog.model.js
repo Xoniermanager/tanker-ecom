@@ -24,8 +24,18 @@ const BlogSchema = new mongoose.Schema(
             },
             source: String,
         },
-        tags: [String],
-        categories: [String],
+        tags: {
+            type: [String],
+            required: true,
+            validate: [array => array.length > 0, "At least one tag is required"]
+        },
+        categories: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "BlogCategory",
+                required: true,
+            }
+        ],
         content: {
             type: mongoose.Schema.Types.Mixed,
             required: true,
@@ -35,8 +45,8 @@ const BlogSchema = new mongoose.Schema(
             metaDescription: String,
             keywords: [String],
         },
-        isPublished: { type: Boolean, default: false },
-        publishedAt: Date,
+        isPublished: { type: Boolean, default: true },
+        publishedAt: { type: Date, default: Date.now() },
     },
     { timestamps: true }
 );
@@ -49,7 +59,7 @@ BlogSchema.virtual("thumbnail.fullUrl").get(function () {
     if (this.thumbnail?.source) {
         return getPublicFileUrl(this.thumbnail.source);
     }
-    return null; 
+    return null;
 });
 
 module.exports = mongoose.model("Blog", BlogSchema);

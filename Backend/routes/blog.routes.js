@@ -2,14 +2,18 @@ const express = require("express");
 const upload = require("../config/multer");
 const { BlogController } = require("../controllers/blog.controller");
 const authorize = require("../middlewares/auth");
-const { validateUpsertBlog, validatePublishStatus } = require("../middlewares/validation");
+const {
+    validateUpsertBlog,
+    validatePublishStatus,
+    validateBlogFilterQuery
+} = require("../middlewares/validation");
 
 const router = express.Router();
 const blogController = new BlogController();
 
 // ==================== Blog Routes ====================
-router.get("/", authorize(['admin']), blogController.getAllBlogs);
-router.get("/published", blogController.getPublishedBlogs);
+router.get("/", authorize(['admin']), validateBlogFilterQuery, blogController.getAllBlogs);
+router.get("/published", validateBlogFilterQuery, blogController.getPublishedBlogs);
 router.get("/:slug", blogController.getPublishedBlogBySlug);
 router.get("/author/:userId", blogController.getBlogsByAuthor);
 router.post(

@@ -129,17 +129,34 @@ class BaseRepository {
      * @param {Object|null} [sort=null] - Sorting object.
      * @param {Object|null} [session=null] - Optional Mongoose session.
      * @param {String|Object} [projection=null] - Fields to include or exclude.
+     * @param {String|Object|Array|null} [populateOptions=null] - Paths to populate; can be a string, object, or array of strings/objects.
      * @returns {Promise<{ data: Array<Object>, total: number, page: number, limit: number }>}
      */
-    async paginate(filter = {}, page = 1, limit = 10, sort = null, session = null, projection = null) {
-        console.log(projection);
-
+    async paginate(
+        filter = {},
+        page = 1,
+        limit = 10,
+        sort = null,
+        session = null,
+        projection = null,
+        populateOptions = null
+    ) {
         const skip = (page - 1) * limit;
-        const query = this.model
+        let query = this.model
             .find(filter, projection)
             .sort(sort)
             .skip(skip)
             .limit(limit);
+
+        if (populateOptions) {
+            if (Array.isArray(populateOptions)) {
+                populateOptions.forEach(option => {
+                    query = query.populate(option);
+                });
+            } else {
+                query = query.populate(populateOptions);
+            }
+        }
 
         if (session) query.session(session);
 
