@@ -306,7 +306,7 @@ const handleSubmit = async (e) => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 
                 <label className="flex items-center gap-2 cursor-pointer bg-purple-100 border border-purple-300 text-purple-700 rounded-xl px-4 py-2 font-medium w-fit">
                   <MdOutlineCloudUpload className="text-xl" />
@@ -326,7 +326,7 @@ const handleSubmit = async (e) => {
                     className="mt-2 w-16 h-16 object-contain border border-gray-200 rounded"
                   />
                 )}
-              </div>
+              </div> */}
             </div>
           ))}
           
@@ -344,7 +344,7 @@ const handleSubmit = async (e) => {
        <button
                    type="submit"
                    disabled={isLoading}
-                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
+                   className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
                  >
                    {isLoading ? 'Submitting...' : 'Submit'}
                    <MdOutlineCloudUpload />
