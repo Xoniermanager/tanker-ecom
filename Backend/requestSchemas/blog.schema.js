@@ -43,8 +43,15 @@ const filterBlogSchema = z.object({
     categories: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
+const categorySchema = z.object({
+    name: z.string(),
+    slug: z.string().optional(),
+    description: z.string().optional(),
+})
+
 module.exports = {
     upsertBlogSchema,
     setPublishStatusSchema,
     filterBlogSchema,
+    categorySchema,
 };
