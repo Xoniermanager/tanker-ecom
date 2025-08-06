@@ -11,8 +11,9 @@ const page = () => {
   const [galleryData, setGalleryData] = useState(null);
   const [blogData, setBlogData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageLimit, setPageLimit] = useState(10);
-  const [totalPages, setTotalPages] = useState(1)
+  const [pageLimit, setPageLimit] = useState(9);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = async () => {
     try {
@@ -24,6 +25,7 @@ const page = () => {
   };
 
   const getBlogData = async () => {
+    setIsLoading(true)
     try {
       const accessToken = Cookies.get("accessToken");
 
@@ -44,12 +46,20 @@ const page = () => {
     } catch (error) {
       console.error(error);
     }
+    finally{
+      setIsLoading(false)
+    }
   };
 
   useEffect(() => {
     fetchData();
-    getBlogData();
+    
   }, []);
+
+  useEffect(() => {
+    getBlogData();
+  }, [currentPage, pageLimit])
+  
 
   const counterData =
     galleryData?.sections?.find(
@@ -58,7 +68,7 @@ const page = () => {
   return (
     <>
       <PageBanner heading={"our gallery"} />
-      <GalleryComponent blogData={blogData} currentPage={currentPage} setPageLimit={setPageLimit} totalPages={totalPages}/>
+      <GalleryComponent blogData={blogData} currentPage={currentPage} setPageLimit={setPageLimit} totalPages={totalPages} setTotalPages={setTotalPages} setCurrentPage={setCurrentPage}/>
       {counterData && <Counter counterData={counterData} />}
     </>
   );
