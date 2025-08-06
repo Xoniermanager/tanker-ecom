@@ -71,7 +71,7 @@ const WorkProcess = ({ workProcessData }) => {
 
     try {
       let finalProcess = [];
-      const accessToken = Cookies.get("accessToken");
+     
       for (let item of formData.process) {
         const fileFormData = new FormData();
         fileFormData.append("file", item.thumbnail.source);
