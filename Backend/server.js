@@ -62,7 +62,10 @@ const startServer = async () => {
                 return res.status(400).json({ message: "file is required." });
             }
 
+            
+
             const file = await uploadImage(req.file.buffer, req.file.originalname, "uploads", req.file.mimetype);
+            console.log("file: ", file)
             const fullFilePath = getPublicFileUrl(file.url);
             customResponse(res, "File uploaded successfully", {
                 file,
