@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const { Types } = require('mongoose');
 const blogRepository = require("../repositories/cms/blog.repository");
 const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
-const summaryFields = 'title subtitle slug thumbnail tags createdAt author';
+const summaryFields = 'title subtitle slug thumbnail tags categories createdAt author';
 
 class BlogService {
     /**
@@ -10,10 +11,51 @@ class BlogService {
      *
      * @param {number} page - Current page number (default is 1).
      * @param {number} limit - Number of blogs per page (default is 10).
+     * @param {Object} filters - MongoDB query filters (default is empty object - {}).
      * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>} Paginated list of blogs.
      */
-    async getAllBlogs(page = 1, limit = 10) {
-        return await blogRepository.paginate({}, page, limit, { createdAt: -1 }, null, summaryFields);
+    async getAllBlogs(page = 1, limit = 10, filters = {}) {
+        const query = {};
+
+        if (filters.tags) {
+            const tags = Array.isArray(filters.tags) ? filters.tags : [filters.tags];
+            query.tags = { $in: tags };
+        }
+
+        if (filters.categories) {
+            const categories = Array.isArray(filters.categories) ? filters.categories : [filters.categories];
+
+            const categoryObjectIds = categories.map(id => {
+                try {
+                    return new Types.ObjectId(id);
+                } catch {
+                    return null;
+                }
+            }).filter(Boolean); // remove invalid ones
+
+            query.categories = { $in: categoryObjectIds };
+        }
+
+        if (filters.title) {
+            query.title = { $regex: filters.title, $options: 'i' }; // case-insensitive search
+        }
+
+        if (filters.isPublished) {
+            query.isPublished = filters.isPublished;
+        }
+
+        return await blogRepository.paginate(
+            query,
+            page,
+            limit,
+            { createdAt: -1 },
+            null,
+            summaryFields,
+            {
+                path: 'categories',
+                select: '_id name slug',
+            }
+        );
     }
 
     /**
@@ -94,11 +136,11 @@ class BlogService {
      *
      * @param {number} page - Current page number (default is 1).
      * @param {number} limit - Number of blogs per page (default is 10).
+     * @param {Object} filters - MongoDB query filters (default is empty object - {}).
      * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>} Paginated list of published blogs.
      */
-    async getPublishedBlogs(page = 1, limit = 10) {
-        const filter = { isPublished: true };
-        return await blogRepository.paginate(filter, page, limit, { createdAt: -1 }, null, summaryFields);
+    async getPublishedBlogs(page = 1, limit = 10, filters = {}) {
+        return await blogRepository.paginate(filters, page, limit, { createdAt: -1 }, null, summaryFields);
     }
 
     /**

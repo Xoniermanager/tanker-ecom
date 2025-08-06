@@ -8,6 +8,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import api from '../../../../components/user/common/api';
+import { SiFusionauth } from "react-icons/si";
 
 
 const Page = () => {
@@ -29,6 +30,7 @@ const Page = () => {
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
+        setErrMessage("")
         try {
             const response = await api.post(`/auth/request-admin-login-otp`, {email: formData.companyEmail, password: formData.password})
             if(response.status === 200){
@@ -80,9 +82,9 @@ const Page = () => {
                             {errMessage && <div className="flex justify-end">
                                 <p className='text-red-500'>{errMessage}</p>
                             </div>}
-                            <div className='flex'>
-                                <button style={{borderRadius: "8px"}} type="submit" className='btn-two uppercase'>
-                                 {isLoading ? "Submitting..." :  "Login"}
+                            <div className='flex items-center justify-start'>
+                                <button type="submit" disabled={formData.companyEmail === "" || formData.password.length < 8 || isLoading} className='px-10 group py-2.5 flex items-center gap-2.5 bg-purple-900 hover:bg-purple-950 disabled:bg-purple-300 text-white font-medium uppercase rounded-md'>
+                                 {isLoading ? "Submitting..." :  "Login"} <SiFusionauth className='group-hover:rotate-90 text-md'/>
                             </button>
                             </div>
                             {/* <div className="flex">

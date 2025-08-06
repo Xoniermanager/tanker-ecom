@@ -177,19 +177,21 @@ const Counter = ({ counterData }) => {
           {renderBox("boxThree", "Box Three")}
           {renderBox("boxFour", "Box Four")}
         </div>
+        <div className="flex items-center justify-end w-full">
+        {errMessage && (
+          <p className="text-red-500 font-medium mt-2">{errMessage}</p>
+        )}
+        </div>
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded flex items-center gap-2"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded flex items-center gap-2"
           >
             {isLoading ? "Submitting..." : "Submit"} <MdOutlineCloudUpload />
           </button>
         </div>
-
-        {errMessage && (
-          <p className="text-red-500 font-medium mt-2">{errMessage}</p>
-        )}
+        
       </form>
     </div>
   );

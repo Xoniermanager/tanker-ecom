@@ -6,6 +6,8 @@ const {
 const {
     upsertBlogSchema,
     setPublishStatusSchema,
+    filterBlogSchema,
+    categorySchema,
 } = require("../requestSchemas/blog.schema");
 const {
     bulkDeleteGallerySchema,
@@ -21,6 +23,7 @@ const {
     resetPasswordSchema
 } = require("../requestSchemas/auth.schema");
 const { contactSchema } = require("../requestSchemas/contact.schema");
+const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
 
 const optionalUrl = z
     .string()
@@ -174,12 +177,18 @@ const validateUpsertBlog = (req, res, next) =>
     validateSchema(req, res, next, upsertBlogSchema);
 const validatePublishStatus = (req, res, next) =>
     validateSchema(req, res, next, setPublishStatusSchema);
+const validateBlogFilterQuery = (req, res, next) =>
+    validateQuery(req, res, next, filterBlogSchema);
+const validateBlogCategory = (req, res, next) =>
+    validateSchema(req, res, next, categorySchema);
 const validateBulkInsertUpdateGalleryItems = (req, res, next) =>
     validateMultipartJsonField(req, res, next, bulkInsertUpdateGallerySchema, 'items');
 const validateBulkDeleteGalleryItems = (req, res, next) =>
     validateSchema(req, res, next, bulkDeleteGallerySchema);
 const validateContact = (req, res, next) =>
     validateSchema(req, res, next, contactSchema);
+const validateTestimonial = (req, res, next) =>
+    validateSchema(req, res, next, testimonialSchema);
 
 module.exports = {
     validateUserRegistration,
@@ -194,7 +203,10 @@ module.exports = {
     validateUpdateSection,
     validateUpsertBlog,
     validatePublishStatus,
+    validateBlogFilterQuery,
+    validateBlogCategory,
     validateBulkInsertUpdateGalleryItems,
     validateBulkDeleteGalleryItems,
-    validateContact
+    validateContact,
+    validateTestimonial
 };

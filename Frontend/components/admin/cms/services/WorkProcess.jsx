@@ -22,17 +22,17 @@ const WorkProcess = ({ workProcessData }) => {
         image: null,
         previewUrl: "",
         subtitle: "",
-        thumbnail:{
-            type:"image",
-            source:""
-        }
+        thumbnail: {
+          type: "image",
+          source: "",
+        },
       },
     ],
   });
   useEffect(() => {
-    console.log("formData",formData)
-  }, [formData])
-  
+    console.log("formData", formData);
+  }, [formData]);
+
   useEffect(() => {
     setSectionId(workProcessData?.section_id || "");
     setFormData({
@@ -69,40 +69,35 @@ const WorkProcess = ({ workProcessData }) => {
     setIsLoading(true);
     setErrMessage(null);
 
-   
-
     try {
-  let finalProcess = [];
-  const accessToken = Cookies.get("accessToken")
-for (let item of formData.process) {
+      let finalProcess = [];
+     
+      for (let item of formData.process) {
         const fileFormData = new FormData();
-      fileFormData.append('file', item.thumbnail.source);
-
-    const thumbRes = await api.put("/upload-files", fileFormData, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    }); 
-    finalProcess.push({
-        ...item,
-        thumbnail: {
-            ...item.thumbnail,
-            source: thumbRes.data.data.fullPath
+        fileFormData.append("file", item.thumbnail.source);
+        let thumbRes;
+        if (item.thumbnail.source.name) {
+          thumbRes = await api.put("/upload-files", fileFormData);
         }
-    });
-    console.log("thumb Res: ", thumbRes)
-}
+        finalProcess.push({
+          ...item,
+          ...(thumbRes && {
+            thumbnail: {
+              ...item.thumbnail,
+              source: thumbRes.data.data.fullPath,
+            },
+          }),
+        });
+      }
 
-    
-
-    const formContents = [
-      {
-        order: 1,
-        type: "cards",
-        label:"Process",
-        contents: finalProcess,
-      },
-    ];
+      const formContents = [
+        {
+          order: 1,
+          type: "cards",
+          label: "Process",
+          contents: finalProcess,
+        },
+      ];
       const payload = {
         section_id: sectionId,
         heading: formData.heading,
@@ -248,7 +243,7 @@ for (let item of formData.process) {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
           >
             {isLoading ? "Submitting..." : "Submit"} <MdOutlineCloudUpload />
           </button>

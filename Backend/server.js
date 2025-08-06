@@ -14,8 +14,10 @@ const swaggerDocsRoute = require("./routes/docs.routes");
 const SiteSettingRoutes = require("./routes/siteSetting.routes");
 const CmsRoutes = require("./routes/cms.routes");
 const BlogRoutes = require("./routes/blog.routes");
+const BlogCategoryRoutes = require("./routes/blog-category.routes");
 const GalleryRoutes = require("./routes/gallery.routes");
 const ContactRoutes = require("./routes/contact.routes");
+const TestimonialRoutes = require("./routes/testimonial.routes");
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
@@ -52,7 +54,9 @@ const startServer = async () => {
         app.use("/api/site-settings", SiteSettingRoutes);
         app.use("/api/cms", CmsRoutes);
         app.use("/api/blogs", BlogRoutes);
+        app.use("/api/blog-categories", BlogCategoryRoutes);
         app.use("/api/gallery", GalleryRoutes);
+        app.use("/api/testimonials", TestimonialRoutes);
         app.use("/api/contact", ContactRoutes);
 
         // Route to upload files
@@ -61,8 +65,6 @@ const startServer = async () => {
             if (!req.file) {
                 return res.status(400).json({ message: "file is required." });
             }
-
-            
 
             const file = await uploadImage(req.file.buffer, req.file.originalname, "uploads", req.file.mimetype);
             console.log("file: ", file)

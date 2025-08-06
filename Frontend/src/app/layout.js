@@ -3,6 +3,7 @@ import "./globals.css";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import ScrollToTop from "../../components/common/ScrollToTop";
 
 const InstrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${InstrumentSans.variable}  antialiased h-screen `}
       >
+        <ScrollToTop/>
         <ToastContainer/>
         {children}
       </body>

@@ -17,7 +17,10 @@ class BlogRepository extends BaseRepository {
      * @returns {Promise<Object|null>} The blog with full thumbnail path if found, otherwise null.
      */
     async findBySlug(slug, session = null) {
-        const blog = await this.model.findOne({ slug }).session(session);
+        const blog = await this.model.findOne({ slug }).populate({
+            path: 'categories',
+            select: '_id name slug',
+        }).session(session);
         if (!blog) return null;
 
         const blogObj = blog.toObject();
@@ -75,6 +78,10 @@ class BlogRepository extends BaseRepository {
     async findByAuthor(userId, projection = null, session = null) {
         return this.model
             .find({ "author.userId": userId }, projection)
+            .populate({
+                path: 'categories',
+                select: '_id name slug',
+            })
             .session(session);
     }
 

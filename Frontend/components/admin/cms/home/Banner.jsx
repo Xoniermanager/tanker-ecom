@@ -88,7 +88,7 @@ const Banner = ({ homeData }) => {
       title: homeData?.contents?.find(item => item.label === "Headline")?.text || "",
       subHeading: homeData?.contents?.find(item => item.label === "Tagline")?.text || "",
       description: homeData?.contents?.find(item => item.label === "Description")?.text || "",
-      thumbnail: {type : homeData?.thumbnail?.type, source: homeData?.thumbnail?.source }|| { type: "", source: "" },
+      thumbnail: {type : homeData?.thumbnail?.type, source: "" }|| { type: "", source: "" },
       buttonName: homeData?.contents?.find(item => item.label === "Call To Action")?.text || "",
       buttonLink: homeData?.contents?.find(item => item.label === "Call To Action")?.link || ""
     })
@@ -104,19 +104,24 @@ const Banner = ({ homeData }) => {
  const handleSubmit = async (e) => {
   e.preventDefault();
   setIsLoading(true);
+  setErrMessage('')
 
   try {
     const accessToken = Cookies.get("accessToken")
     const fileFormData = new FormData();
+    let uploadedThumbnailUrl;
     
+    if(formData.thumbnail.source !== ""){
     fileFormData.append('file', formData.thumbnail.source);
     const thumbRes = await api.put("/upload-files", fileFormData, {
       headers:{
         Authorization: `Bearer ${accessToken}`
       }
     }); 
+    uploadedThumbnailUrl = thumbRes.data.data.file.url;
+  }
     
-    const uploadedThumbnailUrl = thumbRes.data.data.file.url;
+    
 
     const formContents = [
       {
@@ -152,11 +157,11 @@ const Banner = ({ homeData }) => {
       heading: formData.title,
       subheading: formData.subHeading,
       order: 1, 
-      thumbnail: {
+      ...(uploadedThumbnailUrl && {thumbnail: {
         type: formData.thumbnail.type,
-        source: uploadedThumbnailUrl && uploadedThumbnailUrl,
-      },
-      contents: formContents,
+        source: uploadedThumbnailUrl,
+      }}),
+      contents: formContents
     };
 
     const response =  await api.put(`/cms/sections/${sectionId}`, payload ,{
@@ -281,9 +286,8 @@ const Banner = ({ homeData }) => {
               !formData.subHeading ||
               !formData.description ||
               !formData.buttonName ||
-              !formData.buttonLink ||
-              !formData.thumbnail.type ||
-              !formData.thumbnail.source
+              !formData.buttonLink 
+               || isLoading
             }
             className='px-8 py-2.5 rounded-lg disabled:bg-purple-300 bg-purple-900 hover:bg-purple-950 font-medium text-white '
           >

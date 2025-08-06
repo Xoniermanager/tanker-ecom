@@ -41,7 +41,7 @@ const WorkProcess = ({workProcessData}) => {
                 <p className="text-center text-[#6e797b] font-medium ">{item?.description || "N/A"}</p>
                 <span className="bg-black text-white p-0.5 px-1 rounded-md font-bold text-sm uppercase tracking-wide absolute left-5 -bottom-2">{item?.subtitle || "N/A"}</span>
               </div>
-              <Image className="object-center rounded-full w-[175px] h-[175px] border-8 border-white -mt-20 relative z-20" src={item?.thumbnail?.source} width={175} height={175} alt="truck"/>
+              <Image className="object-center object-cover rounded-full w-[175px] h-[175px] border-8 border-white -mt-20 relative z-20" src={item?.thumbnail?.source} width={175} height={175} alt="truck"/>
               <div className="text-white bg-orange-400 rounded-full h-14 w-14 absolute z-20 -bottom-20 flex items-center justify-center font-bold text-xl">0{i + 1}</div>
             </div>
           ))}

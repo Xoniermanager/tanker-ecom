@@ -220,7 +220,7 @@ const OurServices = ({serviceData}) => {
                     onChange={(e) => handleServiceChange(index, e)}
                   />
                 </div>
-                <div className="flex flex-col gap-2 col-span-2">
+                {/* <div className="flex flex-col gap-2 col-span-2">
                   <label>Link</label>
                   <input
                     type="text"
@@ -230,7 +230,7 @@ const OurServices = ({serviceData}) => {
                     value={service.link}
                     onChange={(e) => handleServiceChange(index, e)}
                   />
-                </div>
+                </div> */}
               </div>
 
               {formData?.services?.length > 1 && (
@@ -258,7 +258,7 @@ const OurServices = ({serviceData}) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 text-white px-6 py-2.5 font-medium rounded-lg flex items-center gap-2"
           >
             {isLoading ? 'Submitting...' : 'Submit'}
             <MdOutlineCloudUpload />
