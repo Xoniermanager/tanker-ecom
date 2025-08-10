@@ -1,24 +1,15 @@
-"use client"
-import React from 'react'
-import api from '../../user/common/api'
-import { FaXmark } from "react-icons/fa6"
-import { toast } from 'react-toastify'
 
-const Logout = ({ close }) => {
-//   const handleLogout = async () => {
-//     try {
-//       const response = await api.post('/auth/logout', {})
-//       if (response.status === 200) {
-//         toast.success('Account logged out successfully')
-        
-//         Cookies.remove("accessToken")
-//         close()
-//       }
-//     } catch (error) {
-//       console.error("Logout error:", error)
-//       toast.error('Logout failed')
-//     }
-//   }
+import React from 'react'
+import { FaXmark } from "react-icons/fa6"
+import { IoMdLogOut } from "react-icons/io";
+
+
+
+const Logout = ({ logout, isLoading, close }) => {
+
+
+  
+  
 
   return (
     <>
@@ -30,10 +21,11 @@ const Logout = ({ close }) => {
         <h2 className='text-2xl font-semibold text-purple-950'>Are you sure you want to logout?</h2>
         <div className="flex justify-end items-center gap-3">
           <button
-            className='bg-red-500 px-6 py-2 text-white rounded-lg font-medium'
-            // onClick={handleLogout}
+          disabled={isLoading}
+            className='bg-red-500 hover:bg-red-600 disabled:bg-red-300 px-6 py-2 text-white rounded-lg font-medium flex items-center gap-1.5' 
+            onClick={logout}
           >
-            Logout
+           {isLoading ? 'Requesting...' : 'Logout' } <IoMdLogOut />
           </button>
         </div>
       </div>

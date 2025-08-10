@@ -37,7 +37,7 @@ const page = () => {
         
       }, []);
 
-      console.log("about data: ", aboutData)
+    
 
 
       const EmployeeData = aboutData?.sections.find(item=>item?.section_id === "section-our-people")

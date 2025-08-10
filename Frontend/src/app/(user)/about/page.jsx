@@ -8,8 +8,10 @@ import Counter from '../../../../components/user/home/Counter'
 import ClientFeedback from '../../../../components/user/about/ClientFeedback'
 import OurPeople from '../../../../components/user/about/OurPeople'
 import  {getPageData} from "../../../../components/admin/cms/common/getPageData"
+import api from '../../../../components/user/common/api'
 const Page = () => {
    const [aboutData, setAboutData] = useState(null)
+   const [frontendTestimonialData, setFrontendTestimonialData] = useState(null)
 
   const fetchData = async()=>{
       try{
@@ -21,10 +23,22 @@ const Page = () => {
         console.error("error: ", error)
       }
     }
+
+    const getTestimonialData = async()=>{
+      try {
+        const response = await api.get(`/testimonials/frontend`)
+        if(response.status === 200){
+            setFrontendTestimonialData(response.data.data)
+            
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   
     useEffect(() => {
       fetchData()
-  
+      getTestimonialData()
     }, []);
 
     const aboutDatas = aboutData?.sections?.find(item=>item?.section_id === "section-about-company") || null
@@ -41,7 +55,7 @@ const Page = () => {
      {ourPeopleData && <OurPeople peopleData={ourPeopleData}/> }
       {whoWeAreData && <WhoWeAre whoWeAreData={whoWeAreData}/>}
       {counterData && <Counter counterData={counterData}/>}
-     {testimonialData && <ClientFeedback testimonialData={testimonialData}/> }
+     {testimonialData && <ClientFeedback testimonialData={testimonialData} testimonials={frontendTestimonialData}/> }
     </>
   )
 }

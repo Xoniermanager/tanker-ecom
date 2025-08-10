@@ -19,6 +19,7 @@ const BlogManagement = ({
   addTag,
   tagInput,
   setTagInput,
+  categoryData
 }) => {
 
   console.log("formdata: ", formData)
@@ -97,7 +98,7 @@ const BlogManagement = ({
             <label htmlFor="categories">Categories</label>
             <select
               name="categories"
-              className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
+              className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none capitalize"
               value={formData.categories.join(", ")}
               onChange={handleChange}
               required
@@ -105,9 +106,10 @@ const BlogManagement = ({
               <option value="" hidden>
                 Select your blog categories
               </option>
-              <option value="cat1">cat1</option>
-              <option value="cat2">cat2</option>
-              <option value="cat3">cat3</option>
+              {categoryData.map((item,i)=>(
+                <option value={item._id} key={i}>{item.name}</option>
+              ))}
+              
             </select>
           </div>
 
@@ -175,15 +177,7 @@ const BlogManagement = ({
           <BlogEditor
   onChange={(html) => handleChange({ target: { name: 'content', value: html } })}
 />
-          {/* <textarea
-            name="content"
-            rows={6}
-            placeholder="Write the blog content here..."
-            className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
-            value={formData.content}
-            onChange={handleChange}
-            required
-          /> */}
+         
         </div>
 
         {errMessage && (

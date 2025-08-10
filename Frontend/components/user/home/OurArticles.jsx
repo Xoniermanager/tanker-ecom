@@ -73,7 +73,7 @@ const OurArticles = ({ articleData }) => {
               </div>
               <div className="post-info">
                 <ul className="tags flex">
-                  <li>{date}</li>
+                  <li className="text-white">{date}</li>
                   <li className="ml-auto small">
                     <Link
                       href={`/news/${item.slug}`}

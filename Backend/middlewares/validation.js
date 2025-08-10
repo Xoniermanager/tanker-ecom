@@ -25,6 +25,8 @@ const {
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
 
+const {productCategorySchema} = require('../requestSchemas/product.schema')
+
 const optionalUrl = z
     .string()
     .optional()
@@ -189,6 +191,7 @@ const validateContact = (req, res, next) =>
     validateSchema(req, res, next, contactSchema);
 const validateTestimonial = (req, res, next) =>
     validateSchema(req, res, next, testimonialSchema);
+const validateProductCategory = (req, res, next) => validateSchema(req,res,next, productCategorySchema)
 
 module.exports = {
     validateUserRegistration,
@@ -208,5 +211,6 @@ module.exports = {
     validateBulkInsertUpdateGalleryItems,
     validateBulkDeleteGalleryItems,
     validateContact,
-    validateTestimonial
+    validateTestimonial,
+    validateProductCategory
 };

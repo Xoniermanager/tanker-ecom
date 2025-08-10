@@ -230,6 +230,31 @@ class AuthController {
             next(error);
         }
     }
+
+    logout = async(req, res, next)=>{
+        try{
+            
+            res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "None",
+                path:"/",
+                
+            });
+
+            res.clearCookie("accessToken", {
+                httpOnly: true,
+                secure: true,
+                sameSite: "None",
+                path:"/",
+                
+            });
+        customResponse(res, "logout successful")
+        }
+        catch(error){
+            next(error)
+        }
+    }
 }
 
 exports.AuthController = AuthController;

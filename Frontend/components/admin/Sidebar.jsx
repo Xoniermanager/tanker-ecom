@@ -12,11 +12,14 @@ import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdContentPaste } from "react-icons/md";
 import Logout from "./common/Logout";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import api from "../user/common/api";
 
 const Sidebar = () => {
   const [active, setActive] = useState(0);
   const [logoutPopup, setLogoutPopup] = useState(false)
-
+  const [isLoading, setIsLoading] = useState(false)
   const path = usePathname();
   const pathname = path.split("/");
   const pathpop = path.split("/").pop();
@@ -25,9 +28,30 @@ const Sidebar = () => {
     setActive(active !== no ? no : 0);
   };
 
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    setIsLoading(true)
+      try {
+
+        const response = await api.post('/auth/logout', {})
+        if (response.status === 200) {
+          toast.success('Account logged out successfully')
+          setLogoutPopup(false)
+          router.push('/')
+        }
+      } catch (error) {
+        console.error("Logout error:", error)
+        toast.error('Logout failed')
+      }
+      finally{
+        setIsLoading(false)
+      }
+    }
+
   return (
     <>
-    {logoutPopup && <Logout close={()=>setLogoutPopup(false)}/>}
+    {logoutPopup && <Logout logout={handleLogout} isLoading={isLoading} close={()=>setLogoutPopup(false)}/>}
     <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full ">
       <div className="">
         <Image
@@ -234,14 +258,14 @@ const Sidebar = () => {
             >
               <span
                 className={`h-9 w-9 flex items-center justify-center rounded-full  text-lg ${
-                  pathname.includes("products") && "text-orange-600 bg-white "
+                  pathname.includes("cms") && "text-orange-600 bg-white "
                 }`}
               >
                 <MdContentPaste  className="group-hover:scale-110 group-hover:text-orange-600 text-lg" />
               </span>
               <span
                 className={`font-medium ${
-                  pathname.includes("products") && "text-orange-600"
+                  pathname.includes("cms") && "text-orange-600"
                 } group-hover:text-orange-600`}
               >
                 CMS
@@ -323,6 +347,17 @@ const Sidebar = () => {
                 >
                   {" "}
                   Contact Us
+                </Link>
+              </li>
+              <li className="">
+                <Link
+                  href={`/admin/cms/testimonials`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("testimonials") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  Testimonials
                 </Link>
               </li>
               

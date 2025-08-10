@@ -26,4 +26,9 @@ module.exports = {
         login_otp: 5 * 60 * 1000, // 5 minutes
         password_reset: 10 * 60 * 1000, // 10 minutes
     },
+    STOCK_STATUS:{
+        IN_STOCK: "in_stock",
+        OUT_OF_STOCK: "out_of_stock",
+        PRE_ORDER: "pre_order"
+    }
 };

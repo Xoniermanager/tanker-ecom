@@ -321,6 +321,8 @@ class UserService {
             type
         );
     }
+
+    
 }
 
 module.exports = { UserService };
