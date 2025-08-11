@@ -16,6 +16,10 @@ const ProductCategorySchema = new Schema(
       unique: true,
       lowercase: true,
     },
+    status:{
+      type:Boolean,
+      default: true
+    },
     description: {
       type: String,
       default: "",
@@ -25,4 +29,6 @@ const ProductCategorySchema = new Schema(
   { timestamps: true }
 );
 
-module.export = module("ProductCategory", ProductCategorySchema);
+const productService = model("ProductCategory", ProductCategorySchema);
+
+module.exports = productService

@@ -203,7 +203,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/admin/dashboard/products/add-category`}
+                  href={`/admin/products/add-category`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("add-category") && "text-orange-600"
                   } `}
@@ -214,7 +214,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/products/add-product`}
+                  href={`/admin/products/add-product`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("add-product") && "text-orange-600"
                   } `}
@@ -226,7 +226,7 @@ const Sidebar = () => {
               
               <li className="">
                 <Link
-                  href={`/admin/dashboard/products`}
+                  href={`/admin/products`}
                   className={`font-medium hover:text-orange-600 ${
                     pathpop === "products" && "text-orange-600"
                   } `}
@@ -237,7 +237,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/detail`}
+                  href={`/admin/detail`}
                   className="font-medium hover:text-orange-600"
                 >
                   {" "}

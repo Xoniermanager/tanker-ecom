@@ -102,7 +102,7 @@ class TestimonialController {
     updateTestimonialStatus = async (req, res, next) => {
         try {
             const testimonialId = req.params.id;
-            console.log( testimonialId)
+            
             const status = await testimonialService.updateTestimonialStatus(testimonialId);
             customResponse(res, `Testimonial status changed to ${status} successfully`, null);
         } catch (error) {
