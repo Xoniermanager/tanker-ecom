@@ -96,8 +96,8 @@ class BlogRepository extends BaseRepository {
         const query = { _id: slugOrId };
 
         const update = publish
-            ? { $set: { isPublished: true, publishedAt: new Date() } }
-            : { $set: { isPublished: false }, $unset: { publishedAt: "" } };
+            ? { $set: { isPublished: false, publishedAt: new Date() } }
+            : { $set: { isPublished: true }, $unset: { publishedAt: "" } };
 
         return this.model.findOneAndUpdate(query, update, { new: true, session });
     }

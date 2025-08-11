@@ -65,7 +65,7 @@ const filterBlogSchema = z.object({
 
 const categorySchema = z.object({
     name: z.string(),
-    slug: z.string().optional(),
+    slug: z.string(),
     description: z.string().optional(),
 })
 

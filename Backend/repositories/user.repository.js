@@ -60,6 +60,8 @@ class UserRepository extends BaseRepository {
 
         return Otp.findOne({ email, type }).sort({ createdAt: -1 }).session(session);
     }
+
+    
 }
 
 module.exports = new UserRepository();

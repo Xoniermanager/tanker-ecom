@@ -12,58 +12,58 @@ const MenuBar = ({ editor }) => {
 
   return (
     <div className="flex flex-wrap gap-2 mb-4">
-      {/* Inline Styles */}
-      <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+     
+      <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Bold
       </button>
-      <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Italic
       </button>
-      <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Underline
       </button>
-      <button onClick={() => editor.chain().focus().toggleStrike().run()} className={editor.isActive('strike') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleStrike().run()} className={editor.isActive('strike') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Strike
       </button>
 
-      {/* Paragraph and Headings */}
-      <button onClick={() => editor.chain().focus().setParagraph().run()} className={!editor.isActive('heading') ? 'bg-purple-800 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'}>
+      
+      <button onClick={() => editor.chain().focus().setParagraph().run()} className={!editor.isActive('heading') ? 'bg-purple-800 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'} type='button'>
         Paragraph
       </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'} type='button'>
         H1
       </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'} type='button'>
         H2
       </button>
-      <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'bg-purple-700 text-white px-3 py-1 rounded' : 'bg-purple-100 px-3 py-1 rounded'} type='button'>
         H3
       </button>
 
-      {/* Lists */}
-      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'bg-blue-700 text-white px-3 py-1 rounded' : 'bg-blue-100 px-3 py-1 rounded'}>
+     
+      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'bg-blue-700 text-white px-3 py-1 rounded' : 'bg-blue-100 px-3 py-1 rounded'} type='button'>
         Bullet List
       </button>
-      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'bg-blue-700 text-white px-3 py-1 rounded' : 'bg-blue-100 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'bg-blue-700 text-white px-3 py-1 rounded' : 'bg-blue-100 px-3 py-1 rounded'} type='button'>
         Numbered List
       </button>
 
-      {/* Other Blocks */}
-      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+     
+      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Quote
       </button>
-      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'}>
+      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'bg-gray-800 text-white px-3 py-1 rounded' : 'bg-gray-200 px-3 py-1 rounded'} type='button'>
         Code
       </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()} className="bg-yellow-200 px-3 py-1 rounded">
+      <button onClick={() => editor.chain().focus().setHardBreak().run()} className="bg-yellow-200 px-3 py-1 rounded" type='button'>
         Line Break
       </button>
 
-      {/* Undo/Redo */}
-      <button onClick={() => editor.chain().focus().undo().run()} className="bg-red-100 px-3 py-1 rounded">
+      
+      <button onClick={() => editor.chain().focus().undo().run()} className="bg-red-100 px-3 py-1 rounded" type='button'>
         Undo
       </button>
-      <button onClick={() => editor.chain().focus().redo().run()} className="bg-green-100 px-3 py-1 rounded">
+      <button onClick={() => editor.chain().focus().redo().run()} className="bg-green-100 px-3 py-1 rounded" type='button'>
         Redo
       </button>
     </div>

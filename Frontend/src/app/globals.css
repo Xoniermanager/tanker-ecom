@@ -61,6 +61,21 @@ body {
     overflow: hidden;
     transition: all .3s ease-in-out 0s;
 }
+.btn-two-big {
+    font-size: 16px;
+    color: #fff;
+    text-transform: capitalize;
+    font-weight: 600;
+    
+    padding: 15px 28px;
+    min-width: 200px;
+    text-align: center;
+    background: #3C0367;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    transition: all .3s ease-in-out 0s;
+}
 
 .btn-one:before {
     content: "";
@@ -92,6 +107,22 @@ body {
 }
 
 .btn-two:hover:before {
+    right: -20px;
+}
+.btn-two-big:before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 150%;
+    top: 0;
+    right: calc(150% - 15px);
+    background: #000;
+    transform: skew(-15deg);
+    z-index: -1;
+    transition: all .4s ease-in-out 0s;
+}
+
+.btn-two-big:hover:before {
     right: -20px;
 }
 
@@ -565,6 +596,22 @@ content: "";
     transform: translateY(0) ;
   }
 }
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 1.2s ease forwards;
+}
+
 
 
 

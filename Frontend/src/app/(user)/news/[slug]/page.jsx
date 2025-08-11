@@ -9,63 +9,6 @@ import parse from 'html-react-parser';
 import { IoIosSearch } from "react-icons/io";
 import Link from 'next/link';
 
-const htmlString = `
-  <h1>Revolutionizing Fuel Transportation with Smart Tanker Solutions</h1>
-
-  
-
-
-
-  <p>
-    In today’s fast-paced logistics world, the transportation of liquid goods, especially fuel and water, demands precision, safety, and efficiency.
-    <em>Smart Tanker Solutions</em> are transforming how industries handle these critical deliveries.
-  </p>
-
-  <h2>Why Tanker Solutions Matter</h2>
-
-  <p>
-    Traditional tanker systems are often prone to issues like leakage, theft, inaccurate measurements, and inefficient routing. Modern tanker solutions
-    address these challenges by incorporating technology-driven features, ensuring maximum reliability.
-  </p>
-
-  <h2>Key Features of Modern Tanker Systems</h2>
-
-  <ul>
-    <li><strong>GPS Tracking:</strong> Real-time monitoring of tanker location for optimized routing and delivery times.</li>
-    <li><strong>IoT Sensors:</strong> Smart sensors monitor fluid levels, pressure, and temperature inside the tank.</li>
-    <li><strong>Digital Metering:</strong> Accurate fuel dispensing and automatic report generation.</li>
-    <li><strong>Remote Valve Control:</strong> Enhance safety by remotely managing tanker operations.</li>
-  </ul>
-
-  <h2>Industries Benefiting from Tanker Solutions</h2>
-
-  <p>These smart systems are being widely adopted in:</p>
-  <ol>
-    <li>Petroleum and Fuel Distribution</li>
-    <li>Water Supply for Municipal and Industrial Use</li>
-    <li>Chemical and Liquid Waste Transport</li>
-  </ol>
-
-  <h2>Case Study: Improving Fuel Delivery</h2>
-
-  <p>
-    A logistics company reported a 30% improvement in fuel delivery time and a 20% reduction in theft after switching to smart tanker solutions. With better
-    route planning and digital flow meters, they also minimized human errors and increased customer trust.
-  </p>
-
-  <blockquote>
-    "Since integrating smart tanker systems, we’ve reduced fuel loss and improved delivery tracking drastically." – Logistics Manager, XYZ Corp.
-  </blockquote>
-
-  <h2>Conclusion</h2>
-
-  <p>
-    The future of tanker logistics lies in embracing automation, data, and control. Investing in <strong>Smart Tanker Solutions</strong> ensures
-    better compliance, safety, and profitability.
-  </p>
-
-  <p>For a tailored solution for your fleet, <a href="/contact">contact our team</a> today.</p>
-`;
 
 
 const page = () => {
@@ -154,7 +97,7 @@ const page = () => {
               ) : (
                 blogData?.categories?.map((item, index) => (
                   <span key={index} className="bg-white border-slate-400 border-1 text-slate-500 hover:text-white hover:bg-purple-950 hover:border-purple-950 cursor-pointer font-medium px-3 py-0.5 rounded capitalize">
-                    {item}
+                    {item.name}
                   </span>
                 ))
               )}

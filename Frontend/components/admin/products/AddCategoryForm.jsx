@@ -21,10 +21,10 @@ const AddCategoryForm = ({ formData, handleSubmit, handleChange, isLoading, errM
         </Link>
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-2 gap-5">
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="categoryName"
+              htmlFor="name"
               className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
             >
               <span className="text-red-500 text-[8px]">
@@ -34,16 +34,37 @@ const AddCategoryForm = ({ formData, handleSubmit, handleChange, isLoading, errM
             </label>
             <input
               type="text"
-              id="categoryName"
-              name="categoryName"
-              value={formData.categoryName}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               placeholder="Category Name"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded-md px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
-          <div className=" flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="slug"
+              className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+            >
+              <span className="text-red-500 text-[8px]">
+                <FaStarOfLife />
+              </span>{" "}
+              Category Slug
+            </label>
+            <input
+              type="text"
+              id="slug"
+              name="slug"
+              value={formData.slug}
+              onChange={handleChange}
+              placeholder="Ex: hard_ware"
+              className="w-full border border-gray-300 rounded-md px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+          <div className=" flex flex-col gap-2 col-span-2">
                       <label htmlFor="description" className="flex gap-1 mb-1 text-sm font-medium text-gray-900">
                         <span className='text-red-500 text-[8px]'><FaStarOfLife /></span> Description
                       </label>
@@ -54,7 +75,7 @@ const AddCategoryForm = ({ formData, handleSubmit, handleChange, isLoading, errM
                         value={formData.description}
                         onChange={handleChange}
                         rows={4}
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        className="w-full border border-gray-300 rounded-md px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         required
                       ></textarea>
                     </div>
@@ -64,8 +85,9 @@ const AddCategoryForm = ({ formData, handleSubmit, handleChange, isLoading, errM
                 </div>
                 <div className="flex justify-end items-center gap-2">
                   <button
+                    disabled={isLoading || formData.name === "" || formData.slug === ""}
                     type="submit"
-                    className="bg-orange-400 text-white font-semibold py-2.5 px-8 rounded hover:bg-orange-500 transition flex items-center gap-2"
+                    className="bg-orange-400 disabled:bg-orange-300 disabled:cursor-none text-white font-semibold py-2.5 px-8 rounded hover:bg-orange-500 transition flex items-center gap-2"
                   >
                    {isLoading ? "Uploading..." : "Upload"} <AiOutlineCloudUpload className='text-xl'/>
                   </button>

@@ -7,6 +7,7 @@ const router = express.Router();
 const testimonialController = new TestimonialController();
 
 // ==================== Testimonial Routes ====================
+
 router.get("/", authorize(["admin"]), testimonialController.getAllTestimonials);
 router.get("/frontend", testimonialController.getFrontendTestimonials);
 router.get("/:id", authorize(["admin"]), testimonialController.getTestimonialById);

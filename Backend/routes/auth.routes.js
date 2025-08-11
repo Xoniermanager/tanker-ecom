@@ -58,6 +58,7 @@ router.post(
     authController.resendLoginOtp
 );
 router.post("/refresh-token", authController.refreshToken);
+router.post('/logout', authorize(['admin', 'user']), authController.logout )
 router.get('/me', authorize(['admin', 'user']), authController.getMe);
 
 module.exports = router;

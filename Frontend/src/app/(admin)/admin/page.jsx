@@ -84,7 +84,7 @@ const Page = () => {
                             </div>}
                             <div className='flex items-center justify-start'>
                                 <button type="submit" disabled={formData.companyEmail === "" || formData.password.length < 8 || isLoading} className='px-10 group py-2.5 flex items-center gap-2.5 bg-purple-900 hover:bg-purple-950 disabled:bg-purple-300 text-white font-medium uppercase rounded-md'>
-                                 {isLoading ? "Submitting..." :  "Login"} <SiFusionauth className='group-hover:rotate-90 text-md'/>
+                                 {isLoading ? "Submitting..." :  "Login"} <SiFusionauth className={` ${isLoading ? "animate-spin": 'group-hover:rotate-90'} text-md `}/>
                             </button>
                             </div>
                             {/* <div className="flex">

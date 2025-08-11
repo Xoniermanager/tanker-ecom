@@ -20,7 +20,7 @@ class TestimonialController {
      */
     getFrontendTestimonials = async (req, res, next) => {
         try {
-            const testimonials = await testimonialService.getAllTestimonials({ status: "active" });
+            const testimonials = await testimonialService.getAllTestimonials({ status: "active" }, 3);
             customResponse(res, "All testimonials fetched successfully", testimonials);
         } catch (error) {
             next(error);
@@ -102,6 +102,7 @@ class TestimonialController {
     updateTestimonialStatus = async (req, res, next) => {
         try {
             const testimonialId = req.params.id;
+            
             const status = await testimonialService.updateTestimonialStatus(testimonialId);
             customResponse(res, `Testimonial status changed to ${status} successfully`, null);
         } catch (error) {

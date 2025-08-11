@@ -3,7 +3,10 @@ const { Types } = require('mongoose');
 const blogRepository = require("../repositories/cms/blog.repository");
 const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
-const summaryFields = 'title subtitle slug thumbnail tags categories createdAt author';
+const summaryFields = 'title subtitle slug thumbnail tags categories createdAt isPublished author';
+
+
+
 
 class BlogService {
     /**
