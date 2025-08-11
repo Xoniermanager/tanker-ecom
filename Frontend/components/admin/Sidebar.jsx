@@ -52,7 +52,7 @@ const Sidebar = () => {
   return (
     <>
     {logoutPopup && <Logout logout={handleLogout} isLoading={isLoading} close={()=>setLogoutPopup(false)}/>}
-    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full ">
+    <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full">
       <div className="">
         <Image
           className="bg-contain"
@@ -63,13 +63,13 @@ const Sidebar = () => {
         />
       </div>
       <div className="bg-white flex items-center gap-4 p-3 rounded-lg">
-        <Image
+        {<Image
           className="bg-cover rounded-full w-11 h-11"
-          src={"/images/Employee_one.jpg"}
+          src="https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"
           height={40}
           width={40}
           alt="user"
-        />
+        />}
         <div className="flex flex-col gap-0.5">
           <h3 className="text-orange-600 font-bold">John Doe</h3>
           <span className="text-sm text-gray-500 font-medium">Admin</span>

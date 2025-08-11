@@ -55,7 +55,7 @@ const OurArticle = ({ blogData }) => {
                 </div>
                 <div className="post-info">
                   <ul className="tags flex">
-                    <li>{createdDate || "N/A"}</li>
+                    <li><span className="text-white">{createdDate || "N/A"}</span></li>
                     <li className="ml-auto small">
                       <Link
                         href={`/news/${item.slug}`}

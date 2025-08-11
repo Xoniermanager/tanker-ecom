@@ -61,6 +61,7 @@ const siteSettingSchema = z.object({
             head_office: z
                 .string()
                 .min(5, { message: "Head Office address is required." }),
+            address_link: z.string().url({message: "Please enter a valid url"}),
             service_depot: z
                 .string()
                 .min(5, { message: "Service Depot address is required." }),
@@ -78,11 +79,13 @@ const siteSettingSchema = z.object({
         title: z.string().min(1, { message: "Site title is required." }),
         slogan: z.string().optional(),
         description: z.string().optional(),
+        copyright: z.string().optional()
     }),
     seoDetails: z.object({
         metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
         keywords: z.array(z.string()).optional(),
+        canonicalUrl:z.string().url({message: "Please enter a valid url"}).optional()
     }),
 });
 

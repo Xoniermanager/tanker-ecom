@@ -92,7 +92,7 @@ const CategoryManagement = ({
 
 
       <div className="bg-white p-6 rounded-xl border border-gray-200">
-        <h3 className="font-semibold text-xl mb-4">Manage Categories</h3>
+        <h3 className="font-semibold text-xl mb-4 text-purple-950">Manage Categories</h3>
         <form
           onSubmit={handleCategorySubmit}
           className="bg-purple-50/50 p-6 rounded-xl flex flex-col gap-8"
@@ -149,7 +149,8 @@ const CategoryManagement = ({
           </div>
         </form>
       </div>
-      <div className="p-6 rounded-xl shadow-[0_0_14px_#00000015] w-full bg-white mt-6">
+      <div className="p-6 rounded-xl shadow-[0_0_14px_#00000015] w-full bg-white mt-6 flex flex-col gap-5">
+        <h2 className="font-semibold text-xl text-purple-950">All Blog Categories</h2>
         <table className="border border-gray-200 w-full rounded-xl ">
           <thead>
             <tr className="w-full border-b-1 border-gray-200 bg-purple-50">
