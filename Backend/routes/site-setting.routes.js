@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../config/multer");
-const { SiteSettingController } = require("../controllers/siteSetting.controller");
+const { SiteSettingController } = require("../controllers/site-setting.controller");
 const {
     validateSiteSetting,
 } = require("../middlewares/validation");

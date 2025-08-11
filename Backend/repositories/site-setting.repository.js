@@ -1,4 +1,4 @@
-const SiteSetting = require("../models/SiteSetting");
+const SiteSetting = require("../models/site-setting.model");
 const BaseRepository = require("./base.repository");
 
 /**

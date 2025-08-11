@@ -1,4 +1,4 @@
-const siteSettingService = require("../services/siteSetting.service");
+const siteSettingService = require("../services/site-setting.service");
 const customResponse = require("../utils/response");
 const { uploadImage } = require("../utils/storage");
 

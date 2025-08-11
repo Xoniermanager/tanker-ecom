@@ -43,7 +43,7 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
                         </div>
                         <div className="flex justify-between items-center mt-4">
                                           <button
-                                            className="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:underline flex items-center gap-1"
+                                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:underline flex items-center gap-1"
                                             // onClick={()=>handleEdit(item._id)}
                                           >
                                             <MdEdit className="text-lg" /> Edit
@@ -51,7 +51,7 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
           
                                           <button
                                              onClick={()=>handleSetBlogDelete(item._id)}
-                                            className="bg-red-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:underline flex items-center gap-1"
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:underline flex items-center gap-1"
                                           >
                                             <MdDeleteOutline className="text-lg" /> Delete
                                           </button>

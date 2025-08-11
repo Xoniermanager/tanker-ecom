@@ -1,5 +1,5 @@
-const SiteSetting = require("../models/SiteSetting");
-const siteSettingRepository = require("../repositories/siteSetting.repository");
+const SiteSetting = require("../models/site-setting.model");
+const siteSettingRepository = require("../repositories/site-setting.repository");
 const customError = require("../utils/error");
 const mongoose = require("mongoose");
 
