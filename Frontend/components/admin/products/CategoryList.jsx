@@ -124,7 +124,7 @@ const CategoryList = ({
               </th>
               <th className="px-6 py-4 font-medium">Category Description</th>
               <th className="px-6 py-4 font-medium">Status</th>
-              <th className="px-6 py-4 font-medium"> Action </th>
+              <th className="px-6 py-4 font-medium"> Actions </th>
             </tr>
           </thead>
           <tbody className="text-gray-800">
