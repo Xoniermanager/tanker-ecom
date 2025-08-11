@@ -238,6 +238,7 @@ const Page = () => {
       if (response.status === 201 || response.status === 200) {
         toast.success("Data updated successfully");
         setErrMessage(null);
+        getBlogData()
         setFormData({
           title: "",
           subtitle: "",
@@ -391,6 +392,7 @@ const Page = () => {
         toast.success('Blog Deleted successfully')
         setDeletedBlogId(null)
         getBlogData()
+        setShowDeletePopup(false)
       }
 
     } catch (error) {
