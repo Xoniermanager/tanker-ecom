@@ -1,20 +1,33 @@
+
 import Footer from "../../../components/user/common/Footer";
 import Navbar from "../../../components/user/common/Navbar";
 
 
 
 
-export default function UserLayout({ children }) {
+ const SiteSettingData = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`,{
+    next: {revalidate: 60}, 
+  }).then(res=>res.json()).catch(err=>console.error(err))
+
+
+
+export default async function UserLayout({ children }) {
+
+ 
   return (
     <html lang="en">
       <body
-        
       >
         
-        <Navbar/>
+        <Navbar siteData={SiteSettingData.data}/>
         {children}
-        <Footer/>
+        <Footer siteData={SiteSettingData.data}/>
       </body>
     </html>
   );
 }
+
+export const metadata = {
+  // title: SiteSettingData.seoDetails.metaTitle,
+  description: "Ecommerce website",
+};

@@ -1,4 +1,5 @@
 const userRepository = require("../repositories/user.repository");
+
 const customError = require("../utils/error");
 const {
     generateAccessToken,
@@ -320,6 +321,19 @@ class UserService {
             Date.now() + OTP_EXPIRY_DURATION[type],
             type
         );
+    }
+
+    changeUserPassword = async(payload ,id)=>{
+        const {oldPassword, newPassword} = payload;
+
+        const isPasswordMatch = await userRepository.compareUserPassword(id, oldPassword);
+        if(!isPasswordMatch){
+            throw customError("Your old password is incorrect, please check and try again", 401)
+        }
+
+        await userRepository.changePassword(id, newPassword)
+        return true
+
     }
 
     

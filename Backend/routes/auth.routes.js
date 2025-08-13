@@ -8,6 +8,7 @@ const {
     validateResetPassword,
     validateRequestVerifyEmailOtp,
     validateVerifyEmailOtp,
+    validateChangePassword
 } = require("../middlewares/validation");
 const authorize = require("../middlewares/auth");
 
@@ -59,6 +60,7 @@ router.post(
 );
 router.post("/refresh-token", authController.refreshToken);
 router.post('/logout', authorize(['admin', 'user']), authController.logout )
+router.patch('/change-password', authorize(['admin', 'user']), validateChangePassword, authController.changePassword)
 router.get('/me', authorize(['admin', 'user']), authController.getMe);
 
 module.exports = router;

@@ -6,7 +6,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
 import { usePathname } from 'next/navigation';
 
-const Navbar = () => {
+const Navbar = ({siteData}) => {
   const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
 
@@ -31,7 +31,7 @@ const Navbar = () => {
         <div className="bg-purple-950 py-2.5 w-full">
           <div className='max-w-full px-4 mx-auto flex items-center justify-between'>
             <div className='flex items-center gap-3'>
-              <Link href={'/'} className='text-white'> <FaFacebookF /> </Link>
+              {siteData?.contactDetails?.socialMediaLinks?.facebook && <Link href={siteData?.contactDetails?.socialMediaLinks?.facebook} className='text-white'> <FaFacebookF /> </Link>}
               <span className='h-[20px] border-r-1 border-white'></span>
               <Image
                 src={'/images/box.png'}
@@ -39,15 +39,15 @@ const Navbar = () => {
                 height={20}
                 alt='box'
               />
-              <span className='text-white'>Tanker Solutions NZ-made and international offerings</span>
+              <span className='text-white'>{siteData?.siteDetails?.slogan}</span>
             </div>
-            <Link href={'tel:+64274281896'} className='flex items-center gap-4 group'>
+            <Link href={`tel:${siteData?.contactDetails?.phoneNumbers?.contact_one}`} className='flex items-center gap-4 group'>
               <span className='h-11 w-11 bg-black rounded-full text-white flex items-center justify-center text-2xl'>
                 <FiPhoneCall />
               </span>
               <div className='flex flex-col gap-0'>
                 <h4 className='uppercase font-semibold text-white'>support</h4>
-                <p className='group-hover:text-orange-400 text-white'>+64 27428 1896</p>
+                <p className='group-hover:text-orange-400 text-white'>{siteData?.contactDetails?.phoneNumbers?.contact_one}</p>
               </div>
             </Link>
           </div>

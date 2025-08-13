@@ -23,7 +23,7 @@
     "apexcharts": "^5.2.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
-    "framer-motion": "^12.23.6",
+    "framer-motion": "^12.23.12",
     "html-react-parser": "^5.2.6",
     "js-cookie": "^3.0.5",
     "next": "15.3.4",

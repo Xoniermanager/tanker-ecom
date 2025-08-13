@@ -4,6 +4,7 @@ import { IoIosSearch, IoIosNotificationsOutline } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
 import { GoPlusCircle } from "react-icons/go";
 import NotificationSidebar from './common/NotificationSidebar';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const [showNotification, setShowNotification] = useState(false)
@@ -25,11 +26,11 @@ const Navbar = () => {
                <span className='text-2xl group-hover:text-orange-600'><IoIosNotificationsOutline /></span>
                <span className='bg-red-500 h-4 w-4 flex rounded-full items-center justify-center text-white absolute -top-1.5 -right-1 text-[10px]'> 2</span>
            </button>
-           <button className="relative cursor-pointer group">
+           {/* <button className="relative cursor-pointer group" onClick={()=>toast.info("Sorry Admin service is under development")}>
                <span className='text-2xl group-hover:text-orange-600'><IoCartOutline /></span>
                <span className='bg-red-500 h-4 w-4 flex rounded-full items-center justify-center text-white absolute -top-1.5 -right-1 text-[10px]'> 2</span>
-           </button>
-           <button className='bg-orange-500 flex items-center gap-3 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-orange-600'>
+           </button> */}
+           <button className='bg-orange-500 flex items-center gap-3 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-orange-600' onClick={()=>toast.info("Sorry Admin service is under development")}>
            <GoPlusCircle /> Add Product
            </button>
         </div>

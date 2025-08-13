@@ -21,6 +21,7 @@ class SiteSettingController {
     upsertSettings = async (req, res, next) => {
         try {
             const updateData = req.body;
+             console.log("req", req.file)
 
             if (req.file) {
                 const uploadedUrl = await uploadImage(req.file, "site-settings");

@@ -43,6 +43,8 @@ const GalleryManagement = ({getGalleryData}) => {
     setFormData({ ...formData, items: updatedItems });
   };
 
+  
+
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
@@ -306,7 +308,7 @@ const GalleryManagement = ({getGalleryData}) => {
                   item.title === "" ||
                   item.alt === "" ||
                   item.tags.length === 0 ||
-                  item.image.source === ""
+                  item.image.source === "" || isLoading
               )}
             >
               {isLoading ? "Updating..." : "Update"} <MdOutlineCloudUpload className="text-xl" />

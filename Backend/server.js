@@ -32,7 +32,7 @@ const startServer = async () => {
 
         const app = express();
         const PORT = process.env.PORT || 3000;
-        app.set("trust proxy", 1); // 🔥 Required on Vercel or behind proxy
+        app.set("trust proxy", 1); //  Required on Vercel or behind proxy
 
         // Middleware
         app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));

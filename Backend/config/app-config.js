@@ -3,7 +3,7 @@ const MongoDB = require("./database");
 const User = require("../models/user.model");
 const { default: mongoose } = require("mongoose");
 const ENUMS = require("../constants/enums");
-const SiteSetting = require("../models/SiteSetting");
+const SiteSetting = require("../models/site-setting.model");
 
 const seedAppConfig = async () => {
     await MongoDB.connect();
@@ -51,6 +51,7 @@ const seedAppConfig = async () => {
                     title: "Tanker Solutions",
                     slogan: "Tanker Solutions NZ-made and international offerings",
                     description: "Tanker Solutions is dedicated to providing the best quality cost effective solution to your fuel and dry bulk transport and delivery needs.",
+                    copyright: "All Rights Reserved"
                 },
                 contactDetails: {
                     emails: {
@@ -65,6 +66,7 @@ const seedAppConfig = async () => {
                     },
                     addresses: {
                         head_office: "8-10 Makaro Street, Porirua, 5022, NEW ZEALAND",
+                        address_link: 'https://www.google.com/maps?ll=-41.138116,174.830112&z=21&t=h&hl=en&gl=IN&mapclient=embed&q=8+Makaro+Street+Elsdon+Porirua+5022+New+Zealand',
                         service_depot: "21A Barnes Street, Seaview, Lower Hutt, 5010"
                     },
                     socialMediaLinks: {

@@ -6,6 +6,8 @@ import Counter from "../../../../components/user/home/Counter";
 import { getPageData } from "../../../../components/admin/cms/common/getPageData";
 import api from "../../../../components/user/common/api";
 import Cookies from "js-cookie";
+import PageLoader from "../../../../components/common/PageLoader";
+import FailedDataLoading from "../../../../components/common/FailedDataLoading";
 
 const page = () => {
   const [galleryData, setGalleryData] = useState(null);
@@ -16,11 +18,15 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = async () => {
+    setIsLoading(true)
     try {
       const pageData = await getPageData();
       setGalleryData(pageData?.data || null);
     } catch (error) {
       console.error("error: ", error);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -59,6 +65,19 @@ const page = () => {
   useEffect(() => {
     getBlogData();
   }, [currentPage, pageLimit])
+
+
+  if(isLoading){
+    return (
+      <PageLoader/>
+    )
+  }
+
+  if(!galleryData){
+    return (
+      <FailedDataLoading />
+    )
+  }
   
 
   const counterData =

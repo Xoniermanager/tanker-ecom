@@ -9,17 +9,21 @@ import { FiTruck } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
 import { MdContentPaste } from "react-icons/md";
 import Logout from "./common/Logout";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import api from "../user/common/api";
+import { motion } from "framer-motion";
+
+import { useInView } from "react-intersection-observer";
 
 const Sidebar = () => {
   const [active, setActive] = useState(0);
   const [logoutPopup, setLogoutPopup] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [inView, setInView] = useState(false)
   const path = usePathname();
   const pathname = path.split("/");
   const pathpop = path.split("/").pop();
@@ -29,6 +33,8 @@ const Sidebar = () => {
   };
 
   const router = useRouter()
+
+  
 
   const handleLogout = async () => {
     setIsLoading(true)
@@ -62,7 +68,7 @@ const Sidebar = () => {
           alt="Tanker Logo"
         />
       </div>
-      <div className="bg-white flex items-center gap-4 p-3 rounded-lg">
+      <div className="bg-white flex items-center gap-4 p-3 relative rounded-lg cursor-pointer" onMouseEnter={()=>setInView(true)} onMouseLeave={()=>setInView(false)}>
         {<Image
           className="bg-cover rounded-full w-11 h-11"
           src="https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"
@@ -74,6 +80,21 @@ const Sidebar = () => {
           <h3 className="text-orange-600 font-bold">John Doe</h3>
           <span className="text-sm text-gray-500 font-medium">Admin</span>
         </div>
+
+         <motion.ul
+        
+        className="absolute top-[100%] w-full flex flex-col gap-1 left-0 bg-white p-4 rounded-lg shadow-[0_0_10px_#00000020]" 
+        initial={{ opacity: 0, y: 50, display:"none"}}
+        animate={inView ? { opacity: 1, y: 0, display:"block" } : {}}
+        exit={{ opacity: 0, y: 50 }}
+        transition={{ duration: 0.4 }}
+        
+      >
+      
+        <li > <Link className="p-2 px-4 rounded-lg flex items-center gap-2 hover:bg-orange-100 hover:text-orange-500 hover:font-medium" href={'/admin/profile'}><FaRegUser className="text-orange-500"/>Profile</Link></li>
+        <li className="p-2 px-4 rounded-lg flex items-center gap-2 hover:bg-orange-100 hover:text-orange-500 hover:font-medium"  onClick={()=>setLogoutPopup(true)} ><IoLogOutOutline className="text-lg text-orange-500"/>Logout</li>
+       
+      </motion.ul>
       </div>
       <div className="h-[100vh] overflow-y-scroll">
       <div className="flex flex-col gap-2 " >
@@ -105,7 +126,7 @@ const Sidebar = () => {
               </span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             {" "}
             <div
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl group cursor-pointer ${
@@ -163,7 +184,7 @@ const Sidebar = () => {
                 </Link>
               </li>
             </ul>
-          </li>
+          </li> */}
           <li>
             {" "}
             <div
@@ -212,6 +233,9 @@ const Sidebar = () => {
                   Add Category
                 </Link>
               </li>
+               
+               {/* Add Product */}
+
               <li className="">
                 <Link
                   href={`/admin/products/add-product`}
@@ -224,7 +248,9 @@ const Sidebar = () => {
                 </Link>
               </li>
               
-              <li className="">
+              {/* List View */}
+
+              {/* <li className="">
                 <Link
                   href={`/admin/products`}
                   className={`font-medium hover:text-orange-600 ${
@@ -234,8 +260,11 @@ const Sidebar = () => {
                   {" "}
                   List View{" "}
                 </Link>
-              </li>
-              <li className="">
+              </li> */}
+
+              {/* product details  */}
+
+              {/* <li className="">
                 <Link
                   href={`/admin/detail`}
                   className="font-medium hover:text-orange-600"
@@ -243,9 +272,11 @@ const Sidebar = () => {
                   {" "}
                   Product Details{" "}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </li>
+
+
           <li>
             {" "}
             <div
@@ -363,7 +394,10 @@ const Sidebar = () => {
               
             </ul>
           </li>
-          <li>
+
+          {/* CUSTOMERS */}
+
+          {/* <li>
             {" "}
             <Link
               href={`/admin/dashboard/customers`}
@@ -388,8 +422,11 @@ const Sidebar = () => {
                 Customers
               </span>
             </Link>
-          </li>
-          <li>
+          </li> */}
+
+          {/* INVOICE */}
+
+          {/* <li>
             {" "}
             <Link
               href={`/admin/dashboard/invoice`}
@@ -414,7 +451,7 @@ const Sidebar = () => {
                 Invoices
               </span>
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="flex flex-col gap-2">
@@ -461,7 +498,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/admin/dashboard/profile`}
+                  href={`/admin/profile`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("profile") && "text-orange-600"
                   } `}
@@ -470,7 +507,7 @@ const Sidebar = () => {
                   My Profile{" "}
                 </Link>
               </li>
-              <li className="">
+              {/* <li className="">
                 <Link
                   href={`/admin/dashboard/detail`}
                   className="font-medium hover:text-orange-600"
@@ -478,7 +515,7 @@ const Sidebar = () => {
                   {" "}
                   Details{" "}
                 </Link>
-              </li>
+              </li> */}
               <li className="">
                 <button
                  
@@ -493,30 +530,30 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              href={`/admin/dashboard/settings`}
+              href={`/admin/website-settings`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
-                pathpop === "settings"
+                pathpop === "website-settings"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
                   : "bg-transparent  "
               } `}
             >
               <span
                 className={`h-9 w-9 flex items-center justify-center  rounded-full text-lg ${
-                  pathpop === "settings" && "text-orange-600 bg-white"
+                  pathpop === "website-settings" && "text-orange-600 bg-white"
                 }`}
               >
                 <IoSettingsOutline />
               </span>
               <span
                 className={`font-medium ${
-                  pathpop === "settings" && "text-orange-600"
+                  pathpop === "website-settings" && "text-orange-600"
                 }`}
               >
-                Settings
+                Website Settings
               </span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             {" "}
             <Link
               href={`/admin/dashboard/faqs`}
@@ -541,7 +578,7 @@ const Sidebar = () => {
                 Faqs
               </span>
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
       </div>
