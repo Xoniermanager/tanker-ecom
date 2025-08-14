@@ -5,9 +5,6 @@ const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
 const summaryFields = 'title subtitle slug thumbnail tags categories createdAt isPublished author';
 
-
-
-
 class BlogService {
     /**
      * Fetch all blogs with pagination support (admin view).

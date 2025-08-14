@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const { STOCK_STATUS } = require("../../constants/enums");
 
 const inventorySchema = new Schema({
     product: {
@@ -10,10 +11,10 @@ const inventorySchema = new Schema({
         type: Number,
         default: 0,
     },
-    stockStatus: {
+    status: {
         type: String,
-        enum: ["in_stock", "out_of_stock"],
-        default: "in_stock",
+        enum: Object.values(STOCK_STATUS),
+        default: STOCK_STATUS.IN_STOCK,
     },
 }, { timestamps: true }
 );

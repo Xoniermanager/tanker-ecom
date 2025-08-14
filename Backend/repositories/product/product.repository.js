@@ -12,8 +12,8 @@ class ProductRepository extends BaseRepository {
      * @param {mongoose.ClientSession} [session=null] - Optional mongoose session.
      * @returns {Promise<Object|null>} Product document or null.
      */
-    async findBySlug(slug, session = null) {
-        return this.model.findOne({ slug }).session(session);
+    async findBySlug(slug, session = null, populateOption = null) {
+        return this.model.findOne({ slug }).populate(populateOption).session(session);
     }
 }
 

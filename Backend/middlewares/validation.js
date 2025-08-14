@@ -26,7 +26,7 @@ const {
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
 
-const { productCategorySchema, productSchema, updateProductSchema } = require("../requestSchemas/product.schema");
+const { productCategorySchema, productSchema, updateProductSchema, updateInventorySchema } = require("../requestSchemas/product.schema");
 
 const optionalUrl = z
     .string()
@@ -220,7 +220,10 @@ const validateProductCategory = (req, res, next) =>
 const validateChangePassword = (req, res, next) =>
     validateSchema(req, res, next, changePasswordSchema);
 const validateProduct = (req, res, next) => validateSchema(req, res, next, productSchema)
-const validateUpdateProduct = (req, res, next) => validateSchema(req, res, next, updateProductSchema)
+const validateUpdateProduct = (req, res, next) =>
+    validateSchema(req, res, next, updateProductSchema)
+const validateInventoryUpdate = (req, res, next) =>
+    validateSchema(req, res, next, updateInventorySchema)
 
 
 module.exports = {
@@ -246,4 +249,5 @@ module.exports = {
     validateChangePassword,
     validateProduct,
     validateUpdateProduct,
+    validateInventoryUpdate,
 };
