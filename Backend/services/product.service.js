@@ -41,10 +41,16 @@ class ProductService {
             { createdAt: -1 },
             null,
             summaryFields,
-            {
-                path: "category",
-                select: "_id name slug",
-            }
+            [
+                {
+                    path: "category",
+                    select: "_id name slug",
+                },
+                {
+                    path: "inventory",
+                    select: "_id quantity status",
+                }
+            ]
         );
     }
 
@@ -59,18 +65,16 @@ class ProductService {
                 throw customError("Invalid product slug", 400);
             }
 
-            const product = await productRepository.findBySlug(slug);
+            const product = await productRepository.findBySlug(slug, null, {
+                path: "inventory",
+                select: "_id quantity status",
+            });
 
             if (!product) {
                 throw customError("Product not found", 404);
             }
 
-            const inventory = await inventoryRepository.findOne({ product: product._id });
-
-            return {
-                ...product.toObject(),
-                inventory: inventory ? inventory.quantity : 0
-            };
+            return product.toObject()
         } catch (err) {
             throw err;
         }

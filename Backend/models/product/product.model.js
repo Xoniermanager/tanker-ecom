@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { PRODUCT_STATUS } = require("../../constants/enums");
+const inventoryModel = require("./inventory.model");
 
 const productSchema = new Schema(
   {
@@ -101,5 +102,16 @@ const productSchema = new Schema(
 function arrayLimit(val) {
   return val.length <= 10;
 }
+
+productSchema.set("toJSON", { virtuals: true });
+productSchema.set("toObject", { virtuals: true });
+
+// virtual for inventory
+productSchema.virtual("inventory", {
+  ref: "Inventory",
+  localField: "_id",
+  foreignField: "product",
+  justOne: true
+});
 
 module.exports = model("Product", productSchema);

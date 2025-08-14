@@ -23,10 +23,10 @@ class InventoryRepository extends BaseRepository {
      * @param {mongoose.ClientSession} [session=null] - Optional mongoose session.
      * @returns {Promise<Object|null>} Updated inventory document or null.
      */
-    async updateQuantity(productId, quantity, session = null) {
+    async updateQuantity(productId, quantity, status, session = null) {
         return this.model.findOneAndUpdate(
             { product: productId },
-            { $set: { quantity } },
+            { $set: { quantity, status } },
             { new: true, session }
         );
     }

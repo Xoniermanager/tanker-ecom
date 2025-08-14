@@ -4,7 +4,11 @@ const customError = require("../utils/error");
 
 class InventoryService {
     /**
-     * Get inventory for a product.
+     * Fetch inventory by its associated product ID.
+     * 
+     * @async
+     * @param {string} productId - The ID of the product whose inventory is to be fetched.
+     * @returns {Promise<Object>} The inventory document for the given product.
      */
     async getInventoryByProduct(productId) {
         const inventory = await inventoryRepository.findByProduct(productId);
@@ -13,9 +17,15 @@ class InventoryService {
     }
 
     /**
-     * Update inventory quantity.
-     */
-    async updateInventory(productId, quantity) {
+    * Update inventory quantity for a given product.
+    * Uses a transaction to ensure data consistency.
+    * 
+    * @async
+    * @param {string} productId - The product ID whose inventory is to be updated.
+    * @param {number} quantity - The new quantity to set.
+    * @returns {Promise<Object>} The updated inventory document.
+    */
+    async updateInventory(productId, quantity, status) {
         const session = await mongoose.startSession();
         try {
             session.startTransaction();
@@ -23,6 +33,7 @@ class InventoryService {
             const updated = await inventoryRepository.updateQuantity(
                 productId,
                 quantity,
+                status,
                 session
             );
 
@@ -39,7 +50,14 @@ class InventoryService {
     }
 
     /**
-     * Increment or decrement inventory by a certain amount.
+     * Adjust inventory quantity for a given product by a specified change value.
+     * This is typically used for incrementing or decrementing stock levels.
+     * 
+     * @async
+     * @param {string} productId - The product ID whose inventory is to be adjusted.
+     * @param {number} change - The amount to adjust the quantity by (positive or negative).
+     * @returns {Promise<Object>} The updated inventory document.
+     * @throws {Error} If inventory is not found or the transaction fails.
      */
     async adjustInventory(productId, change) {
         const session = await mongoose.startSession();
