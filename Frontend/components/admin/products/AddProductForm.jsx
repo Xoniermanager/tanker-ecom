@@ -11,11 +11,21 @@ import Link from 'next/link';
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
-    productName: '',
-    price: '',
+    name: '',
     category: '',
-    quantity: '',
+    regularPrice: '',
+    sellingPrice: '',
+    shortDescription: "",
     description: '',
+    brand: '',
+    origin:"",
+    highlights:[],
+    specifications:{
+      type:"pdf",
+      source: ""
+    },
+    images:[],
+    initialQuantity:"",
   });
   const [isLoading, setIsLoading] = useState(false)
   const [errMessage, setErrMessage] = useState(null)
@@ -24,17 +34,7 @@ const AddProductForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
 
   
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await api.get('/categories'); 
-  //       setCategories(response.data || []);
-  //     } catch (error) {
-  //       console.error('Error fetching categories:', error);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
+  const getCategoryData = async
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -70,12 +70,7 @@ const AddProductForm = () => {
         formPayload.append('productImages', file);
       });
 
-      const response = await api.post('/products', formPayload, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await api.post('/products', formPayload);
 
       
       setFormData({

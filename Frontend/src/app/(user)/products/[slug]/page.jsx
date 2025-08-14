@@ -4,8 +4,8 @@ import ProductDetailComponents from '../../../../../components/user/Products/Pro
 
 const page = ({params}) => {
 
-  const id = params?.id
-  console.log(id)
+  const slug = params?.slug
+  console.log(slug)
   return (
     <>
       <PageBanner heading={'product details'}/>
