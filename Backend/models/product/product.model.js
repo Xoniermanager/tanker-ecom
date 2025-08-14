@@ -1,8 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { PRODUCT_STATUS } = require("../../constants/enums");
 
-
-
 const productSchema = new Schema(
   {
     name: {
@@ -30,22 +28,54 @@ const productSchema = new Schema(
       required: true,
       trim: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     brand: {
       type: String,
       required: true,
     },
-    description: {
+    origin: {
       type: String,
-      required: true,
+      trim: true,
     },
     highlights: {
       type: [String],
       validate: [arrayLimit, "maximum highlights limit 10"],
     },
-    status: {
-      type: String,
-      enum: Object.values(PRODUCT_STATUS),
-      default: "active",
+    specifications: {
+      type: {
+        type: String,
+        enum: ["pdf", "image"]
+      },
+      source: String
+    },
+    specifications_search_index: {
+      type: [String],
+      index: true,
+    },
+    images: {
+      type: [
+        {
+          source: { type: String, required: true },
+          type: {
+            type: String,
+            enum: ["image"],
+            default: "image",
+          },
+        },
+      ],
+      validate: {
+        validator: function (val) {
+          // Only enforce on creation
+          if (this.isNew) {
+            return Array.isArray(val) && val.length >= 1;
+          }
+          return true;
+        },
+        message: "At least one image is required",
+      },
     },
     slug: {
       type: String,
@@ -54,34 +84,16 @@ const productSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    origin: {
+    status: {
       type: String,
-      trim: true,
+      enum: Object.values(PRODUCT_STATUS),
+      default: "active",
     },
-    specifications: {
-      type: [
-        {
-          Key_parameter: { type: String, required: true },
-          values: { type: Object, required: true },
-        },
-      ],
+    seo: {
+      metaTitle: String,
+      metaDescription: String,
+      keywords: [String],
     },
-    specifications_search_index: {
-      type: [String],
-      index: true,
-    },
-    images: [
-      {
-        type: {
-          type: String,
-          enum: ["image", "video"],
-        },
-        source: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
   },
   { timestamps: true }
 );
