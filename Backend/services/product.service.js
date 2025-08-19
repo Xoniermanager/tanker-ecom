@@ -35,7 +35,7 @@ class ProductService {
         }
 
         if (filters.brand) {
-            query.brand = { $regex: `^${filters.brand}$`, $options: "i" }; 
+            query.brand = { $regex: `^${filters.brand}$`, $options: "i" }; // ^ and $ ensures full match, case-insensitive
         }
 
         return await productRepository.paginate(
@@ -69,13 +69,16 @@ class ProductService {
                 throw customError("Invalid product slug", 400);
             }
 
-            const product = await productRepository.findBySlug(slug, null, [{
-                path: "inventory",
-                select: "_id quantity status",
-            }, {
-                path: "category",
-                select: "-status -createdAt -updatedAt"
-            }]);
+            const product = await productRepository.findBySlug(slug, null, [
+                {
+                    path: "category",
+                    select: "_id name slug",
+                },
+                {
+                    path: "inventory",
+                    select: "_id quantity status",
+                }
+            ]);
 
             if (!product) {
                 throw customError("Product not found", 404);
