@@ -181,6 +181,14 @@ class ProductService {
 
         return newStatus;
     }
+
+    /**
+     * Fetch all unique brands from products.
+     * @returns {Promise<string[]>} List of unique brand names.
+     */
+    async getBrandsForFilter() {
+        return productRepository.getAllUniqueBrands();
+    }
 }
 
 module.exports = new ProductService();

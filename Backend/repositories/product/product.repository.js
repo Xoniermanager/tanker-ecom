@@ -15,6 +15,30 @@ class ProductRepository extends BaseRepository {
     async findBySlug(slug, session = null, populateOption = null) {
         return this.model.findOne({ slug }).populate(populateOption).session(session);
     }
+
+    /**
+     * Fetch all unique brands from products.
+     * @returns {Promise<string[]>} List of unique brand names.
+     */
+    async getAllUniqueBrands() {
+        const results = await this.model.aggregate([
+            {
+                $group: {
+                    _id: { $toLower: "$brand" }
+                }
+            },
+            {
+                $replaceRoot: { newRoot: { brand: "$_id" } }
+            }
+        ]);
+
+        return results.map(r => {
+            return {
+                "label": r.brand.charAt(0).toUpperCase() + r.brand.slice(1),
+                "value": r.brand.toLowerCase()
+            }
+        });
+    }
 }
 
 module.exports = new ProductRepository();

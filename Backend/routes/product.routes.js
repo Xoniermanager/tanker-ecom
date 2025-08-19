@@ -12,6 +12,7 @@ const inventoryController = new InventoryController();
 // ==================== Product Routes ====================
 router.get("/", authorize(['admin']), productController.getAllProducts);
 router.get("/frontend", productController.getFrontendProducts);
+router.get('/brands', productController.getBrandsForFilter);
 router.get("/:slug", productController.getProductBySlug);
 router.post(
     "/",
