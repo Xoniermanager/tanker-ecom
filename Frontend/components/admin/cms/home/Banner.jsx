@@ -250,7 +250,7 @@ const Banner = ({ homeData }) => {
             
             <div className="flex flex-col gap-2 ">
               <label htmlFor='thumbnailSource'>Thumbnail File Source</label>
-              <input type="file" accept="image/*,video/*" onChange={handleFileChange} className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3" />
+              <input type="file" accept={formData.thumbnail.type === "video" ?"video/*" : "image/*,"} onChange={handleFileChange} className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3" />
             </div>
 
             

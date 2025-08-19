@@ -12,6 +12,11 @@ class ProductCategoryRepository extends BaseRepository {
     return await query;
   }
 
+  async findActiveCategories(filters = {}, projection = "", sort,  session = null){
+    const result = this.model.find(filters).select(projection).sort(sort).session(session)
+    return result
+  }
+
   async updateCategoryStatus(id, updatedStatus, session = null) {
     const result = await this.model.findByIdAndUpdate(
       id,

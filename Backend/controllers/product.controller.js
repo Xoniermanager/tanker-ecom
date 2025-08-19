@@ -54,8 +54,8 @@ class ProductController {
                 });
             }
 
+            
             data.images = uploadedImages;
-
             const product = await productService.createProduct(data);
             customResponse(res, "Product created successfully", product);
         } catch (error) {

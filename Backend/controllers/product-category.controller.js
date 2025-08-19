@@ -24,6 +24,15 @@ class ProductCategoryController {
         }
     }
 
+    async getAllActiveCategories(req,res,next){
+        try {
+            const result = await productCategoryService.getAllActiveCategory({status:true})
+            return customResponse(res, "Active category data get successfully", result)
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async getById(req,res,next){
         try {
             const {id} = req.params;

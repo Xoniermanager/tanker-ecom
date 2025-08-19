@@ -103,6 +103,7 @@ const siteSettingSchema = z.object({
  */
 const validateSchema = async (req, res, next, schema) => {
     try {
+       
         const resolvedSchema =
             typeof schema === "function" ? await schema() : schema;
         const validatedData = resolvedSchema.parse(req.body);

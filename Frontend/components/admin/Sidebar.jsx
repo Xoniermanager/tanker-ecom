@@ -250,7 +250,7 @@ const Sidebar = () => {
               
               {/* List View */}
 
-              {/* <li className="">
+              <li className="">
                 <Link
                   href={`/admin/products`}
                   className={`font-medium hover:text-orange-600 ${
@@ -260,7 +260,7 @@ const Sidebar = () => {
                   {" "}
                   List View{" "}
                 </Link>
-              </li> */}
+              </li>
 
               {/* product details  */}
 

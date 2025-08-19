@@ -20,7 +20,7 @@ class ProductService {
 
         if (filters.category) {
             try {
-                query.category = new Types.ObjectId(filters.category);
+                query.category = new Types.ObjectId(String(filters.category));
             } catch {
                 throw customError("Invalid category ID", 400);
             }
@@ -65,10 +65,13 @@ class ProductService {
                 throw customError("Invalid product slug", 400);
             }
 
-            const product = await productRepository.findBySlug(slug, null, {
+            const product = await productRepository.findBySlug(slug, null, [{
                 path: "inventory",
                 select: "_id quantity status",
-            });
+            }, {
+                path: "category",
+                select: "-status -createdAt -updatedAt"
+            }]);
 
             if (!product) {
                 throw customError("Product not found", 404);
@@ -96,7 +99,7 @@ class ProductService {
                 productRepository,
                 session
             );
-
+            
             const product = await productRepository.create(data, session);
 
             await inventoryRepository.create(

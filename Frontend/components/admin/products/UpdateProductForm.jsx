@@ -9,36 +9,14 @@ import Link from "next/link";
 import { FaPlus, FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-const AddProductForm = () => {
+const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, setImagePreviews}) => {
   const [specPreview, setSpecPreview] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    regularPrice: "",
-    sellingPrice: "",
-    shortDescription: "",
-    description: "",
-    brand: "",
-    origin: "",
-    highlights: [],
-    specifications: {
-      type: "",
-      source: "",
-    },
-    images: [],
-    slug: "",
-    initialQuantity: "",
-    seo: {
-      metaTitle: "",
-      metaDescription: "",
-      keywords: [],
-    },
-  });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const [categories, setCategories] = useState([]);
   const [productImages, setProductImages] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
+  
   const [highlights, setHighlights] = useState("");
 
   const handleInputChange = (e) => {
@@ -155,6 +133,7 @@ const AddProductForm = () => {
     setErrMessage(null);
 
     try {
+        if(!productData._id) return setErrMessage("Product id not found, please try again!")
       const formPayload = new FormData();
 
       formPayload.append("name", formData.name);
@@ -182,49 +161,29 @@ const AddProductForm = () => {
         );
       }
 
-     
-
       if (formData.seo?.metaTitle) {
-        formPayload.append("seo[metaTitle]", formData.seo.metaTitle);
-      }
-      if (formData.seo?.metaDescription) {
-        formPayload.append(
-          "seo[metaDescription]",
-          formData.seo.metaDescription
-        );
-      }
-      if (Array.isArray(formData.seo?.keywords)) {
-        formData.seo.keywords.forEach((kw, index) => {
-          formPayload.append(`seo[keywords][${index}]`, kw);
-        });
-      }
+  formPayload.append("seo[metaTitle]", formData.seo.metaTitle);
+}
+if (formData.seo?.metaDescription) {
+  formPayload.append("seo[metaDescription]", formData.seo.metaDescription);
+}
+if (Array.isArray(formData.seo?.keywords)) {
+  formData.seo.keywords.forEach((kw, index) => {
+    formPayload.append(`seo[keywords][${index}]`, kw);
+  });
+}
 
       productImages.forEach((file) => {
         formPayload.append("images", file);
       });
 
-      const response = await api.post("/products", formPayload, {
+      const response = await api.put(`/products/${productData._id}`, formPayload, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
-        // Reset state
-        setFormData({
-          name: "",
-          category: "",
-          regularPrice: "",
-          sellingPrice: "",
-          shortDescription: "",
-          description: "",
-          brand: "",
-          origin: "",
-          highlights: [],
-          specifications: { type: "", source: "" },
-          images: [],
-          slug: "",
-          initialQuantity: "",
-          seo: { metaTitle: "", metaDescription: "", keywords: [] },
-        });
+       
+        
         setProductImages([]);
         setImagePreviews([]);
         setSpecPreview(null);
@@ -244,13 +203,15 @@ const AddProductForm = () => {
     }
   };
 
-  console.log("formData: ", formData);
+  console.log("FromData: ", formData)
+
+  
 
   return (
     <div className="w-full p-10 bg-white rounded-xl shadow-[0_0_15px_#00000015] flex flex-col gap-10">
       <div className="flex items-center justify-between ">
         <h2 className="text-2xl font-semibold  text-gray-800">
-          Add New Product
+          Update Product
         </h2>
         <Link
           href={"/dashboard/products"}
@@ -466,6 +427,7 @@ const AddProductForm = () => {
               id="origin"
               name="origin"
               placeholder="Product Origin"
+              value={formData.origin}
               onChange={handleInputChange}
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
@@ -507,6 +469,7 @@ const AddProductForm = () => {
               value={formData.slug}
               onChange={handleInputChange}
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              
             />
           </div>
           <div className="flex items-end gap-3 col-span-2 w-full">
@@ -538,7 +501,7 @@ const AddProductForm = () => {
           </div>
           <div className="flex gap-3 items-center col-span-2 flex-wrap">
             {formData.highlights.map((item, i) => (
-              <span className="px-5 py-1 rounded-full text-orange-500 bg-orange-100 flex items-center gap-1">
+              <span className="px-5 py-1 rounded-full text-orange-500 bg-orange-100 flex items-center gap-1" key={i}>
                 {item}{" "}
                 <FaXmark
                   className="hover:rotate-90 cursor-pointer"
@@ -749,7 +712,7 @@ const AddProductForm = () => {
             type="submit"
             className="bg-orange-400 text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-orange-500 disabled:bg-orange-300 transition flex items-center gap-2"
           >
-            {isLoading ? "Uploading..." : "Upload"}{" "}
+            {isLoading ? "Updating..." : "Update"}{" "}
             <AiOutlineCloudUpload className="text-xl" />
           </button>
         </div>
@@ -758,4 +721,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default UpdateProductForm;

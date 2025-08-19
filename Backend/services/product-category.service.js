@@ -33,9 +33,18 @@ class productCategoryService {
         
     }
 
-    async getAllCategory(filters = {}){
+    async getAllCategory(filters = {}, session = null){
         try {
             const result = await ProductCategoryRepository.findAll(filters, projections, {createdAt: -1})
+            return result
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getAllActiveCategory(filters = {}, session = null){
+        try {
+            const result = await ProductCategoryRepository.findActiveCategories(filters,projections, {createdAt: -1}, session)
             return result
         } catch (error) {
             throw error

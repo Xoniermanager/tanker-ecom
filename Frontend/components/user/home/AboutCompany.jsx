@@ -31,9 +31,9 @@ const AboutCompany = ({ aboutData }) => {
     <div className="bg-[#f2edf6] py-28 relative">
       <div className="max-w-7xl mx-auto flex items-center  gap-16 relative z-1">
         <div className="w-[45%] relative">
-          <video className="rounded-2xl w-[95%] aspect-3/5 object-cover object-center" autoPlay muted loop>
+          {aboutData.thumbnail.type === "video" ? <video className="rounded-2xl w-[95%] aspect-3/5 object-cover object-center" autoPlay muted loop>
             <source src={aboutData.thumbnail.fullPath} />
-          </video>
+          </video> : <Image src={aboutData.thumbnail.fullPath} height={300} width={300} className="rounded-2xl w-[95%] aspect-3/5 object-cover object-center"  alt="truck"/>}
           <div className="h-20 w-20 absolute -top-9 -right-4 rounded-full bg-orange-400 text-white text-4xl font-bold flex items-center justify-center">
             {" "}
             18{" "}
