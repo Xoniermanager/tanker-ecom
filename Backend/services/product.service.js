@@ -69,10 +69,16 @@ class ProductService {
                 throw customError("Invalid product slug", 400);
             }
 
-            const product = await productRepository.findBySlug(slug, null, {
-                path: "inventory",
-                select: "_id quantity status",
-            });
+            const product = await productRepository.findBySlug(slug, null, [
+                {
+                    path: "category",
+                    select: "_id name slug",
+                },
+                {
+                    path: "inventory",
+                    select: "_id quantity status",
+                }
+            ]);
 
             if (!product) {
                 throw customError("Product not found", 404);

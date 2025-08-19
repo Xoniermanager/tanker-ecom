@@ -10,6 +10,7 @@ class ProductRepository extends BaseRepository {
      * Finds product by slug.
      * @param {string} slug - The product slug.
      * @param {mongoose.ClientSession} [session=null] - Optional mongoose session.
+     * @param {String|Object|Array|null} [populateOptions=null] - Paths to populate; can be a string, object, or array of strings/objects.
      * @returns {Promise<Object|null>} Product document or null.
      */
     async findBySlug(slug, session = null, populateOption = null) {
