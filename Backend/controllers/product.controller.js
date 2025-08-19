@@ -104,6 +104,15 @@ class ProductController {
             next(error);
         }
     };
+
+    getBrandsForFilter = async (req, res, next) => {
+        try {
+            const result = await productService.getBrandsForFilter();
+            customResponse(res, `Product brands fetched successfully`, result);
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 exports.ProductController = ProductController;

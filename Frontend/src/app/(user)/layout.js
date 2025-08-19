@@ -19,9 +19,9 @@ export default async function UserLayout({ children }) {
       <body
       >
         
-        <Navbar siteData={SiteSettingData.data}/>
+        <Navbar siteData={SiteSettingData?.data}/>
         {children}
-        <Footer siteData={SiteSettingData.data}/>
+        <Footer siteData={SiteSettingData?.data}/>
       </body>
     </html>
   );

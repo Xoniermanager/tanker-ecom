@@ -34,6 +34,10 @@ class ProductService {
             query.name = { $regex: filters.name, $options: "i" };
         }
 
+        if (filters.brand) {
+            query.brand = { $regex: `^${filters.brand}$`, $options: "i" }; 
+        }
+
         return await productRepository.paginate(
             query,
             page,
@@ -183,6 +187,14 @@ class ProductService {
         await product.save();
 
         return newStatus;
+    }
+
+    /**
+     * Fetch all unique brands from products.
+     * @returns {Promise<string[]>} List of unique brand names.
+     */
+    async getBrandsForFilter() {
+        return productRepository.getAllUniqueBrands();
     }
 }
 

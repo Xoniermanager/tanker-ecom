@@ -219,8 +219,8 @@ const ProductDetailComponents = ({
           <li className=""> <button className={`${active === 1 ? "bg-orange-500 text-white" : "bg-slate-200"} text-lg font-medium px-5 py-2 border-b-lg`} onClick={()=>setActive(1)}>Description</button></li>
           <li className=""> <button className={`${active === 2 ? "bg-orange-500 text-white" : "bg-slate-200"} text-lg font-medium px-5 py-2 border-b-lg`} onClick={()=>setActive(2)}>Specifications</button></li>
         </ul>
-        <div className="">
-
+        <div className="w-full py-6">
+           {active === 1 && <p className="text-center">{productData?.description}</p>}
         </div>
       </div>
     </div>
