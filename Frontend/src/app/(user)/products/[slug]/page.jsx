@@ -6,10 +6,13 @@ import api from '../../../../../components/user/common/api'
 import { useParams } from 'next/navigation'
 import PageLoader from '../../../../../components/common/PageLoader'
 import FailedDataLoading from '../../../../../components/common/FailedDataLoading'
+import RelatedProductComponent from '../../../../../components/user/Products/RelatedProductComponent'
 
 
 const page = () => {
   const [productData, setProductData] = useState(null)
+  const [productCategory, setProductCategory] = useState(null)
+  const [relatedCategoryData, setRelatedCategoryData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [quantity, setQuantity] = useState(1);
 
@@ -33,6 +36,7 @@ const page = () => {
        const response = await api.get(`/products/${slug}`);
        if(response.status === 200){
         setProductData(response.data.data)
+        setProductCategory(response?.data?.data?.category?._id)
         
        }
      } catch (error) {
@@ -43,9 +47,31 @@ const page = () => {
      }
   }
 
-  useEffect(()=>{
-     fetchProduct()
-  },[])
+  const fetchRelatedProduct = async()=>{
+    try {
+      const response = await api.get(`/products/frontend?category=${productCategory}`)
+      if(response.status ===200){
+        setRelatedCategoryData(response.data.data.data)
+         
+        console.log("related category: ", response.data.data)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+ useEffect(() => {
+  fetchProduct();
+}, [slug]); 
+
+useEffect(() => {
+  if (productCategory) {
+    fetchRelatedProduct();
+  }
+}, [productCategory]); 
+
+
+const filter = relatedCategoryData?.filter(item=>item._id !== productData._id)
 
 
 
@@ -60,7 +86,9 @@ if (!productData){
   return (
     <>
       <PageBanner heading={'product details'}/>
-      <ProductDetailComponents productData={productData} quantity={quantity} setQuantity={setQuantity} handleIncrease={handleIncrease} handleDecrease={handleDecrease}/>
+      <ProductDetailComponents productData={productData} quantity={quantity} setQuantity={setQuantity} handleIncrease={handleIncrease} handleDecrease={handleDecrease }/>
+      <RelatedProductComponent relatedCategoryData={filter} productData={productData} />
+
     </>
   )
 }

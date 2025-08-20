@@ -8,12 +8,15 @@ const page = () => {
   const [categoryData, setCategoryData] = useState(null);
   const [productData, setProductData] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(5)
+  const [totalPages, setTotalPages] = useState(1)
   const [pageLimit, setPageLimit] = useState(10)
   const [errMessage, setErrMessage] = useState(null)
-  const [isLoading, setIsLoading] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const [deletePopupShow, setDeletePopupShow] = useState(false)
   const [deletedProductId, setDeletedProductId] = useState(null)
+  const [searchInput, setSearchInput] = useState("")
+  const [filterByName, setFilterByName] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   
   // get category data
@@ -21,7 +24,7 @@ const page = () => {
 
   const getCategoryData = async()=>{
     try {
-      const response = await api.get(`/product-categories?limit=${pageLimit}`)
+      const response = await api.get(`/product-categories`)
       if(response.status === 200){
         setCategoryData(response.data.data)
       }
@@ -30,11 +33,15 @@ const page = () => {
     }
   }
 
+ 
+  
+
 
   const getProducts = async () => {
-    
+    setIsLoading(true)
     try {
-    const response = await api.get(`/products`)
+    const response = await api.get(`/products?limit=${pageLimit}&page=${currentPage}${filterByName ? `&name=${filterByName}`: ""}${
+        selectedCategories.length > 0 ? `&category=${selectedCategories.join(",")}`: ""}`)
     if(response.status === 200){
       setProductData(response.data.data.data)
       setTotalPages(response.data.data.totalPages)
@@ -43,12 +50,25 @@ const page = () => {
     }
     } catch (error) {
       console.error(error);
+    } finally{
+      setIsLoading(false)
     }
   };
 
+   useEffect(() => {
+    const delayDebouncing = setTimeout(() => {
+      setFilterByName(searchInput)
+      setCurrentPage(1)
+    }, 400);
+  
+    return () => {
+      clearTimeout(delayDebouncing)
+    }
+  }, [searchInput])
+
   useEffect(() => {
     getProducts()
-  }, [currentPage, pageLimit])
+  }, [currentPage, pageLimit, filterByName, selectedCategories])
   
 
   useEffect(() => {
@@ -83,14 +103,18 @@ const page = () => {
     setDeletedProductId(id)
   }
 
-
-  
-
+  const handleCategoryChange = (id) => {
+  setSelectedCategories((prev) =>
+    prev.includes(id)
+      ? prev.filter((catId) => catId !== id) 
+      : [...prev, id] 
+  );
+};
 
   return (
     <>
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
-        <ProductList categoryData={categoryData} productData={productData} totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage} deletePopupShow={deletePopupShow} setDeletePopupShow={setDeletePopupShow} setDeleteProduct={setDeleteProduct} handleDelete={handleDelete} isLoading={isLoading} errMessage={errMessage}/>
+        <ProductList categoryData={categoryData} productData={productData} totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage} deletePopupShow={deletePopupShow} setDeletePopupShow={setDeletePopupShow} setDeleteProduct={setDeleteProduct} handleDelete={handleDelete} isLoading={isLoading} errMessage={errMessage} searchInput={searchInput} setSearchInput={setSearchInput} setPageLimit={setPageLimit} selectedCategories={selectedCategories} setSelectedCategories={setSelectedCategories} handleCategoryChange={handleCategoryChange}/>
       </div>
     </>
   );

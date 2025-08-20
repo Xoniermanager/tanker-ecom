@@ -6,6 +6,8 @@ import DeletePopup from "../../../../../../../components/admin/common/DeletePopu
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import PageLoader from "../../../../../../../components/common/PageLoader";
+import Link from "next/link";
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
@@ -91,11 +93,11 @@ const Page = () => {
             {productData.name}
           </h1>
           <div className="flex gap-3">
-            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition">
-              Edit Product
-            </button>
-            <button className="bg-purple-950 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-900 transition" onClick={()=>setDeleteProduct(productData._id)}>
-              Delete Product
+            <Link href={`/admin/products/update/${productData.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
+              <MdOutlineEdit className="text-lg"/> Edit Product
+            </Link>
+            <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition flex items-center gap-2" onClick={()=>setDeleteProduct(productData._id)}>
+             <MdDeleteOutline className="text-xl"/> Delete Product
             </button>
           </div>
         </div>
@@ -155,10 +157,10 @@ const Page = () => {
                 Pricing
               </h2>
               <div className="flex gap-6 items-center">
-                <p className="text-2xl font-bold text-orange-500">
+                <p className="text-2xl font-bold text-green-500">
                   ₹{productData.sellingPrice}
                 </p>
-                <p className="text-lg text-gray-500 line-through">
+                <p className="text-lg text-red-500 line-through">
                   ₹{productData.regularPrice}
                 </p>
               </div>

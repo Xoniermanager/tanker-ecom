@@ -35,7 +35,7 @@ class ProductService {
         }
 
         if (filters.brand) {
-            query.brand = { $regex: `^${filters.brand}$`, $options: "i" }; // ^ and $ ensures full match, case-insensitive
+            query.brand = { $regex: `^${filters.brand}$`, $options: "i" }; 
         }
 
         return await productRepository.paginate(

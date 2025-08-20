@@ -9,20 +9,101 @@ import { IoMdSearch } from "react-icons/io";
 import Link from "next/link";
 
 import { IoArrowForward } from "react-icons/io5";
+import api from "../common/api";
+import BlockPageLoader from "../../common/BlockPageLoader";
 
 const OurProducts = ({
-  productData,
-  totalPages,
-  currentPage,
-  setCurrentPage,
-  categoryData,
-  setFilterCategory,
-  filterByName,
-  setFilterByName,
+ 
 }) => {
+  const [productData, setProductData] = useState(null);
+    const [categoryData, setCategoryData] = useState(null);
+    const [brandData, setBrandData] = useState(null)
+    const [isLoading, setIsLoading] = useState(false);
+    const [filterCategory, setFilterCategory] = useState(null)
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterByName, setFilterByName] = useState(null)
+    const [filterBrand, setFilterBrand] = useState(null)
+    const [errMessage, setErrMessage] = useState(false)
+    const [totalPages, setTotalPages] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageLimit, setPageLimit] = useState(6)
   const [activePage, setActivePage] = useState(1);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.get(`/products/frontend?limit=${pageLimit}&page=${currentPage}&${filterCategory ? `category=${filterCategory}` : ""}&${filterByName ? `name=${filterByName}` : ""}&${filterBrand ? `brand=${filterBrand}` : ""}`);
+      if(response.status === 200){
+        setProductData(response?.data?.data.data || null);
+        
+        setTotalPages(response?.data?.data?.totalPages)
+        setPageLimit(response?.data?.data?.limit)
+        setCurrentPage(response?.data?.data?.page)
+      }
+    } catch (error) {
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+      setErrMessage(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCategories = async()=>{
+    try {
+      const response = await api.get(`/product-categories/active`)
+      if(response.status === 200){
+        setCategoryData(response.data.data)
+      }
+    } catch (error) {
+      console.error(error)
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+      setErrMessage(message);
+    }
+  }
+
+  const fetchBrand = async()=>{
+    try {
+      const response = await api.get(`/products/brands`)
+      if(response.status === 200){
+         setBrandData(response.data.data)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  
+  useEffect(() => {
+    fetchCategories();
+    fetchBrand()
+  }, [])
+
+  useEffect(() => {
+  const delayDebounce = setTimeout(() => {
+    setFilterByName(searchTerm);  
+    setCurrentPage(1);           
+  }, 500);
+
+  return () => clearTimeout(delayDebounce);
+}, [searchTerm]);
+
+  useEffect(() => {
+      fetchData();
+    }, [currentPage, pageLimit, filterCategory, filterByName, filterBrand]);
+  
+    if(isLoading){
+      <BlockPageLoader/>
+    }
 
   return (
     <div className="w-full py-28 px-4 flex flex-col gap-10">
@@ -53,8 +134,8 @@ const OurProducts = ({
               type="text"
               className="w-full outline-none"
               placeholder="Search here..."
-              value={filterByName}
-              onChange={(e) => setFilterByName(e.target.value)}
+              value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -67,8 +148,15 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
+            onChange={(e)=>setFilterBrand(e.target.value)}
           >
+             <option value="" hidden>
+              Choose Brand
+            </option>
             <option value="">All Brands</option>
+            {brandData?.map((item,i)=>(
+             <option value={item.value}>{item.label}</option>
+            ))}
           </select>
         </div>
         <div className="flex flex-col gap-2">
@@ -91,23 +179,11 @@ const OurProducts = ({
             ))}
           </select>
         </div>
-        {/* <div className="flex flex-col gap-2">
-          <label htmlFor="" className="text-sm font-semibold text-gray-700">Sub-Categories</label>
-          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
-          <option value="">All Sub-Categories</option>
-
-          </select>
-        </div> */}
-        {/* <div className="flex flex-col gap-2">
-          <label htmlFor="" className="text-sm font-semibold text-gray-700">Made In</label>
-          <select name="brand" id="brand" className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50">
-          <option value="">All Origins</option>
-          </select>
-        </div> */}
+       
       </div>
 
-      <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {productData.map((item, index) => (
+      <div className="grid grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
+        {productData?.map((item, index) => (
           <div className="main-box w-full" key={index}>
             <div
               style={{ backgroundImage: `url('/images/truckOne.jpg')` }}

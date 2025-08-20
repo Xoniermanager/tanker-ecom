@@ -47,8 +47,8 @@ const ProductDetailComponents = ({
 
   return (
     <>
-    <div className="py-28 w-full bg-[#fbf2f2] flex flex-col gap-12">
-      <div className="max-w-7xl mx-auto">
+    <div className="pt-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
+      <div className="max-w-7xl mx-auto w-full">
         <div className="flex items-start gap-14">
           <div className="w-[45%] relative">
             <div className="bg-white p-6 rounded-4xl flex flex-col items-center gap-4 w-full">

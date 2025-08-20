@@ -13,7 +13,7 @@ class InventoryRepository extends BaseRepository {
      * @returns {Promise<Object|null>} Inventory record or null.
      */
     async findByProduct(productId, session = null) {
-        return this.model.findOne({ product: productId }).session(session);
+        return this.model.findOne({ product: productId }).populate({path:"product", select: "name sellingPrice slug"} ).session(session);
     }
 
     /**
