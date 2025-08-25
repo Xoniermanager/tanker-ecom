@@ -34,6 +34,17 @@ module.exports = {
     PRODUCT_STATUS:{
         ACTIVE: "active",
         INACTIVE: "inactive"
+    },
+    ORDER_STATUS:{
+        PENDING: "pending",
+        PROCESSING: "processing",
+        SHIPPED: "shipped",
+        DELIVERED: "delivered",
+        CANCELLED: "cancelled"
+    },
+    PAYMENT_METHODS:{
+        COD:"cod",
+        ONLINE_PAYMENT: "online_payment"
     }
 
 };

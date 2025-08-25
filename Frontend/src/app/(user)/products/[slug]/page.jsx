@@ -7,6 +7,13 @@ import { useParams } from 'next/navigation'
 import PageLoader from '../../../../../components/common/PageLoader'
 import FailedDataLoading from '../../../../../components/common/FailedDataLoading'
 import RelatedProductComponent from '../../../../../components/user/Products/RelatedProductComponent'
+import { toast } from 'react-toastify'
+import { useCart } from '../../../../../context/cart/CartContext'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useAuth } from '../../../../../context/user/AuthContext'
+
+
 
 
 const page = () => {
@@ -14,21 +21,39 @@ const page = () => {
   const [productCategory, setProductCategory] = useState(null)
   const [relatedCategoryData, setRelatedCategoryData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [cartIsLoading, setCartIsLoading] = useState(false)
+  const [errMessage, setErrMessage] = useState(null)
   const [quantity, setQuantity] = useState(1);
+const MySwal = withReactContent(Swal);
+  const {cartData, fetchCartData} = useCart()
+
+  const productQuantity = productData?.inventory?.quantity;
+  const {isAuthenticated} = useAuth()
 
 
 
   const handleIncrease = () => {
+    if(productQuantity === 0){
+      return toast.error("This product is out of stock")
+    }
+    if(quantity >= productQuantity ) {
+     return toast.info("No more stock available")
+    }
     setQuantity((prev) => prev + 1);
   };
+
 
   const handleDecrease = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); 
   };
 
+  const handleQuantityChange = (e)=>{
+     setQuantity(Number(e.target.value))
+  }
+
+
   const {slug} = useParams();
 
- 
 
   const fetchProduct = async()=>{
     setIsLoading(true)
@@ -52,8 +77,6 @@ const page = () => {
       const response = await api.get(`/products/frontend?category=${productCategory}`)
       if(response.status ===200){
         setRelatedCategoryData(response.data.data.data)
-         
-        console.log("related category: ", response.data.data)
       }
     } catch (error) {
       console.error(error)
@@ -74,6 +97,45 @@ useEffect(() => {
 const filter = relatedCategoryData?.filter(item=>item._id !== productData._id)
 
 
+const isInCart = cartData?.some(
+  (item) => item.product._id.toString() === productData?._id.toString()
+);
+
+const handleCartSubmit = async(e)=>{
+   e.preventDefault();
+   
+  
+   if(!isAuthenticated){
+      const localCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+      const existingItem = localCart.find(item => item.productId === productData._id);
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        localCart.push({ product: {_id: productData._id, regularPrice: productData.regularPrice, 
+sellingPrice: productData.sellingPrice, images:[productData.images[0].source]},  quantity });
+      }
+     fetchCartData()
+      localStorage.setItem("guestCart", JSON.stringify(localCart));
+      toast.success("Product added to cart locally");
+      return;
+   }
+   setCartIsLoading(true)
+   try {
+    if(!productData._id) return setErrMessage("Product id not found")
+     const response = await api.post(`/cart`, {productId: productData._id, quantity})
+    if(response.status === 200){
+      toast.success('Product add to cart successfully')
+      fetchCartData()
+    }
+   } catch (error) {
+    if(process.env.NODE_ENV === "development"){ console.error(error) }
+   } finally{
+     setCartIsLoading(false)
+   }
+}
+
+
 
 if (isLoading){
   return <PageLoader/>
@@ -86,8 +148,8 @@ if (!productData){
   return (
     <>
       <PageBanner heading={'product details'}/>
-      <ProductDetailComponents productData={productData} quantity={quantity} setQuantity={setQuantity} handleIncrease={handleIncrease} handleDecrease={handleDecrease }/>
-      <RelatedProductComponent relatedCategoryData={filter} productData={productData} />
+      <ProductDetailComponents productData={productData} quantity={quantity} setQuantity={setQuantity} handleIncrease={handleIncrease} handleDecrease={handleDecrease} handleCartSubmit={handleCartSubmit} cartIsLoading={cartIsLoading} handleQuantityChange={handleQuantityChange} isInCart={isInCart}/>
+      <RelatedProductComponent relatedCategoryData={filter} productData={productData} handleCartSubmit={handleCartSubmit} cartIsLoading={cartIsLoading} />
 
     </>
   )

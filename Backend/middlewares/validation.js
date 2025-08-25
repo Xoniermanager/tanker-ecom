@@ -26,7 +26,7 @@ const {
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
 
-const { productCategorySchema, productSchema, updateProductSchema, updateInventorySchema } = require("../requestSchemas/product.schema");
+const { productCategorySchema, productSchema, updateProductSchema, updateInventorySchema, orderSchema } = require("../requestSchemas/product.schema");
 const { syncCartSchema, cartItemSchema } = require("../requestSchemas/cart.schema");
 
 const optionalUrl = z
@@ -231,6 +231,8 @@ const validateCartItem = (req, res, next) =>
 const validateCartSync = (req, res, next) =>
     validateSchema(req, res, next, syncCartSchema)
 
+const validateOrder = (req,res,next)=> validateSchema(req, res, next, orderSchema)
+
 
 module.exports = {
     validateUserRegistration,
@@ -257,5 +259,6 @@ module.exports = {
     validateUpdateProduct,
     validateInventoryUpdate,
     validateCartItem,
-    validateCartSync
+    validateCartSync,
+    validateOrder
 };

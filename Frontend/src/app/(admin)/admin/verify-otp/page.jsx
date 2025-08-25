@@ -7,6 +7,7 @@ import { IoPlayBackOutline } from "react-icons/io5";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaEye,  FaEyeSlash } from "react-icons/fa";
 
+
 const ResetPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -15,9 +16,11 @@ const ResetPasswordPage = () => {
     newPassword: "",
   });
   const [passShow, setPassShow] = useState(false)
-
+  
   const inputRefs = useRef([]);
   const router = useRouter()
+
+ 
 
   useEffect(() => {
     const email = window.localStorage.getItem("verifyEmail");

@@ -22,7 +22,7 @@ const BlogManagement = ({
   categoryData
 }) => {
 
-  console.log("formdata: ", formData)
+  
   return (
     <>
     <div className="bg-white p-7 rounded-lg flex flex-col gap-5">

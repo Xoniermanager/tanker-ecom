@@ -6,8 +6,6 @@ import { IoMdLogOut } from "react-icons/io";
 
 
 const Logout = ({ logout, isLoading, close }) => {
-
-
   
   
 

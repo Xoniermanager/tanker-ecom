@@ -3,6 +3,7 @@ import React from 'react'
 import { MdDeleteOutline } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import DeletePopup from '../../common/DeletePopup';
+import Link from 'next/link';
 
 const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, errMessage, handleBlogDelete, handleSetBlogDelete, handleToggleBlogStatus}) => {
  
@@ -42,12 +43,13 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
                             </button>
                         </div>
                         <div className="flex justify-between items-center mt-4">
-                                          <button
+                                          <Link
+                                            href={`blogs/update/${item.slug}`}
                                             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:underline flex items-center gap-1"
-                                            // onClick={()=>handleEdit(item._id)}
+                                            
                                           >
                                             <MdEdit className="text-lg" /> Edit
-                                          </button>
+                                          </Link>
           
                                           <button
                                              onClick={()=>handleSetBlogDelete(item._id)}

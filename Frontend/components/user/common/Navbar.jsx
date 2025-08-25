@@ -4,11 +4,19 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaFacebookF } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
+import { IoCartOutline } from "react-icons/io5";
 import { usePathname } from 'next/navigation';
+import {useCart} from '../../../context/cart/CartContext';
+import { useAuth } from '../../../context/user/AuthContext';
 
 const Navbar = ({siteData}) => {
   const [isSticky, setIsSticky] = useState(false);
+
   const pathname = usePathname();
+
+  const {cartData, isLoading, count} = useCart()
+
+  const {isAuthenticated, handleLogout} = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +35,6 @@ const Navbar = ({siteData}) => {
     <>
       <div className='w-full bg-white shadow-[5px_0_20px_#00000025] flex flex-col'>
         
-        {/* Top Purple Bar */}
         <div className="bg-purple-950 py-2.5 w-full">
           <div className='max-w-full px-4 mx-auto flex items-center justify-between'>
             <div className='flex items-center gap-3'>
@@ -53,7 +60,7 @@ const Navbar = ({siteData}) => {
           </div>
         </div>
 
-        {/* Sticky Navbar */}
+        
         <div
           className={`max-w-full px-4 py-3 flex items-center bg-white mid-nav transition-all duration-300 ${
             isSticky
@@ -61,7 +68,7 @@ const Navbar = ({siteData}) => {
               : 'relative'
           }`}
         >
-          {/* Logo */}
+         
           <div className="w-[20%]">
             <Link href={'/'}>
               <Image
@@ -73,7 +80,7 @@ const Navbar = ({siteData}) => {
             </Link>
           </div>
 
-          {/* Nav Links */}
+          
           <div className="w-[45%]">
             <nav>
               <ul className="flex items-start justify-start gap-6">
@@ -88,7 +95,7 @@ const Navbar = ({siteData}) => {
                   </Link>
                 </li>
                 <li>
-                  <Link href={'/products'} className={`${pathname === "/products" && "text-orange-400"} text-neutral-900 text-lg hover:text-orange-400`}>
+                  <Link href={'/products'} className={`${ pathname.includes("products") && "text-orange-400"} text-neutral-900 text-lg hover:text-orange-400`}>
                     Product
                   </Link>
                 </li>
@@ -111,14 +118,19 @@ const Navbar = ({siteData}) => {
             </nav>
           </div>
 
-          {/* Buttons */}
+          
           <div className="w-[35%] flex items-center justify-end gap-5">
+            <div className='relative'>
+            <Link href={'/cart'} className='h-10 w-10 bg-orange-400 rounded-full flex items-center justify-center text-white'><IoCartOutline className='text-lg'/></Link> <span className='absolute -top-1 -right-1 h-4.5 w-4.5 rounded-full flex items-center justify-center bg-purple-950 text-white text-[11px]'>{isLoading? "..." : count || 0}</span></div>
+            {isAuthenticated ? <button  className='btn-two' onClick={handleLogout}> Logout </button> : 
+            <>
             <Link href={'/login'} className='btn-one font-semibold'>
               B2B Login
             </Link>
             <Link href={'/signup'} className='btn-two font-semibold'>
               Sign Up
             </Link>
+            </>}
           </div>
         </div>
       </div>

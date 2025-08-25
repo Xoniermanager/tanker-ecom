@@ -3,26 +3,29 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
-import { FaFacebook, FaSquareInstagram } from "react-icons/fa6";
+import { FaFacebook, FaSquareInstagram, FaCheck } from "react-icons/fa6";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 import { FaChevronLeft, FaChevronRight, FaStar, FaRegStar  } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa6";
+
 
 const ProductDetailComponents = ({
   productData,
   quantity,
   setQuantity,
   handleIncrease,
-  handleDecrease,
+  handleDecrease, handleCartSubmit, cartIsLoading, isInCart
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [active, setActive] = useState(1)
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+
+  
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -39,7 +42,7 @@ const ProductDetailComponents = ({
       alert("Sharing not supported on this browser. Please copy the link.");
     }
   };
-  const discount = Math.floor(
+  const discount = Math.ceil(
     ((Number(productData?.regularPrice) - Number(productData?.sellingPrice)) /
       Number(productData?.regularPrice)) *
       100
@@ -162,20 +165,15 @@ const ProductDetailComponents = ({
             <div className="flex items-end gap-4">
               <div className="flex flex-col gap-2">
                 <h4 className="font-semibold text-purple-950">Quantity:</h4>
-                <div className="flex items-center border border-slate-300 rounded-lg w-28 bg-white">
+                <div className="flex items-center justify-between border border-slate-300 rounded-lg w-28 bg-white">
                   <button
                     onClick={handleDecrease}
                     className="px-2 py-1 text-lg font-bold text-gray-600 hover:text-purple-700"
                   >
                     -
                   </button>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Number(e.target.value))}
-                    className="w-12 py-3 text-center outline-none"
-                    min="1"
-                  />
+                  
+                 <span> {quantity} </span>
                   <button
                     onClick={handleIncrease}
                     className="px-2 py-1 text-lg font-bold text-gray-600 hover:text-purple-700"
@@ -185,9 +183,11 @@ const ProductDetailComponents = ({
                 </div>
               </div>
 
-              <button className="bg-orange-400 hover:bg-orange-500 text-white px-8 py-3 font-medium rounded-lg transition-all">
-                Add to Cart
-              </button>
+             {isInCart ? <button className="text-orange-400  disabled:bg-orange-300 bg-orange-100 px-8 py-3 font-medium rounded-lg transition-all capitalize flex items-center gap-2" >
+               <FaCheck/> Already in cart
+              </button>  :  <button className="bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white px-8 py-3 font-medium rounded-lg transition-all" onClick={handleCartSubmit} disabled={cartIsLoading}>
+                {cartIsLoading ? "Updating..." : "Add to Cart"}
+              </button> }
             </div>
             <ul className="flex flex-col gap-2">
               <li className="flex items-center gap-1.5">

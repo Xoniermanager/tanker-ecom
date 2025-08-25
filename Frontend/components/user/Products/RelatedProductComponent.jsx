@@ -4,7 +4,9 @@ import React from "react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 
 import { FaStar, FaRegStar } from "react-icons/fa";
-const RelatedProductComponent = ({ relatedCategoryData }) => {
+import Link from "next/link";
+
+const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIsLoading }) => {
     
   return (
     <div className="py-28 w-full bg-[#fbf2f2] ">
@@ -12,7 +14,7 @@ const RelatedProductComponent = ({ relatedCategoryData }) => {
         <h2 className="font-bold text-purple-950 text-3xl">Related Product</h2>
         <div className="grid grid-cols-4 w-full gap-8">
           {relatedCategoryData?.map((item, index) => (
-            <div
+            <Link href={`/products/${item?.slug}`}
               className=" flex flex-col rounded-lg group overflow-hidden bg-white"
               key={item._id}
             >
@@ -47,8 +49,8 @@ const RelatedProductComponent = ({ relatedCategoryData }) => {
                   ))}
                 </ul>
               </div>
-              <button className="bg-black py-2 text-white font-semibold text-lg hover:bg-orange-500 flex justify-center items-center gap-2">Add to cart <MdOutlineShoppingCart /></button>
-            </div>
+              <button className="bg-black disabled:bg-black/50 py-2 text-white font-semibold text-lg hover:bg-orange-500 flex justify-center items-center gap-2"  > Add to cart <MdOutlineShoppingCart /></button>
+            </Link>
           ))}
         </div>
       </div>

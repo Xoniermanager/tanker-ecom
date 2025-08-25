@@ -18,10 +18,12 @@ class CartService {
         }
 
         const totalAmount = cart.items.reduce((sum, item) => sum + item.product.sellingPrice * item.quantity, 0);
+        const totalCartItems = cart.items.reduce((acc, init)=> Number(acc) + Number(init.quantity), 0);
 
         return {
             ...cart.toObject(),
             totalAmount,
+            totalCartItems
         };
     }
 

@@ -175,7 +175,7 @@ const OurProducts = ({
             </option>
             <option value="">All Categories</option>
             {categoryData?.map((item, index) => (
-              <option value={item._id}>{item.name}</option>
+              <option value={item._id} key={item._id}>{item.name}</option>
             ))}
           </select>
         </div>

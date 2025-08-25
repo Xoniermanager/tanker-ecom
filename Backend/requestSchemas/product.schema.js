@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { PRODUCT_STATUS, STOCK_STATUS } = require("../constants/enums");
+const { PRODUCT_STATUS, STOCK_STATUS, ORDER_STATUS, PAYMENT_METHODS } = require("../constants/enums");
 
 const imageSchema = z.object({
   source: z.string({
@@ -93,9 +93,39 @@ const updateInventorySchema = z.object({
   status: z.enum(Object.values(STOCK_STATUS)).default(STOCK_STATUS.IN_STOCK)
 })
 
+const productFieldSchema = z.object({
+  product: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid product ObjectId format" }),
+  quantity: z.number().min(1, {message: "quantity can't be zero or negative"}),
+  sellingPrice: z.number().min(0, {message: "selling price can't be negative"})
+})
+
+const addressSchema = z.object({
+  name: z.string({required_error: "Name is required in address"}).trim(),
+  address: z.string({required_error: "address is required"}).trim(),
+  pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(9999, { message: "Pincode must be at most 9999" }),
+})
+
+const orderSchema = z.object({
+  products: z.array(productFieldSchema).min(1, { message: "At list one product required"}),
+  user: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid user ObjectId format" }),
+  address: z.object({billingAddress: addressSchema, shippingAddress: addressSchema}),
+  orderStatus: z.enum(Object.values(ORDER_STATUS)).default(ORDER_STATUS.PROCESSING),
+  paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
+  paymentResult: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid payment result ObjectId format" }).optional()
+
+})
+
+const paymentResultSchema = z.object({
+  transactionId: z.string({required_error: "TransactionId must required"}).trim(),
+  paymentStatus: z.boolean().default(false),
+  paymentResponse: z.any()
+})
+
 module.exports = {
   productSchema,
   updateProductSchema,
   productCategorySchema,
   updateInventorySchema,
+  paymentResultSchema, 
+  orderSchema
 };
