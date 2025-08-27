@@ -46,7 +46,7 @@ class OrderRepository extends BaseRepository {
             .session(session);
 
         if (dbProducts.length !== products.length) {
-            throw customError("Some products not found, please refresh cart", 404);
+            throw customError("Some products not found, please refresh cart", 400);
         }
 
         const finalProductData = [];
@@ -128,7 +128,7 @@ class OrderRepository extends BaseRepository {
 
         const result = await Inventory.bulkWrite(bulkOps, { session });
         if (!result) throw customError("Failed to update inventory", 500);
-        return true;
+        return result;
     };
 }
 
