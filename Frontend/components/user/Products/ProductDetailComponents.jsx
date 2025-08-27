@@ -93,7 +93,7 @@ const ProductDetailComponents = ({
                 {productData?.images?.map((item, index) => (
                   <SwiperSlide key={index}>
                     <Image
-                      src={item.source}
+                      src={item.source || "/images/dummy.jpg"}
                       height={500}
                       width={500}
                       alt={`product-${index}`}
@@ -114,7 +114,7 @@ const ProductDetailComponents = ({
                 {productData?.images?.map((item, index) => (
                   <SwiperSlide className="mb-3" key={`thumb-${index}`}>
                     <Image
-                      src={item.source}
+                      src={item.source || "/images/dummy.jpg"}
                       height={100}
                       width={100}
                       alt={`thumb-${index}`}

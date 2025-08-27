@@ -19,6 +19,8 @@ const page = () => {
   const DataLength = cartData?.length || 0
 
    const popup = withReactContent(Swal)
+
+   const haveCartData = !cartData || !Array.isArray(cartData) || cartData.length <= 0
   
   const handleRemoveProduct = async(id, product)=>{
     const result = await popup.fire({
@@ -104,7 +106,7 @@ const page = () => {
   return (
     <>
       <PageBanner heading={'Cart'}/>
-      <CartItems handleRemoveProduct={handleRemoveProduct} handleClearCart={handleClearCart} DataLength={DataLength}/>
+      <CartItems handleRemoveProduct={handleRemoveProduct} handleClearCart={handleClearCart} DataLength={DataLength} haveCartData={haveCartData}/>
     </>
   )
 }

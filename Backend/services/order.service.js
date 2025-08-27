@@ -99,7 +99,7 @@ class OrderService {
 
   getAll = async() =>{
     try {
-        const response = await orderRepository.paginate({data, total, page, limit, totalPages})
+        const {data, total, page, limit, totalPages} = await orderRepository.paginate()
         if(!response){
             throw customError("Order data not found", 404)
         }

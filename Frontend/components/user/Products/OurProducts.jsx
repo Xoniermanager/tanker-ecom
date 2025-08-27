@@ -192,7 +192,7 @@ const OurProducts = ({
             <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
               <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
                 <Image
-                  src={item.images[0].source}
+                  src={item.images[0]?.source || "/images/dummy.jpg"}
                   width={75}
                   height={75}
                   alt="truck icon"

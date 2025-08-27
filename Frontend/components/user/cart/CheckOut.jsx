@@ -1,8 +1,9 @@
 import React from "react";
-import { NEWZEALAND_REGIONS, PAYMENT_METHODS } from "../../../constants/enums";
+import { NEWZEALAND_CITIES, NEWZEALAND_REGIONS, PAYMENT_METHODS } from "../../../constants/enums";
 import { MdShoppingCartCheckout } from "react-icons/md";
+import { FaXmark, FaCheck } from "react-icons/fa6";
 
-const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice, withShippingChargesPrice }) => {
+const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, handleSubmit, discountPrice, withShippingChargesPrice }) => {
   return (
     <>
       <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
@@ -88,7 +89,8 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                   required
                 />
               </div>
-              <div className="flex flex-col gap-2  ">
+              
+              <div className="flex flex-col gap-2 col-span-2">
                 <label htmlFor="billingAddress.state"> State</label>
                 <select
                   type="text"
@@ -103,20 +105,35 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                     {" "}
                     Choose your state{" "}
                   </option>
-                  {Object.values(NEWZEALAND_REGIONS).map((item) => (
-                    <option value={item} className="capitalize">
+                  {Object.values(NEWZEALAND_REGIONS).map((item, i) => (
+                    <option value={item} className="capitalize" key={i}>
                       {item.split("_").join(" ")}
                     </option>
                   ))}
                 </select>
               </div>
+              <div className="flex flex-col gap-2 ">
+                <label htmlFor="billingAddress.city"> Town/City</label>
+                <input
+                  type="text"
+                  name="billingAddress.city"
+                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                  placeholder="City"
+                  value={formData.billingAddress.city}
+                  onChange={handleChange}
+                  required
+                />
+                <div className="flex items-center justify-end w-full">
+                  {formData.billingAddress.city && ( !Object.values(NEWZEALAND_CITIES).includes(formData.billingAddress.city.toLowerCase())? <p className="text-red-500 text-sm flex items-center gap-1 first-letter:capitalize"> <span>*</span> You entered city is invalid</p> : <p className="text-green-500 text-sm flex items-center gap-1 capitalize"> <FaCheck /> valid city </p>)}
+                </div>
+              </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="billingAddress.pincode">Pin Code</label>
+                <label htmlFor="billingAddress.pincode">Zip Code</label>
                 <input
                   type="number"
                   name="billingAddress.pincode"
                   className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
-                  placeholder="Pin Code"
+                  placeholder="Zip Code"
                   value={formData.billingAddress.pincode}
                   onChange={handleChange}
                   required
@@ -140,7 +157,7 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                   required
                 />
               </div>
-              <div className="flex flex-col gap-2  ">
+              <div className="flex flex-col gap-2 col-span-2 ">
                 <label htmlFor="shippingAddress.state"> State</label>
                 <select
                   type="text"
@@ -155,20 +172,35 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                     {" "}
                     Choose your state{" "}
                   </option>
-                  {Object.values(NEWZEALAND_REGIONS).map((item) => (
-                    <option value={item} className="capitalize">
+                  {Object.values(NEWZEALAND_REGIONS).map((item, i) => (
+                    <option value={item} className="capitalize" key={i}>
                       {item.split("_").join(" ")}
                     </option>
                   ))}
                 </select>
               </div>
+              <div className="flex flex-col gap-2 ">
+                <label htmlFor="shippingAddress.city"> Town/City </label>
+                <input
+                  type="text"
+                  name="shippingAddress.city"
+                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                  placeholder="Enter you address"
+                  value={formData.shippingAddress.city}
+                  onChange={handleChange}
+                  required
+                />
+                <div className="flex items-center justify-end w-full">
+                  {formData.shippingAddress.city && ( !Object.values(NEWZEALAND_CITIES).includes(formData.shippingAddress.city.toLowerCase())? <p className="text-red-500 text-sm flex items-center gap-1 first-letter:capitalize"> <span>*</span> You entered city is invalid</p> : <p className="text-green-500 text-sm flex items-center gap-1 capitalize"> <FaCheck /> valid city </p>)}
+                </div>
+              </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="shippingAddress.pincode">Pin Code</label>
+                <label htmlFor="shippingAddress.pincode">Zip Code</label>
                 <input
                   type="number"
                   name="shippingAddress.pincode"
                   className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
-                  placeholder="Pin Code"
+                  placeholder="Zip Code"
                   value={formData.shippingAddress.pincode}
                   onChange={handleChange}
                   required
@@ -183,6 +215,8 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
               <textarea
                 name="orderNotes"
                 id="orderNotes"
+                value={formData.orderNotes}
+  onChange={handleChange}
                 className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
                 rows={5}
                 placeholder="Enter your notes here..."
@@ -197,12 +231,12 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
             </h2>
 
             <ul className="flex flex-col gap-5 ">
-              {cartData.map((item, index)=>(
+              {cartData?.map((item, index)=>(
                 <li className="flex items-center justify-between " key={index}> <span className="font-medium text-purple-950">{item.product.name} ({item.quantity}) </span> <span className="font-semibold text-purple-900 text-lg"> ${item.product.sellingPrice} </span> </li>
 
               ))}
 
-              <li className="flex items-center justify-between "> <span className="font-medium text-purple-900 text-lg">Sub Total</span> <span className="font-semibold text-purple-900 text-lg">${discountPrice.toFixed(2)}</span> </li>
+              <li className="flex items-center justify-between "> <span className="font-medium text-purple-900 text-lg">Sub Total</span> <span className="font-semibold text-purple-900 text-lg">${discountPrice?.toFixed(2)}</span> </li>
               <div className="border-stone-300 w-full border-b-1"></div>
               <li className="flex items-center justify-between "> <span className="font-medium text-purple-900 text-lg">Shipping</span> <div className="text-black/75 text-sm"> Flat Rate: ${Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE).toFixed(2)}</div> </li>
             </ul>
@@ -213,7 +247,7 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                 {" "}
                 Total{" "}
               </span>
-              <span className="font-semibold text-purple-950 text-xl">${withShippingChargesPrice.toFixed(2)}</span>
+              <span className="font-semibold text-purple-950 text-xl">${withShippingChargesPrice?.toFixed(2)}</span>
             </div>
           </div>
           <div className="px-5 py-5 bg-orange-50 flex flex-col gap-6 rounded-lg border-1 border-stone-800">
@@ -271,7 +305,7 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, discountPrice
                 </span>
               </label>
             </div>
-            <button disabled={!formData.terms} className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase">
+            <button onClick={handleSubmit} disabled={!formData.terms || !Object.values(PAYMENT_METHODS).includes(formData.paymentMethod) || !Object.values(NEWZEALAND_CITIES).includes(formData.billingAddress.city.toLowerCase()) || !Object.values(NEWZEALAND_CITIES).includes(formData.shippingAddress.city.toLowerCase())} className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase">
               Place order <MdShoppingCartCheckout className="text-lg"/>
             </button>
           </div>

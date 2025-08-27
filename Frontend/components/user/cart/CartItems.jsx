@@ -6,8 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaMinus, FaPlus, FaXmark } from "react-icons/fa6";
 import { TbShoppingCartX } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 
-const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength }) => {
+const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartData }) => {
   const {
     cartData,
     isLoading,
@@ -18,7 +19,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength }) => {
     
   } = useCart();
 
-  
+  const router = useRouter();
 
   return (
     <>
@@ -164,9 +165,9 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength }) => {
               </span>
             </li>
           </ul>
-          <Link href={'/cart/checkout'} disabled={!discountPrice || !regularPrice} className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white">
+          <button onClick={()=>router.push('/cart/checkout')} disabled={!discountPrice || !regularPrice || haveCartData} className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white">
             Proceed to checkout
-          </Link>
+          </button>
         </div>
       </div>
     </>
