@@ -3,7 +3,7 @@ import { NEWZEALAND_CITIES, NEWZEALAND_REGIONS, PAYMENT_METHODS } from "../../..
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { FaXmark, FaCheck } from "react-icons/fa6";
 
-const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, handleSubmit, discountPrice, withShippingChargesPrice }) => {
+const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, isLoading, handleSubmit, discountPrice, withShippingChargesPrice , errMessage}) => {
   return (
     <>
       <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
@@ -95,7 +95,7 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, han
                 <select
                   type="text"
                   name="billingAddress.state"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
                   placeholder="Enter you address"
                   value={formData.billingAddress.state}
                   onChange={handleChange}
@@ -162,7 +162,7 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, han
                 <select
                   type="text"
                   name="shippingAddress.state"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
                   placeholder="Enter you address"
                   value={formData.shippingAddress.state}
                   onChange={handleChange}
@@ -305,8 +305,11 @@ const CheckOut = ({ formData, handleChange, handleTerms, cartData, userData, han
                 </span>
               </label>
             </div>
+            <div className="flex">
+              {errMessage && <p className="text-red-500">{errMessage}</p>}
+            </div>
             <button onClick={handleSubmit} disabled={!formData.terms || !Object.values(PAYMENT_METHODS).includes(formData.paymentMethod) || !Object.values(NEWZEALAND_CITIES).includes(formData.billingAddress.city.toLowerCase()) || !Object.values(NEWZEALAND_CITIES).includes(formData.shippingAddress.city.toLowerCase())} className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase">
-              Place order <MdShoppingCartCheckout className="text-lg"/>
+              {isLoading ? "Placing Order...": " Place order"} {!isLoading && <MdShoppingCartCheckout className="text-lg"/> }
             </button>
           </div>
         </div>
