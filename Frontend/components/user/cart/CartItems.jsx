@@ -164,9 +164,9 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength }) => {
               </span>
             </li>
           </ul>
-          <button disabled={!discountPrice || !regularPrice} className="capitalize w-full py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white">
+          <Link href={'/cart/checkout'} disabled={!discountPrice || !regularPrice} className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white">
             Proceed to checkout
-          </button>
+          </Link>
         </div>
       </div>
     </>

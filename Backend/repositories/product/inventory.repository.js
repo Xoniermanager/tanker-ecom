@@ -34,6 +34,10 @@ class InventoryRepository extends BaseRepository {
     async deleteByProduct(productId, session) {
         return this.model.deleteMany({ product: productId }).session(session);
     }
+
+    updateInventory = async(productId, data = {}, session )=>{
+       return this.model.findOneAndUpdate({product: productId},  data, {new: true, session})
+    }
 }
 
 module.exports = new InventoryRepository();

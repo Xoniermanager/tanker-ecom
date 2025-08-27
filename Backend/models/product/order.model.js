@@ -1,8 +1,13 @@
 const { Schema, model } = require("mongoose");
-const { ORDER_STATUS, PAYMENT_METHODS } = require("../../constants/enums");
+const { ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS } = require("../../constants/enums");
+const encryptionPlugin = require("../../plugins/encryptionPlugin");
 
 const orderSchema = new Schema(
   {
+    firstName: {type: String, required: true, trim: true, lowercase: true},
+    lastName: {type: String, required: true, trim: true, lowercase: true},
+    email: {type: String, required: true},
+    phone: {type: Number, required: true },
     products: [
       {
         product: {
@@ -29,8 +34,8 @@ const orderSchema = new Schema(
     },
     address: {
       billingAddress: {
-        name: { type: String, required: true, trim: true, lowercase: true },
         address: { type: String, required: true, trim: true },
+        state: {type: String, required:true, enum: Object.values(NEWZEALAND_REGIONS), trim: true},
         pincode: {
           type: Number,
           required: true,
@@ -40,8 +45,8 @@ const orderSchema = new Schema(
         },
       },
       shippingAddress: {
-        name: { type: String, required: true, trim: true, lowercase: true },
         address: { type: String, required: true, trim: true },
+        state: {type: String, required:true, enum: Object.values(NEWZEALAND_REGIONS), trim: true},
         pincode: {
           type: Number,
           required: true,
@@ -54,17 +59,15 @@ const orderSchema = new Schema(
     },
     totalPrice: {
       type: Number,
-      required: true,
+      
       min: [0, "Total price don't be negative"]
     },
     totalQuantity: {
       type: Number,
-      required: true,
       min: [1, "Total quantity don't be zero or negative"]
     },
     orderStatus: {
       type: String,
-      required: true,
       enum: Object.values(ORDER_STATUS),
       default: ORDER_STATUS.PROCESSING,
     },
@@ -78,6 +81,10 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "PaymentResult",
     },
+    orderNotes:{
+      type: String,
+      trim: true
+    }
   },
   { timestamps: true }
 );
@@ -108,4 +115,15 @@ orderSchema.pre("save", function(next){
     next();
 });
 
-module.exports = model("order", orderSchema);
+orderSchema.plugin(encryptionPlugin, {
+  encryptable: [
+    "address.billingAddress.name",
+    "address.billingAddress.address",
+    "address.billingAddress.pincode",
+    "address.shippingAddress.name",
+    "address.shippingAddress.address",
+    "address.shippingAddress.pincode",
+  ]
+})
+
+module.exports = model("Order", orderSchema);

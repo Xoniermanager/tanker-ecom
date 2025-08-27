@@ -67,14 +67,14 @@ const decreesCount = (id, count = 1) => {
 
   const discountPrice = cartData?.reduce((acc,init)=>Number(acc) + Number(init?.product?.sellingPrice) * init?.quantity, 0)
   const regularPrice  = cartData?.reduce((acc,init)=>Number(acc) + Number(init?.product?.regularPrice) * init?.quantity, 0)
-
+  const withShippingChargesPrice = Number(discountPrice) + Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE)
   useEffect(() => {
     fetchCartData();
   }, []);
 
   return (
     <CartContext.Provider
-      value={{ cartData, setCartData, isLoading, decreesCount, increaseCount, count, fetchCartData, regularPrice, discountPrice }}
+      value={{ cartData, setCartData, isLoading, decreesCount, increaseCount, count, fetchCartData, regularPrice, discountPrice, withShippingChargesPrice }}
     >
       {children}
     </CartContext.Provider>

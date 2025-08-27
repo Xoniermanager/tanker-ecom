@@ -137,23 +137,23 @@ const BlogManagement = ({
 
         <div className="grid grid-cols-2 gap-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="seo.title">SEO Title</label>
+            <label htmlFor="seo.metaTitle">SEO Title</label>
             <input
               type="text"
-              name="seo.title"
+              name="seo.metaTitle"
               className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
-              value={formData.seo.title}
+              value={formData.seo.metaTitle}
               onChange={handleChange}
               placeholder="SEO Title"
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="seo.description">SEO Description</label>
+            <label htmlFor="seo.metaDescription">SEO Description</label>
             <input
               type="text"
-              name="seo.description"
+              name="seo.metaDescription"
               className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
-              value={formData.seo.description}
+              value={formData.seo.metaDescription}
               onChange={handleChange}
               placeholder="SEO Description"
             />

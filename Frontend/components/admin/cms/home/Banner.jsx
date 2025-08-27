@@ -23,7 +23,6 @@ const Banner = ({ homeData }) => {
     buttonLink: ""
   })
 
-  console.log("homedata: ",homeData)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -43,7 +42,6 @@ const Banner = ({ homeData }) => {
         [name]: value
       }))
     }
-    console.log("formdata: ",formData)
   }
 
   const handleFileChange = (e) => {
@@ -151,7 +149,6 @@ const Banner = ({ homeData }) => {
       },
     ];
 
-    
     const payload = {
       section_id: sectionId,
       heading: formData.title,

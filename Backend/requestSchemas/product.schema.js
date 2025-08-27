@@ -1,5 +1,5 @@
 const { z } = require("zod");
-const { PRODUCT_STATUS, STOCK_STATUS, ORDER_STATUS, PAYMENT_METHODS } = require("../constants/enums");
+const { PRODUCT_STATUS, STOCK_STATUS, ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS } = require("../constants/enums");
 
 const imageSchema = z.object({
   source: z.string({
@@ -95,24 +95,27 @@ const updateInventorySchema = z.object({
 
 const productFieldSchema = z.object({
   product: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid product ObjectId format" }),
+  name: z.string({required_error: "Product Name field must required"}),
   quantity: z.number().min(1, {message: "quantity can't be zero or negative"}),
   sellingPrice: z.number().min(0, {message: "selling price can't be negative"})
 })
 
 const addressSchema = z.object({
-  name: z.string({required_error: "Name is required in address"}).trim(),
   address: z.string({required_error: "address is required"}).trim(),
+  state: z.enum(Object.values(NEWZEALAND_REGIONS)),
   pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(9999, { message: "Pincode must be at most 9999" }),
 })
 
 const orderSchema = z.object({
-  products: z.array(productFieldSchema).min(1, { message: "At list one product required"}),
-  user: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid user ObjectId format" }),
+  firstName: z.string({required_error: "First field must required"}),
+  lastName: z.string({required_error: "Last name must be required"}),
+  email: z.string({required_error: "Email is required" }).email({message: "Invalid email format"}),
+  phone: z.string().regex(/^(\+64|0)(2\d{7,9}|[34679]\d{7,8})$/, {message: "Invalid New Zealand phone number format"}),
+  products: z.array(productFieldSchema).min(1, { message: "At least one product required"}),
   address: z.object({billingAddress: addressSchema, shippingAddress: addressSchema}),
-  orderStatus: z.enum(Object.values(ORDER_STATUS)).default(ORDER_STATUS.PROCESSING),
   paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
-  paymentResult: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid payment result ObjectId format" }).optional()
-
+  paymentResult: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid payment result ObjectId format" }).optional(),
+  orderNotes: z.string().optional()
 })
 
 const paymentResultSchema = z.object({

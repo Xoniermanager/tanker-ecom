@@ -109,7 +109,7 @@ const ProductList = ({
 
                             <td className="py-5 px-4">
                              <Link className="w-10 h-10 rounded-full overflow-hidden group" href={`products/view/${product.slug}`}><img
-                                src={product.images[0].source}
+                                src={product?.images[0]?.source ? product?.images[0]?.source : '/images/dummy.jpg' }
                                 alt={product.name}
                                 className="w-10 h-10 rounded-full group-hover:scale-105 object-cover"
                               /></Link>

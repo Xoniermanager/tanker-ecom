@@ -89,7 +89,7 @@ const Page = () => {
       /> }
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-purple-950">
+          <h1 className="text-3xl font-bold text-purple-950 capitalize">
             {productData.name}
           </h1>
           <div className="flex gap-3">
@@ -106,7 +106,7 @@ const Page = () => {
           <div className="space-y-4 sticky top-24 left-0 w-1/2">
             <div className="bg-white rounded-xl shadow p-4">
               <img
-                src={selectedImage || productData.images[0]?.source}
+                src={selectedImage || productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg'}
                 alt={productData.name}
                 className="rounded-xl shadow border-1 border-stone-200 w-full h-80 object-cover"
               />
@@ -158,10 +158,10 @@ const Page = () => {
               </h2>
               <div className="flex gap-6 items-center">
                 <p className="text-2xl font-bold text-green-500">
-                  ₹{productData.sellingPrice}
+                  ${productData.sellingPrice.toFixed(2)}
                 </p>
                 <p className="text-lg text-red-500 line-through">
-                  ₹{productData.regularPrice}
+                  ${productData.regularPrice.toFixed(2)}
                 </p>
               </div>
             </div>

@@ -17,6 +17,10 @@ class ProductRepository extends BaseRepository {
         return this.model.findOne({ slug }).populate(populateOption).session(session);
     }
 
+     async findProductById(id, session = null, populateOption = null) {
+        return this.model.findOne({ _id: id }).populate(populateOption).session(session);
+    }
+
     /**
      * Fetch all unique brands from products.
      * @returns {Promise<string[]>} List of unique brand names.
@@ -40,6 +44,10 @@ class ProductRepository extends BaseRepository {
             }
         });
     }
+
+    
+
+    
 }
 
 module.exports = new ProductRepository();

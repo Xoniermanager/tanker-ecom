@@ -9,7 +9,7 @@ class ProductCategoryController {
         try {
             const payload = req.body;
             const category = await productCategoryService.createProductCategory(payload)
-            customResponse(res, 'product category created successfully', category)
+            return customResponse(res, 'product category created successfully', category)
         } catch (error) {
             next(error)
         }

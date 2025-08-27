@@ -12,6 +12,7 @@ const page = () => {
     title: "",
     subtitle: "",
     previewUrl: "",
+    slug: "",
     thumbnail: {
       source: "",
       type: "image",
@@ -20,8 +21,8 @@ const page = () => {
     categories: [],
     content: "",
     seo: {
-      title: "",
-      description: "",
+      metaTitle: "",
+      metaDescription: "",
       keywords: [],
       blogImage: "",
     },
@@ -41,7 +42,8 @@ const page = () => {
         setFormData({
           title: blog.title || "",
           subtitle: blog.subtitle || "",
-          previewUrl: blog.thumbnail.source || "",
+          previewUrl: blog.thumbnail.fullPath || "",
+          slug: blog.slug || "",
           thumbnail: {
             source: "",
             type: "image",
@@ -50,8 +52,8 @@ const page = () => {
           categories: [blog?.categories[0]._id] || [],
           content: blog.content || "",
           seo: {
-            title: blog.seo.title || "",
-            description: blog.seo.description || "",
+            metaTitle: blog.seo.metaTitle || "",
+            metaDescription: blog.seo.metaDescription || "",
             keywords: blog.seo.keywords || [],
           },
         });
@@ -176,25 +178,24 @@ const page = () => {
     setErrMessage(null);
 
     try {
-     
+      let payload = { ...formData };
+      if (formData.thumbnail.source instanceof File) {
+        const newFormData = new FormData();
+        newFormData.append("file", formData.thumbnail.source);
+        const upload = await api.put("/upload-files", newFormData);
 
-      const newFormData = new FormData();
-      newFormData.append("file", formData.thumbnail.source);
-      const upload = await api.put("/upload-files", newFormData);
-
-      const payload = {
-        ...formData,
-
-        thumbnail: {
-          ...formData.thumbnail,
-          source: upload.data.data.file.url,
-        },
-      };
-
-
+        if (upload && upload.data?.data?.file?.url) {
+          payload.thumbnail = {
+            ...formData.thumbnail,
+            source: upload.data.data.file.url,
+          };
+        }
+      } else {
+        delete payload.thumbnail;
+      }
 
       const response = await api.put(`/blogs/${blogData._id}`, payload);
-      if (response.status === 200 ) {
+      if (response.status === 200) {
         toast.success("Data updated successfully");
         setErrMessage(null);
         getBlogData();
@@ -210,8 +211,8 @@ const page = () => {
           categories: [],
           content: "",
           seo: {
-            title: "",
-            description: "",
+            metaTitle: "",
+            metaDescription: "",
             keywords: [],
             blogImage: "",
           },
