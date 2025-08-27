@@ -223,13 +223,6 @@ class CartRepository extends BaseRepository {
     return cart.save({ session });
   }
 
-
-  clearUserCart = async(filter = {}, session = null)=>{
-     return await this.model.findOneAndUpdate(filter, {$set: {items: []}}, {new: true, session} )
-  }
-
-
-  
 }
 
 module.exports = new CartRepository();

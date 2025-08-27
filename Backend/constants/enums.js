@@ -42,6 +42,12 @@ module.exports = {
         DELIVERED: "delivered",
         CANCELLED: "cancelled"
     },
+    PAYMENT_STATUS:{
+        PENDING: "pending",
+        FAILED: "failed",
+        CANCELLED: "cancelled",
+        SUCCESS: "success",
+    },
     PAYMENT_METHODS:{
         COD:"cod",
         ONLINE_PAYMENT: "online_payment"

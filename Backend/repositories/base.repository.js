@@ -187,6 +187,38 @@ class BaseRepository {
 
         return result;
     }
+
+    /**
+     * Executes bulk write operations on the Inventory collection.
+     *
+     * This is useful when you need to perform multiple update/insert/delete operations
+     * in a single database call (e.g., updating quantities of multiple products
+     * after checkout).
+     *
+     * @param {Array<Object>} operations - Array of bulk operations (updateOne, insertOne, deleteOne).
+     *   Example:
+     *   [
+     *     {
+     *       updateOne: {
+     *         filter: { product: ObjectId("...") },
+     *         update: { $inc: { quantity: -2 } }
+     *       }
+     *     },
+     *     {
+     *       updateOne: {
+     *         filter: { product: ObjectId("...") },
+     *         update: { $inc: { quantity: -1 } }
+     *       }
+     *     }
+     *   ]
+     *
+     * @param {mongoose.ClientSession} session - The current transaction session.
+     *
+     * @returns {Promise<Object>} Result of the bulkWrite operation containing:
+     */
+    async bulkWrite(operations, session) {
+        return Inventory.bulkWrite(operations, { session });
+    }
 }
 
 module.exports = BaseRepository;

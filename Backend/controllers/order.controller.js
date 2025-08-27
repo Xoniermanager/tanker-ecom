@@ -1,35 +1,98 @@
-
 const orderService = require("../services/order.service")
 const customResponse = require("../utils/response")
 
-
-
 class OrderController {
-
-    createOrder = async(req, res, next)=>{
+    /**
+     * Create a new order for the logged-in user.
+     */
+    createOrder = async (req, res, next) => {
         try {
-            const userId = req.user._id
-            const payload = {...req.body, user: userId}
-            const response = await orderService.createOrder(payload)
-            return customResponse(res, "Order created successfully", response)
+            const userId = req.user._id;
+            const payload = { ...req.body, user: userId };
+            const response = await orderService.createOrder(payload);
+            return customResponse(res, "Order created successfully", response);
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
-    getAll = async(req,res,next)=>{
+    /**
+     * Get a paginated list of orders.
+     * Admins can see all orders, users can see their own.
+     */
+    getOrders = async (req, res, next) => {
         try {
-            const result = await orderService.getAll()
-            return customResponse(res, "All order get successfully", result)
+            const { page = 1, limit = 10, ...filters } = req.query;
+
+            if (req.user.role !== "admin") {
+                filters.userId = req.user._id;
+            }
+
+            const response = await orderService.getOrders(page, limit, filters);
+            return customResponse(res, "Orders fetched successfully", response);
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
-    
+    /**
+     * Get order details by order ID.
+     * Checks ownership unless user is an admin.
+     */
+    getOrderDetailById = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const response = await orderService.getOrderById(orderId, req.user);
+            return customResponse(res, "Order detail fetched successfully", response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Get order details by order number.
+     * Checks ownership unless user is an admin.
+     */
+    getOrderByOrderNumber = async (req, res, next) => {
+        try {
+            const { orderNumber } = req.params;
+            const response = await orderService.getOrderByOrderNumber(orderNumber, req.user);
+            return customResponse(res, "Order detail fetched successfully", response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Cancel an order by the user.
+     * Only allowed if order is in PENDING or PROCESSING status.
+     * Restores inventory if stock was reduced.
+     */
+    cancelOrder = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const response = await orderService.cancelOrder(orderId, req.user);
+            return customResponse(res, "Order cancelled successfully", response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Change the status of an order.
+     * Can only be used by admin.
+     * Handles inventory adjustments if order is cancelled.
+     */
+    changeOrderStatus = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const { newStatus, note } = req.body;
+            const response = await orderService.changeOrderStatus(orderId, newStatus, note, req.user);
+            return customResponse(res, "Order status changed successfully", response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
-
-const orderController = new OrderController()
-
-module.exports = orderController
+module.exports = OrderController
