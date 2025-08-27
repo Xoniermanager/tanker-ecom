@@ -95,40 +95,102 @@ const updateInventorySchema = z.object({
 
 const productFieldSchema = z.object({
   product: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid product ObjectId format" }),
-  name: z.string({required_error: "Product Name field must required"}),
-  quantity: z.number().min(1, {message: "quantity can't be zero or negative"}),
-  sellingPrice: z.number().min(0, {message: "selling price can't be negative"})
+  name: z.string({ required_error: "Product Name field must required" }),
+  quantity: z.number().min(1, { message: "quantity can't be zero or negative" }),
+  sellingPrice: z.number().min(0, { message: "selling price can't be negative" })
 })
 
 const addressSchema = z.object({
-  address: z.string({required_error: "address is required"}).trim(),
+  address: z.string({ required_error: "address is required" }).trim(),
   state: z.enum(Object.values(NEWZEALAND_REGIONS)),
+  city: z.string({ required_error: "City field must required" }),
   pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(9999, { message: "Pincode must be at most 9999" }),
 })
 
 const orderSchema = z.object({
-  firstName: z.string({required_error: "First field must required"}),
-  lastName: z.string({required_error: "Last name must be required"}),
-  email: z.string({required_error: "Email is required" }).email({message: "Invalid email format"}),
-  phone: z.string().regex(/^(\+64|0)(2\d{7,9}|[34679]\d{7,8})$/, {message: "Invalid New Zealand phone number format"}),
-  products: z.array(productFieldSchema).min(1, { message: "At least one product required"}),
-  address: z.object({billingAddress: addressSchema, shippingAddress: addressSchema}),
+  firstName: z.string({ required_error: "First field must required" }),
+  lastName: z.string({ required_error: "Last name must be required" }),
+  email: z.string({ required_error: "Email is required" }).email({ message: "Invalid email format" }),
+  phone: z.string().regex(/^(\+64|0)(2\d{7,9}|[34679]\d{7,8})$/, { message: "Invalid New Zealand phone number format" }),
+  products: z.array(productFieldSchema).min(1, { message: "At least one product required" }),
+  address: z.object({ billingAddress: addressSchema, shippingAddress: addressSchema }),
   paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
   paymentResult: z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid payment result ObjectId format" }).optional(),
   orderNotes: z.string().optional()
 })
 
 const paymentResultSchema = z.object({
-  transactionId: z.string({required_error: "TransactionId must required"}).trim(),
+  transactionId: z.string({ required_error: "TransactionId must required" }).trim(),
   paymentStatus: z.boolean().default(false),
   paymentResponse: z.any()
 })
+
+const ordersFilterSchema = z.object({
+  userId: z
+    .string()
+    .regex(/^[0-9a-fA-F]{24}$/, "Invalid userId format")
+    .optional(),
+
+  page: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 1))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "Page must be a positive integer",
+    }),
+
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? parseInt(val, 10) : 10))
+    .refine((val) => !isNaN(val) && val > 0 && val <= 100, {
+      message: "Limit must be between 1 and 100",
+    }),
+
+  status: z.enum((Object.values(ORDER_STATUS))).optional(),
+
+  startDate: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid startDate format",
+    }),
+
+  endDate: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Date.parse(val)), {
+      message: "Invalid endDate format",
+    }),
+
+  sortBy: z
+    .enum(["status", "createdAt", "totalQuantity"])
+    .optional(),
+
+  sortOrder: z
+    .enum(["asc", "desc"])
+    .optional()
+    .default("desc"),
+});
+
+const changeOrderStatusSchema = z.object({
+  newStatus: z.enum(Object.values(ORDER_STATUS), {
+    required_error: "New status is required.",
+    invalid_type_error: "Invalid status value.",
+  }),
+
+  note: z.string({
+    invalid_type_error: "Note must be a string.",
+  }).optional(),
+});
 
 module.exports = {
   productSchema,
   updateProductSchema,
   productCategorySchema,
   updateInventorySchema,
-  paymentResultSchema, 
-  orderSchema
+  paymentResultSchema,
+  orderSchema,
+  ordersFilterSchema,
+  changeOrderStatusSchema
 };

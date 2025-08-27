@@ -3,115 +3,320 @@ const orderRepository = require("../repositories/product/order.repository");
 const userRepository = require("../repositories/user.repository");
 const customError = require("../utils/error");
 const productRepository = require("../repositories/product/product.repository");
-const { STOCK_STATUS } = require("../constants/enums");
+const { ORDER_STATUS, PAYMENT_STATUS, USER_ROLES } = require("../constants/enums");
 const inventoryRepository = require("../repositories/product/inventory.repository");
-const customResponse = require("../utils/response");
 const cartRepository = require("../repositories/cart.repository");
+const { generateOrderNumber } = require("../utils/order-number");
 
 class OrderService {
+  /**
+   * Creates a new order for a user with full validation, stock management, and cart clearance.
+   *
+   * @async
+   * @function createOrder
+   * @param {Object} payload - The order payload.
+   * @param {Array} payload.products - List of products with `{ product: ObjectId, quantity: number }`.
+   * @param {string} payload.paymentMethod - Selected payment method (e.g., COD, UPI, CARD).
+   * @param {Object} payload.user - User placing the order.
+   * @returns {Promise<Object>} - The created order document.
+   */
   createOrder = async (payload) => {
     const session = await startSession();
     try {
       session.startTransaction();
-      const userExist = await userRepository.findById(payload.user, session);
-      if (!userExist) {
-        throw customError("User not exist", 404);
-      }
 
-      await this.checkProductExistWithQuantity(payload.products, session);
+      // Validate all products and stock
+      const products = orderRepository.checkProductExistWithQuantity(payload.products, session);
 
-      await this.updateProductInventory(payload.products, session);
+      // Prepare final order payload
+      payload.product = products;
+      payload.payment = {
+        method: payload.paymentMethod,
+        status: PAYMENT_STATUS.PENDING,
+      };
+      payload.stockReduced = true;
+      payload.orderNumber = generateOrderNumber();
+      delete payload.paymentMethod;
 
+      // Save Order
       const result = await orderRepository.create(payload, session);
 
-      const isCartClear = await cartRepository.clearUserCart(
-        { user: payload.user },
-        session
-      );
+      // Clear cart after order success
+      await cartRepository.clearCart(payload.user._id, session);
 
-      if (!isCartClear) {
-        throw customError("unable to clear cart items for this user", 400);
-      }
+      // Update product inventories
+      orderRepository.updateProductInventory(payload.products, session);
 
       await session.commitTransaction();
-
       return result;
     } catch (error) {
       await session.abortTransaction();
       throw error;
     } finally {
-      await session.endSession();
+      session.endSession();
     }
   };
 
-  checkProductExistWithQuantity = async (products, session) => {
-    for (const item of products) {
-      const product = await productRepository.findProductById(
-        item.product,
-        session,
-        [{
-            path: "inventory",
-            select: "_id quantity status",
-          }]
-      );
+  /**
+   * Fetch paginated orders with filtering and sorting.
+   *
+   * Supports:
+   *  - Filtering by status
+   *  - Filtering by date range (createdAt)
+   *  - Sorting by status, createdAt, or totalQuantity (asc/desc)
+   *
+   * @async
+   * @function getOrders
+   * @param {number} [page=1] - Current page number for pagination.
+   * @param {number} [limit=10] - Number of orders per page.
+   * @param {Object} [filters={}] - Filters and sorting options.
+   * @param {string} [filters.status] - Order status to filter (e.g., "pending", "completed").
+   * @param {string|Date} [filters.startDate] - Start date for createdAt filter.
+   * @param {string|Date} [filters.endDate] - End date for createdAt filter.
+   * @param {string} [filters.sortBy] - Field to sort by ("status", "createdAt", "totalQuantity").
+   * @param {string} [filters.sortOrder="desc"] - Sort order ("asc" or "desc").
+   * @returns {Promise<Object>} - Paginated list of orders.
+   */
+  getOrders = async (page = 1, limit = 10, filters = {}) => {
+    const query = {}
 
-      if (!product) {
-        throw customError(`Sorry ${item.name} product not found please remove it from cart`, 404);
+    // Filter by user
+    if (filters.userId) {
+      query.user = filters.userId;
+    }
+
+    // Filter by status
+    if (filters.status) {
+      query.orderStatus = filters.status;
+    }
+
+    // Filter by date range
+    if (filters.startDate || filters.endDate) {
+      query.createdAt = {};
+      if (filters.startDate) {
+        query.createdAt.$gte = new Date(filters.startDate);
       }
-
-      if (!product.status) {
-        throw customError(`${item.name} product is not available please remove it from cart`, 400);
-      }
-
-      if (String(product.inventory.status) !== String(STOCK_STATUS.IN_STOCK)) {
-        throw customError(`${item.name} is out of stock please remove it from cart`);
-      }
-
-      if (product.inventory.quantity < item.quantity) {
-        throw customError(`${item.name} product quantity not sufficient please decrease product quantity`);
+      if (filters.endDate) {
+        query.createdAt.$lte = new Date(filters.endDate);
       }
     }
-    return true;
-  };
 
-  updateProductInventory = async (products, session) => {
-    try {
-      for (const item of products) {
-        console.log("item: ", item);
-        const isUpdate = await inventoryRepository.updateInventory(
-          item.product,
-          {
-            $inc: {
-              quantity: -item.quantity,
-            },
-          },
-          session
-        );
-        if (!isUpdate) {
-          throw customError("Product inventory not updated", 500);
-        }
-      }
-      return true;
-    } catch (error) {
-      throw error;
+    // Sorting
+    let sort = { createdAt: -1 };
+    if (filters.sortBy) {
+      const sortField = filters.sortBy;
+      const sortOrder = filters.sortOrder === "asc" ? 1 : -1;
+      sort = { [sortField]: sortOrder };
     }
-  };
 
-  getAll = async() =>{
-    try {
-        const response = await orderRepository.paginate({data, total, page, limit, totalPages})
-        if(!response){
-            throw customError("Order data not found", 404)
-        }
-
-        return response
-
-    } catch (error) {
-        throw error
-    }
+    return await orderRepository.paginate(query, page, limit, sort);
   }
+
+  /**
+   * Get order details by MongoDB ObjectId with user check
+   * @param {string} orderId - MongoDB ObjectId of the order
+   * @param {string} user - Current user
+   * @returns {Promise<Object|null>} The order details or null if not found
+   */
+  getOrderById = async (orderId, user) => {
+    const filters = { _id: orderId };
+    if (user.role !== USER_ROLES.ADMIN) filters.user = user._id;
+
+    const order = await orderRepository.findOne(filters);
+    if (!order) throw customError("Order not found", 404);
+    return order;
+  };
+
+  /**
+   * Get order details by Order Number with user check
+   * @param {string} orderNumber - Unique order number
+   * @param {string} user - Current user
+   * @returns {Promise<Object|null>} The order details or null if not found
+   */
+  getOrderByOrderNumber = async (orderNumber, user) => {
+    const filters = { orderNumber: orderNumber };
+    if (user.role !== USER_ROLES.ADMIN) filters.user = user._id;
+
+    const order = await orderRepository.findOne(filters);
+    if (!order) throw customError("Order not found", 404);
+    return order;
+  };
+
+  /**
+   * Cancel an order by a user or admin.
+   * Updates the order status to CANCELLED and restores inventory if stock was reduced.
+   * Also logs the status change in order's statusHistory.
+   *
+   * @param {String} orderId - The ID of the order to cancel.
+   * @param {Object} user - The user performing the cancellation (should include _id and role).
+   * @returns {Promise<Object>} - The updated order document.
+   */
+  cancelOrder = async (orderId, user) => {
+    const session = await startSession();
+
+    try {
+      session.startTransaction();
+
+      const role = user.role;
+      const userId = user._id;
+
+      const order = await orderRepository.findById(orderId, session);
+      if (!order) {
+        throw customError("Order not found", 404);
+      }
+
+      // Ownership check (unless admin)
+      if (role !== USER_ROLES.ADMIN && order.user._id.toString() !== userId.toString()) {
+        throw customError("Not authorized to cancel this order", 403);
+      }
+
+      // Status check
+      if (![ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING].includes(order.orderStatus)) {
+        throw customError("Order cannot be cancelled at this stage", 400);
+      }
+
+      // Update order status
+      order.orderStatus = ORDER_STATUS.CANCELLED;
+
+      // Log history
+      order.statusHistory.push({
+        status: ORDER_STATUS.CANCELLED,
+        changedAt: new Date(),
+        note: "Order cancelled by " + (role === USER_ROLES.ADMIN ? "admin" : "user"),
+      });
+
+      await order.save({ session });
+
+      // Restore inventory if stock was reduced
+      if (order.stockReduced) {
+        orderRepository.updateProductInventory(order.products, session, "increase");
+      }
+
+      await session.commitTransaction();
+      return order;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  };
+
+  /**
+   * Change order status (Admin only)
+   * 
+   * @param {String} orderId - The ID of the order to update
+   * @param {String} newStatus - New status to set (must be one of ORDER_STATUS)
+   * @param {String} note - Optional note explaining the change
+   * @param {Object} adminUser - Admin user performing the action
+   * @returns {Object} Updated order
+   * @throws {Error} Throws if order not found or invalid status
+   */
+  changeOrderStatus = async (orderId, newStatus, note = "", adminUser) => {
+    const session = await startSession();
+
+    try {
+      session.startTransaction();
+
+      const order = await orderRepository.findById(orderId, session);
+      if (!order) {
+        throw customError("Order not found", 404);
+      }
+
+      // Validate new status
+      if (!Object.values(ORDER_STATUS).includes(newStatus)) {
+        throw customError("Invalid order status", 400);
+      }
+
+      // Prevent setting same status
+      if (order.orderStatus === newStatus) {
+        throw customError(`Order already has status "${newStatus}"`, 400);
+      }
+
+      // Prevent changing status of a cancelled order
+      if (order.orderStatus === ORDER_STATUS.CANCELLED) {
+        throw customError("Cannot change status of a cancelled order", 400);
+      }
+
+      // Update order status
+      order.orderStatus = newStatus;
+
+      // Record status change in history
+      order.statusHistory.push({
+        status: newStatus,
+        changedAt: new Date(),
+        note: note ? note : `order status changed to ${newStatus}`,
+      });
+
+      // Restore inventory if order is cancelled and stock was reduced
+      if (newStatus === ORDER_STATUS.CANCELLED && order.stockReduced) {
+        await orderRepository.updateProductInventory(order.products, session, "increase");
+        order.stockReduced = false;
+      }
+
+      await order.save({ session });
+      await session.commitTransaction();
+      return order;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+  };
+
+
+
+
+
+  /**
+   * --------------------------
+   * USER FUNCTIONS
+   * --------------------------
+   */
+
+  getUserOrders = async (page = 1, limit = 10, filters = {}) => {
+    return await orderRepository.paginate(
+      query,
+      { sort: { createdAt: -1 } }
+    );
+  };
+
+  getOrderById = async (orderId, userId) => {
+    const order = await orderRepository.findOne({ _id: orderId, user: userId });
+    if (!order) throw customError("Order not found", 404);
+    return order;
+  };
+
+  /**
+   * --------------------------
+   * ADMIN FUNCTIONS
+   * --------------------------
+   */
+
+  getAllOrders = async (filter = {}, options = {}) => {
+    return await orderRepository.findAll(filter, options);
+  };
+
+  updateOrderStatus = async (orderId, status) => {
+    const order = await orderRepository.findById(orderId);
+    if (!order) throw customError("Order not found", 404);
+
+    order.status = status;
+    await order.save();
+    return order;
+  };
+
+  getOrderDetails = async (orderId) => {
+    const order = await orderRepository.findById(orderId).populate([
+      { path: "user", select: "name email" },
+      { path: "products.product", select: "name price" },
+    ]);
+
+    if (!order) throw customError("Order not found", 404);
+    return order;
+  };
 }
 
 const orderService = new OrderService();
-
 module.exports = orderService;

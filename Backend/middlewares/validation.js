@@ -25,9 +25,18 @@ const {
 } = require("../requestSchemas/auth.schema");
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
-
-const { productCategorySchema, productSchema, updateProductSchema, updateInventorySchema, orderSchema } = require("../requestSchemas/product.schema");
-const { syncCartSchema, cartItemSchema } = require("../requestSchemas/cart.schema");
+const { productCategorySchema,
+    productSchema,
+    updateProductSchema,
+    updateInventorySchema,
+    orderSchema,
+    ordersFilterSchema,
+    changeOrderStatusSchema
+} = require("../requestSchemas/product.schema");
+const {
+    syncCartSchema,
+    cartItemSchema
+} = require("../requestSchemas/cart.schema");
 
 const optionalUrl = z
     .string()
@@ -104,7 +113,7 @@ const siteSettingSchema = z.object({
  */
 const validateSchema = async (req, res, next, schema) => {
     try {
-       
+
         const resolvedSchema =
             typeof schema === "function" ? await schema() : schema;
         const validatedData = resolvedSchema.parse(req.body);
@@ -230,9 +239,12 @@ const validateCartItem = (req, res, next) =>
     validateSchema(req, res, next, cartItemSchema)
 const validateCartSync = (req, res, next) =>
     validateSchema(req, res, next, syncCartSchema)
-
-const validateOrder = (req,res,next)=> validateSchema(req, res, next, orderSchema)
-
+const validateOrder = (req, res, next) =>
+    validateSchema(req, res, next, orderSchema)
+const validateOrderFilter = (req, res, next) =>
+    validateQuery(req, res, next, ordersFilterSchema)
+const validateChangeOrderStatus = (req, res, next) =>
+    validateSchema(req, res, next, changeOrderStatusSchema)
 
 module.exports = {
     validateUserRegistration,
@@ -260,5 +272,7 @@ module.exports = {
     validateInventoryUpdate,
     validateCartItem,
     validateCartSync,
-    validateOrder
+    validateOrder,
+    validateOrderFilter,
+    validateChangeOrderStatus,
 };
