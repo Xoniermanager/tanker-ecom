@@ -6,21 +6,27 @@ import { GoPlusCircle } from "react-icons/go";
 import NotificationSidebar from './common/NotificationSidebar';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [showNotification, setShowNotification] = useState(false)
 
-
+  const router = useRouter();
 
   return (
     <>
        <NotificationSidebar showNotification={showNotification} setShowNotification={setShowNotification}/>
-      <div className='fixed top-0 p-5 z-99 w-full pl-84 bg-violet-50 flex items-center gap-4'>
-        <div className="w-[70%]">
+      <div className='fixed top-0 p-5 z-99 w-full pl-84 bg-violet-50 flex items-center gap-5'>
+        <div className="w-[55%]">
             <div className="bg-white p-2 px-5 rounded-lg flex items-center gap-4 shadow-[0_0_8px_#00000010]">
                 <IoIosSearch className='text-xl'/>
                 <input type="text" className='outline-none border-none w-full' placeholder='Search...' />
             </div>
+        </div>
+        <div className="w-[15%] flex items-center gap-3">
+          <button className='h-9 w-9 rounded-full bg-purple-200 hover:bg-purple-950 text-purple-950 hover:text-white flex items-center justify-center' onClick={()=>router.back()}><FaArrowLeft/></button>
+          <button className='h-9 w-9 rounded-full bg-purple-200 hover:bg-purple-950 text-purple-950 hover:text-white flex items-center justify-center' onClick={()=>router.forward()}><FaArrowRight/></button>
         </div>
         <div className='w-[30%] flex items-center justify-end gap-7'> 
            <button className="relative cursor-pointer group" onClick={()=>setShowNotification(true)}>

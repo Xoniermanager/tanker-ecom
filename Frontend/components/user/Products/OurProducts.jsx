@@ -183,7 +183,7 @@ const OurProducts = ({
       </div>
 
       <div className="grid grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
-        {productData?.map((item, index) => (
+        {productData?.length > 0  ? productData?.map((item, index) => (
           <div className="main-box w-full" key={index}>
             <div
               style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
@@ -219,16 +219,19 @@ const OurProducts = ({
               </div>
             </div>
           </div>
-        ))}
+        )) : (
+          <div className="flex items-center justify-center w-full col-span-3 text-stone-500"> Product data not found</div>
+        )}
       </div>
       <div className="flex items-center gap-4 justify-center">
         {[...Array(totalPages)].map((item, index) => (
           <button
+          
             className={` ${
               currentPage === index + 1
                 ? "bg-orange-400 text-white"
                 : "bg-[#f6e7d3]"
-            } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+            } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950  font-bold border-1 border-dashed text-lg`}
             key={index}
             onClick={() => setCurrentPage(index + 1)}
           >
@@ -236,7 +239,8 @@ const OurProducts = ({
           </button>
         ))}
         <button
-          className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+        disabled={productData?.length <= 0}
+          className={`h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#507b86c5] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl ${productData?.length <= 0 && "hidden"}`}
           onClick={() => setCurrentPage(Number(activePage) + 1)}
         >
           {" "}

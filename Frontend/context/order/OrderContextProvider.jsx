@@ -16,8 +16,8 @@ const getOrderData = async () => {
     try {
       const response = await api.get(`/order`);
       if (response.status === 200) {
-        setOrderData(response.data.data.data);
-        setOrderCount(response.data.data.total)
+        setOrderData(response.data.data.data || null);
+        setOrderCount(response.data.data.total || null)
       }
     } catch (error) {
       const message =
@@ -25,7 +25,7 @@ const getOrderData = async () => {
           error.response.data.errors[0]?.message) ||
         error?.response?.data?.message ||
         "Something went wrong";
-      toast.error(message);
+      
       setErrMessage(message);
     }
   };
@@ -34,7 +34,7 @@ const getOrderData = async () => {
     try {
       const response = await api.get(`/order?status=delivered`);
       if(response.status === 200){
-        setOrderHistoryData(response.data.data.data)
+        setOrderHistoryData(response.data.data.data || null)
       }
     } catch (error) {
       const message =
@@ -42,7 +42,7 @@ const getOrderData = async () => {
           error.response.data.errors[0]?.message) ||
         error?.response?.data?.message ||
         "Something went wrong";
-      toast.error(message);
+      
       setErrMessage(message);
     }
   }
