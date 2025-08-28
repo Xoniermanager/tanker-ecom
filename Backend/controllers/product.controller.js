@@ -77,7 +77,9 @@ class ProductController {
                 });
             }
 
-            data.images = uploadedImages;
+            if(uploadedImages.length > 0){
+                data.images = uploadedImages;
+            }
 
             const product = await productService.updateProduct(req.params.id, data);
             customResponse(res, "Product updated successfully", product);

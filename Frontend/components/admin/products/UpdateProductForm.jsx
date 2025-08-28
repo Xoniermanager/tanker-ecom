@@ -151,14 +151,11 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
         formPayload.append(`highlights[${index}]`, highlight);
       });
 
-      if (formData.specifications?.type) {
+       if (formData.specifications?.type && formData.specifications.type.trim() !== "") {
         formPayload.append("specifications.type", formData.specifications.type);
       }
-      if (formData.specifications?.source) {
-        formPayload.append(
-          "specifications.source",
-          formData.specifications.source
-        );
+      if (formData.specifications?.source && formData.specifications.source.trim() !== "") {
+        formPayload.append("specifications.source", formData.specifications.source);
       }
 
       if (formData.seo?.metaTitle) {
@@ -185,7 +182,7 @@ if (Array.isArray(formData.seo?.keywords)) {
        
         
         setProductImages([]);
-        setImagePreviews([]);
+        // setImagePreviews([]);
         setSpecPreview(null);
 
         toast.success("Product created successfully");
