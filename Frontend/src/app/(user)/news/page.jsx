@@ -7,12 +7,16 @@ import  {getPageData} from "../../../../components/admin/cms/common/getPageData"
 import api from '../../../../components/user/common/api'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import PageLoader from '../../../../components/common/PageLoader'
+import FailedDataLoading from '../../../../components/common/FailedDataLoading'
 const Page = () => {
 
   const [newsData, setNewsData] = useState(null)
   const [blogData, setBlogData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   
     const fetchData = async()=>{
+      setIsLoading(true)
         try{
          const pageData = await getPageData();
           setNewsData(pageData?.data || null)
@@ -21,6 +25,9 @@ const Page = () => {
         }
         catch(error){
           console.error("error: ", error)
+        }
+        finally{
+          setIsLoading(false)
         }
       }
 
@@ -41,6 +48,14 @@ const Page = () => {
         fetchData()
         getBlogData()
       }, []);
+
+      if(isLoading){
+        return <PageLoader/>
+      }
+
+      if(!newsData){
+        return <FailedDataLoading/>
+      }
 
       const counterData = newsData?.sections?.find(item=>item?.section_id === "section-track-record") || null
 

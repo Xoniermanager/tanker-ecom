@@ -9,7 +9,7 @@ class ProductCategoryController {
         try {
             const payload = req.body;
             const category = await productCategoryService.createProductCategory(payload)
-            customResponse(res, 'product category created successfully', category)
+            return customResponse(res, 'product category created successfully', category)
         } catch (error) {
             next(error)
         }
@@ -19,6 +19,15 @@ class ProductCategoryController {
         try {
            const result = await productCategoryService.getAllCategory();
            return customResponse(res, "Category data get successfully", result)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getAllActiveCategories(req,res,next){
+        try {
+            const result = await productCategoryService.getAllActiveCategory({status:true})
+            return customResponse(res, "Active category data get successfully", result)
         } catch (error) {
             next(error)
         }

@@ -11,7 +11,7 @@ const siteSettingController = new SiteSettingController();
 // ==================== Site Setting Routes ====================
 
 router.get("/", siteSettingController.getCurrentSettings);
-router.put("/", validateSiteSetting, siteSettingController.upsertSettings);
+router.put("/", validateSiteSetting, upload.single("logo"), siteSettingController.upsertSettings);
 router.put("/logo", upload.single("logo"), siteSettingController.uploadLogo);
 
 module.exports = router;

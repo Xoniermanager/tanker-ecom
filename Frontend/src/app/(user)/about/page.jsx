@@ -9,11 +9,15 @@ import ClientFeedback from '../../../../components/user/about/ClientFeedback'
 import OurPeople from '../../../../components/user/about/OurPeople'
 import  {getPageData} from "../../../../components/admin/cms/common/getPageData"
 import api from '../../../../components/user/common/api'
+import FailedDataLoading from '../../../../components/common/FailedDataLoading'
+import PageLoader from '../../../../components/common/PageLoader'
 const Page = () => {
    const [aboutData, setAboutData] = useState(null)
    const [frontendTestimonialData, setFrontendTestimonialData] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = async()=>{
+    setIsLoading(true)
       try{
        const pageData = await getPageData();
         setAboutData(pageData?.data || null)
@@ -21,6 +25,8 @@ const Page = () => {
       }
       catch(error){
         console.error("error: ", error)
+      }finally{
+      setIsLoading(false)
       }
     }
 
@@ -40,6 +46,21 @@ const Page = () => {
       fetchData()
       getTestimonialData()
     }, []);
+
+
+
+    if(isLoading){
+    return (
+    <PageLoader/>
+    )
+  }
+
+
+   if (!aboutData) {
+    return (
+      <FailedDataLoading/>
+    );
+  }
 
     const aboutDatas = aboutData?.sections?.find(item=>item?.section_id === "section-about-company") || null
     const counterData = aboutData?.sections?.find(item=>item?.section_id === "section-track-record") || null

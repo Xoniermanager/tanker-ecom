@@ -69,8 +69,14 @@ const AboutUs = ({ aboutData }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData({ ...formData, [name]: value });
+    if(name === 'type'){
+      setFormData((prev)=>({...prev, thumbnail: {
+        ...prev.thumbnail, [name]:value
+      }}))
+    }
+    else{
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleListChange = (index, name, e) => {
@@ -425,7 +431,8 @@ const AboutUs = ({ aboutData }) => {
               <label htmlFor="thumbnailSource">Thumbnail File Source</label>
               <input
                 type="file"
-                accept="image/*,video/*"
+                accept={formData.thumbnail.type === "video"? "video/*": "image/*"}
+                // "image/*,video/*"
                 onChange={handleFileChange}
                 className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
               />

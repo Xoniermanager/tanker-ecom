@@ -10,14 +10,19 @@ import WhoWeAre from "../../../components/user/home/WhoWeAre";
 
 import {getPageData} from "../../../components/admin/cms/common/getPageData"
 import { useEffect, useState } from "react";
+import FailedDataLoading from "../../../components/common/FailedDataLoading";
+import PageLoader from "../../../components/common/PageLoader";
+
 
 
 export default function Home() {
   const [homeData, setHomeData] = useState(null)
   const [pageId, setPageId] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   const fetchData = async()=>{
+    setIsLoading(true)
     try{
      const pageData = await getPageData();
       setHomeData(pageData?.data || null)
@@ -26,12 +31,27 @@ export default function Home() {
     catch(error){
       console.error("error: ", error)
     }
+    finally{
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
     fetchData()
 
   }, []);
+
+  if(isLoading){
+    return (
+    <PageLoader/>
+    )
+  }
+
+   if (!homeData) {
+    return (
+      <FailedDataLoading/>
+    );
+  }
 
   
   const bannerData = homeData?.sections?.find(item=>item?.section_id === "section-banner") || null

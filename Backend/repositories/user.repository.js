@@ -61,7 +61,25 @@ class UserRepository extends BaseRepository {
         return Otp.findOne({ email, type }).sort({ createdAt: -1 }).session(session);
     }
 
-    
+
+    async compareUserPassword(id, oldPassword){
+        const user = await this.model.findById(id);
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    return await user.comparePassword(oldPassword);
+    }
+
+    async changePassword(id, newPassword){
+        const user = await this.model.findById(id);
+    if (!user) {
+        throw new Error("User not found");
+    }
+    user.password = newPassword
+    await user.save()
+    }
+
 }
 
 module.exports = new UserRepository();

@@ -1,3 +1,5 @@
+
+const { tryCatch } = require("bullmq");
 const { UserService } = require("../services/user.service");
 const customResponse = require("../utils/response");
 
@@ -88,7 +90,7 @@ class AuthController {
                 secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
-                path:"/",
+                path: "/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
@@ -98,11 +100,11 @@ class AuthController {
                 secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
-                path:"/",
+                path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
-            customResponse(res, "Login successful", response.returnData, response.accessToken);
+            customResponse(res, "Login successful", response.returnData);
         } catch (error) {
             next(error);
         }
@@ -125,8 +127,8 @@ class AuthController {
                 secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
-                
-                path:"/",
+
+                path: "/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
 
@@ -136,8 +138,8 @@ class AuthController {
                 secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
-                
-                path:"/",
+
+                path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
@@ -225,33 +227,45 @@ class AuthController {
     getMe = async (req, res, next) => {
         try {
             const user = await this.userService.getMe(req);
-            customResponse(res, user);
+            customResponse(res, "user Data get successfully", user);
         } catch (error) {
             next(error);
         }
     }
 
-    logout = async(req, res, next)=>{
-        try{
-            
+
+    changePassword = async (req, res, next) => {
+        try {
+            const payload = req.body
+            const id = req.user.id
+            await this.userService.changeUserPassword(payload, id);
+            return customResponse(res, "Password changed successfully")
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    logout = async (req, res, next) => {
+        try {
+
             res.clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: true,
                 sameSite: "None",
-                path:"/",
-                
+                path: "/",
+
             });
 
             res.clearCookie("accessToken", {
                 httpOnly: true,
                 secure: true,
                 sameSite: "None",
-                path:"/",
-                
+                path: "/",
+
             });
-        customResponse(res, "logout successful")
+            customResponse(res, "logout successful")
         }
-        catch(error){
+        catch (error) {
             next(error)
         }
     }

@@ -39,6 +39,20 @@ function decrypt(encrypted) {
     }
 }
 
+
+function setNestedValue(obj, path, transformFn) {
+    const keys = path.split(".");
+    let current = obj;
+    for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) return; 
+        current = current[keys[i]];
+    }
+    const lastKey = keys[keys.length - 1];
+    if (current[lastKey] && typeof current[lastKey] === "string") {
+        current[lastKey] = transformFn(current[lastKey]);
+    }
+}
+
 /**
  * Mongoose plugin for field-level encryption & decryption
  *
@@ -46,61 +60,120 @@ function decrypt(encrypted) {
  * @param {Object} options
  * @param {string[]} options.encryptable - Array of field names to encrypt
  */
+
+// module.exports = function encryptionPlugin(schema, options = {}) {
+//     const fieldsToEncrypt = options.encryptable || [];
+
+//     // Encrypt on save/create
+//     schema.pre("save", function (next) {
+//         for (const field of fieldsToEncrypt) {
+//             if (this[field] && typeof this[field] === "string") {
+//                 this[field] = encrypt(this[field]);
+//             }
+//         }
+//         next();
+//     });
+
+    
+
+//     // Encrypt during insertMany
+//     schema.pre("insertMany", function (next, docs) {
+//         for (const doc of docs) {
+//             for (const field of fieldsToEncrypt) {
+//                 if (doc[field] && typeof doc[field] === "string") {
+//                     doc[field] = encrypt(doc[field]);
+//                 }
+//             }
+//         }
+//         next();
+//     });
+
+//     // Encrypt during update
+//     schema.pre("findOneAndUpdate", function (next) {
+//         const update = this.getUpdate();
+//         if (!update || !update.$set) return next();
+
+//         for (const field of fieldsToEncrypt) {
+//             if (update.$set[field] && typeof update.$set[field] === "string") {
+//                 update.$set[field] = encrypt(update.$set[field]);
+//             }
+//         }
+
+//         this.setUpdate(update);
+//         next();
+//     });
+
+//     // Decrypt when documents are hydrated (find, findOne, findById)
+//     schema.post("init", function (doc) {
+//         for (const field of fieldsToEncrypt) {
+//             if (doc[field] && typeof doc[field] === "string") {
+//                 doc[field] = decrypt(doc[field]);
+//             }
+//         }
+//     });
+
+//     // Decrypt when converting to object (e.g., API response)
+//     const decryptFields = (obj) => {
+//         for (const field of fieldsToEncrypt) {
+//             if (obj[field] && typeof obj[field] === "string") {
+//                 obj[field] = decrypt(obj[field]);
+//             }
+//         }
+//         return obj;
+//     };
+
+//     schema.methods.toJSON = function () {
+//         return decryptFields(this.toObject());
+//     };
+// };
+
+
 module.exports = function encryptionPlugin(schema, options = {}) {
     const fieldsToEncrypt = options.encryptable || [];
 
-    // Encrypt on save/create
+    // Encrypt on save
     schema.pre("save", function (next) {
         for (const field of fieldsToEncrypt) {
-            if (this[field] && typeof this[field] === "string") {
-                this[field] = encrypt(this[field]);
-            }
+            setNestedValue(this, field, encrypt);
         }
         next();
     });
 
-    // Encrypt during insertMany
+    // Encrypt on insertMany
     schema.pre("insertMany", function (next, docs) {
         for (const doc of docs) {
             for (const field of fieldsToEncrypt) {
-                if (doc[field] && typeof doc[field] === "string") {
-                    doc[field] = encrypt(doc[field]);
-                }
+                setNestedValue(doc, field, encrypt);
             }
         }
         next();
     });
 
-    // Encrypt during update
+    // Encrypt on update
     schema.pre("findOneAndUpdate", function (next) {
         const update = this.getUpdate();
-        if (!update || !update.$set) return next();
+        if (!update) return next();
 
-        for (const field of fieldsToEncrypt) {
-            if (update.$set[field] && typeof update.$set[field] === "string") {
-                update.$set[field] = encrypt(update.$set[field]);
+        if (update.$set) {
+            for (const field of fieldsToEncrypt) {
+                setNestedValue(update.$set, field, encrypt);
             }
+            this.setUpdate(update);
         }
-
-        this.setUpdate(update);
         next();
     });
 
-    // Decrypt when documents are hydrated (find, findOne, findById)
+    // Decrypt on hydrate
     schema.post("init", function (doc) {
         for (const field of fieldsToEncrypt) {
-            if (doc[field] && typeof doc[field] === "string") {
-                doc[field] = decrypt(doc[field]);
-            }
+            setNestedValue(doc, field, decrypt);
         }
     });
 
-    // Decrypt when converting to object (e.g., API response)
+    // Decrypt on toJSON
     const decryptFields = (obj) => {
         for (const field of fieldsToEncrypt) {
-            if (obj[field] && typeof obj[field] === "string") {
-                obj[field] = decrypt(obj[field]);
-            }
+            setNestedValue(obj, field, decrypt);
         }
         return obj;
     };

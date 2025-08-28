@@ -17,8 +17,7 @@ const customResponse = (res, message, data = null, accessToken = null) => {
     const response = {
         status: true,
         message: message,
-        data: data,
-        accessToken: accessToken
+        data: data
     };
 
     res.json(response);

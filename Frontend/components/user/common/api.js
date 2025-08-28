@@ -2,10 +2,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 
+// const api = axios.create({
+//     baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+//     withCredentials: true
+// })
+
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-    withCredentials: true
-})
+  baseURL: "/api",          
+  withCredentials: true,    
+});
 
 // api.interceptors.request.use((config)=>{
 //     const token = Cookies.get("accessToken")

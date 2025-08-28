@@ -1,5 +1,5 @@
 const BaseRepository = require("../base.repository");
-const productService = require("../../models/products/product-category.model");
+const productService = require("../../models/product/product-category.model");
 
 class ProductCategoryRepository extends BaseRepository {
   constructor() {
@@ -10,6 +10,11 @@ class ProductCategoryRepository extends BaseRepository {
     const query = this.model.findOne({ slug }).session(session);
 
     return await query;
+  }
+
+  async findActiveCategories(filters = {}, projection = "", sort,  session = null){
+    const result = this.model.find(filters).select(projection).sort(sort).session(session)
+    return result
   }
 
   async updateCategoryStatus(id, updatedStatus, session = null) {

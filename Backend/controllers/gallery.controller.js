@@ -56,7 +56,7 @@ class GalleryController {
             // Build a map of clientId -> file using fieldname pattern: files[item-123]
             const filesMap = {};
             for (const file of files) {
-                const match = file.fieldname.match(/^files\[(.+?)\]$/); // files[item-123]  throw customError("User not found", 400);
+                const match = file.fieldname.match(/^files\[(.+?)\]$/); // files[item-123]
                 if (match) {
                     const clientId = match[1];
                     filesMap[clientId] = file;

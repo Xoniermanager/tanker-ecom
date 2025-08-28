@@ -12,10 +12,10 @@ const HomePage = ({bannerData}) => {
     <div className="banner relative w-full py-28 overflow-hidden ">
       
       <div className="absolute top-0 left-0 w-full h-full z-0">
-        <video className="w-full h-full  object-cover scale-x-[-1]" autoPlay loop muted>
+       {bannerData.thumbnail.type === "video" ? <video className="w-full h-full  object-cover scale-x-[-1]" autoPlay loop muted>
           <source src={bannerData?.thumbnail?.fullPath} type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </video> : <Image src={bannerData?.thumbnail?.fullPath} className='w-full h-full object-center object-cover' width={800} height={800} alt='banner image' quality={100}/>}
       </div>
       <div className='bg-black/50 absolute top-0 left-0 w-full h-full z-20'></div>
 

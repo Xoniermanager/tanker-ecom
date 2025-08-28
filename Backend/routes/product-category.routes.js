@@ -7,7 +7,8 @@ const ProductCategoryController = require('../controllers/product-category.contr
 const router = Router()
 
 
-router.route('/').get(ProductCategoryController.getAllCategories)
+router.route('/').get(authorize(['admin']),ProductCategoryController.getAllCategories)
+router.route('/active').get(ProductCategoryController.getAllActiveCategories)
 router.route('/:id').get(ProductCategoryController.getById)
 router.route('/').post(authorize(['admin']), validateProductCategory, ProductCategoryController.createCategory)
 router.route('/update/:id').put(authorize(['admin']), validateProductCategory, ProductCategoryController.updateCatById )

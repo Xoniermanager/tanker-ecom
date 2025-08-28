@@ -18,7 +18,10 @@ const BlogCategoryRoutes = require("./routes/blog-category.routes");
 const GalleryRoutes = require("./routes/gallery.routes");
 const ContactRoutes = require("./routes/contact.routes");
 const TestimonialRoutes = require("./routes/testimonial.routes");
-const ProductCategoriesRoutes = require("./routes/product-category.routes")
+const ProductCategoriesRoutes = require("./routes/product-category.routes");
+const ProductsRoutes = require("./routes/product.routes");
+const CartRoutes = require("./routes/cart.routes");
+const OrderRoutes = require("./routes/order.routes")
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
@@ -32,7 +35,7 @@ const startServer = async () => {
 
         const app = express();
         const PORT = process.env.PORT || 3000;
-        app.set("trust proxy", 1); // 🔥 Required on Vercel or behind proxy
+        app.set("trust proxy", 1); //  Required on Vercel or behind proxy
 
         // Middleware
         app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -59,7 +62,10 @@ const startServer = async () => {
         app.use("/api/gallery", GalleryRoutes);
         app.use("/api/testimonials", TestimonialRoutes);
         app.use("/api/contact", ContactRoutes);
-        app.use("/api/product-categories", ProductCategoriesRoutes)
+        app.use("/api/product-categories", ProductCategoriesRoutes);
+        app.use("/api/products", ProductsRoutes);
+        app.use("/api/cart", CartRoutes);
+        app.use("/api/order", OrderRoutes)
 
         // Route to upload files
         app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {

@@ -8,12 +8,12 @@ const siteSettingSchema = new mongoose.Schema(
   {
     contactDetails: {
       emails: {
-        sales_enquiry: { type: String, required: true },
-        bdm: { type: String, required: true },
+        // sales_enquiry: { type: String, required: true },
+        // bdm: { type: String, required: true },
         footer: { type: String, required: true },
       },
       phoneNumbers: {
-        service_depot: { type: String, required: true },
+        // service_depot: { type: String, required: true },
         contact_one: { type: String, required: true },
         contact_two: { type: String, required: true },
       },

@@ -11,7 +11,7 @@ const {
 } = require("../requestSchemas/blog.schema");
 const {
     bulkDeleteGallerySchema,
-    bulkInsertUpdateGallerySchema
+    bulkInsertUpdateGallerySchema,
 } = require("../requestSchemas/gallery.schema");
 const {
     userRegistrationSchema,
@@ -20,18 +20,29 @@ const {
     requestVerifyEmailOtpSchema,
     verifyLoginOtpSchema,
     requestPasswordResetSchema,
-    resetPasswordSchema
+    resetPasswordSchema,
+    changePasswordSchema,
 } = require("../requestSchemas/auth.schema");
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
-
-const {productCategorySchema} = require('../requestSchemas/product.schema')
+const { productCategorySchema,
+    productSchema,
+    updateProductSchema,
+    updateInventorySchema,
+    orderSchema,
+    ordersFilterSchema,
+    changeOrderStatusSchema
+} = require("../requestSchemas/product.schema");
+const {
+    syncCartSchema,
+    cartItemSchema
+} = require("../requestSchemas/cart.schema");
 
 const optionalUrl = z
     .string()
     .optional()
     .refine((val) => !val || /^https?:\/\/\S+$/.test(val), {
-        message: "Invalid url"
+        message: "Invalid url",
     });
 
 /**
@@ -40,16 +51,11 @@ const optionalUrl = z
 const siteSettingSchema = z.object({
     contactDetails: z.object({
         emails: z.object({
-            sales_enquiry: z
-                .string()
-                .email({ message: "Invalid email for Sales Enquiry." }),
-            bdm: z.string().email({ message: "Invalid email for BDM." }),
+
             footer: z.string().email({ message: "Invalid email for Footer." }),
         }),
         phoneNumbers: z.object({
-            service_depot: z
-                .string()
-                .min(5, { message: "Service Depot phone number is required." }),
+
             contact_one: z
                 .string()
                 .min(5, { message: "Contact One phone number is required." }),
@@ -61,7 +67,7 @@ const siteSettingSchema = z.object({
             head_office: z
                 .string()
                 .min(5, { message: "Head Office address is required." }),
-            address_link: z.string().url({message: "Please enter a valid url"}),
+            address_link: z.string().url({ message: "Please enter a valid url" }),
             service_depot: z
                 .string()
                 .min(5, { message: "Service Depot address is required." }),
@@ -71,21 +77,34 @@ const siteSettingSchema = z.object({
             twitter: optionalUrl,
             instagram: optionalUrl,
             linkedin: optionalUrl,
-            youtube: optionalUrl
+            youtube: optionalUrl,
         }),
     }),
     siteDetails: z.object({
-        logo: z.string().url({ message: "Logo must be a valid URL." }).optional(),
+        // logo: z.string().url({ message: "Logo must be a valid URL." }).optional(),
+        logo: z.object({
+            url: z
+                .string()
+                .min(1, { message: "Logo URL is required." })
+                .url({ message: "Logo URL must be a valid URL." }),
+            key: z
+                .string()
+                .min(1, { message: "Logo file key is required." }),
+            file: z.any().optional(),
+        }),
         title: z.string().min(1, { message: "Site title is required." }),
         slogan: z.string().optional(),
         description: z.string().optional(),
-        copyright: z.string().optional()
+        copyright: z.string().optional(),
     }),
     seoDetails: z.object({
         metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
         keywords: z.array(z.string()).optional(),
-        canonicalUrl:z.string().url({message: "Please enter a valid url"}).optional()
+        canonicalUrl: z
+            .string()
+            .url({ message: "Please enter a valid url" })
+            .optional(),
     }),
 });
 
@@ -94,6 +113,7 @@ const siteSettingSchema = z.object({
  */
 const validateSchema = async (req, res, next, schema) => {
     try {
+
         const resolvedSchema =
             typeof schema === "function" ? await schema() : schema;
         const validatedData = resolvedSchema.parse(req.body);
@@ -130,9 +150,15 @@ const validateQuery = async (req, res, next, schema) => {
 /**
  **  Helper function for multipart json validation
  */
-const validateMultipartJsonField = (req, res, next, schema, fieldName = 'items') => {
+const validateMultipartJsonField = (
+    req,
+    res,
+    next,
+    schema,
+    fieldName = "items"
+) => {
     try {
-        if (typeof req.body[fieldName] === 'string') {
+        if (typeof req.body[fieldName] === "string") {
             req.body[fieldName] = JSON.parse(req.body[fieldName]);
         }
 
@@ -187,14 +213,38 @@ const validateBlogFilterQuery = (req, res, next) =>
 const validateBlogCategory = (req, res, next) =>
     validateSchema(req, res, next, categorySchema);
 const validateBulkInsertUpdateGalleryItems = (req, res, next) =>
-    validateMultipartJsonField(req, res, next, bulkInsertUpdateGallerySchema, 'items');
+    validateMultipartJsonField(
+        req,
+        res,
+        next,
+        bulkInsertUpdateGallerySchema,
+        "items"
+    );
 const validateBulkDeleteGalleryItems = (req, res, next) =>
     validateSchema(req, res, next, bulkDeleteGallerySchema);
 const validateContact = (req, res, next) =>
     validateSchema(req, res, next, contactSchema);
 const validateTestimonial = (req, res, next) =>
     validateSchema(req, res, next, testimonialSchema);
-const validateProductCategory = (req, res, next) => validateSchema(req,res,next, productCategorySchema)
+const validateProductCategory = (req, res, next) =>
+    validateSchema(req, res, next, productCategorySchema);
+const validateChangePassword = (req, res, next) =>
+    validateSchema(req, res, next, changePasswordSchema);
+const validateProduct = (req, res, next) => validateSchema(req, res, next, productSchema)
+const validateUpdateProduct = (req, res, next) =>
+    validateSchema(req, res, next, updateProductSchema)
+const validateInventoryUpdate = (req, res, next) =>
+    validateSchema(req, res, next, updateInventorySchema)
+const validateCartItem = (req, res, next) =>
+    validateSchema(req, res, next, cartItemSchema)
+const validateCartSync = (req, res, next) =>
+    validateSchema(req, res, next, syncCartSchema)
+const validateOrder = (req, res, next) =>
+    validateSchema(req, res, next, orderSchema)
+const validateOrderFilter = (req, res, next) =>
+    validateQuery(req, res, next, ordersFilterSchema)
+const validateChangeOrderStatus = (req, res, next) =>
+    validateSchema(req, res, next, changeOrderStatusSchema)
 
 module.exports = {
     validateUserRegistration,
@@ -215,5 +265,14 @@ module.exports = {
     validateBulkDeleteGalleryItems,
     validateContact,
     validateTestimonial,
-    validateProductCategory
+    validateProductCategory,
+    validateChangePassword,
+    validateProduct,
+    validateUpdateProduct,
+    validateInventoryUpdate,
+    validateCartItem,
+    validateCartSync,
+    validateOrder,
+    validateOrderFilter,
+    validateChangeOrderStatus,
 };

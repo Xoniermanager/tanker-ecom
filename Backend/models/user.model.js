@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema(
             match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             required: false,
         },
+        profileImage:{
+            type: String,
+            default: null
+        },
 
         // Preferences
         country: {

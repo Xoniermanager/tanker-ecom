@@ -40,8 +40,8 @@ const Page = () => {
     categories: [],
     content: "",
     seo: {
-      title: "",
-      description: "",
+      metaTitle: "",
+      metaDescription: "",
       keywords: [],
       blogImage: "",
     },
@@ -251,8 +251,8 @@ const Page = () => {
           categories: [],
           content: "",
           seo: {
-            title: "",
-            description: "",
+            metaTitle: "",
+            metaDescription: "",
             keywords: [],
             blogImage: "",
           },

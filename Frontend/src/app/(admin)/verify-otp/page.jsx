@@ -5,6 +5,7 @@ import api from "../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
+import { useAuth } from "../../../../context/user/AuthContext";
 
 const Page = () => {
   const [verifyCredentials, setVerifyCredentials] = useState({
@@ -20,6 +21,8 @@ const Page = () => {
   const inputRefs = useRef([]);
 
   const router = useRouter();
+
+   const {fetchUserData} = useAuth()
 
   useEffect(() => {
     const getVerifyLoginEmail = localStorage.getItem("verify-login-email");
@@ -90,14 +93,14 @@ const Page = () => {
           password: null,
         });
        
-        console.log("userData: ", response.data)
+        
         
 
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
         
 
-
+        fetchUserData()
         toast.success("OTP verify successfully");
         router.push("/admin/dashboard");
         
