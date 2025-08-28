@@ -135,7 +135,7 @@ sellingPrice: productData.sellingPrice, images:[productData.images[0].source]}, 
           error.response.data.errors[0]?.message) ||
         error?.response?.data?.message ||
         "Something went wrong";
-        toast.error(message)
+        toast.error(message);
       setErrMessage(message);
       
    } finally{

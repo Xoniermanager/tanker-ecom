@@ -135,11 +135,11 @@ const ProductDetailComponents = ({
                 {productData?.name}
               </h2>
               <div className="flex items-center gap-5">
-                <span className="font-semibold text-purple-950 text-3xl">
-                  ${productData?.sellingPrice}
+                <span className="font-semibold text-purple-950 text-3xl tracking-wide">
+                  ${productData?.sellingPrice.toFixed(2)}
                 </span>{" "}
                 <span className="text-[#00000080] line-through">
-                  ${productData?.regularPrice}
+                  ${productData?.regularPrice.toFixed(2)}
                 </span>{" "}
                 <span className="text-red-500">{discount}%</span>{" "}
                 <span className={`text-white ${(productData?.inventory?.status.split("_").join(" ") !== "in stock") ? "bg-red-500" : "bg-purple-950"} bg-purple-950  p-0.5 px-2 rounded-lg text-sm capitalize font-semibold`}>

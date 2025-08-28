@@ -161,7 +161,7 @@ const MySwal = withReactContent(Swal);
           terms: false,
           paymentMethod: "cod",
         });
-        router.push('/')
+        router.push('/orders')
       }
     } catch (error) {
       const message =

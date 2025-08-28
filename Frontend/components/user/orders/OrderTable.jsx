@@ -1,19 +1,21 @@
 "use client"
 import React, {useState, useEffect} from 'react'
-import { useOrder } from '../../../context/order/OrderContext';
+
 import { FaEye } from "react-icons/fa";
 import { TbTruckLoading } from "react-icons/tb";
 import { FaRegAddressCard } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import OrderDetail from './OrderDetail';
 import { FaHistory } from "react-icons/fa";
+import { IoArrowForward } from "react-icons/io5";
+import { toast } from 'react-toastify';
 
-const OrderTable = () => {
+
+const OrderTable = ({orderData, currentPage, setCurrentPage, pageLimit, totalPages}) => {
   const [active, setActive] = useState(1);
   const [viewOrderData, setViewOrderData] = useState(null);
 
-  const {orderData, orderCount} = useOrder();
-
+ console.log("order data: ", orderData)
   const handleViewOrder = (item, number) =>{
     setViewOrderData(item)
     setActive(number)
@@ -26,23 +28,29 @@ const OrderTable = () => {
          <div className="w-1/4 sticky top-34">
            <ul className='border-1 border-slate-200 rounded-xl p-4 flex flex-col gap-3 bg-sky-50/10'>
             <li className={`px-6 py-3 ${(active === 1 || active === 11) ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400" : "hover:bg-slate-50"} cursor-pointer font-medium rounded-lg flex items-center gap-2`} onClick={()=>setActive(1)}> <TbTruckLoading /> Orders </li>
-            <li className={`px-7 py-3 ${active === 2 ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400" : "hover:bg-slate-50"} cursor-pointer font-medium rounded-lg flex items-center gap-2`} onClick={()=>setActive(2)}> <FaRegAddressCard/> Address </li>
-            <li className={`px-7 py-3 ${active === 3 ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400" : "hover:bg-slate-50"} cursor-pointer font-medium rounded-lg flex items-center gap-2`} onClick={()=>setActive(3)}> <FaHistory /> Order History </li>
+            <li className={`px-7 py-3 ${active === 2 ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400" : "hover:bg-slate-50"} cursor-pointer font-medium rounded-lg flex items-center gap-2`}
+            //  onClick={()=>setActive(2)}
+             onClick={()=>toast.info("Sorry it is under development")}
+             > <FaRegAddressCard/> Address </li>
+            <li className={`px-7 py-3 ${active === 3 ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400" : "hover:bg-slate-50"} cursor-pointer font-medium rounded-lg flex items-center gap-2`}
+            //  onClick={()=>setActive(3)}
+              onClick={()=>toast.info("Sorry it is under development")}
+             > <FaHistory /> Order History </li>
            </ul>
          </div>
          <div className="w-3/4">
-            {active === 1 && <table className='w-full'>
+            {active === 1 &&<div className='flex flex-col gap-8'> <table className='w-full'>
               <thead>
                 <tr className='bg-gray-100 rounded-lg'>
-                  <th  className='p-4 text-start'>Order Id</th>
-                  <th className='p-4 text-start'>Date</th>
-                  <th className='p-4 text-start'>Status</th>
-                  <th className='p-4 text-start'>Total</th>
-                  <th className='p-4 text-start'>Action</th>
+                  <th  className='p-4 text-start font-medium'>Order Id</th>
+                  <th className='p-4 text-start font-medium'>Date</th>
+                  <th className='p-4 text-start font-medium'>Status</th>
+                  <th className='p-4 text-start font-medium'>Total</th>
+                  <th className='p-4 text-start font-medium'>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {orderData ? orderData?.map((item, index)=>{
+                {orderData?.length > 0 ? orderData?.map((item, index)=>{
                const orderDate = new Date(item.createdAt).toLocaleDateString()
               return <tr key={item._id} className={`border-b-1 border-stone-200 ${((index % 2) !== 0) && "bg-stone-50"} hover:bg-purple-100/50`}>
                   <td className='p-4 py-6'><span className='font-medium text-sm text-purple-950 cursor-pointer' onClick={()=>handleViewOrder(item, 11)}>{item.orderNumber}</span></td>
@@ -74,12 +82,37 @@ const OrderTable = () => {
                 </tr>
                 }): (
                   <tr>
-                     <td colSpan={5}> Data not found </td>
+                     <td colSpan={5} className='text-center p-2.5'>Order data not found </td>
                   </tr>
                 )}
               </tbody>
 
             </table>
+             <div className="flex items-center gap-4 justify-center">
+                    {[...Array(totalPages)].map((item, index) => (
+                      <button
+                      
+                        className={` ${
+                          currentPage === index + 1
+                            ? "bg-orange-400 text-white"
+                            : "bg-[#f6e7d3]"
+                        } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950  font-bold border-1 border-dashed text-lg`}
+                        key={index}
+                        onClick={() => setCurrentPage(index + 1)}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                    <button
+                    disabled={orderData?.length <= 0 || Number(totalPages) === Number(currentPage)}
+                      className={`h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#507b86c5] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl ${orderData?.length <= 0 && "hidden"}`}
+                      onClick={() => setCurrentPage(Number(currentPage) + 1)}
+                    >
+                      {" "}
+                      <IoArrowForward />{" "}
+                    </button>
+                  </div>
+ </div>
             }
             {
               active === 11 && <OrderDetail viewOrderData={viewOrderData} />

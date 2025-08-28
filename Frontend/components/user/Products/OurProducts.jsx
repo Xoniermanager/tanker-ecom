@@ -100,6 +100,15 @@ const OurProducts = ({
   useEffect(() => {
       fetchData();
     }, [currentPage, pageLimit, filterCategory, filterByName, filterBrand]);
+
+    const handleBrandFilter = (e) =>{
+      setFilterBrand(e)
+      setCurrentPage(1)
+    }
+    const handleCategoryFilter = (e) =>{
+      setFilterCategory(e)
+      setCurrentPage(1)
+    }
   
     if(isLoading){
       <BlockPageLoader/>
@@ -135,7 +144,7 @@ const OurProducts = ({
               className="w-full outline-none"
               placeholder="Search here..."
               value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
+  onChange={(e)=>setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -148,14 +157,14 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
-            onChange={(e)=>setFilterBrand(e.target.value)}
+            onChange={(e)=>handleBrandFilter(e.target.value)}
           >
              <option value="" hidden>
               Choose Brand
             </option>
             <option value="">All Brands</option>
             {brandData?.map((item,i)=>(
-             <option value={item.value}>{item.label}</option>
+             <option value={item.value} key={i}>{item.label}</option>
             ))}
           </select>
         </div>
@@ -168,7 +177,7 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 capitalize border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
-            onChange={(e) => setFilterCategory(e.target.value)}
+            onChange={(e) => handleCategoryFilter(e.target.value)}
           >
             <option value="" hidden>
               Choose Categories
@@ -196,12 +205,12 @@ const OurProducts = ({
                   width={75}
                   height={75}
                   alt="truck icon"
-                  className="h-16 w-16 object-cover"
+                  className="h-16 w-20 object-cover"
                 />
-                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full">
+                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
                   {item.name}
                 </h3>
-                <p className="text-zinc-500 font-medium text-base text-center leading-6 line-clamp-3 h-19">
+                <p className="text-zinc-500 font-medium text-base text-center leading-8 line-clamp-3 h-22">
                   {item.shortDescription}
                 </p>
 
