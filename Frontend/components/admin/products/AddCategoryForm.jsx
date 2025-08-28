@@ -13,7 +13,7 @@ const AddCategoryForm = ({ formData, handleSubmit, handleChange, isLoading, errM
           Add New Category
         </h2>
         <Link
-          href={"/dashboard/products"}
+          href={"/admin/products"}
           className="bg-purple-500 text-white rounded-lg font-semibold py-2.5 px-8  hover:bg-purple-600 transition flex items-center gap-2"
         >
           {" "}

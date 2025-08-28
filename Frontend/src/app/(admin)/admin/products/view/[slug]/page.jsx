@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import PageLoader from "../../../../../../../components/common/PageLoader";
 import Link from "next/link";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { IoChevronBackOutline } from "react-icons/io5";
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
@@ -98,6 +99,9 @@ const Page = () => {
             </Link>
             <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition flex items-center gap-2" onClick={()=>setDeleteProduct(productData._id)}>
              <MdDeleteOutline className="text-xl"/> Delete Product
+            </button>
+            <button className="bg-orange-500 text-white px-6 py-2 rounded-lg shadow hover:bg-orange-600 transition flex items-center gap-2" onClick={()=>router.back()}>
+             <IoChevronBackOutline className="text-xl"/> Back
             </button>
           </div>
         </div>
