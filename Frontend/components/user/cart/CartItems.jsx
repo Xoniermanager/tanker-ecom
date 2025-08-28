@@ -38,9 +38,9 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                 <th className="font-semibold text-purple-950 text-xl p-3 text-start">
                   Quantity
                 </th>
-                <th className="font-semibold text-purple-950 text-xl p-3 text-start">
+                {/* <th className="font-semibold text-purple-950 text-xl p-3 text-start">
                   Discount
-                </th>
+                </th> */}
                 <th className="font-semibold text-purple-950 text-xl p-3 text-start">
                   Price
                 </th>
@@ -95,15 +95,15 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                           </button>{" "}
                         </div>
                       </td>
-                      <td className="p-5">
+                      {/* <td className="p-5">
                         {" "}
                         <span className="text-green-500 tracking-wide bg-green-50 px-3.5 py-1.5 text-sm rounded-lg font-medium">
                           {discount.toFixed(2)}%{" "}
                         </span>
-                      </td>
+                      </td> */}
                       <td className="p-5">
                         {" "}
-                        <span className="text-orange-500 tracking-wide bg-orange-50 px-3.5 py-1.5 text-sm rounded-lg font-medium">
+                        <span className="text-orange-500 tracking-wide bg-orange-50 px-4 py-1.5 rounded-md font-medium">
                           ${item.product?.sellingPrice}
                         </span>{" "}
                       </td>
@@ -165,9 +165,29 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
               </span>
             </li>
           </ul>
-          <button onClick={()=>router.push('/cart/checkout')} disabled={!discountPrice || !regularPrice || haveCartData} className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white">
-            Proceed to checkout
-          </button>
+          <div className="relative group w-full">
+  <button
+    onClick={() => router.push("/cart/checkout")}
+    disabled={!discountPrice || !regularPrice || haveCartData}
+    className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white rounded-md"
+  >
+    Proceed to checkout
+  </button>
+
+
+  {(!discountPrice || !regularPrice || haveCartData) && (
+    <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
+      {haveCartData
+        ? "Your cart is empty, please add products first"
+        : !regularPrice
+        ? "Price details are missing"
+        : !discountPrice
+        ? "Discount not applied"
+        : "Please check your cart details"}
+    </span>
+  )}
+</div>
+
         </div>
       </div>
     </>

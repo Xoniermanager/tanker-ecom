@@ -130,6 +130,14 @@ sellingPrice: productData.sellingPrice, images:[productData.images[0].source]}, 
     }
    } catch (error) {
     if(process.env.NODE_ENV === "development"){ console.error(error) }
+    const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+        toast.error(message)
+      setErrMessage(message);
+      
    } finally{
      setCartIsLoading(false)
    }

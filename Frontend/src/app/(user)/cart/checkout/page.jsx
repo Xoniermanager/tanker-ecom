@@ -7,10 +7,12 @@ import { useCart } from "../../../../../context/cart/CartContext";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import { forbidden, useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const page = () => {
   const { userData } = useAuth();
-  const { cartData, discountPrice, withShippingChargesPrice } = useCart();
+  const { cartData, discountPrice, withShippingChargesPrice, fetchCartData } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const router = useRouter();
@@ -22,13 +24,15 @@ const page = () => {
     products:[],
     billingAddress: {
       address: "",
-      state: "",
+      // state: "",
+      country:"",
       city: "",
       pincode: "",
     },
     shippingAddress: {
       address: "",
-      state: "",
+      // state: "",
+      country: "",
       city: "",
       pincode: "",
     },
@@ -37,7 +41,8 @@ const page = () => {
     paymentMethod: "cod",
   });
 
-  console.log("CARTDATA", cartData)
+
+const MySwal = withReactContent(Swal);
 
   useEffect(() => {
     setFormData({
@@ -45,9 +50,9 @@ const page = () => {
         (userData?.fullName?.split(" ").length > 1
           ? userData?.fullName?.split(" ").slice(0, -1).join(" ")
           : userData?.fullName?.split(" ").pop()) || "",
-      lastName: userData.fullName.split(" ").pop() || "",
-      email: userData.companyEmail || "",
-      phone: Number(userData.mobileNumber) || "",
+      lastName: userData?.fullName?.split(" ").pop() || "",
+      email: userData?.companyEmail || "",
+      phone: Number(userData?.mobileNumber) || "",
       products: cartData ? cartData?.map((item=> {
             return {
                 product: item.product._id,
@@ -59,12 +64,14 @@ const page = () => {
       ,
       billingAddress: {
         address: "",
-        state: "",
+        // state: "",
+        country:"",
         pincode: "",
       },
       shippingAddress: {
         address: "",
-        state: "",
+        // state: "",
+        country:"",
         pincode: "",
       },
     });
@@ -101,6 +108,19 @@ const page = () => {
     setErrMessage(null);
 
     try {
+      // if(!formData.terms){
+      //   MySwal.fire({
+      //     title: <p>Are you sure?</p>,
+      // html: <p>You won’t be able to revert this!</p>,
+      // icon: "warning",
+      // showCancelButton: true,
+      // confirmButtonColor: "#3085d6",
+      // // cancelButtonColor: "#d33",
+      // confirmButtonText: "Okay",
+      //   }).then((result)=>{
+      //     if(result.isConfirmed) return 
+      //   })
+      // }
         const payload = {
             firstName : formData.firstName,
             lastName: formData.lastName,
@@ -117,6 +137,7 @@ const page = () => {
       const response = await api.post("/order", payload);
       if (response.status === 200) {
         toast.success(`Your order placed successfully`);
+        fetchCartData()
         setFormData({
           firstName: "",
           lastName: "",
@@ -124,13 +145,15 @@ const page = () => {
           phone: "",
           billingAddress: {
             address: "",
-            state: "",
+            // state: "",
+            country:"",
             city: "",
             pincode: "",
           },
           shippingAddress: {
             address: "",
-            state: "",
+            // state: "",
+            country:"",
             city: "",
             pincode: "",
           },

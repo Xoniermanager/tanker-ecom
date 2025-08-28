@@ -43,9 +43,9 @@ class OrderRepository extends BaseRepository {
       .populate([{ path: "inventory", select: "_id quantity status" }])
       .session(session);
 
-    if (dbProducts.length !== products.length) {
-      throw customError("Some products not found, please refresh cart", 400);
-    }
+        if (dbProducts.length !== products.length) {
+            throw customError("Some products not found, please refresh cart", 400);
+        }
 
     const finalProductData = [];
     for (const item of products) {
@@ -134,10 +134,10 @@ class OrderRepository extends BaseRepository {
       };
     });
 
-    const result = await Inventory.bulkWrite(bulkOps, { session });
-    if (!result) throw customError("Failed to update inventory", 500);
-    return true;
-  };
+        const result = await Inventory.bulkWrite(bulkOps, { session });
+        if (!result) throw customError("Failed to update inventory", 500);
+        return result;
+    };
 }
 
 const orderRepository = new OrderRepository();

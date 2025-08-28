@@ -244,7 +244,7 @@ const AddProductForm = () => {
     }
   };
 
-  console.log("formData: ", formData);
+ 
 
   return (
     <div className="w-full p-10 bg-white rounded-xl shadow-[0_0_15px_#00000015] flex flex-col gap-10">
@@ -253,7 +253,7 @@ const AddProductForm = () => {
           Add New Product
         </h2>
         <Link
-          href={"/dashboard/products"}
+          href={"/admin/products"}
           className="bg-purple-500  text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-purple-600 transition flex items-center gap-2"
         >
           {" "}

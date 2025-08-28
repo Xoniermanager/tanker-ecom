@@ -24,7 +24,13 @@ class CartRepository extends BaseRepository {
   async getUserCart(userId, session = null) {
     return this.model
       .findOne({ user: userId })
-      .populate("items.product")
+      .populate({
+        path: "items.product",
+        populate: {
+          path: "inventory",
+          model: "Inventory",
+        },
+      })
       .session(session);
   }
 
@@ -222,7 +228,6 @@ class CartRepository extends BaseRepository {
 
     return cart.save({ session });
   }
-
 }
 
 module.exports = new CartRepository();

@@ -1,6 +1,7 @@
 const { z } = require("zod");
-const { PRODUCT_STATUS, STOCK_STATUS, ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS } = require("../constants/enums");
+const { PRODUCT_STATUS, STOCK_STATUS, ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS, COUNTRIES } = require("../constants/enums");
 
+const countries = Object.values(COUNTRIES).map(item=> item.value)
 const imageSchema = z.object({
   source: z.string({
     required_error: "Image source is required.",
@@ -102,7 +103,8 @@ const productFieldSchema = z.object({
 
 const addressSchema = z.object({
   address: z.string({ required_error: "address is required" }).trim(),
-  state: z.enum(Object.values(NEWZEALAND_REGIONS)),
+  // state: z.enum(Object.values(NEWZEALAND_REGIONS)),
+  country: z.enum(Object.values(countries)),
   city: z.string({ required_error: "City field must required" }),
   pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(9999, { message: "Pincode must be at most 9999" }),
 })

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CartContext } from "./CartContext.js";
 import api from "../../components/user/common/api.js";
 import { useAuth } from "../user/AuthContext.js";
+import { toast } from "react-toastify";
 
 const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
@@ -12,7 +13,6 @@ const CartContextProvider = ({ children }) => {
 
   const fetchCartData = async () => {
     
-
     if(!isAuthenticated){
       const guestCart = localStorage.getItem("guestCart")
       
@@ -36,13 +36,30 @@ const CartContextProvider = ({ children }) => {
   const increaseCount = (id, count = 1) => {
   if (!id) return;
 
+  
+  const targetItem = cartData.find(item => item.product._id === id);
+  
+  if (!targetItem) {
+   toast.error("Item not found in cart");
+    return;
+  }
+  const newQuantity = targetItem.quantity + count;
+  const availableQuantity = targetItem.product.inventory?.quantity || 0;
+  
+  if (newQuantity > availableQuantity) {
+   
+    toast.info(`Only ${availableQuantity} items available in stock`); 
+    return;
+  }
+
+  
   const updatedItems = cartData.map((item) =>
     item.product._id === id
-      ? { ...item, quantity: item.quantity + count }
+      ? { ...item, quantity: newQuantity }
       : item
   );
 
-  setCartData(updatedItems); 
+  setCartData(updatedItems);
 };
 
 const decreesCount = (id, count = 1) => {

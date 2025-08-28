@@ -1,12 +1,17 @@
 import React from "react";
 import AuthContextProvider from "./user/AuthContextProvider";
 import CartContextProvider from "./cart/CartContextProvider";
+import OrderContextProvider from "./order/OrderContextProvider";
 
 const Providers = ({ children }) => {
   return (
     <>
       <AuthContextProvider>
-        <CartContextProvider>{children}</CartContextProvider>
+        <CartContextProvider>
+          <OrderContextProvider>
+          {children}
+          </OrderContextProvider>
+        </CartContextProvider>
       </AuthContextProvider>
     </>
   );

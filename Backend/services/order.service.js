@@ -46,14 +46,10 @@ class OrderService {
       delete payload.paymentMethod;
 
       // Save Order
-     await orderRepository.create(payload, session);
-
-      
+     const result = await orderRepository.create(payload, session);
 
       // Clear cart after order success
-       await cartRepository.clearCart(payload.user._id, session);
-
-      
+      await cartRepository.clearCart(payload.user._id, session);
 
       // Update product inventories
       await orderRepository.updateProductInventory(payload.products, session);
@@ -122,7 +118,7 @@ class OrderService {
       sort = { [sortField]: sortOrder };
     }
 
-    return await orderRepository.paginate(query, page, limit, sort);
+    return await orderRepository.paginate(query, page, limit, sort, null, null, "products.product");
   };
 
   /**
@@ -293,51 +289,6 @@ class OrderService {
     } finally {
       session.endSession();
     }
-  };
-
-  /**
-   * --------------------------
-   * USER FUNCTIONS
-   * --------------------------
-   */
-
-  getUserOrders = async (page = 1, limit = 10, filters = {}) => {
-    return await orderRepository.paginate(query, { sort: { createdAt: -1 } });
-  };
-
-  getOrderById = async (orderId, userId) => {
-    const order = await orderRepository.findOne({ _id: orderId, user: userId });
-    if (!order) throw customError("Order not found", 404);
-    return order;
-  };
-
-  /**
-   * --------------------------
-   * ADMIN FUNCTIONS
-   * --------------------------
-   */
-
-  getAllOrders = async (filter = {}, options = {}) => {
-    return await orderRepository.findAll(filter, options);
-  };
-
-  updateOrderStatus = async (orderId, status) => {
-    const order = await orderRepository.findById(orderId);
-    if (!order) throw customError("Order not found", 404);
-
-    order.status = status;
-    await order.save();
-    return order;
-  };
-
-  getOrderDetails = async (orderId) => {
-    const order = await orderRepository.findById(orderId).populate([
-      { path: "user", select: "name email" },
-      { path: "products.product", select: "name price" },
-    ]);
-
-    if (!order) throw customError("Order not found", 404);
-    return order;
   };
 }
 
