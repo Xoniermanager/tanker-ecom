@@ -30,14 +30,14 @@ const orderSchema = new Schema(
         // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
         country: { type: String, required: true, enum: Object.values(countries) },
         city: { type: String, required: true },
-        pincode: { type: Number, required: true, min: 1000, max: 9999 },
+        pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
       shippingAddress: {
         address: { type: String, required: true, trim: true },
         // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
         country: { type: String, required: true, enum: Object.values(countries) },
         city: { type: String, required: true },
-        pincode: { type: Number, required: true, min: 1000, max: 9999 },
+        pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
     },
 

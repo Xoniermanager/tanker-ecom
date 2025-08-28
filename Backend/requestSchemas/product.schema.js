@@ -106,14 +106,15 @@ const addressSchema = z.object({
   // state: z.enum(Object.values(NEWZEALAND_REGIONS)),
   country: z.enum(Object.values(countries)),
   city: z.string({ required_error: "City field must required" }),
-  pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(9999, { message: "Pincode must be at most 9999" }),
+  pincode: z.number().min(1000, { message: "Pincode must be at least 1000" }).max(999999, { message: "Pincode must be at most 999999" }),
 })
 
 const orderSchema = z.object({
   firstName: z.string({ required_error: "First field must required" }),
   lastName: z.string({ required_error: "Last name must be required" }),
   email: z.string({ required_error: "Email is required" }).email({ message: "Invalid email format" }),
-  phone: z.string().regex(/^(\+64|0)(2\d{7,9}|[34679]\d{7,8})$/, { message: "Invalid New Zealand phone number format" }),
+  phone: z.string(),
+  // .regex(/^(\+64|0)(2\d{7,9}|[34679]\d{7,8})$/, { message: "Invalid New Zealand phone number format" }),
   products: z.array(productFieldSchema).min(1, { message: "At least one product required" }),
   address: z.object({ billingAddress: addressSchema, shippingAddress: addressSchema }),
   paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
