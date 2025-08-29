@@ -58,7 +58,9 @@ const orderSchema = new Schema(
       method: { type: String, enum: Object.values(PAYMENT_METHODS), required: true },
       status: { type: String, enum: Object.values(PAYMENT_STATUS), default: PAYMENT_STATUS.PENDING },
       transactionId: String,
+      paymentIntentId: String,
       paidAt: Date,
+      paymentSystemData: {}
     },
 
     stockReduced: { type: Boolean, default: false },

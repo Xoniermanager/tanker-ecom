@@ -93,6 +93,19 @@ class OrderController {
             next(error);
         }
     }
+
+    /**
+     * Create a Stripe PaymentIntent for the given order.
+     */
+    initializePayment = async (req, res, next) => {
+        try {
+            const { orderId } = req.params;
+            const response = await orderService.initializePayment(orderId);
+            return customResponse(res, "Payment initialized successfully", response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = OrderController

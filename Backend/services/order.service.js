@@ -7,6 +7,7 @@ const { ORDER_STATUS, PAYMENT_STATUS, USER_ROLES } = require("../constants/enums
 const inventoryRepository = require("../repositories/product/inventory.repository");
 const cartRepository = require("../repositories/cart.repository");
 const { generateOrderNumber } = require("../utils/order-number");
+const stripeService = require("./stripe.service");
 
 class OrderService {
   /**
@@ -16,7 +17,7 @@ class OrderService {
    * @function createOrder
    * @param {Object} payload - The order payload.
    * @param {Array} payload.products - List of products with `{ product: ObjectId, quantity: number }`.
-   * @param {string} payload.paymentMethod - Selected payment method (e.g., COD, UPI, CARD).
+   * @param {string} payload.paymentMethod - Selected payment method.
    * @param {Object} payload.user - User placing the order.
    * @returns {Promise<Object>} - The created order document.
    */
@@ -264,6 +265,113 @@ class OrderService {
       session.endSession();
     }
   };
+
+
+  // -------------------------------- Payment Section --------------------------------
+
+  /**
+   * Creates a Stripe PaymentIntent for the given order.
+   *
+   * @param {string} orderId - The ID of the order.
+   * @returns {Promise<Object>} PaymentIntent details with clientSecret and orderId.
+   * @throws {Error} If the order is not found or Stripe fails.
+   */
+  async initializePayment(orderId) {
+    try {
+      const order = await orderRepository.findById(orderId);
+      if (!order) throw customError("Order not found", 404);
+
+      if (order.orderStatus !== ORDER_STATUS.PENDING)
+        throw customError("Payment can not made for this order", 400);
+
+      const totalAmount = order.totalPrice;
+      const paymentIntent = await stripeService.createPaymentIntent(totalAmount);
+
+      order.payment.paymentIntentId = paymentIntent.paymentIntentId;
+      await order.save();
+
+      return {
+        ...paymentIntent,
+        orderId
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Handles incoming Stripe webhook events.
+   * 
+   * Supported event types:
+   *  - payment_intent.succeeded → calls handleSuccess to mark the order as paid
+   *  - payment_intent.payment_failed → calls handleFailed to mark the order payment as failed
+   *  - payment_intent.canceled → calls handleCanceled to mark the order payment as canceled
+   * 
+   * @param {string} signature - The Stripe webhook signature from the request headers
+   * @param {Buffer|string} rawBody - The raw request body from Stripe webhook
+   * @returns {Promise<boolean>} Returns true if event was processed successfully, undefined on error
+   */
+  handleStripeWebhook = async (signature, rawBody) => {
+    try {
+      const event = stripeService.constructEvent(rawBody, signature);
+      console.log(`Processing webhook event: ${event.type} (${event.id})`);
+
+      switch (event.type) {
+        case "payment_intent.succeeded":
+          await this.handleSuccess(event.data.object);
+          break;
+
+        case "payment_intent.payment_failed":
+          await this.handleFailed(event.data.object);
+          break;
+
+        case "payment_intent.canceled":
+          await this.handleCanceled(event.data.object);
+          break;
+
+        case "payment_intent.requires_action":
+          console.log(`Payment requires action for PaymentIntent: ${event.data.object.id}`);
+          break;
+
+        default:
+          console.log("Unhandled event:", event.type);
+      }
+
+      return true
+    } catch (err) {
+      console.error("Webhook error:", err.message);
+    }
+  };
+
+  async handleSuccess(paymentIntent) {
+    const order = await orderRepository.findOne({ "payment.paymentIntentId": paymentIntent.id });
+    if (!order) return;
+
+    order.orderStatus = ORDER_STATUS.PROCESSING;
+    order.payment.status = PAYMENT_STATUS.SUCCESS;
+    order.payment.paidAt = Date.now();
+    order.payment.paymentSystemData = paymentIntent;
+    await order.save();
+  }
+
+  async handleFailed(paymentIntent) {
+    const order = await orderRepository.findOne({ "payment.paymentIntentId": paymentIntent.id });
+    if (!order) return;
+
+    order.payment.status = PAYMENT_STATUS.FAILED;
+    order.payment.paymentSystemData = paymentIntent;
+    await order.save();
+  }
+
+  async handleCanceled(paymentIntent) {
+    const order = await orderRepository.findOne({ "payment.paymentIntentId": paymentIntent.id });
+    if (!order) return;
+
+    order.orderStatus = ORDER_STATUS.CANCELLED;
+    order.payment.status = PAYMENT_STATUS.CANCELLED;
+    order.payment.paymentSystemData = paymentIntent;
+    await order.save();
+  }
 }
 
 const orderService = new OrderService();
