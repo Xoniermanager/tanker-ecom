@@ -176,9 +176,9 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
               <span className="w-1/2 text-purple-950 text-lg font-medium">
                 Total Price
               </span>
-              <span className={`w-1/2 text-end ${(cartData.length > 0) && "text-green-500"} tracking-wide text-lg font-medium`}>
+              <span className={`w-1/2 text-end ${(cartData?.length > 0) && "text-green-500"} tracking-wide text-lg font-medium`}>
                 {" "}
-                $ {(withShippingChargesPrice && (cartData.length >0)) ?  withShippingChargesPrice?.toFixed(2) : "--"}{" "}
+                $ {(withShippingChargesPrice && (cartData?.length >0)) ?  withShippingChargesPrice?.toFixed(2) : "--"}{" "}
               </span>
             </li>
           </ul>
