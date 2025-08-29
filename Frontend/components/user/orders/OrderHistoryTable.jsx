@@ -133,7 +133,7 @@ const OrderHistoryTable = ({handleViewOrder}) => {
                       <td colSpan={5} className="text-center p-4">
                         {" "}
                         {isAuthenticated
-                          ? "Order data not available"
+                          ? "Order data not available till now"
                           : "Please login first to see your order data"}{" "}
                       </td>
                     </tr>
