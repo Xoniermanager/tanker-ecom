@@ -19,12 +19,20 @@ class ProductService {
         const query = {};
 
         if (filters.category) {
-            try {
-                query.category = new Types.ObjectId(String(filters.category));
-            } catch {
-                throw customError("Invalid category ID", 400);
+        try {
+            let categories;
+            if (Array.isArray(filters.category)) {
+                categories = filters.category;
+            } else {
+                categories = filters.category.split(',').map(id => id.trim()).filter(id => id);
             }
+            query.category = { $in: categories.map(item => new Types.ObjectId(String(item)))};
+            
+        } catch (error) {
+            throw customError("Invalid category ID", 400);
         }
+    }
+
 
         if (filters.status) {
             query.status = filters.status;

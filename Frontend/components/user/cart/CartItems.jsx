@@ -6,7 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaMinus, FaPlus, FaXmark } from "react-icons/fa6";
 import { TbShoppingCartX } from "react-icons/tb";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "../../../context/user/AuthContext";
 
 const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartData }) => {
   const {
@@ -16,10 +17,16 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
     decreesCount,
     regularPrice,
     discountPrice,
+    withShippingChargesPrice
     
   } = useCart();
 
+  const {isAuthenticated} = useAuth()
+
   const router = useRouter();
+
+  const pathname = usePathname()
+
 
   return (
     <>
@@ -53,9 +60,9 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
               {cartData?.length > 0 ? (
                 cartData?.map((item, index) => {
                   const discount =
-                    ((Number(item.product?.regularPrice) -
-                      Number(item.product?.sellingPrice)) /
-                      Number(item.product?.regularPrice)) *
+                    ((Number(item?.product?.regularPrice) -
+                      Number(item?.product?.sellingPrice)) /
+                      Number(item?.product?.regularPrice)) *
                     100;
                   return (
                     <tr>
@@ -65,7 +72,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                           className="flex items-center gap-3 group "
                         >
                           <Image
-                            src={item?.product?.images[0]?.source || '/images/dummy.jpg' }
+                            src={item?.product?.images[0]?.source || item?.product?.images[0] || '/images/dummy.jpg' }
                             height={80}
                             width={80}
                             className="h-16 w-18 group-hover:scale-104 rounded-lg object-cover"
@@ -104,7 +111,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                       <td className="p-5">
                         {" "}
                         <span className="text-orange-500 tracking-wide bg-orange-50 px-4 py-1.5 rounded-md font-medium">
-                          ${item.product?.sellingPrice}
+                          ${item.product?.sellingPrice.toFixed(2)}
                         </span>{" "}
                       </td>
                       <td className="p-5">
@@ -155,29 +162,41 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                 $ {discountPrice ?  discountPrice?.toFixed(2) : "--" }{" "}
               </span>
             </li>
+            <li className="flex items-center justify-between bg-orange-50/60 border-stone-200 border-b-1 py-5 px-6">
+              <span className="w-1/2 text-purple-950 text-lg font-medium">
+                Shipping
+              </span>
+              <div className="text-black/75 text-[15px]">
+                  {" "}
+                  Flat Rate: $
+                  {Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE).toFixed(2)}
+                </div>{" "}
+            </li>
             <li className="flex items-center justify-between bg-orange-50/60 py-5 px-6">
               <span className="w-1/2 text-purple-950 text-lg font-medium">
                 Total Price
               </span>
-              <span className="w-1/2 text-end text-green-500 tracking-wide text-lg font-medium">
+              <span className={`w-1/2 text-end ${(cartData.length > 0) && "text-green-500"} tracking-wide text-lg font-medium`}>
                 {" "}
-                $ {discountPrice ?  discountPrice?.toFixed(2) : "--"}{" "}
+                $ {(withShippingChargesPrice && (cartData.length >0)) ?  withShippingChargesPrice?.toFixed(2) : "--"}{" "}
               </span>
             </li>
           </ul>
           <div className="relative group w-full">
   <button
-    onClick={() => router.push("/cart/checkout")}
+    onClick={() => isAuthenticated ? router.push("/cart/checkout") : router.push(`/login?redirect=${pathname}`)}
     disabled={!discountPrice || !regularPrice || haveCartData}
     className="capitalize w-full flex items-center justify-center py-3 bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white rounded-md"
   >
-    Proceed to checkout
+   {isAuthenticated ? " Proceed to checkout " : "Login to checkout" }
   </button>
 
 
   {(!discountPrice || !regularPrice || haveCartData) && (
     <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
-      {haveCartData
+      {!isAuthenticated
+       ? "You are not logged in" :
+        haveCartData
         ? "Your cart is empty, please add products first"
         : !regularPrice
         ? "Price details are missing"

@@ -54,7 +54,7 @@ const ProductDetailComponents = ({
 
   return (
     <>
-      <div className="pt-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
+      <div className="py-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-start gap-14">
             <div className="w-[45%] relative">
@@ -142,7 +142,7 @@ const ProductDetailComponents = ({
                   ${productData?.regularPrice.toFixed(2)}
                 </span>{" "}
                 <span className="text-red-500">{discount}%</span>{" "}
-                <span className={`text-white ${(productData?.inventory?.status.split("_").join(" ") !== "in stock") ? "bg-red-500" : "bg-purple-950"} bg-purple-950  p-0.5 px-2 rounded-lg text-sm capitalize font-semibold`}>
+                <span className={`text-white ${(productData?.inventory?.status.split("_").join(" ") !== "in stock") ? "bg-red-500" : "bg-green-500"}   p-0.5 px-2 rounded-lg text-sm capitalize font-semibold`}>
                   {productData?.inventory?.status.split("_").join(" ")}
                 </span>
               </div>
@@ -161,7 +161,7 @@ const ProductDetailComponents = ({
               <p className="text-gray-700 ">{productData.shortDescription}</p>
               <ul className="flex flex-col gap-2">
                 {productData.highlights.map((item, index) => (
-                  <li className="flex items-center gap-1.5" key={index}>
+                  <li className="flex items-center gap-1.5 capitalize" key={index}>
                     <FaCheck className="text-purple-950" /> {item}
                   </li>
                 ))}
@@ -233,7 +233,7 @@ const ProductDetailComponents = ({
               <button
                 className={`${
                   active === 1 ? "bg-orange-500 text-white" : "bg-slate-200"
-                } text-lg font-medium px-5 py-2 border-b-lg`}
+                } text-lg font-medium px-8 py-2 border-b-lg`}
                 onClick={() => setActive(1)}
               >
                 Description
@@ -244,16 +244,19 @@ const ProductDetailComponents = ({
               <button
                 className={`${
                   active === 2 ? "bg-orange-500 text-white" : "bg-slate-200"
-                } text-lg font-medium px-5 py-2 border-b-lg`}
+                } text-lg font-medium px-8 py-2 border-b-lg`}
                 onClick={() => setActive(2)}
               >
                 Specifications
               </button>
             </li>
           </ul>
-          <div className="w-full py-6">
+          <div className="w-full py-6 px-6">
             {active === 1 && (
-              <p className="text-center">{productData?.description}</p>
+              <p className="text-center text-gray-600">{productData?.description}</p>
+            )}
+            {active === 2 && (
+              <p className="text-center text-gray-600">Specification not found</p>
             )}
           </div>
         </div>

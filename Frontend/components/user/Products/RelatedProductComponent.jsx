@@ -9,11 +9,11 @@ import Link from "next/link";
 const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIsLoading }) => {
     
   return (
-    <div className="py-28 w-full bg-[#fbf2f2] ">
+    <div className="pb-28 w-full bg-[#fbf2f2] ">
       <div className="max-w-7xl mx-auto flex flex-col items-start gap-8">
         <h2 className="font-bold text-purple-950 text-3xl">Related Product</h2>
         <div className="grid grid-cols-4 w-full gap-8">
-          {relatedCategoryData?.map((item, index) => (
+          {relatedCategoryData.length > 0 ?  relatedCategoryData?.map((item, index) => (
             <Link href={`/products/${item?.slug}`}
               className=" flex flex-col rounded-lg group overflow-hidden bg-white"
               key={item._id}
@@ -51,7 +51,9 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
               </div>
               <button className="bg-black disabled:bg-black/50 py-2 text-white font-semibold text-lg hover:bg-orange-500 flex justify-center items-center gap-2"  > Add to cart <MdOutlineShoppingCart /></button>
             </Link>
-          ))}
+          )) : (
+                    <p>No product found</p>
+                  )}
         </div>
       </div>
     </div>

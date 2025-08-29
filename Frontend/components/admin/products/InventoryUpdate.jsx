@@ -68,7 +68,7 @@ const InventoryUpdate = ({
           </div>
           <div className="flex flex-col gap-3">
             <label className="capitalize text-sm text-purple-900">
-              product quantity
+             <span className="text-red-500 text-lg">*</span> product quantity
             </label>
             <input
               type="number"
@@ -80,7 +80,7 @@ const InventoryUpdate = ({
           </div>
           <div className="flex flex-col gap-3">
             <label className="capitalize text-sm text-purple-900">
-              product status
+             <span className="text-red-500 text-lg">*</span> product status
             </label>
             <select
               type="text"

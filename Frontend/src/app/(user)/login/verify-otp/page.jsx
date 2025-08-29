@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
 import { useAuth } from "../../../../../context/user/AuthContext";
 
@@ -21,6 +21,11 @@ const VerifyOtpPage = () => {
   const inputRefs = useRef([]);
 
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+
+
 
   const {fetchUserData} = useAuth();
 
@@ -99,7 +104,7 @@ const VerifyOtpPage = () => {
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
 
-        router.push("/");
+        redirect ? router.push(`${redirect}`) : router.push("/");
       }
     } catch (error) {
       setErrMessage("Verification failed. Try again.");
