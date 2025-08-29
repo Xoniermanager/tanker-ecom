@@ -19,7 +19,6 @@ const page = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   
-  // get category data
 
 
   const getCategoryData = async()=>{
@@ -32,9 +31,6 @@ const page = () => {
       console.log(error)
     }
   }
-
- 
-  
 
 
   const getProducts = async () => {

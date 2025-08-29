@@ -1,80 +1,44 @@
-"use client";
-import React, { useState, useEffect } from "react";
-
-import { FaEye } from "react-icons/fa";
-import { TbTruckLoading } from "react-icons/tb";
-import { FaRegAddressCard } from "react-icons/fa6";
-import { motion, AnimatePresence } from "framer-motion";
-import OrderDetail from "./OrderDetail";
-import { FaHistory } from "react-icons/fa";
+"use client"
+import React, {useEffect, useState} from 'react'
 import { IoArrowForward } from "react-icons/io5";
-import { toast } from "react-toastify";
-import { useAuth } from "../../../context/user/AuthContext";
-import OrderHistoryTable from "./OrderHistoryTable";
+import api from '../common/api';
+import { useAuth } from '../../../context/user/AuthContext';
+import { FaEye } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
-const OrderTable = ({
-  orderData,
-  currentPage,
-  setCurrentPage,
-  pageLimit,
-  totalPages,
-  isLoading
-}) => {
-  const [active, setActive] = useState(1);
-  const [viewOrderData, setViewOrderData] = useState(null);
 
-  const { isAuthenticated } = useAuth();
+const OrderHistoryTable = ({handleViewOrder}) => {
+    const [orderHistoryData, setOrderHistoryData] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageLimit, setPageLimit] = useState(10)
+    const [errMessage, setErrMessage] = useState(null)
 
-  const handleViewOrder = (item, number) => {
-    setViewOrderData(item);
-    setActive(number);
-  };
+    const {isAuthenticated} = useAuth()
+    const getOrderHistoryData = async()=>{
+              try {
+                const response = await api.get(`/order?status=delivered${totalPages && `&page=${currentPage}`}${pageLimit && `&limit=${pageLimit}`}`);
+                if(response.status === 200){
+                    const responseData = response.data.data
+                  setOrderHistoryData(responseData.data || null)
+                  console.log(responseData)
+                }
+              } catch (error) {
+                const message =
+                  (Array.isArray(error?.response?.data?.errors) &&
+                    error.response.data.errors[0]?.message) ||
+                  error?.response?.data?.message ||
+                  "Something went wrong";
+                setErrMessage(message);
+              }
+            }
 
+            useEffect(() => {
+              getOrderHistoryData()
+            }, [])
+            
   return (
-    <>
-      <div className="py-24 max-w-7xl mx-auto flex items-start gap-10 ">
-        <div className="w-1/4 sticky top-34">
-          <ul className="border-1 border-slate-200 rounded-xl p-4 flex flex-col gap-3 bg-sky-50/10">
-            <li
-              className={`px-6 py-3 ${
-                active === 1 
-                  ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
-                  : "hover:bg-slate-50"
-              } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
-              onClick={() => setActive(1)}
-            >
-              {" "}
-              <TbTruckLoading /> Orders{" "}
-            </li>
-            <li
-              className={`px-7 py-3 ${
-                active === 2
-                  ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
-                  : "hover:bg-slate-50"
-              } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
-              //  onClick={()=>setActive(2)}
-              onClick={() => toast.info("Sorry it is under development")}
-            >
-              {" "}
-              <FaRegAddressCard /> Address{" "}
-            </li>
-            <li
-              className={`px-7 py-3 ${
-                active === 3
-                  ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
-                  : "hover:bg-slate-50"
-              } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
-              onClick={() => setActive(3)}
-              // onClick={()=>toast.info("Sorry it is under development")}
-            >
-              {" "}
-              <FaHistory /> Order History{" "}
-            </li>
-          </ul>
-        </div>
-        <div className="w-3/4">
-          {active === 1 && (
-            <div className="flex flex-col gap-8">
+     <div className="flex flex-col gap-8">
               {" "}
               <table className="w-full">
                 <thead>
@@ -87,8 +51,8 @@ const OrderTable = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {!isLoading ?  (orderData?.length > 0 ? (
-                    orderData?.map((item, index) => {
+                  {orderHistoryData?.length > 0 ? (
+                    orderHistoryData?.map((item, index) => {
                       const orderDate = new Date(
                         item.createdAt
                       ).toLocaleDateString();
@@ -117,11 +81,12 @@ const OrderTable = ({
                               className={`${
                                 item.orderStatus === "pending"
                                   ? "bg-yellow-500"
-                                  : item.orderStatus === "failed"
+                                  : item.orderStatus === "processing"
                                   ? "bg-blue-500"
-                                  : // item.orderStatus === "shipped" ? "bg-purple-500" :
+                                  :
+                                   item.orderStatus === "shipped" ? "bg-purple-500" :
                                   item.orderStatus === "delivered"
-                                  ? "bg-green-500"
+                                  ? "bg-green-400"
                                   : item.orderStatus === "cancelled"
                                   ? "bg-red-500"
                                   : "bg-gray-500"
@@ -165,25 +130,18 @@ const OrderTable = ({
                     })
                   ) : (
                     <tr>
-                      <td colSpan={5} className="text-center p-4" >
+                      <td colSpan={5} className="text-center p-4">
                         {" "}
                         {isAuthenticated
-                          ? "Order data not found"
+                          ? "Order data not available"
                           : "Please login first to see your order data"}{" "}
                       </td>
                     </tr>
-                  ) ) : (
-                    <tr>
-                   <td colSpan={5}  className="text-center ">
-                    <div className="flex gap-2 items-center justify-center w-full py-5">
-    <div className="w-4 h-4 border-2 border-purple-900 border-t-transparent rounded-full animate-spin"></div>
-    <p className="  font-medium animate-pulse">Loading...</p> </div>
-  </td></tr>
                   )}
                 </tbody>
               </table>
               <div className="flex items-center gap-4 justify-center">
-                {[...Array(totalPages)].map((item, index) => (
+                {(orderHistoryData?.length) > 0 && [...Array(totalPages)].map((item, index) => (
                   <button
                     className={` ${
                       currentPage === index + 1
@@ -198,11 +156,11 @@ const OrderTable = ({
                 ))}
                 <button
                   disabled={
-                    orderData?.length <= 0 ||
+                    orderHistoryData?.length <= 0 ||
                     Number(totalPages) === Number(currentPage)
                   }
                   className={`h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#507b86c5] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl ${
-                    orderData?.length <= 0 && "hidden"
+                    orderHistoryData?.length <= 0 && "hidden"
                   }`}
                   onClick={() => setCurrentPage(Number(currentPage) + 1)}
                 >
@@ -211,13 +169,7 @@ const OrderTable = ({
                 </button>
               </div>
             </div>
-          )}
-          {active === 11 && <OrderDetail viewOrderData={viewOrderData} onBack={()=>setActive(1)} />}
-          {active === 3 && <OrderHistoryTable handleViewOrder={handleViewOrder}/>}
-        </div>
-      </div>
-    </>
-  );
-};
+  )
+}
 
-export default OrderTable;
+export default OrderHistoryTable

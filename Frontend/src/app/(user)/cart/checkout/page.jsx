@@ -175,8 +175,6 @@ const MySwal = withReactContent(Swal);
     }
   };
 
-  console.log('formData', formData)
-
   return (
     <>
       <PageBanner heading={"Check out"} />

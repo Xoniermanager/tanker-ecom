@@ -144,8 +144,8 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
       formPayload.append("description", formData.description);
       formPayload.append("brand", formData.brand);
       formPayload.append("origin", formData.origin);
-      formPayload.append("slug", formData.slug);
-      formPayload.append("initialQuantity", formData.initialQuantity);
+      // formPayload.append("slug", formData.slug);
+      // formPayload.append("initialQuantity", formData.initialQuantity);
 
       formData.highlights.forEach((highlight, index) => {
         formPayload.append(`highlights[${index}]`, highlight);
@@ -211,7 +211,7 @@ if (Array.isArray(formData.seo?.keywords)) {
           Update Product
         </h2>
         <Link
-          href={"/dashboard/products"}
+          href={"/admin/products"}
           className="bg-purple-500  text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-purple-600 transition flex items-center gap-2"
         >
           {" "}
@@ -323,7 +323,7 @@ if (Array.isArray(formData.seo?.keywords)) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label
               htmlFor="initialQuantity"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -343,8 +343,8 @@ if (Array.isArray(formData.seo?.keywords)) {
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
-          </div>
-          <div className="flex flex-col gap-2">
+          </div> */}
+          <div className="flex flex-col gap-2 col-span-2">
             <label
               htmlFor="brand"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -409,7 +409,7 @@ if (Array.isArray(formData.seo?.keywords)) {
             ></textarea>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 col-span-2">
             <label
               htmlFor="origin"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -451,7 +451,7 @@ if (Array.isArray(formData.seo?.keywords)) {
             </select>
           </div>
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label
               htmlFor="slug"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -468,7 +468,7 @@ if (Array.isArray(formData.seo?.keywords)) {
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
               
             />
-          </div>
+          </div> */}
           <div className="flex items-end gap-3 col-span-2 w-full">
             <div className="flex flex-col gap-2 w-full">
               <label
@@ -508,7 +508,7 @@ if (Array.isArray(formData.seo?.keywords)) {
             ))}
           </div>
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label
               htmlFor="type"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -535,9 +535,7 @@ if (Array.isArray(formData.seo?.keywords)) {
               htmlFor="specSource"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
             >
-              {/* <span className="text-red-500 text-[8px]">
-                <FaStarOfLife />
-              </span>{" "} */}
+              
               Specification File
             </label>
             <input
@@ -602,7 +600,7 @@ if (Array.isArray(formData.seo?.keywords)) {
                 )}
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="col-span-2 flex flex-col gap-2">
             <label

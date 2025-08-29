@@ -5,7 +5,7 @@ import React, {useState, useEffect} from 'react'
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import api from '../common/api';
 
 const LoginForm = () => {
@@ -17,8 +17,11 @@ const LoginForm = () => {
         password:""
     })
 
-
+    
     const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get("redirect") || "";
 
      const handleChange = (e)=>{
      const {name, value} = e.target
@@ -36,7 +39,7 @@ const LoginForm = () => {
                 window.localStorage.setItem('verify-login-password', formData.password)
                 setFormData({companyEmail: "", password: ""})
                 setErrMessage("")
-                router.push("/login/verify-otp")
+                router.push(`/login/verify-otp${redirect && `?redirect=${redirect}`}`)
             }
 
         } catch (error) {

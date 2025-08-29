@@ -20,7 +20,10 @@ const CheckOut = ({
   withShippingChargesPrice,
   errMessage,
 }) => {
+  
   return (
+
+    
     <>
       <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
         <div className="w-[72%] flex flex-col gap-3">
@@ -161,7 +164,7 @@ const CheckOut = ({
                   onChange={handleChange}
                   required
                 />
-                <div className="flex items-center justify-end w-full">
+                {/* <div className="flex items-center justify-end w-full">
                   {formData.billingAddress.city &&
                     (!Object.values(NEWZEALAND_CITIES).includes(
                       formData.billingAddress.city.toLowerCase()
@@ -176,7 +179,7 @@ const CheckOut = ({
                         <FaCheck /> valid city{" "}
                       </p>
                     ))}
-                </div>
+                </div> */}
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="billingAddress.pincode">Zip Code</label>
@@ -241,7 +244,7 @@ const CheckOut = ({
                   onChange={handleChange}
                   required
                 />
-                <div className="flex items-center justify-end w-full">
+                {/* <div className="flex items-center justify-end w-full">
                   {formData.shippingAddress.city &&
                     (!Object.values(NEWZEALAND_CITIES).includes(
                       formData.shippingAddress.city.toLowerCase()
@@ -256,7 +259,7 @@ const CheckOut = ({
                         <FaCheck /> valid city{" "}
                       </p>
                     ))}
-                </div>
+                </div> */}
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor="shippingAddress.pincode">Zip Code</label>
@@ -323,7 +326,7 @@ const CheckOut = ({
                 <span className="font-medium text-purple-900 text-lg">
                   Shipping
                 </span>{" "}
-                <div className="text-black/75 text-sm">
+                <div className="text-black/75 text-[15px]">
                   {" "}
                   Flat Rate: $
                   {Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE).toFixed(2)}
@@ -338,7 +341,7 @@ const CheckOut = ({
                 Total{" "}
               </span>
               <span className="font-semibold text-purple-950 text-xl">
-                ${withShippingChargesPrice?.toFixed(2)}
+                ${cartData.length > 0 ? withShippingChargesPrice?.toFixed(2) : "--"}
               </span>
             </div>
           </div>
@@ -413,13 +416,7 @@ const CheckOut = ({
                   !formData.terms ||
                   !Object.values(PAYMENT_METHODS).includes(
                     formData.paymentMethod
-                  ) ||
-                  !Object.values(NEWZEALAND_CITIES).includes(
-                    formData.billingAddress?.city?.toLowerCase()
-                  ) ||
-                  !Object.values(NEWZEALAND_CITIES).includes(
-                    formData?.shippingAddress?.city?.toLowerCase()
-                  )
+                  ) 
                 }
                 className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase w-full relative"
               >
@@ -430,12 +427,6 @@ const CheckOut = ({
               {(!formData.terms ||
                 !Object.values(PAYMENT_METHODS).includes(
                   formData.paymentMethod
-                ) ||
-                !Object.values(NEWZEALAND_CITIES).includes(
-                  formData.billingAddress?.city?.toLowerCase()
-                ) ||
-                !Object.values(NEWZEALAND_CITIES).includes(
-                  formData?.shippingAddress?.city?.toLowerCase()
                 )) && (
                 <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
                   Please fill all the fields properly

@@ -115,8 +115,8 @@ const handleCartSubmit = async(e)=>{
         localCart.push({ product: {_id: productData._id, regularPrice: productData.regularPrice, 
 sellingPrice: productData.sellingPrice, images:[productData.images[0].source]},  quantity });
       }
-     fetchCartData()
       localStorage.setItem("guestCart", JSON.stringify(localCart));
+      fetchCartData()
       toast.success("Product added to cart locally");
       return;
    }
@@ -143,8 +143,6 @@ sellingPrice: productData.sellingPrice, images:[productData.images[0].source]}, 
    }
 }
 
-
-
 if (isLoading){
   return <PageLoader/>
 }
@@ -157,7 +155,7 @@ if (!productData){
     <>
       <PageBanner heading={'product details'}/>
       <ProductDetailComponents productData={productData} quantity={quantity} setQuantity={setQuantity} handleIncrease={handleIncrease} handleDecrease={handleDecrease} handleCartSubmit={handleCartSubmit} cartIsLoading={cartIsLoading} handleQuantityChange={handleQuantityChange} isInCart={isInCart}/>
-      <RelatedProductComponent relatedCategoryData={filter} productData={productData} handleCartSubmit={handleCartSubmit} cartIsLoading={cartIsLoading} />
+      {(filter?.length > 0) && <RelatedProductComponent relatedCategoryData={filter} productData={productData} handleCartSubmit={handleCartSubmit} cartIsLoading={cartIsLoading} />}
 
     </>
   )

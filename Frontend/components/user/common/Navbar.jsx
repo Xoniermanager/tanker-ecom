@@ -129,11 +129,11 @@ const Navbar = ({ siteData }) => {
                   <AnimatePresence>
                     {isHovered && (
                       <motion.ul
-                        initial={{ opacity: 0, y: -10 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
+                        exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.2, ease: "easeInOut" }}
-                        className="absolute w-48 bg-white rounded-lg shadow-md z-20 top-[125%] left-0 px-3 py-2 border border-slate-200"
+                        className="absolute w-48 bg-white rounded-lg shadow-md z-20 top-[135%] -left-10 px-3 py-2 border border-slate-200"
                       >
                         <li>
                           <Link

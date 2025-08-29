@@ -22,8 +22,8 @@ const Page = () => {
         source: "",
       },
       images: [],
-      slug: "",
-      initialQuantity: "",
+      // slug: "",
+      // initialQuantity: "",
       seo: {
         metaTitle: "",
         metaDescription: "",
@@ -57,8 +57,8 @@ const Page = () => {
         source: "",
       },
           images: product.images || [],
-          slug: product.slug || "",
-          initialQuantity: product.inventory?.quantity || "",
+          // slug: product.slug || "",
+          // initialQuantity: product.inventory?.quantity || "",
           seo: {
             metaTitle: product.seo?.metaTitle || "",
             metaDescription: product.seo?.metaDescription || "",

@@ -69,9 +69,9 @@ const ProductList = ({
                   <option value="30">30</option>
                 </select>
               </div>
-              <button className="px-5 py-2.5 bg-orange-400 rounded-lg font-semibold text-white hover:bg-orange-500">
+              {/* <button className="px-5 py-2.5 bg-orange-400 rounded-lg font-semibold text-white hover:bg-orange-500">
                 Actions
-              </button>
+              </button> */}
             </div>
 
             <div className="mt-5   rounded-lg">

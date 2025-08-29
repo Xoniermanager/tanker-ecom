@@ -2,13 +2,13 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { FaChevronDown, FaChevronUp, FaBox, FaShippingFast, FaTruck, FaCheck } from 'react-icons/fa'
 import { motion, AnimatePresence } from "framer-motion"
+import { useRouter } from 'next/navigation'
+import { IoIosArrowBack } from "react-icons/io";
 
 const OrderDetail = ({ viewOrderData, onBack }) => {
   const [expandedProducts, setExpandedProducts] = useState({})
   
-  console.log('order data: ', viewOrderData)
 
-  // Toggle product expansion
   const toggleProductExpansion = (productId) => {
     setExpandedProducts(prev => ({
       ...prev,
@@ -16,7 +16,8 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
     }))
   }
 
-  // Order status progression
+   const router = useRouter();
+ 
   const orderStatuses = [
     { status: 'pending', label: 'Order Placed', icon: FaBox, description: 'Your order has been placed successfully' },
     { status: 'processing', label: 'Processing', icon: FaShippingFast, description: 'We are preparing your order' },
@@ -35,14 +36,14 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
          
          <div className="flex items-center justify-between">
            <h2 className='text-2xl font-semibold text-purple-950'>Order Detail</h2>
-           {onBack && (
+          
              <button 
                onClick={onBack}
-               className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
+               className="px-6 py-2 bg-purple-100 text-purple-700 flex items-center gap-2 rounded-lg hover:bg-purple-950 hover:text-white transition-colors"
              >
-               Back to Orders
+             <IoIosArrowBack />  Back to Orders
              </button>
-           )}
+           
          </div>
 
          <div className="grid grid-cols-2 gap-5">
@@ -69,11 +70,11 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
            </div>
          </div>
 
-         {/* Order Status Tracking */}
+        
          <div className="bg-gray-50 p-6 rounded-xl">
            <h3 className="text-lg font-semibold mb-6 text-purple-950">Order Tracking</h3>
            <div className="relative">
-             {/* Progress Line */}
+            
              <div className="absolute left-6 top-8 bottom-0 w-0.5 bg-gray-200"></div>
              <div 
                className="absolute left-6 top-8 w-0.5 bg-green-500 transition-all duration-500"
@@ -87,14 +88,14 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
                
                return (
                  <div key={statusItem.status} className="relative flex items-start gap-4 pb-8 last:pb-0">
-                   {/* Status Icon */}
+                  
                    <div className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center ${
                      isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'
                    }`}>
                      <StatusIcon className="text-lg" />
                    </div>
                    
-                   {/* Status Info */}
+                  
                    <div className="flex-1 pt-1">
                      <div className="flex items-center gap-2">
                        <h4 className={`font-medium ${isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
@@ -132,7 +133,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
               
               return (
                 <div key={item._id} className="flex w-full flex-col gap-4 bg-stone-50/90 rounded-lg p-6 border border-stone-100">
-                    {/* Product Header - Always Visible */}
+                   
                     <div 
                       className="flex items-center justify-between gap-4 cursor-pointer hover:bg-white/50 p-2 rounded-lg transition-colors"
                       onClick={() => toggleProductExpansion(item._id)}
@@ -168,7 +169,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
                          </div>
                     </div>
 
-                    {/* Expandable Product Details */}
+                   
                     <AnimatePresence>
                       {isExpanded && (
                         <motion.div
@@ -212,7 +213,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
                               </div>
                             </div>
 
-                            {/* Product Description */}
+                           
                             {item.product.shortDescription && (
                               <div className="mt-4">
                                 <label className='text-gray-500 text-sm capitalize block mb-2'>Description</label>
@@ -222,7 +223,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
                               </div>
                             )}
 
-                            {/* Product Highlights */}
+                           
                             {item.product.highlights && item.product.highlights.length > 0 && (
                               <div className="mt-4">
                                 <label className='text-gray-500 text-sm capitalize block mb-2'>Highlights</label>
@@ -237,7 +238,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
                               </div>
                             )}
 
-                            {/* Additional Product Images */}
+                           
                             {item.product.images && item.product.images.length > 1 && (
                               <div className="mt-4">
                                 <label className='text-gray-500 text-sm capitalize block mb-2'>Product Images</label>
@@ -264,7 +265,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
             })}
          </div>
 
-         {/* Order Summary */}
+         
          <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-xl border border-purple-100">
            <div className="flex justify-between items-center mb-4">
              <h3 className="text-lg font-semibold text-purple-950">Order Summary</h3>

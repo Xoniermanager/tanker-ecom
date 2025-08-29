@@ -6,17 +6,16 @@ import { toast } from 'react-toastify';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useCart } from '../cart/CartContext';
+import { useRouter } from 'next/navigation';
 
 const AuthContextProvider = ({children}) => {
     const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-
-
     const popup = withReactContent(Swal)
-    
-    
+
+    const router = useRouter();
 
     const fetchUserData = async() =>{
       setIsLoading(true)
@@ -56,9 +55,9 @@ const AuthContextProvider = ({children}) => {
         const response = await api.post(`/auth/logout`,{})
         if(response.status === 200){
           toast.success("User logged out successfully")
-          setUserData(null)
-          
-          setIsAuthenticated(false)
+          setUserData(null);
+          setIsAuthenticated(false);
+          router.push('/');
         }
       } catch (error) {
          if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
@@ -73,11 +72,20 @@ const AuthContextProvider = ({children}) => {
     useEffect(() => {
   if (isAuthenticated) {
     const localCart = localStorage.getItem("guestCart") ? JSON.parse(localStorage.getItem("guestCart")) : [];
-   
+    
+
+    const payload = localCart.map(item=>{
+     return { productId: item.product._id,
+            quantity: item.quantity,
+     }
+    })
+
     if (localCart.length > 0) {
       (async function submitGuestCart(){
-        await api.post('/cart/sync', {localCart})
-
+       const response =  await api.post('/cart/sync', {localCart: payload})
+       if(response.status === 200){
+        localStorage.removeItem("guestCart")
+       }
       })()
     }
   }

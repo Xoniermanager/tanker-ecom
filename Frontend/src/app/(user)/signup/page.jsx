@@ -93,8 +93,8 @@ setErrMessage(message);
 
   return (
     <>
-      <div className="py-24 max-w-7xl mx-auto flex gap-5">
-        <div className="w-[42%] flex flex-col gap-2">
+      <div className="py-24 max-w-7xl mx-auto flex items-start gap-5">
+        <div className="w-[43%] flex flex-col gap-2 sticky top-28">
           <h1 className="text-[40px] font-bold text-purple-950 ">
             Create Your Account
           </h1>
