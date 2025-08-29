@@ -20,7 +20,7 @@ const page = () => {
   const popup = withReactContent(Swal);
 
   const haveCartData =
-    !cartData || !Array.isArray(cartData) || cartData.length <= 0;
+    !cartData || !Array.isArray(cartData) || cartData?.length <= 0;
 
   const handleRemoveProduct = async (id, product) => {
     const result = await popup.fire({
