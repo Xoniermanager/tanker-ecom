@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
-const { ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS, PAYMENT_STATUS } = require("../../constants/enums");
+const { ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS, PAYMENT_STATUS, COUNTRIES } = require("../../constants/enums");
 const encryptionPlugin = require("../../plugins/encryptionPlugin");
+
+const countries = Object.values(COUNTRIES).map(item => item.value);
 
 const orderSchema = new Schema(
   {
@@ -25,15 +27,17 @@ const orderSchema = new Schema(
     address: {
       billingAddress: {
         address: { type: String, required: true, trim: true },
-        state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
+        // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
+        country: { type: String, required: true, enum: Object.values(countries) },
         city: { type: String, required: true },
-        pincode: { type: Number, required: true, min: 1000, max: 9999 },
+        pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
       shippingAddress: {
         address: { type: String, required: true, trim: true },
-        state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
+        // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
+        country: { type: String, required: true, enum: Object.values(countries) },
         city: { type: String, required: true },
-        pincode: { type: Number, required: true, min: 1000, max: 9999 },
+        pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
     },
 

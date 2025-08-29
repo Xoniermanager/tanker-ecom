@@ -100,6 +100,15 @@ const OurProducts = ({
   useEffect(() => {
       fetchData();
     }, [currentPage, pageLimit, filterCategory, filterByName, filterBrand]);
+
+    const handleBrandFilter = (e) =>{
+      setFilterBrand(e)
+      setCurrentPage(1)
+    }
+    const handleCategoryFilter = (e) =>{
+      setFilterCategory(e)
+      setCurrentPage(1)
+    }
   
     if(isLoading){
       <BlockPageLoader/>
@@ -135,7 +144,7 @@ const OurProducts = ({
               className="w-full outline-none"
               placeholder="Search here..."
               value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
+  onChange={(e)=>setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -148,14 +157,14 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
-            onChange={(e)=>setFilterBrand(e.target.value)}
+            onChange={(e)=>handleBrandFilter(e.target.value)}
           >
              <option value="" hidden>
               Choose Brand
             </option>
             <option value="">All Brands</option>
             {brandData?.map((item,i)=>(
-             <option value={item.value}>{item.label}</option>
+             <option value={item.value} key={i}>{item.label}</option>
             ))}
           </select>
         </div>
@@ -168,7 +177,7 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 capitalize border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
-            onChange={(e) => setFilterCategory(e.target.value)}
+            onChange={(e) => handleCategoryFilter(e.target.value)}
           >
             <option value="" hidden>
               Choose Categories
@@ -183,7 +192,7 @@ const OurProducts = ({
       </div>
 
       <div className="grid grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
-        {productData?.map((item, index) => (
+        {productData?.length > 0  ? productData?.map((item, index) => (
           <div className="main-box w-full" key={index}>
             <div
               style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
@@ -192,16 +201,16 @@ const OurProducts = ({
             <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
               <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
                 <Image
-                  src={item.images[0].source}
+                  src={item.images[0]?.source || "/images/dummy.jpg"}
                   width={75}
                   height={75}
                   alt="truck icon"
-                  className="h-16 w-16 object-cover"
+                  className="h-16 w-20 object-cover"
                 />
-                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full">
+                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
                   {item.name}
                 </h3>
-                <p className="text-zinc-500 font-medium text-base text-center leading-6 line-clamp-3 h-19">
+                <p className="text-zinc-500 font-medium text-base text-center leading-8 line-clamp-3 h-22">
                   {item.shortDescription}
                 </p>
 
@@ -219,16 +228,19 @@ const OurProducts = ({
               </div>
             </div>
           </div>
-        ))}
+        )) : (
+          <div className="flex items-center justify-center w-full col-span-3 text-stone-500"> Product data not found</div>
+        )}
       </div>
       <div className="flex items-center gap-4 justify-center">
         {[...Array(totalPages)].map((item, index) => (
           <button
+          
             className={` ${
               currentPage === index + 1
                 ? "bg-orange-400 text-white"
                 : "bg-[#f6e7d3]"
-            } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+            } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950  font-bold border-1 border-dashed text-lg`}
             key={index}
             onClick={() => setCurrentPage(index + 1)}
           >
@@ -236,7 +248,8 @@ const OurProducts = ({
           </button>
         ))}
         <button
-          className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+        disabled={productData?.length <= 0}
+          className={`h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#507b86c5] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl ${productData?.length <= 0 && "hidden"}`}
           onClick={() => setCurrentPage(Number(activePage) + 1)}
         >
           {" "}

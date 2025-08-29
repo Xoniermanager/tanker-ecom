@@ -35,7 +35,7 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
                   {item.name}
                 </h2>
                 <span className="text-purple-950 text-lg tracking-wide font-black">
-                  ${item.sellingPrice}
+                  ${item.sellingPrice.toFixed(2)}
                 </span>
                 <ul className="flex items-center gap-1">
                   {[...Array(5)].map((_, index) => (

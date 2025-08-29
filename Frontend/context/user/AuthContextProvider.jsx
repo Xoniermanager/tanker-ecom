@@ -16,6 +16,7 @@ const AuthContextProvider = ({children}) => {
 
     const popup = withReactContent(Swal)
     
+    
 
     const fetchUserData = async() =>{
       setIsLoading(true)
@@ -56,7 +57,7 @@ const AuthContextProvider = ({children}) => {
         if(response.status === 200){
           toast.success("User logged out successfully")
           setUserData(null)
-          setCartData(null)
+          
           setIsAuthenticated(false)
         }
       } catch (error) {

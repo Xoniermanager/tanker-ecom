@@ -44,7 +44,7 @@ const Page = () => {
 
         setFormData({
           name: product.name || "",
-          category: product.category || "",
+          category: product.category._id || "",
           regularPrice: product.regularPrice || "",
           sellingPrice: product.sellingPrice || "",
           shortDescription: product.shortDescription || "",
@@ -52,7 +52,10 @@ const Page = () => {
           brand: product.brand || "",
           origin: product.origin || "",
           highlights: product.highlights || [],
-          specifications: product.specifications_search_index || [],
+          specifications:{
+        type: "",
+        source: "",
+      },
           images: product.images || [],
           slug: product.slug || "",
           initialQuantity: product.inventory?.quantity || "",

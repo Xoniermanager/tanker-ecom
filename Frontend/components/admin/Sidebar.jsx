@@ -16,8 +16,10 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import api from "../user/common/api";
 import { motion } from "framer-motion";
+import { Skeleton, Box } from '@mui/material';
 
 import { useInView } from "react-intersection-observer";
+import { useAuth } from "../../context/user/AuthContext";
 
 const Sidebar = () => {
   const [active, setActive] = useState(0);
@@ -34,7 +36,11 @@ const Sidebar = () => {
 
   const router = useRouter()
 
-  
+  const {userData} = useAuth()
+
+  console.log("userdata: ", userData)
+
+
 
   const handleLogout = async () => {
     setIsLoading(true)
@@ -77,8 +83,8 @@ const Sidebar = () => {
           alt="user"
         />}
         <div className="flex flex-col gap-0.5">
-          <h3 className="text-orange-600 font-bold">John Doe</h3>
-          <span className="text-sm text-gray-500 font-medium">Admin</span>
+          <h3 className="text-orange-600 font-bold capitalize">{userData ? userData?.fullName : <Skeleton variant="text" width={140} height={25} />}</h3>
+          <span className="text-sm text-gray-500 font-medium capitalize">{userData ? userData?.role  : <Skeleton variant="text" width={110} height={20} />}</span>
         </div>
 
          <motion.ul

@@ -3,7 +3,11 @@ const orderRepository = require("../repositories/product/order.repository");
 const userRepository = require("../repositories/user.repository");
 const customError = require("../utils/error");
 const productRepository = require("../repositories/product/product.repository");
-const { ORDER_STATUS, PAYMENT_STATUS, USER_ROLES } = require("../constants/enums");
+const {
+  ORDER_STATUS,
+  PAYMENT_STATUS,
+  USER_ROLES,
+} = require("../constants/enums");
 const inventoryRepository = require("../repositories/product/inventory.repository");
 const cartRepository = require("../repositories/cart.repository");
 const { generateOrderNumber } = require("../utils/order-number");
@@ -27,7 +31,10 @@ class OrderService {
       session.startTransaction();
 
       // Validate all products and stock
-      const products = await orderRepository.checkProductExistWithQuantity(payload.products, session);
+      const products = await orderRepository.checkProductExistWithQuantity(
+        payload.products,
+        session
+      );
 
       // Prepare final order payload
       payload.product = products;
@@ -40,7 +47,7 @@ class OrderService {
       delete payload.paymentMethod;
 
       // Save Order
-      const result = await orderRepository.create(payload, session);
+     const result = await orderRepository.create(payload, session);
 
       // Clear cart after order success
       await cartRepository.clearCart(payload.user._id, session);
@@ -51,6 +58,8 @@ class OrderService {
       await session.commitTransaction();
       return result;
     } catch (error) {
+      console.log("error", error);
+
       await session.abortTransaction();
       throw error;
     } finally {
@@ -79,7 +88,7 @@ class OrderService {
    * @returns {Promise<Object>} - Paginated list of orders.
    */
   getOrders = async (page = 1, limit = 10, filters = {}) => {
-    const query = {}
+    const query = {};
 
     // Filter by user
     if (filters.userId) {
@@ -110,8 +119,8 @@ class OrderService {
       sort = { [sortField]: sortOrder };
     }
 
-    return await orderRepository.paginate(query, page, limit, sort);
-  }
+    return await orderRepository.paginate(query, page, limit, sort, null, null, "products.product");
+  };
 
   /**
    * Get order details by MongoDB ObjectId with user check
@@ -167,12 +176,19 @@ class OrderService {
       }
 
       // Ownership check (unless admin)
-      if (role !== USER_ROLES.ADMIN && order.user._id.toString() !== userId.toString()) {
+      if (
+        role !== USER_ROLES.ADMIN &&
+        order.user._id.toString() !== userId.toString()
+      ) {
         throw customError("Not authorized to cancel this order", 403);
       }
 
       // Status check
-      if (![ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING].includes(order.orderStatus)) {
+      if (
+        ![ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING].includes(
+          order.orderStatus
+        )
+      ) {
         throw customError("Order cannot be cancelled at this stage", 400);
       }
 
@@ -183,14 +199,20 @@ class OrderService {
       order.statusHistory.push({
         status: ORDER_STATUS.CANCELLED,
         changedAt: new Date(),
-        note: "Order cancelled by " + (role === USER_ROLES.ADMIN ? "admin" : "user"),
+        note:
+          "Order cancelled by " +
+          (role === USER_ROLES.ADMIN ? "admin" : "user"),
       });
 
       await order.save({ session });
 
       // Restore inventory if stock was reduced
       if (order.stockReduced) {
-        await orderRepository.updateProductInventory(order.products, session, "increase");
+        await orderRepository.updateProductInventory(
+          order.products,
+          session,
+          "increase"
+        );
       }
 
       await session.commitTransaction();
@@ -205,7 +227,7 @@ class OrderService {
 
   /**
    * Change order status (Admin only)
-   * 
+   *
    * @param {String} orderId - The ID of the order to update
    * @param {String} newStatus - New status to set (must be one of ORDER_STATUS)
    * @param {String} note - Optional note explaining the change
@@ -251,7 +273,11 @@ class OrderService {
 
       // Restore inventory if order is cancelled and stock was reduced
       if (newStatus === ORDER_STATUS.CANCELLED && order.stockReduced) {
-        await orderRepository.updateProductInventory(order.products, session, "increase");
+        await orderRepository.updateProductInventory(
+          order.products,
+          session,
+          "increase"
+        );
         order.stockReduced = false;
       }
 

@@ -7,36 +7,55 @@ import "swiper/css/navigation";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
+import api from "../common/api";
 
-const OurProducts = ({productData}) => {
+const OurProducts = ({ productData }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [swiperInstance, setSwiperInstance] = useState(null);
 
+  const [productDatas, setProductData] = useState(null);
 
-  const para = productData?.contents?.find(item=>item.type === 'text').text
+  const fetchProductData = async () => {
+    try {
+      const response = await api.get("/products/frontend");
+      if (response.status) {
+        setProductData(response.data.data.data);
+      }
+    } catch (error) {
+      if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
+  const para = productData?.contents?.find((item) => item.type === "text").text;
 
   const slides = [
     {
-      id:1,
+      id: 1,
       img: "/images/truckOne.jpg",
       heading: "CIVACON",
       para: "Tank truck products including API bottom loading adaptors...",
     },
     {
-      id:2,
+      id: 2,
       img: "/images/truckOne.jpg",
       heading: "Knappco and SureSeal",
       para: "Specialist equipment for transporting dry bulk products.",
     },
     {
-      id:3,
+      id: 3,
       img: "/images/truckOne.jpg",
       heading: "CLA-VAL",
       para: "Aviation fueling products including underwing couplers.",
     },
     {
-      id:4,
+      id: 4,
       img: "/images/truckOne.jpg",
       heading: "CIVACON",
       para: "Tank truck products including API bottom loading adaptors...",
@@ -53,7 +72,7 @@ const OurProducts = ({productData}) => {
       swiperInstance.params.navigation.prevEl = prevRef.current;
       swiperInstance.params.navigation.nextEl = nextRef.current;
 
-      swiperInstance.navigation.destroy(); 
+      swiperInstance.navigation.destroy();
       swiperInstance.navigation.init();
       swiperInstance.navigation.update();
     }
@@ -61,20 +80,22 @@ const OurProducts = ({productData}) => {
 
   return (
     <div className="w-full py-28 px-4">
-     
       <div className="flex flex-col gap-4 items-center mb-20">
         <div className="flex items-center gap-2">
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-          <span className="text-orange-400  font-semibold text-[22px] uppercase">{productData?.subheading || "N/A"}</span>
+          <span className="text-orange-400  font-semibold text-[22px] uppercase">
+            {productData?.subheading || "N/A"}
+          </span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-7xl text-purple-950 capitalize">{productData?.heading || "N/A"}</h2>
+        <h2 className="font-black text-7xl text-purple-950 capitalize">
+          {productData?.heading || "N/A"}
+        </h2>
         <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
           {para || "N/A"}
         </p>
       </div>
 
-     
       <Swiper
         modules={[Navigation]}
         spaceBetween={30}
@@ -83,42 +104,56 @@ const OurProducts = ({productData}) => {
         onSwiper={setSwiperInstance}
         className=""
       >
-        {slides.map((item, index) => (
-          <SwiperSlide className="main-box" key={index}>
-            <div
-              style={{ backgroundImage: `url(${item.img})` }}
-              className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-3xl flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
-            ></div>
-            <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
-              <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
-                <Image
-                  src="/images/truck-icon.png"
-                  width={75}
-                  height={75}
-                  alt="truck icon"
-                />
-                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full">
-                  {item.heading}
-                </h3>
-                <p className="text-zinc-500 font-medium text-base text-center leading-8 line-clamp-3">
-                  {item.para}
-                </p>
+        {productData ? (
+          productDatas?.slice(0, 8)?.map((item, index) => (
+            <SwiperSlide className="main-box" key={index}>
+              <div
+                style={{ backgroundImage: `url(${item.images[0].source})` }}
+                className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-3xl flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
+              ></div>
+              <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
+                <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
+                  <Image
+                    src={item.images[0].source || "/images/dummy.jpg"}
+                    width={75}
+                    height={75}
+                    alt="truck icon"
+                    className="h-16 w-20 object-cover"
+                  />
+                  <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
+                    {item.name}
+                  </h3>
+                  <p className="text-zinc-500 font-medium text-base text-center leading-8 line-clamp-3 h-22">
+                    {item.description}
+                  </p>
 
-                <Link
-                  href={`/products/${item.id}`}
-                  className="relative inline-flex items-center justify-start w-48 h-12 px-8 overflow-hidden text-lg font-bold text-purple-950 group rounded-md ml-4"
-                >
-                  <span className="z-10 transition-all duration-300 transform group-hover:-translate-x-4">
-                    View Products
-                  </span>
-                  <span className="absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[150px] text-orange-400">
-                    <FaCircleArrowRight />
-                  </span>
-                </Link>
+                  <Link
+                    href={`/products/${item.slug}`}
+                    className="relative inline-flex items-center justify-start w-48 h-12 px-8 overflow-hidden text-lg font-bold text-purple-950 group rounded-md ml-4"
+                  >
+                    <span className="z-10 transition-all duration-300 transform group-hover:-translate-x-4">
+                      View Products
+                    </span>
+                    <span className="absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[150px] text-orange-400">
+                      <FaCircleArrowRight />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))
+        ) : (
+          <SwiperSlide className="main-box">
+            <div className="flex items-center justify-center h-74 bg-gray-100 rounded-3xl">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-950 mx-auto mb-4"></div>
+                <p className="text-purple-950 font-medium">
+                  Loading products...
+                </p>
               </div>
             </div>
           </SwiperSlide>
-        ))}
+        )}
       </Swiper>
 
       {/* Navigation Buttons */}
@@ -140,7 +175,7 @@ const OurProducts = ({productData}) => {
           className="border-1 border-stone-200 h-16 w-16 flex items-center justify-center rounded-full hover:bg-orange-400"
         >
           <Image
-          className="scale-x-[-1] "
+            className="scale-x-[-1] "
             src={"/images/left-arrow.png"}
             height={30}
             width={30}
