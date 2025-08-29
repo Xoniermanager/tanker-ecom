@@ -21,7 +21,8 @@ const TestimonialRoutes = require("./routes/testimonial.routes");
 const ProductCategoriesRoutes = require("./routes/product-category.routes");
 const ProductsRoutes = require("./routes/product.routes");
 const CartRoutes = require("./routes/cart.routes");
-const OrderRoutes = require("./routes/order.routes")
+const OrderRoutes = require("./routes/order.routes");
+const WebhookRoutes = require("./routes/webhook.routes");
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
@@ -36,6 +37,8 @@ const startServer = async () => {
         const app = express();
         const PORT = process.env.PORT || 3000;
         app.set("trust proxy", 1); //  Required on Vercel or behind proxy
+
+        app.use("/webhook", WebhookRoutes);
 
         // Middleware
         app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));

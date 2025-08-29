@@ -17,5 +17,6 @@ router.get('/:orderId', authorize(['user', 'admin']), orderController.getOrderDe
 router.get('/by-number/:orderNumber', authorize(['user', 'admin']), orderController.getOrderByOrderNumber);
 router.post('/cancel/:orderId', authorize(['user']), orderController.cancelOrder);
 router.put('/status/:orderId', validateChangeOrderStatus, authorize(['admin']), orderController.changeOrderStatus);
+router.post('/payment/:orderId', authorize(['user', 'admin']), orderController.initializePayment);
 
 module.exports = router
