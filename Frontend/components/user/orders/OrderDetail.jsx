@@ -78,7 +78,7 @@ const OrderDetail = ({ viewOrderData, onBack }) => {
              <div className="absolute left-6 top-8 bottom-0 w-0.5 bg-gray-200"></div>
              <div 
                className="absolute left-6 top-8 w-0.5 bg-green-500 transition-all duration-500"
-               style={{ height: `${(getCurrentStatusIndex() / (orderStatuses.length - 1)) * 100}%` }}
+               style={{ height: `${(getCurrentStatusIndex() / (orderStatuses?.length - 1)) * 100}%` }}
              ></div>
              
              {orderStatuses.map((statusItem, index) => {

@@ -341,7 +341,7 @@ const CheckOut = ({
                 Total{" "}
               </span>
               <span className="font-semibold text-purple-950 text-xl">
-                ${cartData.length > 0 ? withShippingChargesPrice?.toFixed(2) : "--"}
+                ${cartData?.length > 0 ? withShippingChargesPrice?.toFixed(2) : "--"}
               </span>
             </div>
           </div>
