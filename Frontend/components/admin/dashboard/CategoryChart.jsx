@@ -10,18 +10,18 @@ const CategoryChart = () => {
   console.log("Top Categories: ", topSellingCategories)
   
   
-  const categoriesWithSales = topSellingCategories.filter(
-    category => category.salesMetrics?.totalRevenue && category.salesMetrics.totalRevenue > 0
+  const categoriesWithSales = topSellingCategories?.filter(
+    category => category?.salesMetrics?.totalRevenue && category?.salesMetrics?.totalRevenue > 0
   );
   
   
   const totalRevenue = categoriesWithSales.reduce(
-    (sum, category) => sum + (category.salesMetrics?.totalRevenue || 0), 
+    (sum, category) => sum + (category?.salesMetrics?.totalRevenue || 0), 
     0
   );
   
 
-  const chartData = categoriesWithSales.map(category => ({
+  const chartData = categoriesWithSales?.map(category => ({
     name: category.name,
     revenue: category.salesMetrics?.totalRevenue || 0,
     percentage: ((category.salesMetrics?.totalRevenue || 0) / totalRevenue * 100).toFixed(1)
