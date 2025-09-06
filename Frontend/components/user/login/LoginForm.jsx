@@ -73,7 +73,7 @@ const LoginForm = () => {
                                               {passShow ? <input type='text' name='password' className='w-full outline-none' placeholder='Enter Password' value={formData.password} onChange={handleChange}/> : <input type='password' name='password' className='w-full outline-none' placeholder='Enter Password' value={formData.password} onChange={handleChange}/>} {passShow ? <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(false)}> <FaEye/></span> :  <span className='text-lg hover:text-purple-950 hover:cursor-pointer hover:scale-105 ' onClick={()=>setPassShow(true)}> <FaEyeSlash/></span>} </div>
                             </div>
                             <div className="flex justify-end">
-                                <Link href={''} className='text-orange-500 hover:underline font-medium'> Forgot your password?</Link>
+                                <Link href={'/login/forgot-password'} className='text-orange-500 hover:underline font-medium'> Forgot your password?</Link>
                             </div>
                             {errMessage && <div className="flex justify-end">
                                 <p className='text-red-500'>{errMessage}</p>

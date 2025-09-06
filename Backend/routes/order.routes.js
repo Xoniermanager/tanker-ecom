@@ -2,7 +2,8 @@ const { Router } = require("express");
 const {
     validateOrder,
     validateOrderFilter,
-    validateChangeOrderStatus
+    validateChangeOrderStatus,
+    validateCancelOrderByUser
 } = require('../middlewares/validation');
 const authorize = require("../middlewares/auth");
 const OrderController = require("../controllers/order.controller");
@@ -15,8 +16,8 @@ router.post('/', validateOrder, authorize(['user']), orderController.createOrder
 router.get('/', validateOrderFilter, authorize(['user', 'admin']), orderController.getOrders);
 router.get('/:orderId', authorize(['user', 'admin']), orderController.getOrderDetailById);
 router.get('/by-number/:orderNumber', authorize(['user', 'admin']), orderController.getOrderByOrderNumber);
-router.post('/cancel/:orderId', authorize(['user']), orderController.cancelOrder);
-router.put('/status/:orderId', validateChangeOrderStatus, authorize(['admin']), orderController.changeOrderStatus);
+router.post('/cancel/:orderId', validateCancelOrderByUser, authorize(['user']), orderController.cancelOrder);
+router.patch('/status/:orderId', validateChangeOrderStatus, authorize(['admin']), orderController.changeOrderStatus);
 router.post('/payment/:orderId', authorize(['user', 'admin']), orderController.initializePayment);
 
 module.exports = router

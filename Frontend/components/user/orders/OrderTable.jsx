@@ -18,7 +18,8 @@ const OrderTable = ({
   setCurrentPage,
   pageLimit,
   totalPages,
-  isLoading
+  isLoading,
+  getOrderData
 }) => {
   const [active, setActive] = useState(1);
   const [viewOrderData, setViewOrderData] = useState(null);
@@ -46,7 +47,7 @@ const OrderTable = ({
               {" "}
               <TbTruckLoading /> Orders{" "}
             </li>
-            <li
+            {/* <li
               className={`px-7 py-3 ${
                 active === 2
                   ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
@@ -57,7 +58,7 @@ const OrderTable = ({
             >
               {" "}
               <FaRegAddressCard /> Address{" "}
-            </li>
+            </li> */}
             <li
               className={`px-7 py-3 ${
                 active === 3
@@ -212,8 +213,8 @@ const OrderTable = ({
               </div>
             </div>
           )}
-          {active === 11 && <OrderDetail viewOrderData={viewOrderData} onBack={()=>setActive(1)} />}
-          {active === 3 && <OrderHistoryTable handleViewOrder={handleViewOrder}/>}
+          {active === 11 && <OrderDetail viewOrderData={viewOrderData} onBack={()=>setActive(1)} setActive={setActive} getOrderData={getOrderData} />}
+          {active === 3 && <OrderHistoryTable handleViewOrder={handleViewOrder} />}
         </div>
       </div>
     </>

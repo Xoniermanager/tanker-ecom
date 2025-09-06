@@ -5,14 +5,19 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 // Icons
 import { BsBasket, BsThreeDots } from "react-icons/bs"
-import { IoIosArrowRoundUp } from "react-icons/io"
+import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io"
 import Link from 'next/link';
+import { useDashboard } from '../../../context/dashboard/DashboardContext';
+import CountUp from 'react-countup';
+import { toast } from 'react-toastify';
 
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const OrderMonitor = () => {
-     const [specShow, setSpecShow] = useState(false)
+     const [specShow, setSpecShow] = useState(false);
+
+     const {dashboardData} = useDashboard()
 
   const chartOptions = {
     chart: {
@@ -48,8 +53,8 @@ const OrderMonitor = () => {
          transition={{ duration: .3}}
          viewport={{ once: true }}
         className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-20 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
-           <li><Link  href={'/dashboard/orders'} className="hover:text-orange-500">View Detail</Link></li>
-           <li><button className="hover:text-orange-500">Download</button></li>
+           <li><Link  href={'/admin/orders'} className="hover:text-orange-500">View Detail</Link></li>
+           <li><button className="hover:text-orange-500" onClick={()=>toast.info("Temporarily disabled")}>Download</button></li>
         </motion.ul>
         </div>
       </div>
@@ -57,7 +62,7 @@ const OrderMonitor = () => {
       <h2 className='text-xl font-semibold'>Orders</h2>
 
       <div className="flex justify-between items-center gap-2">
-        <span className='text-3xl '>310</span>
+        <CountUp className='text-3xl ' start={0} end={dashboardData?.totalOrders?.count || 0} duration={2} suffix={(dashboardData?.totalOrders?.isPositive === true) && "+"}/>
         <div className="w-24 h-10">
           <Chart
             options={chartOptions}
@@ -69,9 +74,9 @@ const OrderMonitor = () => {
         </div>
       </div>
 
-      <p className='text-green-500 font-medium flex items-center gap-0.5'>
-        Over last month 1.4% 
-        <IoIosArrowRoundUp className='text-xl wavy'/>
+      <p className={`${(dashboardData?.totalOrders?.isPositive === true) ? "text-green-500" : "text-red-500"}  font-medium flex items-center gap-0.5`}>
+        Over last month {dashboardData?.totalOrders?.salesPercent}% 
+        {(dashboardData?.totalOrders?.isPositive === true ) ? <IoIosArrowRoundUp className='text-xl wavy'/> : <IoIosArrowRoundDown className='text-xl wavy text-red-500'/>}
       </p>
     </div>
   )

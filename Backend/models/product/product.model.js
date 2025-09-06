@@ -48,9 +48,9 @@ const productSchema = new Schema(
     specifications: {
       type: {
         type: String,
-        enum: ["pdf", "image"]
+        enum: ["pdf", "image"],
       },
-      source: String
+      source: String,
     },
     specifications_search_index: {
       type: [String],
@@ -90,6 +90,11 @@ const productSchema = new Schema(
       enum: Object.values(PRODUCT_STATUS),
       default: "active",
     },
+    
+    measurements: [{
+       measurementName : {type: String, trim: true},
+       measurementValue: {type: String, trim: true}
+    }],
     seo: {
       metaTitle: String,
       metaDescription: String,
@@ -111,7 +116,7 @@ productSchema.virtual("inventory", {
   ref: "Inventory",
   localField: "_id",
   foreignField: "product",
-  justOne: true
+  justOne: true,
 });
 
 module.exports = model("Product", productSchema);

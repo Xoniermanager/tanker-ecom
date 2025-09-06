@@ -12,6 +12,7 @@ const inventoryRepository = require("../repositories/product/inventory.repositor
 const cartRepository = require("../repositories/cart.repository");
 const { generateOrderNumber } = require("../utils/order-number");
 const stripeService = require("./stripe.service");
+const productCategoryRepository = require("../repositories/product/product-category.repository");
 
 class OrderService {
   /**
@@ -43,8 +44,11 @@ class OrderService {
         status: PAYMENT_STATUS.PENDING,
       };
       payload.stockReduced = true;
+      // payload.salesCount = payload.products.quantity,
       payload.orderNumber = generateOrderNumber();
       delete payload.paymentMethod;
+
+      
 
       // Save Order
      const result = await orderRepository.create(payload, session);
@@ -54,6 +58,7 @@ class OrderService {
 
       // Update product inventories
       await orderRepository.updateProductInventory(payload.products, session);
+      await productCategoryRepository.manageCategorySalesMetrics(products, session)
 
       await session.commitTransaction();
       return result;
@@ -161,7 +166,7 @@ class OrderService {
    * @param {Object} user - The user performing the cancellation (should include _id and role).
    * @returns {Promise<Object>} - The updated order document.
    */
-  cancelOrder = async (orderId, user) => {
+  cancelOrder = async (orderId, user, reason = null) => {
     const session = await startSession();
 
     try {
@@ -202,6 +207,7 @@ class OrderService {
         note:
           "Order cancelled by " +
           (role === USER_ROLES.ADMIN ? "admin" : "user"),
+        reason
       });
 
       await order.save({ session });
@@ -213,6 +219,9 @@ class OrderService {
           session,
           "increase"
         );
+        console.log("products: ", order.products)
+
+        // await productCategoryRepository.manageCategorySalesMetrics(order.products, session, "decrease")
       }
 
       await session.commitTransaction();
@@ -312,6 +321,7 @@ class OrderService {
 
       const totalAmount = order.totalPrice;
       const paymentIntent = await stripeService.createPaymentIntent(totalAmount);
+      console.log('payment Intent: ', paymentIntent)
 
       order.payment.paymentIntentId = paymentIntent.paymentIntentId;
       await order.save();

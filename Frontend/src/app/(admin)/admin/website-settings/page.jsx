@@ -64,7 +64,7 @@ const Page = () => {
     });
   };
 
-  console.log("formData: ", formData)
+
 
    const getWebsiteSettingData = async () => {
     try {
@@ -129,9 +129,7 @@ const Page = () => {
    getWebsiteSettingData();
   }, [])
 
-  
-  
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

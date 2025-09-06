@@ -24,6 +24,14 @@ export const PAYMENT_METHODS = Object.freeze({
         ONLINE_PAYMENT: "online_payment"
 })
 
+export const  ORDER_STATUS = Object.freeze({
+        PENDING: "pending",
+        PROCESSING: "processing",
+        SHIPPED: "shipped",
+        DELIVERED: "delivered",
+        CANCELLED: "cancelled"
+    })
+
 export const NEWZEALAND_CITIES = Object.freeze({
   WHANGAREI: "whangarei",
   KAITIA: "kaitaia",

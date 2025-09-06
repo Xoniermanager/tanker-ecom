@@ -1,3 +1,4 @@
+// pages/checkout/page.js (Simplified)
 "use client";
 import React, { useState, useEffect } from "react";
 import PageBanner from "../../../../../components/user/common/PageBanner";
@@ -6,32 +7,29 @@ import { useAuth } from "../../../../../context/user/AuthContext";
 import { useCart } from "../../../../../context/cart/CartContext";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
-import { forbidden, useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const { userData } = useAuth();
   const { cartData, discountPrice, withShippingChargesPrice, fetchCartData } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const router = useRouter();
+  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
-    products:[],
+    products: [],
     billingAddress: {
       address: "",
-      // state: "",
-      country:"",
+      country: "",
       city: "",
       pincode: "",
     },
     shippingAddress: {
       address: "",
-      // state: "",
       country: "",
       city: "",
       pincode: "",
@@ -41,11 +39,9 @@ const page = () => {
     paymentMethod: "cod",
   });
 
-
-const MySwal = withReactContent(Swal);
-
   useEffect(() => {
-    setFormData({
+    setFormData(prev => ({
+      ...prev,
       firstName:
         (userData?.fullName?.split(" ").length > 1
           ? userData?.fullName?.split(" ").slice(0, -1).join(" ")
@@ -53,31 +49,17 @@ const MySwal = withReactContent(Swal);
       lastName: userData?.fullName?.split(" ").pop() || "",
       email: userData?.companyEmail || "",
       phone: Number(userData?.mobileNumber) || "",
-      products: cartData ? cartData?.map((item=> {
-            return {
-                product: item.product._id,
-                name: item.product.name,
-                quantity: item.quantity,
-                sellingPrice: item.product.sellingPrice
-            }
-        })) : []
-      ,
-      billingAddress: {
-        address: "",
-        // state: "",
-        country:"",
-        pincode: "",
-      },
-      shippingAddress: {
-        address: "",
-        // state: "",
-        country:"",
-        pincode: "",
-      },
-    });
-  }, []);
+      products: cartData ? cartData?.map((item) => ({
+        product: item.product._id,
+        name: item.product.name,
+        quantity: item.quantity,
+        sellingPrice: item.product.sellingPrice
+      })) : [],
+    }));
+  }, [userData, cartData]);
 
   const handleChange = (e) => {
+    setErrMessage(null);
     const { name, value } = e.target;
 
     if (name.includes(".")) {
@@ -95,84 +77,81 @@ const MySwal = withReactContent(Swal);
         [name]: value,
       }));
     }
-    
   };
 
   const handleTerms = (e) => {
     setFormData({ ...formData, terms: !formData.terms });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, returnOrderData = false) => {
     e.preventDefault();
     setIsLoading(true);
     setErrMessage(null);
 
     try {
-      // if(!formData.terms){
-      //   MySwal.fire({
-      //     title: <p>Are you sure?</p>,
-      // html: <p>You won’t be able to revert this!</p>,
-      // icon: "warning",
-      // showCancelButton: true,
-      // confirmButtonColor: "#3085d6",
-      // // cancelButtonColor: "#d33",
-      // confirmButtonText: "Okay",
-      //   }).then((result)=>{
-      //     if(result.isConfirmed) return 
-      //   })
-      // }
-        const payload = {
-            firstName : formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: String(formData.phone),
-            products: formData.products,
-            address: {
-                billingAddress: formData.billingAddress,
-                shippingAddress: formData.shippingAddress
-            },
-            paymentMethod: formData.paymentMethod,
-            orderNotes: formData.orderNotes,
-        }
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: String(formData.phone),
+        products: formData.products,
+        address: {
+          billingAddress: formData.billingAddress,
+          shippingAddress: formData.shippingAddress
+        },
+        paymentMethod: formData.paymentMethod,
+        orderNotes: formData.orderNotes,
+      };
+
       const response = await api.post("/order", payload);
+      
       if (response.status === 200) {
-        toast.success(`Your order placed successfully`);
-        fetchCartData()
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          billingAddress: {
-            address: "",
-            // state: "",
-            country:"",
-            city: "",
-            pincode: "",
-          },
-          shippingAddress: {
-            address: "",
-            // state: "",
-            country:"",
-            city: "",
-            pincode: "",
-          },
-          orderNotes: "",
-          terms: false,
-          paymentMethod: "cod",
-        });
-        router.push('/orders')
+        const orderData = response.data.data;
+        
+        if (returnOrderData) {
+ 
+          return { 
+            orderId: orderData._id,
+            ...orderData 
+          };
+        } else {
+          
+          toast.success("Your order placed successfully");
+          fetchCartData();
+          resetForm();
+          router.push('/orders');
+        }
       }
     } catch (error) {
-      const message =
-        (Array.isArray(error?.response?.data?.errors) &&
-          error.response.data.errors[0]?.message) ||
-        error?.response?.data?.message ||
-        "Something went wrong";
+      const message = error?.response?.data?.message || "Something went wrong";
       setErrMessage(message);
+      return null;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const resetForm = () => {
+    setFormData(prev => ({
+      ...prev,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      products: [],
+      billingAddress: { address: "", country: "", city: "", pincode: "" },
+      shippingAddress: { address: "", country: "", city: "", pincode: "" },
+      orderNotes: "",
+      terms: false,
+      paymentMethod: "cod",
+    }));
+  };
+
+  const handlePaymentSuccess = (orderId) => {
+    toast.success("Payment completed successfully!");
+    fetchCartData();
+    resetForm();
+    router.push('/orders');
   };
 
   return (
@@ -189,9 +168,10 @@ const MySwal = withReactContent(Swal);
         userData={userData}
         errMessage={errMessage}
         isLoading={isLoading}
+        onPaymentSuccess={handlePaymentSuccess}
       />
     </>
   );
 };
 
-export default page;
+export default Page;

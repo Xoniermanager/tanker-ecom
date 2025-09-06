@@ -10,6 +10,12 @@ const imageSchema = z.object({
   type: z.literal("image").default("image"),
 });
 
+
+const measurementsSchema = z.object({
+  measurementName: z.string().trim(),
+  measurementValue: z.string().trim()
+})
+
 const productSchema = z.object({
   name: z.string({
     required_error: "Product name is required.",
@@ -69,7 +75,7 @@ const productSchema = z.object({
   slug: z.string().optional(),
 
   status: z.enum(Object.values(PRODUCT_STATUS)).default(PRODUCT_STATUS.ACTIVE),
-
+  measurements: z.array(measurementsSchema).optional(),
   seo: z.object({
     metaTitle: z.string().optional(),
     metaDescription: z.string().optional(),
@@ -181,9 +187,15 @@ const changeOrderStatusSchema = z.object({
     required_error: "New status is required.",
     invalid_type_error: "Invalid status value.",
   }),
-
   note: z.string({
     invalid_type_error: "Note must be a string.",
+  }).optional(),
+});
+
+const cancelOrderByUserSchema = z.object({
+  
+  reason: z.string({
+    invalid_type_error: "Reason must be a string.",
   }).optional(),
 });
 
@@ -195,5 +207,6 @@ module.exports = {
   paymentResultSchema,
   orderSchema,
   ordersFilterSchema,
-  changeOrderStatusSchema
+  changeOrderStatusSchema,
+  cancelOrderByUserSchema
 };

@@ -323,7 +323,7 @@ class UserService {
         );
     }
 
-    changeUserPassword = async(payload ,id)=>{
+    changeUserPassword = async(payload,id)=>{
         const {oldPassword, newPassword} = payload;
 
         const isPasswordMatch = await userRepository.compareUserPassword(id, oldPassword);
@@ -334,6 +334,18 @@ class UserService {
         await userRepository.changePassword(id, newPassword)
         return true
 
+    }
+
+    updateProfile = async(payload, id)=>{
+        try {
+            const result = await userRepository.update(id, payload)
+            if(!result){
+                throw customError("User data not updated", 400)
+            }
+            return result
+        } catch (error) {
+            throw error
+        }
     }
 
     

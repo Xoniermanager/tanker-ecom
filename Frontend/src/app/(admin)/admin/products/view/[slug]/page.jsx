@@ -27,7 +27,6 @@ const Page = () => {
       const response = await api.get(`/products/${slug}`);
       if (response.status === 200) {
         setProductData(response.data.data);
-        console.log("product data: ", response.data.data);
       }
     } catch (error) {
       console.error(error);
@@ -110,7 +109,7 @@ const Page = () => {
           <div className="space-y-4 sticky top-24 left-0 w-1/2">
             <div className="bg-white rounded-xl shadow p-4">
               <img
-                src={selectedImage || productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg'}
+                src={selectedImage || (productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg')}
                 alt={productData.name}
                 className="rounded-xl shadow border-1 border-stone-200 w-full h-80 object-cover"
               />
@@ -206,11 +205,27 @@ const Page = () => {
             </div>
 
             <div className="bg-white rounded-xl shadow p-6">
+                <h2 className="text-xl font-semibold text-purple-950 mb-3 capitalize">measurements</h2>
+                {(productData.measurements.length > 0 ) ? productData.measurements.map((item,index)=>(
+                  <ul className="flex  flex-col gap-4 list-disc list-inside">
+                    <li className="flex items-center  gap-3">
+                      <span>{item?.measurementName}: </span>
+                      <span className="text-orange-500">{item?.measurementValue}</span>
+                    </li>
+                    
+                   
+                  </ul>
+                )):(
+                  <p className="text-gray-600">No measurement data found</p>
+                )}
+            </div>
+
+            <div className="bg-white rounded-xl shadow p-6">
               <h2 className="text-xl font-semibold text-purple-950 mb-2">
                 Product Status
               </h2>
               <span
-                className={`px-5 py-2 rounded-full text-sm font-medium ${
+                className={`px-5 py-2 rounded-full text-sm font-medium capitalize ${
                   productData.status === "active"
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"

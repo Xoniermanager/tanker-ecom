@@ -22,7 +22,7 @@ const page = () => {
             const response = await api.get(`/order?page=${currentPage}&limit=${pageLimit}`);
             if (response.status === 200 || response.data === 304) {
               setOrderData(response.data.data.data || null);
-             console.log("order data: ", response.data.data)
+           
               setOrderCount(response.data.data.total || null)
               setPageLimit(Number(response.data.data.limit))
               setTotalPages(response.data.data.totalPages)
@@ -43,19 +43,19 @@ const page = () => {
 
         
       
-         
-      
       
         useEffect(() => {
           getOrderData();
          
         }, [currentPage, pageLimit]);
 
+        
+
 
   return (
     <>
       <PageBanner heading={"Order"} />
-      <OrderTable orderData={orderData} currentPage={currentPage} setCurrentPage={setCurrentPage} pageLimit={pageLimit} totalPages={totalPages} isLoading={isLoading}/>
+      <OrderTable orderData={orderData} currentPage={currentPage} setCurrentPage={setCurrentPage} pageLimit={pageLimit} totalPages={totalPages} isLoading={isLoading} getOrderData={getOrderData}/>
       
     </>
   );

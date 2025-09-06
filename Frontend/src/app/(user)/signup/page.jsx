@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
 import { FaEnvelope } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import api from "../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import {
@@ -19,11 +20,14 @@ import { PiOfficeChairFill } from "react-icons/pi";
 import { BiSolidMessageCheck } from "react-icons/bi";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Link from "next/link";
+import { COUNTRIES } from "../../../../constants/enums";
 
 const page = () => {
   const [passShow, setPassShow] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const [captchaToken, setCaptchaToken] = useState(null);
   const [formData, setFormData] = useState({
     companyEmail: "",
     companyName: "",
@@ -37,18 +41,42 @@ const page = () => {
     password: "",
     confirmPassword: "",
   });
+  const recaptchaRef = useRef(null);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const formDisable = formData.fullName === "" || formData.companyName === "" || formData.alternativeEmail === "" || formData.communicationPreference === "" || formData.confirmPassword === "" || formData.country === "" || formData.designation === "" || formData.mobileNumber === "" || formData.password === "" || formData.preferredLanguage === "" || formData.password.length < 8 || !captchaToken;
+
+  const handleCaptcha = (token) => {
+    
+    setCaptchaToken(token);
+    if (errMessage && errMessage.includes("robot")) setErrMessage(null);
+  };
+
+  const handleCaptchaExpired = () => {
+   
+    setCaptchaToken(null);
+  };
+
+  const handleCaptchaError = () => {
+    
+    setCaptchaToken(null);
+    setErrMessage("reCAPTCHA error occurred. Please try again.");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      if (!captchaToken) {
+        setErrMessage("Please verify that you are not a robot");
+        return;
+      }
       if (formData.password.trim() !== formData.confirmPassword.trim())
         return setErrMessage(
           "Your password does not matching please fill again"
@@ -60,7 +88,7 @@ const page = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        window.localStorage.setItem("verify-email", formData.companyEmail)
+        window.localStorage.setItem("verify-email", formData.companyEmail);
         setFormData({
           companyEmail: "",
           companyName: "",
@@ -75,17 +103,23 @@ const page = () => {
           confirmPassword: "",
         });
         toast.success("Your account created successfully");
-        router.push("/signup/verify-otp")
-       ;
+        router.push("/signup/verify-otp");
       }
     } catch (error) {
       console.error(error);
-      const message = (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
-  error?.response?.data?.message ||  "Something went wrong";
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
 
-setErrMessage(message);
+      setErrMessage(message);
     } finally {
       setIsLoading(false);
+      setCaptchaToken(null);
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
     }
   };
 
@@ -240,188 +274,12 @@ setErrMessage(message);
                   onChange={handleChange}
                   required
                 >
-                  <option value={""} hidden>
-                    {" "}
-                    Select Country or Region{" "}
-                  </option>
-
-                  <option value="Afghanistan">Afghanistan</option>
-                  <option value="Albania">Albania</option>
-                  <option value="Algeria">Algeria</option>
-                  <option value="Andorra">Andorra</option>
-                  <option value="Angola">Angola</option>
-                  <option value="Argentina">Argentina</option>
-                  <option value="Armenia">Armenia</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Austria">Austria</option>
-                  <option value="Azerbaijan">Azerbaijan</option>
-                  <option value="Bahamas">Bahamas</option>
-                  <option value="Bahrain">Bahrain</option>
-                  <option value="Bangladesh">Bangladesh</option>
-                  <option value="Barbados">Barbados</option>
-                  <option value="Belarus">Belarus</option>
-                  <option value="Belgium">Belgium</option>
-                  <option value="Belize">Belize</option>
-                  <option value="Benin">Benin</option>
-                  <option value="Bhutan">Bhutan</option>
-                  <option value="Bolivia">Bolivia</option>
-                  <option value="Bosnia &amp; Herzegovina">
-                    Bosnia &amp; Herzegovina
-                  </option>
-                  <option value="Botswana">Botswana</option>
-                  <option value="Brazil">Brazil</option>
-                  <option value="Brunei">Brunei</option>
-                  <option value="Bulgaria">Bulgaria</option>
-                  <option value="Burkina Faso">Burkina Faso</option>
-                  <option value="Burundi">Burundi</option>
-                  <option value="Cambodia">Cambodia</option>
-                  <option value="Cameroon">Cameroon</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Cape Verde">Cape Verde</option>
-                  <option value="Central African Republic">
-                    Central African Republic
-                  </option>
-                  <option value="Chad">Chad</option>
-                  <option value="Chile">Chile</option>
-                  <option value="China">China</option>
-                  <option value="Colombia">Colombia</option>
-                  <option value="Comoros">Comoros</option>
-                  <option value="Congo (Brazzaville)">
-                    Congo (Brazzaville)
-                  </option>
-                  <option value="Congo (Kinshasa)">Congo (Kinshasa)</option>
-                  <option value="Costa Rica">Costa Rica</option>
-                  <option value="Croatia">Croatia</option>
-                  <option value="Cuba">Cuba</option>
-                  <option value="Cyprus">Cyprus</option>
-                  <option value="Czech Republic">Czech Republic</option>
-                  <option value="Denmark">Denmark</option>
-                  <option value="Djibouti">Djibouti</option>
-                  <option value="Dominica">Dominica</option>
-                  <option value="Dominican Republic">Dominican Republic</option>
-                  <option value="Ecuador">Ecuador</option>
-                  <option value="Egypt">Egypt</option>
-                  <option value="El Salvador">El Salvador</option>
-                  <option value="Estonia">Estonia</option>
-                  <option value="Eswatini">Eswatini</option>
-                  <option value="Ethiopia">Ethiopia</option>
-                  <option value="Fiji">Fiji</option>
-                  <option value="Finland">Finland</option>
-                  <option value="France">France</option>
-                  <option value="Gabon">Gabon</option>
-                  <option value="Gambia">Gambia</option>
-                  <option value="Germany">Germany</option>
-                  <option value="Ghana">Ghana</option>
-                  <option value="Greece">Greece</option>
-                  <option value="Grenada">Grenada</option>
-                  <option value="Guatemala">Guatemala</option>
-                  <option value="Guinea">Guinea</option>
-                  <option value="Guyana">Guyana</option>
-                  <option value="Haiti">Haiti</option>
-                  <option value="Honduras">Honduras</option>
-                  <option value="Hungary">Hungary</option>
-                  <option value="Iceland">Iceland</option>
-                  <option value="India">India</option>
-                  <option value="Indonesia">Indonesia</option>
-                  <option value="Iran">Iran</option>
-                  <option value="Iraq">Iraq</option>
-                  <option value="Ireland">Ireland</option>
-                  <option value="Israel">Israel</option>
-                  <option value="Italy">Italy</option>
-                  <option value="Jamaica">Jamaica</option>
-                  <option value="Japan">Japan</option>
-                  <option value="Jordan">Jordan</option>
-                  <option value="Kazakhstan">Kazakhstan</option>
-                  <option value="Kenya">Kenya</option>
-                  <option value="Kiribati">Kiribati</option>
-                  <option value="Korea, North">Korea, North</option>
-                  <option value="Korea, South">Korea, South</option>
-                  <option value="Kosovo">Kosovo</option>
-                  <option value="Kuwait">Kuwait</option>
-                  <option value="Kyrgyzstan">Kyrgyzstan</option>
-                  <option value="Laos">Laos</option>
-                  <option value="Latvia">Latvia</option>
-                  <option value="Lebanon">Lebanon</option>
-                  <option value="Lesotho">Lesotho</option>
-                  <option value="Liberia">Liberia</option>
-                  <option value="Libya">Libya</option>
-                  <option value="Liechtenstein">Liechtenstein</option>
-                  <option value="Lithuania">Lithuania</option>
-                  <option value="Luxembourg">Luxembourg</option>
-                  <option value="Madagascar">Madagascar</option>
-                  <option value="Malawi">Malawi</option>
-                  <option value="Malaysia">Malaysia</option>
-                  <option value="Maldives">Maldives</option>
-                  <option value="Mali">Mali</option>
-                  <option value="Malta">Malta</option>
-                  <option value="Mauritania">Mauritania</option>
-                  <option value="Mauritius">Mauritius</option>
-                  <option value="Mexico">Mexico</option>
-                  <option value="Moldova">Moldova</option>
-                  <option value="Monaco">Monaco</option>
-                  <option value="Mongolia">Mongolia</option>
-                  <option value="Montenegro">Montenegro</option>
-                  <option value="Morocco">Morocco</option>
-                  <option value="Mozambique">Mozambique</option>
-                  <option value="Myanmar">Myanmar</option>
-                  <option value="Namibia">Namibia</option>
-                  <option value="Nepal">Nepal</option>
-                  <option value="Netherlands">Netherlands</option>
-                  <option value="New Zealand">New Zealand</option>
-                  <option value="Nicaragua">Nicaragua</option>
-                  <option value="Niger">Niger</option>
-                  <option value="Nigeria">Nigeria</option>
-                  <option value="North Macedonia">North Macedonia</option>
-                  <option value="Norway">Norway</option>
-                  <option value="Oman">Oman</option>
-                  <option value="Pakistan">Pakistan</option>
-                  <option value="Panama">Panama</option>
-                  <option value="Papua New Guinea">Papua New Guinea</option>
-                  <option value="Paraguay">Paraguay</option>
-                  <option value="Peru">Peru</option>
-                  <option value="Philippines">Philippines</option>
-                  <option value="Poland">Poland</option>
-                  <option value="Portugal">Portugal</option>
-                  <option value="Qatar">Qatar</option>
-                  <option value="Romania">Romania</option>
-                  <option value="Russia">Russia</option>
-                  <option value="Rwanda">Rwanda</option>
-                  <option value="Saint Lucia">Saint Lucia</option>
-                  <option value="Samoa">Samoa</option>
-                  <option value="Senegal">Senegal</option>
-                  <option value="Serbia">Serbia</option>
-                  <option value="Seychelles">Seychelles</option>
-                  <option value="Singapore">Singapore</option>
-                  <option value="Slovakia">Slovakia</option>
-                  <option value="Slovenia">Slovenia</option>
-                  <option value="Somalia">Somalia</option>
-                  <option value="South Africa">South Africa</option>
-                  <option value="Spain">Spain</option>
-                  <option value="Sri Lanka">Sri Lanka</option>
-                  <option value="Sudan">Sudan</option>
-                  <option value="Sweden">Sweden</option>
-                  <option value="Switzerland">Switzerland</option>
-                  <option value="Tanzania">Tanzania</option>
-                  <option value="Thailand">Thailand</option>
-                  <option value="Togo">Togo</option>
-                  <option value="Trinidad &amp; Tobago">
-                    Trinidad &amp; Tobago
-                  </option>
-                  <option value="Tunisia">Tunisia</option>
-                  <option value="Turkey">Turkey</option>
-                  <option value="Uganda">Uganda</option>
-                  <option value="Ukraine">Ukraine</option>
-                  <option value="United Arab Emirates">
-                    United Arab Emirates
-                  </option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="United States">United States</option>
-                  <option value="Uruguay">Uruguay</option>
-                  <option value="Vanuatu">Vanuatu</option>
-                  <option value="Venezuela">Venezuela</option>
-                  <option value="Vietnam">Vietnam</option>
-                  <option value="Zambia">Zambia</option>
-                  <option value="Zimbabwe">Zimbabwe</option>
+                  <option value="">Select Country</option>
+                  {Object.values(COUNTRIES).map((country) => (
+                    <option key={country.code} value={country.value}>
+                      {country.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="w-full flex flex-col gap-2">
@@ -546,14 +404,28 @@ setErrMessage(message);
                 <p className="text-red-500">{errMessage}</p>
               </div>
             )}
-            <div className="flex ">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+              onChange={handleCaptcha}
+              onExpired={handleCaptchaExpired}
+              onError={handleCaptchaError}
+              theme="light"
+            />
+            <div className="flex relative group">
               <button
                 type="submit"
-                style={{ borderRadius: "8px" }}
-                className="btn-two"
+                disabled={formDisable}
+               
+                className="bg-purple-900 disabled:bg-purple-400 hover:bg-purple-950 text-white px-9 tracking-wide py-3 rounded-md font-medium"
               >
                 {isLoading ? "Submitting..." : "Sign Up"}
               </button>
+              {formDisable && (
+                              <span className="absolute left-0 -translate-x-4 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
+                                Please fill all the fields properly
+                              </span>
+                            )}
             </div>
 
             <div className="flex">

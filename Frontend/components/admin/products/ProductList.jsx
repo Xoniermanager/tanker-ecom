@@ -116,12 +116,12 @@ const ProductList = ({
                             </td>
                             <td className=" max-w-[150px] truncate">
                              <Link className="py-5 px-4 font-medium text-gray-800 hover:text-orange-500 capitalize "
-                                    href={`products/view/${product.slug}`}> {product.name} </Link>
+                                    href={`products/view/${product?.slug}`}> {product.name} </Link>
                             </td>
                             <td className="py-5 px-4">
                               <span className="px-2 capitalize py-1 text-sm text-purple-800 font-medium bg-purple-100 rounded-lg  text-nowrap">
                                 {" "}
-                                {product.category.name}{" "}
+                                {product?.category?.name}{" "}
                               </span>
                             </td>
                             <td className="py-5 px-4">
@@ -129,14 +129,14 @@ const ProductList = ({
                               <span className="flex items-center gap-0.5 bg-orange-50 w-fit rounded-lg text-orange-500 px-2 py-1 font-medium">
                                 {" "}
                                 <BiDollar />{" "}
-                                {Number(product.sellingPrice).toFixed(2)}
+                                {Number(product?.sellingPrice).toFixed(2)}
                               </span>
                             </td>
 
                             <td className="py-5 px-4 font-medium">
                               <span
                                 className={`${
-                                  product.inventory.status === "in_stock"
+                                  product?.inventory?.status === "in_stock"
                                     ? "text-green-500"
                                     : "text-red-500"
                                 } capitalize text-nowrap`}
@@ -158,25 +158,25 @@ const ProductList = ({
                               {openMenuIndex === index && (
                                 <div className="absolute right-4 top-12 w-42 bg-white  shadow-[0_0_15px_#00000030] rounded-lg py-2 z-10 ">
                                   <Link
-                                    href={`products/view/${product.slug}`}
+                                    href={`products/view/${product?.slug}`}
                                     className="flex items-center gap-1.5 w-full px-5 py-2 text-left text-sm hover:text-orange-500"
                                   >
                                    <AiOutlineProduct className="text-lg text-orange-400"/> View Product
                                   </Link>
                                   <Link
-                                    href={`products/view-inventory/${product._id}`}
+                                    href={`products/view-inventory/${product?._id}`}
                                     className="flex items-center gap-1.5 w-full px-5 py-2 text-left text-sm hover:text-orange-500"
                                   >
                                    <MdOutlineInventory2 className="text-lg text-orange-400"/>  View Inventory
                                   </Link>
                                   <Link
-                                    href={`products/update/${product.slug}`}
+                                    href={`products/update/${product?.slug}`}
                                     className="flex items-center gap-1.5 w-full px-5 py-2 text-left text-sm  hover:text-orange-500"
                                   >
                                    <MdOutlineEdit className="text-lg text-orange-400"/> Edit Product
                                   </Link>
                                   <Link
-                                    href={`products/edit-inventory/${product._id}`}
+                                    href={`products/edit-inventory/${product?._id}`}
                                     className="flex items-center gap-1.5 w-full px-5 py-2 text-left text-sm  hover:text-orange-500"
                                   >
                                    <MdOutlineAutoFixHigh className="text-lg text-orange-400" /> Edit Inventory

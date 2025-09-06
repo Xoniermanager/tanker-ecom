@@ -5,14 +5,19 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 // Icons
 import { BsBasket, BsThreeDots, BsCreditCard2Front } from "react-icons/bs"
-import { IoIosArrowRoundUp } from "react-icons/io"
+import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io"
 import Link from 'next/link';
+import { useDashboard } from '../../../context/dashboard/DashboardContext';
+import CountUp from 'react-countup';
+import { toast } from 'react-toastify';
 
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
+
 const SalesMonitor = () => {
      const [specShow, setSpecShow] = useState(false)
+     const {dashboardData} = useDashboard()
 
   const chartOptions = {
     chart: {
@@ -47,9 +52,9 @@ const SalesMonitor = () => {
          animate={specShow ? {opacity: 1, y: 0, display: "flex"} : {opacity: 0, y: 10, display: "none"}}
          transition={{ duration: .3}}
          viewport={{ once: true }}
-        className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-20 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
-           <li><Link href={'/dashboard/orders'} className="hover:text-orange-500">View Detail</Link></li>
-           <li><button className="hover:text-orange-500">Download</button></li>
+        className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-9000 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
+           <li><Link href={'/admin/orders'} className="hover:text-orange-500">View Detail</Link></li>
+           <li><button className="hover:text-orange-500" onClick={()=>toast.info("Temporarily disabled")}>Download</button></li>
         </motion.ul>
         </div>
       </div>
@@ -57,7 +62,7 @@ const SalesMonitor = () => {
       <h2 className='text-xl font-semibold'>Sales</h2>
 
       <div className="flex justify-between items-center gap-2">
-        <span className='text-3xl'>$3.759,00</span>
+       <CountUp className='text-3xl' start={0} end={Number(dashboardData?.totalRevenue?.revenue) || 0} duration={2} decimals={2} prefix={"$"}/>
         <div className="w-24 h-10">
           <Chart
             options={chartOptions}
@@ -69,9 +74,9 @@ const SalesMonitor = () => {
         </div>
       </div>
 
-      <p className='text-green-500 font-medium flex items-center gap-0.5'>
-        Over last month 1.4% 
-        <IoIosArrowRoundUp className='text-xl wavy'/>
+      <p className={`${(dashboardData?.totalRevenue?.isPositive === true) ? "text-green-500" : "text-red-500"}  font-medium flex items-center gap-0.5`}>
+        Over last month {dashboardData?.totalRevenue?.salesPercent}% 
+        {(dashboardData?.totalRevenue?.isPositive === true ) ? <IoIosArrowRoundUp className='text-xl wavy'/> : <IoIosArrowRoundDown className='text-xl wavy text-red-500'/>}
       </p>
     </div>
   )

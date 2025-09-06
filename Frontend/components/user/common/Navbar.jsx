@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect } from "react";
-import { FaFacebookF } from "react-icons/fa";
+import { FaFacebookF, FaRegUser } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
 import { IoCartOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ const Navbar = ({ siteData }) => {
 
   const { cartData, isLoading, count } = useCart();
 
-  const { isAuthenticated, handleLogout } = useAuth();
+  const { isAuthenticated, handleLogout, userData } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +74,7 @@ const Navbar = ({ siteData }) => {
         <div
           className={`max-w-full px-4 py-3 flex items-center bg-white mid-nav transition-all duration-300 ${
             isSticky
-              ? "fixed top-0 left-0 w-full z-[500] shadow-lg animate-slideDown"
+              ? "fixed top-0 left-0 w-full z-[400] shadow-lg animate-slideDown"
               : "relative"
           }`}
         >
@@ -182,10 +182,13 @@ const Navbar = ({ siteData }) => {
           </div>
 
           <div className="w-[35%] flex items-center justify-end gap-5">
+            {(isAuthenticated && userData.role === "user")  && <Link href={"/profile"} className="h-10 w-10 bg-purple-900 hover:bg-purple-950 rounded-full flex items-center justify-center text-white">
+            <FaRegUser className=""/>
+            </Link>}
             <div className="relative">
               <Link
                 href={"/cart"}
-                className="h-10 w-10 bg-orange-400 rounded-full flex items-center justify-center text-white"
+                className="h-10 w-10 bg-orange-400 hover:bg-orange-500 rounded-full flex items-center justify-center text-white"
               >
                 <IoCartOutline className="text-lg" />
               </Link>{" "}

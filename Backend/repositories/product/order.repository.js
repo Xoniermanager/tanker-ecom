@@ -2,7 +2,7 @@ const BaseRepository = require("../base.repository");
 const Order = require("../../models/product/order.model");
 const Product = require("../../models/product/product.model");
 const Inventory = require("../../models/product/inventory.model");
-const { STOCK_STATUS } = require("../../constants/enums");
+const { STOCK_STATUS, ORDER_STATUS } = require("../../constants/enums");
 const customError = require("../../utils/error");
 
 class OrderRepository extends BaseRepository {
@@ -40,12 +40,12 @@ class OrderRepository extends BaseRepository {
     const ids = products.map((p) => p.product);
 
     const dbProducts = await Product.find({ _id: { $in: ids } })
-      .populate([{ path: "inventory", select: "_id quantity status" }])
+      .populate([{ path: "inventory", select: "_id quantity status" }, {path: "category"}])
       .session(session);
 
-        if (dbProducts.length !== products.length) {
-            throw customError("Some products not found, please refresh cart", 400);
-        }
+    if (dbProducts.length !== products.length) {
+      throw customError("Some products not found, please refresh cart", 400);
+    }
 
     const finalProductData = [];
     for (const item of products) {
@@ -76,6 +76,7 @@ class OrderRepository extends BaseRepository {
         name: product.name,
         quantity: item.quantity,
         sellingPrice: product.sellingPrice,
+        category: product.category._id
       });
     }
 
@@ -116,6 +117,12 @@ class OrderRepository extends BaseRepository {
             {
               $set: {
                 quantity: { $add: ["$quantity", qtyChange] },
+                salesCount: {
+                $add: [
+                  "$salesCount",
+                  direction === "decrease" ? item.quantity : 0,
+                ],
+              },
               },
             },
             {
@@ -134,10 +141,113 @@ class OrderRepository extends BaseRepository {
       };
     });
 
-        const result = await Inventory.bulkWrite(bulkOps, { session });
-        if (!result) throw customError("Failed to update inventory", 500);
-        return result;
+    const result = await Inventory.bulkWrite(bulkOps, { session });
+    if (!result) throw customError("Failed to update inventory", 500);
+    return result;
+  };
+
+  getOrdersCount = async (startDate, endDate = new Date(), session = null) => {
+    const filter = {
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
     };
+    return await this.count(filter, session);
+  };
+
+  
+
+  getDeliveredOrdersCount = async (
+    startDate,
+    endDate = new Date(),
+    session = null
+  ) => {
+    const filter = {
+      orderStatus: "delivered",
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    };
+    return await this.count(filter, session);
+  };
+
+  getArrivedOrdersCount = async (
+    startDate,
+    endDate = new Date(),
+    session = null
+  ) => {
+    const filter = {
+      orderStatus: { $in: [ORDER_STATUS.PROCESSING, ORDER_STATUS.SHIPPED] },
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    };
+    return await this.count(filter, session);
+  };
+
+  getPendingOrdersCount = async (
+    startDate,
+    endDate = new Date(),
+    session = null
+  ) => {
+    const filter = {
+      orderStatus: {
+        $in: [
+          ORDER_STATUS.PENDING,
+          ORDER_STATUS.PROCESSING,
+          ORDER_STATUS.SHIPPED,
+        ],
+      },
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    };
+    return await this.count(filter, session);
+  };
+
+  getCancelledOrdersCount = async (
+    startDate,
+    endDate = new Date(),
+    session = null
+  ) => {
+    const filter = {
+      orderStatus: { $in: [ORDER_STATUS.CANCELLED] },
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    };
+    return await this.count(filter, session);
+  };
+
+  getTotalRevenue = async (startDate, endDate = new Date(), session = null) => {
+    const pipeline = [
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+          orderStatus: { $nin: [ORDER_STATUS.CANCELLED] },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalPrice" },
+        },
+      },
+    ];
+
+    const query = this.model.aggregate(pipeline);
+    if (session) query.session(session);
+
+    const result = await query;
+    return result.length > 0 ? result[0].totalRevenue : 0;
+  };
+
+  
 }
 
 const orderRepository = new OrderRepository();

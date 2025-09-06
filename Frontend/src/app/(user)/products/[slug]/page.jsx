@@ -113,7 +113,7 @@ const handleCartSubmit = async(e)=>{
         existingItem.quantity += quantity;
       } else {
         localCart.push({ product: {_id: productData._id, regularPrice: productData.regularPrice, 
-sellingPrice: productData.sellingPrice, images:[productData.images[0].source]},  quantity });
+sellingPrice: productData.sellingPrice, name: productData.name, images:[productData.images[0].source]},  quantity });
       }
       localStorage.setItem("guestCart", JSON.stringify(localCart));
       fetchCartData()

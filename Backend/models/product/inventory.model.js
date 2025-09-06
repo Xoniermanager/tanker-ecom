@@ -11,6 +11,12 @@ const inventorySchema = new Schema({
         type: Number,
         default: 0,
     },
+    salesCount: {
+      type: Number,
+      min: [0, "sales count don't be negative"],
+      default: 0,
+      index: true
+    },
     status: {
         type: String,
         enum: Object.values(STOCK_STATUS),

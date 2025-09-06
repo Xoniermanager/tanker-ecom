@@ -22,6 +22,7 @@ const {
     requestPasswordResetSchema,
     resetPasswordSchema,
     changePasswordSchema,
+    userUpdateSchema
 } = require("../requestSchemas/auth.schema");
 const { contactSchema } = require("../requestSchemas/contact.schema");
 const { testimonialSchema } = require("../requestSchemas/testimonial.schema");
@@ -31,7 +32,8 @@ const { productCategorySchema,
     updateInventorySchema,
     orderSchema,
     ordersFilterSchema,
-    changeOrderStatusSchema
+    changeOrderStatusSchema,
+    cancelOrderByUserSchema
 } = require("../requestSchemas/product.schema");
 const {
     syncCartSchema,
@@ -82,16 +84,16 @@ const siteSettingSchema = z.object({
     }),
     siteDetails: z.object({
         // logo: z.string().url({ message: "Logo must be a valid URL." }).optional(),
-        logo: z.object({
-            url: z
-                .string()
-                .min(1, { message: "Logo URL is required." })
-                .url({ message: "Logo URL must be a valid URL." }),
-            key: z
-                .string()
-                .min(1, { message: "Logo file key is required." }),
-            file: z.any().optional(),
-        }),
+        // logo: z.object({
+        //     url: z
+        //         .string()
+        //         .min(1, { message: "Logo URL is required." })
+        //         .url({ message: "Logo URL must be a valid URL." }),
+        //     key: z
+        //         .string()
+        //         .min(1, { message: "Logo file key is required." }),
+        //     file: z.any().optional(),
+        // }),
         title: z.string().min(1, { message: "Site title is required." }),
         slogan: z.string().optional(),
         description: z.string().optional(),
@@ -245,6 +247,9 @@ const validateOrderFilter = (req, res, next) =>
     validateQuery(req, res, next, ordersFilterSchema)
 const validateChangeOrderStatus = (req, res, next) =>
     validateSchema(req, res, next, changeOrderStatusSchema)
+const validateCancelOrderByUser = (req, res, next) =>
+    validateSchema(req, res, next, cancelOrderByUserSchema)
+const validateUpdateUser = (req, res, next) => validateSchema(req,res,next, userUpdateSchema)
 
 module.exports = {
     validateUserRegistration,
@@ -275,4 +280,6 @@ module.exports = {
     validateOrder,
     validateOrderFilter,
     validateChangeOrderStatus,
+    validateCancelOrderByUser,
+    validateUpdateUser
 };

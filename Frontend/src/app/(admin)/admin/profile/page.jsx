@@ -7,7 +7,9 @@ import { FaRegUser } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
 import ChangePassword from '../../../../../components/admin/profile/ChangePassword';
 import { toast } from 'react-toastify';
-
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import UpdateAdminProfile from '../../../../../components/admin/profile/UpdateAdminProfile';
+import { LuUserRoundPen } from "react-icons/lu";
 const page = () => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
@@ -129,15 +131,12 @@ console.log(passwordData)
       <div className="w-[64%] rounded-t-2xl flex flex-col gap-4">
        {active === 1 && <UserProfile
           userData={userData}
-          handleSubmit={handleSubmit}
-          formData={formData}
-          handleChange={handleChange}
-          handleImageChange={handleImageChange}
-          previewImage={previewImage}
-          isLoading={isLoading}
-          errMessage={errMessage}
+          
+         
+         
         />}
         {active === 2 && <ChangePassword passwordData={passwordData} handlePasswordChange={handlePasswordChange} handlePasswordDataChange={handlePasswordDataChange} isLoading={isLoading} errMessage={errMessage}/>}
+        {active === 3 && <UpdateAdminProfile/>}
       </div>
       <div className="w-[36%] flex flex-col gap-6">
         <ul className='flex flex-col gap-1 bg-white rounded-lg p-4 px-6'>
@@ -146,6 +145,9 @@ console.log(passwordData)
           </li>
           <li className={`flex px-4 py-2.5 items-center rounded-lg capitalize gap-2 cursor-pointer ${active === 2 && "bg-orange-100 text-orange-500"} `} onClick={()=>handleActive(2)}>
             <RiLockPasswordLine /> change password
+          </li>
+          <li className={`flex px-4 py-2.5 items-center rounded-lg capitalize gap-2 cursor-pointer ${active === 3 && "bg-orange-100 text-orange-500"} `} onClick={()=>handleActive(3)}>
+            <LuUserRoundPen /> Update Profile
           </li>
           
         </ul>

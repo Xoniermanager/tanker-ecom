@@ -38,8 +38,6 @@ const Sidebar = () => {
 
   const {userData} = useAuth()
 
-  console.log("userdata: ", userData)
-
 
 
   const handleLogout = async () => {
@@ -77,7 +75,7 @@ const Sidebar = () => {
       <div className="bg-white flex items-center gap-4 p-3 relative rounded-lg cursor-pointer" onMouseEnter={()=>setInView(true)} onMouseLeave={()=>setInView(false)}>
         {<Image
           className="bg-cover rounded-full w-11 h-11"
-          src="https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"
+          src={userData?.profileImage ||  " https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"}
           height={40}
           width={40}
           alt="user"
@@ -132,7 +130,7 @@ const Sidebar = () => {
               </span>
             </Link>
           </li>
-          {/* <li>
+          <li>
             {" "}
             <div
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl group cursor-pointer ${
@@ -171,7 +169,7 @@ const Sidebar = () => {
             >
               <li className="">
                 <Link
-                  href={`/admin/dashboard/orders`}
+                  href={`/admin/orders`}
                   className={`font-medium hover:text-orange-600 ${
                     pathname.includes("orders") && "text-orange-600"
                   } `}
@@ -182,7 +180,7 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link
-                  href={`/admin/dashboard/detail`}
+                  href={`/admin/detail`}
                   className="font-medium hover:text-orange-600"
                 >
                   {" "}
@@ -190,7 +188,7 @@ const Sidebar = () => {
                 </Link>
               </li>
             </ul>
-          </li> */}
+          </li>
           <li>
             {" "}
             <div
