@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { FaFacebook, FaSquareInstagram, FaCheck } from "react-icons/fa6";
+import { TbRulerMeasure } from "react-icons/tb";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -142,7 +143,14 @@ const ProductDetailComponents = ({
                   ${productData?.regularPrice.toFixed(2)}
                 </span>{" "}
                 <span className="text-red-500">{discount}%</span>{" "}
-                <span className={`text-white ${(productData?.inventory?.status.split("_").join(" ") !== "in stock") ? "bg-red-500" : "bg-green-500"}   p-0.5 px-2 rounded-lg text-sm capitalize font-semibold`}>
+                <span
+                  className={`text-white ${
+                    productData?.inventory?.status.split("_").join(" ") !==
+                    "in stock"
+                      ? "bg-red-500"
+                      : "bg-green-500"
+                  }   p-0.5 px-2 rounded-lg text-sm capitalize font-semibold`}
+                >
                   {productData?.inventory?.status.split("_").join(" ")}
                 </span>
               </div>
@@ -161,7 +169,10 @@ const ProductDetailComponents = ({
               <p className="text-gray-700 ">{productData.shortDescription}</p>
               <ul className="flex flex-col gap-2">
                 {productData.highlights.map((item, index) => (
-                  <li className="flex items-center gap-1.5 capitalize" key={index}>
+                  <li
+                    className="flex items-center gap-1.5 capitalize"
+                    key={index}
+                  >
                     <FaCheck className="text-purple-950" /> {item}
                   </li>
                 ))}
@@ -191,14 +202,21 @@ const ProductDetailComponents = ({
                   <button className="text-orange-400  disabled:bg-orange-300 bg-orange-100 px-8 py-3 font-medium rounded-lg transition-all capitalize flex items-center gap-2">
                     <FaCheck /> Already in cart
                   </button>
-                ) : (
-                 (productData.inventory.status === "in_stock") ? <button
+                ) : productData.inventory.status === "in_stock" ? (
+                  <button
                     className="bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white px-8 py-3 font-medium rounded-lg transition-all"
                     onClick={handleCartSubmit}
                     disabled={cartIsLoading}
                   >
                     {cartIsLoading ? "Updating..." : "Add to Cart"}
-                  </button> : <button type="button" className="bg-red-200 hover:bg-red-300  text-red-500  px-8 py-2.5 font-medium rounded-lg transition-all">Out of stock</button>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="bg-red-200 hover:bg-red-300  text-red-500  px-8 py-2.5 font-medium rounded-lg transition-all"
+                  >
+                    Out of stock
+                  </button>
                 )}
               </div>
               <ul className="flex flex-col gap-2">
@@ -227,36 +245,72 @@ const ProductDetailComponents = ({
           </div>
         </div>
         <div className="max-w-7xl mx-auto border-1 border-zinc-300 bg-white rounded-3xl w-full">
-          <ul className="flex items-center justify-center w-full">
-            <li className="">
+          <ul className="flex items-center justify-center w-full rounded-b-lg overflow-hidden">
+            <li className="border-r-1 border-gray-200 ">
               {" "}
               <button
                 className={`${
-                  active === 1 ? "bg-orange-500 text-white" : "bg-slate-200"
-                } text-lg font-medium px-8 py-2 border-b-lg`}
+                  active === 1 ? "bg-orange-500 text-white" : "bg-slate-100"
+                } text-lg font-medium px-9 py-2 border-b-lg`}
                 onClick={() => setActive(1)}
               >
                 Description
               </button>
             </li>
-            <li className="">
+            <li className="border-r-1 border-gray-200">
               {" "}
               <button
                 className={`${
-                  active === 2 ? "bg-orange-500 text-white" : "bg-slate-200"
-                } text-lg font-medium px-8 py-2 border-b-lg`}
+                  active === 2 ? "bg-orange-500 text-white" : "bg-slate-100"
+                } text-lg font-medium px-9 py-2 border-b-lg`}
                 onClick={() => setActive(2)}
               >
                 Specifications
               </button>
             </li>
+            <li className="">
+              {" "}
+              <button
+                className={`${
+                  active === 3 ? "bg-orange-500 text-white" : "bg-slate-100"
+                } text-lg font-medium px-9 py-2 border-b-lg`}
+                onClick={() => setActive(3)}
+              >
+                Measurements
+              </button>
+            </li>
           </ul>
-          <div className="w-full py-6 px-6">
+          <div className="w-full py-8 px-8">
             {active === 1 && (
-              <p className="text-center text-gray-600">{productData?.description}</p>
+              <p className="text-center text-gray-600">
+                {productData?.description}
+              </p>
             )}
             {active === 2 && (
-              <p className="text-center text-gray-600">Specification not found</p>
+              <p className="text-center text-gray-600">
+                Specification not found
+              </p>
+            )}
+            {active === 3 && (
+              <div className="grid grid-cols-3 gap-5">
+    {(productData.measurements.length > 0 && productData.measurements.some(item=> item.measurementName !== "" && item.measurementValue !== "" ))? productData.measurements.map((item, index) => (
+      <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {/* <div className="w-2 h-2 bg-orange-500 rounded-full"></div> */}
+           <span className=" text-orange-500 "><TbRulerMeasure /></span> 
+            <span className="text-lg tracking-wide font-medium text-gray-800">{item.measurementName}</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <div className="w-1 h-6 bg-gray-300 rounded-full"></div>
+            <span className="text-orange-500 text-lg tracking-wide font-semibold">{item.measurementValue}</span>
+          </div>
+        </div>
+      </div>
+    )): (
+      <p className="text-slate-600 w-full col-span-3 flex items-center justify-center gap-2"> Measurement data not found for this product</p>
+    )}
+  </div>
             )}
           </div>
         </div>

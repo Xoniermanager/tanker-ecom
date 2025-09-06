@@ -8,6 +8,7 @@ import ScrollToTop from "../../components/common/ScrollToTop";
 import UserContextProvider from "../../context/user/AuthContextProvider";
 import Providers from "../../context/Providers";
 
+
 const InstrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
@@ -24,7 +25,11 @@ export default function RootLayout({ children }) {
       <body className={`${InstrumentSans.variable}  antialiased h-screen `}>
         <ScrollToTop />
         <ToastContainer />
-        <Providers>{children}</Providers>
+        <Providers>
+          
+          {children}
+          
+          </Providers>
       </body>
     </html>
   );

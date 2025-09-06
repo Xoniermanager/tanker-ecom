@@ -3,13 +3,17 @@ import React, { useState, useEffect } from "react";
 import api from "../../user/common/api";
 
 import { AiOutlineCloudUpload, AiOutlineDollar } from "react-icons/ai";
-import { FaStarOfLife } from "react-icons/fa";
 import { CiCircleList } from "react-icons/ci";
 import Link from "next/link";
 import { FaPlus, FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { RiResetLeftFill } from "react-icons/ri";
+import { FaStarOfLife, FaTrash } from "react-icons/fa";
+import Image from "next/image";
 
-const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, setImagePreviews}) => {
+const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, setImagePreviews, prev}) => {
   const [specPreview, setSpecPreview] = useState(null);
   
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +22,7 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
   const [productImages, setProductImages] = useState([]);
   
   const [highlights, setHighlights] = useState("");
-
+  const popup = withReactContent(Swal);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "slug") {
@@ -28,6 +32,15 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
+
+  // useEffect(() => {
+  //   if(prev){
+  //     setSpecPreview(prev)
+  //   }
+  // }, [])
+
+   
+  
 
   const handleHighlights = () => {
     if (highlights === "" || highlights.trim() === "") return null;
@@ -68,6 +81,68 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
       },
     }));
   };
+
+    const handleMeasurementChange = (e, index) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => {
+      const updatedMeasurements = [...prev.measurements];
+      updatedMeasurements[index] = {
+        ...updatedMeasurements[index],
+        [name]: value,
+      };
+      return {
+        ...prev,
+        measurements: updatedMeasurements,
+      };
+    });
+  };
+
+  const handleAddMeasurement = () => {
+    setFormData((prev) => ({
+      ...prev,
+      measurements: [
+        ...prev.measurements,
+        { measurementName: "", measurementValue: "" },
+      ],
+    }));
+  };
+
+    const handleRemoveMeasurement = (index) => {
+        // if(formData.measurements.length <= 1) return toast.info("At least one measurement is required")
+    setFormData((prev) => {
+      const updatedMeasurements = [...prev.measurements];
+      updatedMeasurements.splice(index, 1);
+      return { ...prev, measurements: (updatedMeasurements.length > 0) ? updatedMeasurements : [{ measurementName: "", measurementValue: "" }] };
+    });
+  };
+
+
+
+    const handleResetMeasurement = async() =>{
+
+     const result = await popup.fire({
+      title: "Are you sure?",
+      text: `Do you really want to reset measurement`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Reset",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!result.isConfirmed) return;
+    setFormData((prev) => ({
+      ...prev,
+      measurements: [
+       {
+        measurementName: "",
+        measurementValue: "",
+      },
+      ],
+    }));
+  }
 
   const handleSpecificationChange = (e) => {
     const { name, value, files } = e.target;
@@ -136,6 +211,14 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
         if(!productData._id) return setErrMessage("Product id not found, please try again!")
       const formPayload = new FormData();
 
+         let uploadedSpecUrl;
+    
+    if(formData.specifications.source !== ""){
+    formPayload.append('file', formData.specifications.source);
+    const thumbRes = await api.put("/upload-files", formPayload); 
+    uploadedSpecUrl = thumbRes.data.data.file.url;
+  }
+
       formPayload.append("name", formData.name);
       formPayload.append("category", formData.category);
       formPayload.append("regularPrice", formData.regularPrice);
@@ -152,10 +235,10 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
       });
 
        if (formData.specifications?.type && formData.specifications.type.trim() !== "") {
-        formPayload.append("specifications.type", formData.specifications.type);
+        formPayload.append("specifications[type]", formData.specifications.type);
       }
-      if (formData.specifications?.source && formData.specifications.source.trim() !== "") {
-        formPayload.append("specifications.source", formData.specifications.source);
+      if (formData.specifications?.source ) {
+        formPayload.append("specifications[source]", uploadedSpecUrl);
       }
 
       if (formData.seo?.metaTitle) {
@@ -164,7 +247,7 @@ const UpdateProductForm = ({formData, setFormData, productData, imagePreviews, s
 if (formData.seo?.metaDescription) {
   formPayload.append("seo[metaDescription]", formData.seo.metaDescription);
 }
-if (Array.isArray(formData.seo?.keywords)) {
+if (Array.isArray(formData.seo?.keywords) ) {
   formData.seo.keywords.forEach((kw, index) => {
     formPayload.append(`seo[keywords][${index}]`, kw);
   });
@@ -173,6 +256,13 @@ if (Array.isArray(formData.seo?.keywords)) {
       productImages.forEach((file) => {
         formPayload.append("images", file);
       });
+
+        if (Array.isArray(formData.measurements)) {
+  formData.measurements.forEach((m, index) => {
+    formPayload.append(`measurements[${index}][measurementName]`, m.measurementName);
+    formPayload.append(`measurements[${index}][measurementValue]`, m.measurementValue);
+  });
+}
 
       const response = await api.put(`/products/${productData._id}`, formPayload, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -200,7 +290,7 @@ if (Array.isArray(formData.seo?.keywords)) {
     }
   };
 
-  console.log("FromData: ", formData)
+
 
   
 
@@ -508,7 +598,7 @@ if (Array.isArray(formData.seo?.keywords)) {
             ))}
           </div>
 
-          {/* <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="type"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -542,7 +632,7 @@ if (Array.isArray(formData.seo?.keywords)) {
               id="specSource"
               name="source"
               type="file"
-              accept="image/*, .pdf"
+              accept={(formData.specifications.type === "image") ?  "image/*" :  ".pdf"}
               onChange={handleSpecificationChange}
               className="block w-full text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 
                file:rounded-full file:border-0 file:text-sm file:font-semibold 
@@ -574,8 +664,10 @@ if (Array.isArray(formData.seo?.keywords)) {
                   </div>
                 ) : (
                   <div className="relative w-40 h-40">
-                    <img
+                    <Image
                       src={specPreview}
+                      height={80}
+                      width={80}
                       alt="Specification Preview"
                       className="w-full h-full object-cover rounded shadow"
                     />
@@ -600,7 +692,7 @@ if (Array.isArray(formData.seo?.keywords)) {
                 )}
               </div>
             )}
-          </div> */}
+          </div> 
 
           <div className="col-span-2 flex flex-col gap-2">
             <label
@@ -643,6 +735,78 @@ if (Array.isArray(formData.seo?.keywords)) {
               ))}
             </div>
           )}
+          <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-1 gap-5 col-span-2">
+          
+                      <div className="col-span-2 flex flex-col gap-4">
+                        <div className="flex items-center gap-8 justify-between mb-5">
+                        <h3 className="flex gap-1  text-md font-medium text-gray-900">
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Measurements
+                        </h3>
+                        <button onClick={handleResetMeasurement} type="button" className="text-white group flex items-center gap-2 bg-red-400 hover:bg-red-500 px-5 py-2 rounded-md"> <RiResetLeftFill className="group-hover:-rotate-360"/> Reset Measurement</button>
+                        </div>
+          
+                        {(formData.measurements.length > 0) ? formData.measurements.map((item, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-2 gap-4 items-center border border-gray-200 rounded-lg p-4 relative"
+                          >
+                           
+                            <div className="flex flex-col gap-2">
+                              <label className="text-sm font-medium text-gray-900">
+                                Name
+                              </label>
+                              <input
+                                type="text"
+                                name="measurementName"
+                                placeholder="Ex: Length, Width, Height"
+                                value={item.measurementName}
+                                onChange={(e) => handleMeasurementChange(e, index)}
+                                className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                              />
+                            </div>
+          
+                           
+                            <div className="flex flex-col gap-2">
+                              <label className="text-sm font-medium text-gray-900">
+                                Value
+                              </label>
+                              <input
+                                type="text"
+                                name="measurementValue"
+                                placeholder="Ex: 200cm, 15kg"
+                                value={item.measurementValue}
+                                onChange={(e) => handleMeasurementChange(e, index)}
+                                className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                              />
+                            </div>
+          
+                            
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveMeasurement(index)}
+                              className="absolute -top-3 -right-3 bg-red-500 text-white p-2 rounded-full shadow hover:bg-red-600 transition"
+                            >
+                              <FaTrash size={14} />
+                            </button>
+                          </div>
+                        )): (
+                          <p className="text-slate-600 text-center w-full"> <button  type="button"
+                          onClick={handleAddMeasurement} className="text-orange-400 hover:text-orange-500">Tap to add measurement </button> to add measurement on it</p>
+                        )}
+          
+                       
+                        <button
+                          type="button"
+                          onClick={handleAddMeasurement}
+                          className="flex items-center justify-end group gap-2 text-sm text-blue-600 hover:text-blue-800 mt-2"
+                        >
+                          <FaPlus className="group-hover:rotate-90"/> Add Measurement
+                        </button>
+                      </div>
+                    </div>
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-2 gap-5 col-span-2">
             <div className="flex flex-col gap-2">
               <label

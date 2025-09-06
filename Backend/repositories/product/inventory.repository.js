@@ -32,12 +32,46 @@ class InventoryRepository extends BaseRepository {
     }
 
     async deleteByProduct(productId, session) {
+        console.log("productId: ", productId)
         return this.model.deleteMany({ product: productId }).session(session);
     }
 
     updateInventory = async(productId, data = {}, session )=>{
        return this.model.findOneAndUpdate({product: productId},  data, {new: true, session})
     }
+
+     getTopSellingProducts = async (projection = null, session = null) => {
+    const pipeline = [
+        // {
+        //     $match: { stockStatus: "in_stock" }
+        // },
+        {
+            $lookup: {
+                from: "products", 
+                localField: "product",
+                foreignField: "_id",
+                as: "product"
+            }
+        },
+        {
+            $sort: {
+                "salesCount": -1
+            }
+        },
+        {
+            $limit: 5
+        }
+    ];
+
+   
+    if (projection) {
+        pipeline.push({ $project: projection });
+    }
+
+    const options = session ? { session } : {};
+    const result = await this.model.aggregate(pipeline, options);
+    return result;
+};
 }
 
 module.exports = new InventoryRepository();

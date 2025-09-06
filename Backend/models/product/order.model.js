@@ -55,6 +55,7 @@ const orderSchema = new Schema(
         status: { type: String, enum: Object.values(ORDER_STATUS) },
         changedAt: { type: Date, default: Date.now },
         note: String,
+        reason: {type: String}
       }
     ],
 

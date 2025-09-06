@@ -22,6 +22,7 @@ const ProductCategoriesRoutes = require("./routes/product-category.routes");
 const ProductsRoutes = require("./routes/product.routes");
 const CartRoutes = require("./routes/cart.routes");
 const OrderRoutes = require("./routes/order.routes");
+const DashboardRoutes = require("./routes/dashboard.route")
 const WebhookRoutes = require("./routes/webhook.routes");
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
@@ -68,17 +69,18 @@ const startServer = async () => {
         app.use("/api/product-categories", ProductCategoriesRoutes);
         app.use("/api/products", ProductsRoutes);
         app.use("/api/cart", CartRoutes);
-        app.use("/api/order", OrderRoutes)
+        app.use("/api/order", OrderRoutes);
+        app.use("/api/dashboard", DashboardRoutes);
 
         // Route to upload files
-        app.put("/api/upload-files", authorize(['admin']), upload.single("file"), async (req, res) => {
+        app.put("/api/upload-files", authorize(['admin', "user"]), upload.single("file"), async (req, res) => {
 
             if (!req.file) {
                 return res.status(400).json({ message: "file is required." });
             }
 
             const file = await uploadImage(req.file.buffer, req.file.originalname, "uploads", req.file.mimetype);
-            console.log("file: ", file)
+            
             const fullFilePath = getPublicFileUrl(file.url);
             customResponse(res, "File uploaded successfully", {
                 file,

@@ -5,31 +5,37 @@ import api from "../../../../../../../components/user/common/api";
 import UpdateProductForm from "../../../../../../../components/admin/products/UpdateProductForm";
 
 const Page = () => {
-  const [productData, setProductData] = useState(null)
+  const [productData, setProductData] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
-      name: "",
-      category: "",
-      regularPrice: "",
-      sellingPrice: "",
-      shortDescription: "",
-      description: "",
-      brand: "",
-      origin: "",
-      highlights: [],
-      specifications: {
-        type: "",
-        source: "",
+    name: "",
+    category: "",
+    regularPrice: "",
+    sellingPrice: "",
+    shortDescription: "",
+    description: "",
+    brand: "",
+    origin: "",
+    highlights: [],
+    specifications: {
+      type: "",
+      source: "",
+    },
+    measurements: [
+      {
+        measurementName: "",
+        measurementValue: "",
       },
-      images: [],
-      // slug: "",
-      // initialQuantity: "",
-      seo: {
-        metaTitle: "",
-        metaDescription: "",
-        keywords: [],
-      },
-    });
+    ],
+    images: [],
+    // slug: "",
+    // initialQuantity: "",
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      keywords: [],
+    },
+  });
   const { slug } = useParams();
 
   const getProduct = async () => {
@@ -38,9 +44,9 @@ const Page = () => {
       if (response.status === 200) {
         const product = response.data.data;
 
-        setProductData(product)
-        
-        setImagePreviews(product.images.map(item=>item.source))
+        setProductData(product);
+
+        setImagePreviews(product.images.map((item) => item.source));
 
         setFormData({
           name: product.name || "",
@@ -52,10 +58,14 @@ const Page = () => {
           brand: product.brand || "",
           origin: product.origin || "",
           highlights: product.highlights || [],
-          specifications:{
-        type: "",
-        source: "",
-      },
+          specifications: {
+            type: product?.specifications?.type || "",
+            source: ""
+          },
+          measurements: (product.measurements.length>0) ? product.measurements?.map((item) => ({
+            measurementName: item.measurementName,
+            measurementValue: item.measurementValue,
+          })) : [],
           images: product.images || [],
           // slug: product.slug || "",
           // initialQuantity: product.inventory?.quantity || "",
@@ -71,6 +81,8 @@ const Page = () => {
       console.error("Error fetching product:", error);
     }
   };
+
+
 
   useEffect(() => {
     getProduct();
@@ -88,8 +100,15 @@ const Page = () => {
 
   return (
     <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
-      
-      <UpdateProductForm formData={formData} setFormData={setFormData} slug={slug} productData={productData} imagePreviews={imagePreviews} setImagePreviews={setImagePreviews}/>
+      <UpdateProductForm
+        formData={formData}
+        setFormData={setFormData}
+        slug={slug}
+        productData={productData}
+        imagePreviews={imagePreviews}
+        setImagePreviews={setImagePreviews}
+        prev={productData?.specifications?.source || null}
+      />
     </div>
   );
 };

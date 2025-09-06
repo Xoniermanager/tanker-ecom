@@ -24,6 +24,27 @@ const ProductCategorySchema = new Schema(
       type: String,
       default: "",
     },
+    salesMetrics: {
+      totalSales: {
+        type: Number,
+        default: 0,
+        min: 0
+      },
+      totalRevenue: {
+        type: Number,
+        default: 0,
+        min: 0
+      },
+      totalOrders: {
+        type: Number,
+        default: 0,
+        min: 0
+      },
+      lastSaleDate: {
+        type: Date,
+        default: null
+      }
+    },
     
   },
   { timestamps: true }

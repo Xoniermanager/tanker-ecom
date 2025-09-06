@@ -8,15 +8,18 @@ const {
     validateResetPassword,
     validateRequestVerifyEmailOtp,
     validateVerifyEmailOtp,
-    validateChangePassword
+    validateChangePassword,
+    validateUpdateUser
 } = require("../middlewares/validation");
 const authorize = require("../middlewares/auth");
+const upload = require("../config/multer");
 
 const router = express.Router();
 const authController = new AuthController();
 
 // ==================== Auth Routes ====================
 router.post("/register", validateUserRegistration, authController.register);
+
 router.post(
     "/verify-email",
     validateVerifyEmailOtp,
@@ -62,5 +65,6 @@ router.post("/refresh-token", authController.refreshToken);
 router.post('/logout', authorize(['admin', 'user']), authController.logout )
 router.patch('/change-password', authorize(['admin', 'user']), validateChangePassword, authController.changePassword)
 router.get('/me', authorize(['admin', 'user']), authController.getMe);
+router.put('/profile-update', authorize(['admin', 'user']), upload.single("file"), validateUpdateUser, authController.updateProfile)
 
 module.exports = router;

@@ -1,6 +1,7 @@
 
 import Footer from "../../../components/user/common/Footer";
 import Navbar from "../../../components/user/common/Navbar";
+import StripeProvider from "../../../components/stripe/StripeProvider";
 
 
 
@@ -18,10 +19,11 @@ export default async function UserLayout({ children }) {
     <html lang="en">
       <body
       >
-        
+        <StripeProvider>
         <Navbar siteData={SiteSettingData?.data}/>
         {children}
         <Footer siteData={SiteSettingData?.data}/>
+        </StripeProvider>
       </body>
     </html>
   );

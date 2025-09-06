@@ -1,5 +1,4 @@
 
-const { tryCatch } = require("bullmq");
 const { UserService } = require("../services/user.service");
 const customResponse = require("../utils/response");
 
@@ -236,10 +235,22 @@ class AuthController {
 
     changePassword = async (req, res, next) => {
         try {
-            const payload = req.body
-            const id = req.user.id
+            const payload = req.body;
+            const id = req.user.id;
             await this.userService.changeUserPassword(payload, id);
-            return customResponse(res, "Password changed successfully")
+            return customResponse(res, "Password changed successfully");
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    updateProfile = async (req, res, next)=>{
+        try {
+            const payload = req.body;
+             
+            const id = req.user.id;
+            const result = await this.userService.updateProfile(payload, id);
+            return customResponse(res, "User updated successfully", result);
         } catch (error) {
             next(error)
         }

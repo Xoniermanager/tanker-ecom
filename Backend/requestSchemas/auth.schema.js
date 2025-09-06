@@ -46,6 +46,28 @@ const userRegistrationSchema = z
     message: "Passwords must match.",
   });
 
+
+  const userUpdateSchema = z
+  .object({
+    companyName: z.string().min(2, { message: "Company name is required" }),
+    fullName: z.string().min(2, { message: "Full name is required" }),
+    designation: z.string().min(2, { message: "Designation is required" }),
+    mobileNumber: z
+      .string()
+      .regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid mobile number" }),
+    country: z.string().min(1, { message: "Country is required." }),
+    profileImage : z.string().optional(),
+    preferredLanguage: z
+      .string()
+      .optional(),
+    communicationPreference: z.enum(
+      Object.values(ENUMS.COMMUNICATION_PREFERENCE),
+      {
+        message: "Invalid communication preference.",
+      }
+    ).optional(),
+  })
+
 /**
  ** Login OTP request schema
  */
@@ -120,5 +142,5 @@ module.exports = {
   verifyLoginOtpSchema,
   requestPasswordResetSchema,
   resetPasswordSchema,
-  changePasswordSchema
+  changePasswordSchema, userUpdateSchema
 };

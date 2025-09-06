@@ -60,7 +60,7 @@ class ProductService {
                 },
                 {
                     path: "inventory",
-                    select: "_id quantity status",
+                    select: "_id quantity status salesCount",
                 }
             ]
         );
@@ -142,6 +142,16 @@ class ProductService {
         const session = await mongoose.startSession();
         try {
             session.startTransaction();
+
+            const existingProduct = await productRepository.findById(id, session)
+
+            if(!existingProduct){
+                throw customError("Product not exist", 404)
+            }
+
+            if(String(existingProduct.name).trim() !== String(data.name).trim()){
+                data.slug = await generateSlugIfNeeded(data.name, null, productRepository, session)
+            }
 
             const updatedProduct = await productRepository.update(id, data, session);
 

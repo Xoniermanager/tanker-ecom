@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   NEWZEALAND_CITIES,
   NEWZEALAND_REGIONS,
@@ -7,6 +7,7 @@ import {
 } from "../../../constants/enums";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { FaXmark, FaCheck } from "react-icons/fa6";
+import StripePaymentModal from "./StripePaymentModal";
 
 const CheckOut = ({
   formData,
@@ -19,8 +20,33 @@ const CheckOut = ({
   discountPrice,
   withShippingChargesPrice,
   errMessage,
+  onPaymentSuccess, 
 }) => {
-  
+  const [showStripeModal, setShowStripeModal] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState(null);
+
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    
+    if (formData.paymentMethod === 'online_payment') {
+     
+      const result = await handleSubmit(e, true); 
+      if (result?.orderId) {
+        setCreatedOrderId(result.orderId);
+        setShowStripeModal(true);
+      }
+    } else {
+     
+      handleSubmit(e);
+    }
+  };
+
+  const handlePaymentComplete = () => {
+    setShowStripeModal(false);
+    if (onPaymentSuccess) {
+      onPaymentSuccess(createdOrderId);
+    }
+  };
   return (
 
     
@@ -411,9 +437,9 @@ const CheckOut = ({
             </div>
             <div className="relative group w-full">
               <button
-                onClick={handleSubmit}
+                onClick={handlePlaceOrder}
                 disabled={
-                  !formData.terms ||
+                  !formData.terms ||  formData.billingAddress.country === "" || formData.shippingAddress.country === "" || formData.billingAddress.address === "" || formData.shippingAddress.address === "" || formData.shippingAddress.pincode === 0 || formData.shippingAddress.pincode.toString().length < 4 || formData.billingAddress.pincode.toString().length < 4 ||  formData.shippingAddress.pincode === "" || formData.billingAddress.pincode === "" || formData.billingAddress.pincode == 0 ||
                   !Object.values(PAYMENT_METHODS).includes(
                     formData.paymentMethod
                   ) 
@@ -424,7 +450,7 @@ const CheckOut = ({
                 {!isLoading && <MdShoppingCartCheckout className="text-lg" />}
               </button>
 
-              {(!formData.terms ||
+              {(!formData.terms || formData.billingAddress.country === "" || formData.shippingAddress.country === "" || formData.billingAddress.address === "" || formData.shippingAddress.address === "" || formData.shippingAddress.pincode === "" || formData.shippingAddress.pincode == 0 || formData.billingAddress.pincode === "" || formData.billingAddress.pincode == 0 ||
                 !Object.values(PAYMENT_METHODS).includes(
                   formData.paymentMethod
                 )) && (
@@ -436,6 +462,13 @@ const CheckOut = ({
           </div>
         </div>
       </div>
+      <StripePaymentModal
+        isOpen={showStripeModal}
+        onClose={() => setShowStripeModal(false)}
+        orderId={createdOrderId}
+        totalAmount={withShippingChargesPrice?.toFixed(2)}
+        onSuccess={handlePaymentComplete}
+      />
     </>
   );
 };
