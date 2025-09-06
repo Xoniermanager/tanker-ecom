@@ -22,8 +22,8 @@ const CategoryChart = () => {
   
 
   const chartData = categoriesWithSales?.map(category => ({
-    name: category.name,
-    revenue: category.salesMetrics?.totalRevenue || 0,
+    name: category?.name,
+    revenue: category?.salesMetrics?.totalRevenue || 0,
     percentage: ((category.salesMetrics?.totalRevenue || 0) / totalRevenue * 100).toFixed(1)
   }));
   
@@ -32,7 +32,7 @@ const CategoryChart = () => {
       type: 'donut',
       background: '#ffffff', 
     },
-    labels: chartData.map(item => `${item.name} (${item.percentage}%)`),
+    labels: chartData?.map(item => `${item.name} (${item.percentage}%)`),
     legend: {
       position: 'bottom',
       fontSize: '14px',
@@ -126,19 +126,7 @@ const CategoryChart = () => {
       </div>
       
       
-      {/* <div className="bg-white rounded-xl p-4">
-        <h3 className="text-lg font-semibold mb-3">Category Breakdown</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {chartData.map((category, index) => (
-            <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-              <span className="font-medium">{category.name}</span>
-              <span className="text-sm">
-                ${category.revenue.toLocaleString()} ({category.percentage}%)
-              </span>
-            </div>
-          ))}
-        </div>
-      </div> */}
+     
     </div>
   )
 }
