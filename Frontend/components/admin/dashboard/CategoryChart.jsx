@@ -15,7 +15,7 @@ const CategoryChart = () => {
   );
   
   
-  const totalRevenue = categoriesWithSales.reduce(
+  const totalRevenue = categoriesWithSales?.reduce(
     (sum, category) => sum + (category?.salesMetrics?.totalRevenue || 0), 
     0
   );
