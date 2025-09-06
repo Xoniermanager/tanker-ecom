@@ -118,9 +118,9 @@ const UserProfile = () => {
               <div className="flex items-center space-x-3">
                 <div
                   className={`${
-                    userData.status === "active" ? "bg-green-50" : "bg-red-50"
+                    userData?.status === "active" ? "bg-green-50" : "bg-red-50"
                   } backdrop-blur-sm rounded-full px-6 py-3 border ${
-                    userData.status === "active"
+                    userData?.status === "active"
                       ? "border-green-500"
                       : "border-red-500"
                   }`}
@@ -133,7 +133,7 @@ const UserProfile = () => {
                     ></div>
                     <span
                       className={`${
-                        userData.status === "active"
+                        userData?.status === "active"
                           ? "text-green-500"
                           : "text-red-500"
                       } font-semibold capitalize`}
@@ -373,7 +373,7 @@ const UserProfile = () => {
                     </p>
                     <p className="text-sm text-gray-600">
                       {userData?.emailVerifiedAt
-                        ? formatDate(userData.emailVerifiedAt)
+                        ? formatDate(userData?.emailVerifiedAt)
                         : "28 Aug 2025, 16:47"}
                     </p>
                   </div>
@@ -387,7 +387,7 @@ const UserProfile = () => {
                     </p>
                     <p className="text-sm text-gray-600">
                       {userData?.createdAt
-                        ? formatDate(userData.createdAt)
+                        ? formatDate(userData?.createdAt)
                         : "28 Aug 2025, 16:47"}
                     </p>
                   </div>
