@@ -77,10 +77,10 @@ const CategoryChart = () => {
   }
 
 
-  const chartSeries = chartData.map(item => item.revenue);
+  const chartSeries = chartData?.map(item => item.revenue);
 
   
-  if (categoriesWithSales.length === 0) {
+  if (categoriesWithSales?.length === 0) {
     return (
       <div className='w-full flex flex-col gap-6'>
         <div className='flex items-center justify-between gap-8'>
