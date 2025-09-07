@@ -4,6 +4,7 @@ const { startSession } = require("mongoose");
 const productRepository = require("../repositories/product/product.repository");
 const inventoryRepository = require("../repositories/product/inventory.repository");
 const productCategoryRepository = require("../repositories/product/product-category.repository");
+const contactRepository = require("../repositories/contact.repository");
 
 
 class DashboardService{
@@ -29,22 +30,24 @@ class DashboardService{
                 previousStartDate.setDate(previousStartDate.getDate() - days);
 
                 
-                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, topSellingProducts, topSellingCategories] = await Promise.all([
+                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, totalQuery, topSellingProducts, topSellingCategories] = await Promise.all([
                     orderRepository.getOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getDeliveredOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getArrivedOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getTotalRevenue(currentStartDate, currentEndDate, session),
+                    contactRepository.getTotalQuery(currentStartDate, currentEndDate, session),
                     inventoryRepository.getTopSellingProducts(null, session),
                     productCategoryRepository.getTopCategories(8,"totalSales")
                     
                 ]);
 
                 
-                const [prevTotalOrders, prevDeliveredOrders, prevArrivedOrders, prevTotalSales] = await Promise.all([
+                const [prevTotalOrders, prevDeliveredOrders, prevArrivedOrders, prevTotalSales, prevTotalQuery] = await Promise.all([
                     orderRepository.getOrdersCount(previousStartDate, previousEndDate, session),
                     orderRepository.getDeliveredOrdersCount(previousStartDate, previousEndDate, session),
                     orderRepository.getArrivedOrdersCount(previousStartDate, previousEndDate, session),
-                    orderRepository.getTotalRevenue(previousStartDate, previousEndDate, session)
+                    orderRepository.getTotalRevenue(previousStartDate, previousEndDate, session),
+                    contactRepository.getTotalQuery(previousStartDate, previousEndDate, session),
                 ]);
 
                 
@@ -75,6 +78,11 @@ class DashboardService{
                              salesPercent: calculateProfiteWithPrev(totalSales, prevTotalSales),
                              isPositive: totalSales >= prevTotalSales
                         } ,
+                        totalQuery:{
+                            count: totalQuery,
+                            queryPercent: calculateProfiteWithPrev(totalQuery, prevTotalQuery),
+                            isPositive: totalQuery >= prevTotalQuery
+                        },
                         topSellingProducts,
                         topSellingCategories
 
@@ -99,6 +107,8 @@ class DashboardService{
             await session.endSession();
         }
     };
+
+    
 }
 
 const dashboardService = new DashboardService()

@@ -18,16 +18,16 @@ export const DashBoardContextProvider = ({ children }) => {
     try {
       const response = await api.get(`/dashboard?timeframe=${timeframe}`);
       if (response.status === 200) {
-        setDashboardData(response.data.data.data);
-        setDashboardAllData(response.data.data);
-        setTopSellingProductData(response.data.data.data.topSellingProducts)
-        setTopSellingCategories(response.data.data.data.topSellingCategories)
+        setDashboardData(response?.data?.data?.data);
+        setDashboardAllData(response?.data?.data);
+        setTopSellingProductData(response?.data?.data?.data?.topSellingProducts)
+        setTopSellingCategories(response?.data?.data?.data?.topSellingCategories)
        
       }
     } catch (error) {
       const message =
         (Array.isArray(error?.response?.data?.errors) &&
-          error.response.data.errors[0]?.message) ||
+          error?.response?.data.errors[0]?.message) ||
         error?.response?.data?.message ||
         "Something went wrong";
 

@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { useCart } from "../../../context/cart/CartContext";
 import { useAuth } from "../../../context/user/AuthContext";
 import { TbTruckLoading } from "react-icons/tb";
+import { MdOutlineDashboard } from "react-icons/md";
 
 const Navbar = ({ siteData }) => {
   const [isSticky, setIsSticky] = useState(false);
@@ -185,17 +186,23 @@ const Navbar = ({ siteData }) => {
             {(isAuthenticated && userData.role === "user")  && <Link href={"/profile"} className="h-10 w-10 bg-purple-900 hover:bg-purple-950 rounded-full flex items-center justify-center text-white">
             <FaRegUser className=""/>
             </Link>}
-            <div className="relative">
+            { (isAuthenticated && userData.role === "user")  && <div className="relative">
               <Link
                 href={"/cart"}
                 className="h-10 w-10 bg-orange-400 hover:bg-orange-500 rounded-full flex items-center justify-center text-white"
               >
                 <IoCartOutline className="text-lg" />
-              </Link>{" "}
+              </Link>
               <span className="absolute -top-1 -right-1 h-4.5 w-4.5 rounded-full flex items-center justify-center bg-purple-950 text-white text-[11px]">
                 {isLoading ? "..." : count || 0}
               </span>
-            </div>
+            </div>}
+             {(isAuthenticated && userData.role === "admin")  &&<div className="relative group"> <Link
+                href={"/admin/dashboard"}
+                className="h-10 w-10 bg-orange-400 hover:bg-orange-500 rounded-full flex items-center justify-center text-white"
+              >
+                <MdOutlineDashboard className="text-lg" />
+              </Link> <span className="bg-slate-900 p-0.5 px-2 rounded-md text-[12px] text-white hidden group-hover:block absolute text-nowrap w-fit top-[114%]  z-100 -left-1/2">Go to dashboard</span> </div>}
             {isAuthenticated ? (
               <button className="btn-two" onClick={handleLogout}>
                 {" "}
