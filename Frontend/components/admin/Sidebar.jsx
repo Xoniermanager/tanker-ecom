@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { act, useState } from "react";
 import { HiOutlineChartBar, HiArrowLongRight } from "react-icons/hi2";
 import { usePathname } from "next/navigation";
-import { BsBoxSeam, BsQuestionCircle } from "react-icons/bs";
+import { BsBoxSeam, BsQuestionCircle, BsChatSquareQuote } from "react-icons/bs";
 import { FiTruck } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import api from "../user/common/api";
 import { motion } from "framer-motion";
 import { Skeleton, Box } from '@mui/material';
+
 
 import { useInView } from "react-intersection-observer";
 import { useAuth } from "../../context/user/AuthContext";
@@ -178,7 +179,7 @@ const Sidebar = () => {
                   List{" "}
                 </Link>
               </li>
-              <li className="">
+              {/* <li className="">
                 <Link
                   href={`/admin/detail`}
                   className="font-medium hover:text-orange-600"
@@ -186,7 +187,7 @@ const Sidebar = () => {
                   {" "}
                   Details{" "}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li>
@@ -395,6 +396,58 @@ const Sidebar = () => {
                   Testimonials
                 </Link>
               </li>
+              
+            </ul>
+          </li>
+          <li>
+            {" "}
+            <div
+              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl group cursor-pointer ${
+                pathname.includes("quote")
+                  ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
+                  : "bg-transparent  "
+              } `}
+              onClick={() => handleActive(4)}
+            >
+              <span
+                className={`h-9 w-9 flex items-center justify-center rounded-full  text-lg ${
+                  pathname.includes("quote") && "text-orange-600 bg-white "
+                }`}
+              >
+                <BsChatSquareQuote  className="group-hover:scale-110 group-hover:text-orange-600 text-lg" />
+              </span>
+              <span
+                className={`font-medium ${
+                  pathname.includes("quote") && "text-orange-600"
+                } group-hover:text-orange-600`}
+              >
+                Quote
+              </span>
+              <span
+                className={`text-slate-500 group-hover:text-orange-600 ${
+                  active === 3 && "rotate-90"
+                }`}
+              >
+                <HiArrowLongRight />
+              </span>
+            </div>
+            <ul
+              className={`flex flex-col gap-4 pl-16  h-0 overflow-hidden ${
+                active === 4 && "h-auto my-4"
+              }`}
+            >
+              <li className="">
+                <Link
+                  href={`/admin/quote`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("home") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  All Quote 
+                </Link>
+              </li>
+              
               
             </ul>
           </li>
