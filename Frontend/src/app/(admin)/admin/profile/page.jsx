@@ -127,7 +127,7 @@ console.log(passwordData)
   }
 
   return (
-    <div className="pl-86 pt-26 p-6 w-full min-h-screen bg-violet-50 flex items-start gap-6">
+    <div className="pl-86 pt-26 p-6 w-full min-h-screen bg-violet-50 flex items-start  gap-6">
       <div className="w-[64%] rounded-t-2xl flex flex-col gap-4">
        {active === 1 && <UserProfile
           userData={userData}
@@ -138,7 +138,7 @@ console.log(passwordData)
         {active === 2 && <ChangePassword passwordData={passwordData} handlePasswordChange={handlePasswordChange} handlePasswordDataChange={handlePasswordDataChange} isLoading={isLoading} errMessage={errMessage}/>}
         {active === 3 && <UpdateAdminProfile/>}
       </div>
-      <div className="w-[36%] flex flex-col gap-6">
+      <div className="w-[36%]  sticky top-24 ">
         <ul className='flex flex-col gap-1 bg-white rounded-lg p-4 px-6'>
           <li className={`flex px-4 py-2.5 items-center rounded-lg gap-2 cursor-pointer ${active === 1 && "bg-orange-100 text-orange-500"} `} onClick={()=>handleActive(1)}>
             <FaRegUser /> Profile

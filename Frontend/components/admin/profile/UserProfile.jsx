@@ -12,7 +12,7 @@ const UserProfile = ({ userData }) => {
   };
 
   return (
-    <div className='w-full max-w-4xl mx-auto flex flex-col gap-8 p-6'>
+    <div className='w-full max-w-4xl mx-auto flex flex-col gap-8'>
       
       <div className="bg-gradient-to-r from-orange-500 to-orange-200 rounded-2xl p-8 text-white">
         <div className="flex items-center gap-6 w-full">

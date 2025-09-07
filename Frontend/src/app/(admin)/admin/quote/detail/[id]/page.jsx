@@ -17,6 +17,7 @@ import {
   FaCheckCircle,
   FaExclamationCircle
 } from "react-icons/fa";
+import DataNotFount from '../../../../../../../components/common/DataNotFount';
 
 const page = () => {
     const [quoteData, setQuoteData] = useState(null);
@@ -88,14 +89,12 @@ const page = () => {
         return <PageLoader />
     }
 
-    
-   
-    
 
     const quote = quoteData;
 
+
     if(!quote){
-        return <PageLoader />
+        return <DataNotFount/>
     }
 
     return (
