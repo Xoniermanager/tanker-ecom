@@ -14,8 +14,9 @@ const CartContextProvider = ({ children }) => {
   const fetchCartData = async () => {
     if (!isAuthenticated) {
       const guestCart = localStorage.getItem("guestCart");
-
-      setCartData(JSON.parse(guestCart));
+      if(guestCart){
+        setCartData(JSON.parse(guestCart));
+      }
     }
     setIsLoading(true);
     try {
