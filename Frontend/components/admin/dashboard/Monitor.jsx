@@ -3,9 +3,15 @@ import Image from 'next/image'
 import React from 'react'
 import { useDashboard } from '../../../context/dashboard/DashboardContext'
 import Link from 'next/link'
+import PageLoader from '../../common/PageLoader'
 
 const Monitor = () => {
     const {dashboardData} = useDashboard();
+
+
+    if(!dashboardData){
+        return <PageLoader/>
+    }
 
     
   return (

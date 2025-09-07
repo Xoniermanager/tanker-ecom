@@ -3,11 +3,12 @@ import React from 'react'
 import { BsQuestionCircle, BsThreeDots } from 'react-icons/bs'
 import dynamic from 'next/dynamic'
 import { useDashboard } from '../../../context/dashboard/DashboardContext';
+import PageLoader from '../../common/PageLoader';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const CategoryChart = () => {
   const {topSellingCategories} = useDashboard();
-  console.log("Top Categories: ", topSellingCategories)
+
   
   
   const categoriesWithSales = topSellingCategories?.filter(
@@ -79,6 +80,9 @@ const CategoryChart = () => {
 
   const chartSeries = chartData?.map(item => item.revenue);
 
+  if(!topSellingCategories){
+    return <PageLoader/>
+  }
   
   if (categoriesWithSales?.length === 0) {
     return (

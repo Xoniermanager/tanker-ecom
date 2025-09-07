@@ -7,6 +7,7 @@ import Image from 'next/image'
 
 import { FaEye } from "react-icons/fa";
 import { useDashboard } from '../../../context/dashboard/DashboardContext'
+import PageLoader from '../../common/PageLoader'
 
 const TopSellingProducts = () => {
   const [specShow, setSpecShow] = useState(false);
@@ -15,6 +16,10 @@ const TopSellingProducts = () => {
 
   const products = topSellingProductsData
   const length = topSellingProductsData?.length || 0;
+
+  if(!topSellingProductsData){
+    return <PageLoader />
+  }
 
   return (
     <div className='w-full flex flex-col gap-4'>
