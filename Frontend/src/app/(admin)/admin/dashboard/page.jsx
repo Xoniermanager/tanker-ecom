@@ -1,10 +1,9 @@
-
+"use client"
 import React from 'react'
 import Monitor from '../../../../../components/admin/dashboard/Monitor'
 import DashboardRowTwo from '../../../../../components/admin/dashboard/DashboardRowTwo'
 import DashboardRowThree from '../../../../../components/admin/dashboard/DashboardRowThree'
 import TopSellingProducts from '../../../../../components/admin/dashboard/TopSellingProducts'
-import api from '../../../../../components/user/common/api'
 import PageLoader from '../../../../../components/common/PageLoader'
 
 const page = () => {
