@@ -41,6 +41,10 @@ class ContactService {
         return await contactRepository.paginate(filters, page, limit, { createdAt: -1 });
     }
 
+    getContactsById = async(id)=>{
+        return await contactRepository.findById(id)
+    }
+
     /**
      * Deletes a contact submission by ID.
      * @param {string} contactId - The ID of the contact to delete.

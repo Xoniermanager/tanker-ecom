@@ -32,6 +32,16 @@ class ContactController {
         }
     };
 
+    getContactsById = async (req, res, next) => {
+        try {
+            const {id} = req.params;
+            const contacts = await this.contactService.getContactsById(id);
+            customResponse(res, "Contact data fetch with id successfully", contacts);
+        } catch (error) {
+            next(error);
+        }
+    };
+
     /**
      * Delete a single contact inquiry by ID.
      */
