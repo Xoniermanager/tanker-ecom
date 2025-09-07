@@ -19,7 +19,7 @@ const OrderTable = ({
   pageLimit,
   totalPages,
   isLoading,
-  getOrderData
+  getOrderData,
 }) => {
   const [active, setActive] = useState(1);
   const [viewOrderData, setViewOrderData] = useState(null);
@@ -38,7 +38,7 @@ const OrderTable = ({
           <ul className="border-1 border-slate-200 rounded-xl p-4 flex flex-col gap-3 bg-sky-50/10">
             <li
               className={`px-6 py-3 ${
-                active === 1 
+                active === 1
                   ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
                   : "hover:bg-slate-50"
               } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
@@ -88,102 +88,108 @@ const OrderTable = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {!isLoading ?  (orderData?.length > 0 ? (
-                    orderData?.map((item, index) => {
-                      const orderDate = new Date(
-                        item.createdAt
-                      ).toLocaleDateString();
-                      return (
-                        <tr
-                          key={item._id}
-                          className={`border-b-1 border-stone-200 ${
-                            index % 2 !== 0 && "bg-stone-50"
-                          } hover:bg-purple-100/50`}
-                        >
-                          <td className="p-4 py-6">
-                            <span
-                              className="font-medium text-sm text-purple-950 cursor-pointer"
-                              onClick={() => handleViewOrder(item, 11)}
-                            >
-                              {item.orderNumber}
-                            </span>
-                          </td>
-                          <td className="p-4 py-6">
-                            <span className="bg-purple-50 px-2.5 py-1 text-purple-950 text-[12px] font-medium rounded-md">
-                              {orderDate}
-                            </span>
-                          </td>
-                          <td className="p-4 py-6">
-                            <span
-                              className={`${
-                                item.orderStatus === "pending"
-                                  ? "bg-yellow-500"
-                                  : item.orderStatus === "failed"
-                                  ? "bg-blue-500"
-                                  : // item.orderStatus === "shipped" ? "bg-purple-500" :
-                                  item.orderStatus === "delivered"
-                                  ? "bg-green-500"
-                                  : item.orderStatus === "cancelled"
-                                  ? "bg-red-500"
-                                  : "bg-gray-500"
-                              } text-white px-2 py-1 text-[12px] capitalize rounded-lg `}
-                            >
-                              {item.orderStatus}{" "}
-                            </span>
-                          </td>
-                          <td className="p-4 py-6">
-                            <span className="text-white px-2 py-1 text-sm capitalize rounded-lg bg-green-400 tracking-wide">
-                              ${item.totalPrice.toFixed(2)}
-                            </span>
-                          </td>
-                          <td>
-                            <div className="relative group ">
-                              <button
+                  {!isLoading ? (
+                    orderData?.length > 0 ? (
+                      orderData?.map((item, index) => {
+                        const orderDate = new Date(
+                          item.createdAt
+                        ).toLocaleDateString();
+                        return (
+                          <tr
+                            key={item._id}
+                            className={`border-b-1 border-stone-200 ${
+                              index % 2 !== 0 && "bg-stone-50"
+                            } hover:bg-purple-100/50`}
+                          >
+                            <td className="p-4 py-6">
+                              <span
+                                className="font-medium text-sm text-purple-950 cursor-pointer"
                                 onClick={() => handleViewOrder(item, 11)}
-                                className="bg-green-50 text-green-500 h-9 w-9 rounded-md flex items-center justify-center hover:bg-green-500 hover:text-white"
                               >
-                                {" "}
-                                <FaEye />{" "}
-                              </button>
-                              <AnimatePresence>
-                                <motion.div
-                                  initial={{ opacity: 0, y: -10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -10 }}
-                                  transition={{
-                                    duration: 0.2,
-                                    ease: "easeInOut",
-                                  }}
-                                  className="hidden group-hover:block absolute top-[110%] -left-[20%] bg-green-100 text-green-500  p-1 px-3 rounded-lg text-[12px]"
+                                {item.orderNumber}
+                              </span>
+                            </td>
+                            <td className="p-4 py-6">
+                              <span className="bg-purple-50 px-2.5 py-1 text-purple-950 text-[12px] font-medium rounded-md">
+                                {orderDate}
+                              </span>
+                            </td>
+                            <td className="p-4 py-6">
+                              <span
+                                className={`${
+                                  item.orderStatus === "pending"
+                                    ? "bg-yellow-500"
+                                    : item.orderStatus === "failed"
+                                    ? "bg-blue-500"
+                                    : // item.orderStatus === "shipped" ? "bg-purple-500" :
+                                    item.orderStatus === "delivered"
+                                    ? "bg-green-500"
+                                    : item.orderStatus === "cancelled"
+                                    ? "bg-red-500"
+                                    : "bg-gray-500"
+                                } text-white px-2 py-1 text-[12px] capitalize rounded-lg `}
+                              >
+                                {item.orderStatus}{" "}
+                              </span>
+                            </td>
+                            <td className="p-4 py-6">
+                              <span className="text-white px-2 py-1 text-sm capitalize rounded-lg bg-green-400 tracking-wide">
+                                ${item.totalPrice.toFixed(2)}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="relative group ">
+                                <button
+                                  onClick={() => handleViewOrder(item, 11)}
+                                  className="bg-green-50 text-green-500 h-9 w-9 rounded-md flex items-center justify-center hover:bg-green-500 hover:text-white"
                                 >
-                                  View Order
-                                </motion.div>{" "}
-                              </AnimatePresence>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                                  {" "}
+                                  <FaEye />{" "}
+                                </button>
+                                <AnimatePresence>
+                                  <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{
+                                      duration: 0.2,
+                                      ease: "easeInOut",
+                                    }}
+                                    className="hidden group-hover:block absolute top-[110%] -left-[20%] bg-green-100 text-green-500  p-1 px-3 rounded-lg text-[12px]"
+                                  >
+                                    View Order
+                                  </motion.div>{" "}
+                                </AnimatePresence>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={5} className="text-center p-4">
+                          {" "}
+                          {isAuthenticated
+                            ? "Order data not found"
+                            : "Please login first to see your order data"}{" "}
+                        </td>
+                      </tr>
+                    )
                   ) : (
                     <tr>
-                      <td colSpan={5} className="text-center p-4" >
-                        {" "}
-                        {isAuthenticated
-                          ? "Order data not found"
-                          : "Please login first to see your order data"}{" "}
+                      <td colSpan={5} className="text-center ">
+                        <div className="flex gap-2 items-center justify-center w-full py-5">
+                          <div className="w-4 h-4 border-2 border-purple-900 border-t-transparent rounded-full animate-spin"></div>
+                          <p className="  font-medium animate-pulse">
+                            Loading...
+                          </p>{" "}
+                        </div>
                       </td>
                     </tr>
-                  ) ) : (
-                    <tr>
-                   <td colSpan={5}  className="text-center ">
-                    <div className="flex gap-2 items-center justify-center w-full py-5">
-    <div className="w-4 h-4 border-2 border-purple-900 border-t-transparent rounded-full animate-spin"></div>
-    <p className="  font-medium animate-pulse">Loading...</p> </div>
-  </td></tr>
                   )}
                 </tbody>
               </table>
-              <div className="flex items-center gap-4 justify-center">
+              {isAuthenticated && (orderData.length > 0 && <div className="flex items-center gap-4 justify-center">
                 {[...Array(totalPages)].map((item, index) => (
                   <button
                     className={` ${
@@ -210,11 +216,20 @@ const OrderTable = ({
                   {" "}
                   <IoArrowForward />{" "}
                 </button>
-              </div>
+              </div>)}
             </div>
           )}
-          {active === 11 && <OrderDetail viewOrderData={viewOrderData} onBack={()=>setActive(1)} setActive={setActive} getOrderData={getOrderData} />}
-          {active === 3 && <OrderHistoryTable handleViewOrder={handleViewOrder} />}
+          {active === 11 && (
+            <OrderDetail
+              viewOrderData={viewOrderData}
+              onBack={() => setActive(1)}
+              setActive={setActive}
+              getOrderData={getOrderData}
+            />
+          )}
+          {active === 3 && (
+            <OrderHistoryTable handleViewOrder={handleViewOrder} />
+          )}
         </div>
       </div>
     </>
