@@ -73,6 +73,7 @@ const AuthContextProvider = ({children}) => {
   if (isAuthenticated) {
     const localCart = localStorage.getItem("guestCart") ? JSON.parse(localStorage.getItem("guestCart")) : [];
     
+    console.log("localcart: ", localCart)
 
     const payload = localCart.map(item=>{
      return { productId: item.product._id,
