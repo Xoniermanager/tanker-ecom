@@ -130,7 +130,7 @@ const UpdateWebsiteComponent = ({
         <SectionTitle title="Site Details" />
         <div className="p-4 bg-purple-50/50 rounded-lg flex flex-col gap-4">
           
-          <div>
+          {/* <div>
             <label className="block mb-2">Logo</label>
             <div className="flex items-center gap-4">
               {formData.siteDetails.logo.url ? (
@@ -165,7 +165,7 @@ const UpdateWebsiteComponent = ({
                 onChange={handleLogoUpload}
               />
             </div>
-          </div>
+          </div> */}
 
           <InputField
             label="Site Title"

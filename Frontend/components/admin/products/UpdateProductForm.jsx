@@ -598,7 +598,7 @@ if (Array.isArray(formData.seo?.keywords) ) {
             ))}
           </div>
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label
               htmlFor="type"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -692,7 +692,7 @@ if (Array.isArray(formData.seo?.keywords) ) {
                 )}
               </div>
             )}
-          </div> 
+          </div>  */}
 
           <div className="col-span-2 flex flex-col gap-2">
             <label
