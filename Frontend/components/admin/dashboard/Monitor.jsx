@@ -20,7 +20,7 @@ const Monitor = () => {
                 <span className='text-sm text-gray-500 capitalize font-medium pb-1'>{dashboardData?.deliveredOrders?.count || 0} new packages</span>
 
                 <div className="h-1 bg-gray-300 w-full rounded-full relative overflow-hidden">
-                    <div style={{ width: `${Number(dashboardData?.totalOrders?.salesPercent) || 0}%` }} className={`absolute left-0 bg-purple-700  z-10 h-1`}></div>
+                    <div style={{ width: `${Number(dashboardData?.deliveredOrders?.salesPercent) || 0}%` }} className={`absolute left-0 bg-purple-700  z-10 h-1`}></div>
                 </div>
                 </div>
 
@@ -33,7 +33,7 @@ const Monitor = () => {
                 <span className='text-sm text-gray-500 capitalize font-medium pb-1'>{dashboardData?.totalOrders?.count || 0} new Orders</span>
 
                 <div className="h-1 bg-gray-300 w-full rounded-full relative overflow-hidden">
-                    <div style={{ width: `${Number(dashboardData?.deliveredOrders?.salesPercent) || 0}%` }} className={`absolute left-0 bg-orange-400 w-[75%] z-10 h-1`}></div>
+                    <div style={{ width: `${Number(dashboardData?.totalOrders?.salesPercent) || 0}%` }} className={`absolute left-0 bg-orange-400 w-[75%] z-10 h-1`}></div>
                 </div>
                 </div>
 
