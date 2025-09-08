@@ -653,7 +653,7 @@ const AddProductForm = () => {
               <option value="" hidden>
                 Select specification type
               </option>
-              <option value="pdf">PDF File</option>
+              {/* <option value="pdf">PDF File</option> */}
               <option value="image">Image</option>
             </select>
           </div>
