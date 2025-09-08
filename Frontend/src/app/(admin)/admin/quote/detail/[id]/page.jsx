@@ -100,14 +100,14 @@ const page = () => {
     return (
        <div className='pl-86 pt-26 p-6 w-full bg-violet-50 flex flex-col gap-6'>
            
-                {/* Header */}
+                
                 <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 mb-6 p-6 flex flex-col gap-4">
                     <div className="flex justify-between items-start">
                         <div>
                             <div className="flex items-center gap-4 mb-2">
                                 
                                 <h1 className="text-3xl font-bold text-purple-950">
-                                    Quote Details
+                                    Queries Details
                                 </h1>
                             </div>
                             <p className="text-lg font-mono text-orange-500">
@@ -138,7 +138,7 @@ const page = () => {
                         <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 p-6">
                             <h2 className="text-xl font-semibold text-purple-950 mb-4 flex items-center gap-2">
                                 <FaComment size={20} />
-                                Quote Message
+                                Queries Message
                             </h2>
                             <div className="bg-gray-50 rounded-lg p-4">
                                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">

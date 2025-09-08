@@ -7,17 +7,12 @@ import { ToastContainer } from "react-toastify";
 import ScrollToTop from "../../components/common/ScrollToTop";
 import UserContextProvider from "../../context/user/AuthContextProvider";
 import Providers from "../../context/Providers";
-
+import { getSiteSettings, createMetadata } from "../../lib/seo.utils";
 
 const InstrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
 });
-
-export const metadata = {
-  title: "Tanker Solutions",
-  description: "Ecommerce website",
-};
 
 export default function RootLayout({ children }) {
   return (
@@ -25,12 +20,15 @@ export default function RootLayout({ children }) {
       <body className={`${InstrumentSans.variable}  antialiased h-screen `}>
         <ScrollToTop />
         <ToastContainer />
-        <Providers>
-          
-          {children}
-          
-          </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
+}
+
+export async function generateMetadata({ params, searchParams, pathname }) {
+  const siteSettingsData = await getSiteSettings();
+  const siteData = siteSettingsData?.data;
+
+  return createMetadata(siteData, { currentPath: pathname });
 }

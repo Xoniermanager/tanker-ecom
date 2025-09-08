@@ -6,10 +6,10 @@ import NotificationSidebar from "../../../../../components/admin/common/Notifica
 
 
 
-export const metadata = {
-  title: "Tanker Solutions admin",
-  description: "Ecommerce website",
-};
+// export const metadata = {
+//   title: "Tanker Solutions admin",
+//   description: "Ecommerce website",
+// };
 
 
 export default function AdminLayout({ children }) {

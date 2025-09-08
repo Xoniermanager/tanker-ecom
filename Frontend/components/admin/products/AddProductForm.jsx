@@ -231,6 +231,7 @@ const AddProductForm = () => {
     formPayload.append('file', formData.specifications.source);
     const thumbRes = await api.put("/upload-files", formPayload); 
     uploadedSpecUrl = thumbRes.data.data.file.url;
+    formPayload.delete("file")
   }
 
 
@@ -635,7 +636,7 @@ const AddProductForm = () => {
             ))}
           </div>
 
-          {/* <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="type"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -727,7 +728,7 @@ const AddProductForm = () => {
                 )}
               </div>
             )}
-          </div> */}
+          </div>
 
           <div className="col-span-2 flex flex-col gap-2">
             <label
@@ -756,7 +757,7 @@ const AddProductForm = () => {
                   <img
                     src={src}
                     alt={`Preview ${index}`}
-                    className="w-full h-52 object-cover rounded shadow"
+                    className="w-full h-52 object-contain rounded shadow"
                   />
                   <button
                     type="button"

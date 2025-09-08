@@ -74,17 +74,17 @@ const Sidebar = () => {
         />
       </div>
       <div className="bg-white flex items-center gap-4 p-3 relative rounded-lg cursor-pointer" onMouseEnter={()=>setInView(true)} onMouseLeave={()=>setInView(false)}>
-        {<Image
+        <Link href={'/admin/profile'} className="flex items-center gap-4" ><Image
           className="bg-cover rounded-full w-11 h-11"
           src={userData?.profileImage ||  "https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"}
           height={40}
           width={40}
           alt="user"
-        />}
+        />
         <div className="flex flex-col gap-0.5">
           <h3 className="text-orange-600 font-bold capitalize">{userData ? userData?.fullName : <Skeleton variant="text" width={140} height={25} />}</h3>
           <span className="text-sm text-gray-500 font-medium capitalize">{userData ? userData?.role  : <Skeleton variant="text" width={110} height={20} />}</span>
-        </div>
+        </div></Link>
 
          <motion.ul
         
@@ -407,7 +407,7 @@ const Sidebar = () => {
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
                   : "bg-transparent  "
               } `}
-              onClick={() => handleActive(4)}
+              onClick={() => handleActive(5)}
             >
               <span
                 className={`h-9 w-9 flex items-center justify-center rounded-full  text-lg ${
@@ -421,11 +421,11 @@ const Sidebar = () => {
                   pathname.includes("quote") && "text-orange-600"
                 } group-hover:text-orange-600`}
               >
-                Quote
+                Queries
               </span>
               <span
                 className={`text-slate-500 group-hover:text-orange-600 ${
-                  active === 3 && "rotate-90"
+                  active === 5 && "rotate-90"
                 }`}
               >
                 <HiArrowLongRight />
@@ -433,7 +433,7 @@ const Sidebar = () => {
             </div>
             <ul
               className={`flex flex-col gap-4 pl-16  h-0 overflow-hidden ${
-                active === 4 && "h-auto my-4"
+                active === 5 && "h-auto my-4"
               }`}
             >
               <li className="">
@@ -444,7 +444,7 @@ const Sidebar = () => {
                   } `}
                 >
                   {" "}
-                  All Quote 
+                  All Queries
                 </Link>
               </li>
               

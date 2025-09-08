@@ -9,6 +9,7 @@ import PageLoader from "../../../../../../../components/common/PageLoader";
 import Link from "next/link";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { IoChevronBackOutline } from "react-icons/io5";
+import Image from "next/image";
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
@@ -108,10 +109,10 @@ const Page = () => {
         <div className="flex items-start gap-8">
           <div className="space-y-4 sticky top-24 left-0 w-1/2">
             <div className="bg-white rounded-xl shadow p-4">
-              <img
-                src={selectedImage || (productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg')}
+              <Image
+                src={selectedImage || (productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg')} height={350} width={350}
                 alt={productData.name}
-                className="rounded-xl shadow border-1 border-stone-200 w-full h-80 object-cover"
+                className="rounded-xl shadow border-1 border-stone-200 w-full h-80 object-contain"
               />
 
               <div className="flex gap-3 mt-4 overflow-x-auto">
@@ -216,6 +217,13 @@ const Page = () => {
                    
                   </ul>
                 )):(
+                  <p className="text-gray-600">No measurement data found</p>
+                )}
+            </div>
+
+            <div className="bg-white rounded-xl shadow p-6">
+                <h2 className="text-xl font-semibold text-purple-950 mb-3 capitalize">Specifications</h2>
+                {(productData?.specifications ) ? (productData?.specifications?.type === 'image') ? <Image src={productData.specifications.source} height={350} width={350} alt="specification"/> : <span> PDF preview not showing yet </span> :(
                   <p className="text-gray-600">No measurement data found</p>
                 )}
             </div>

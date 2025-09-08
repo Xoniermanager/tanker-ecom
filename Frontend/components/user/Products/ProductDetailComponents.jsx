@@ -16,6 +16,7 @@ import {
   FaStar,
   FaRegStar,
 } from "react-icons/fa";
+import { specType } from "../../../constants/enums";
 
 const ProductDetailComponents = ({
   productData,
@@ -287,15 +288,20 @@ const ProductDetailComponents = ({
               </p>
             )}
             {active === 2 && (
-              <p className="text-center text-gray-600">
+              <div className="flex items-center justify-center">
+             {productData.specifications.source ?
+              ((productData.specifications.type === specType.IMAGE) ? <Image src={productData.specifications.source} height={350} width={350} className="object-cover" alt="Specification" quality={100}/> : <p className="text-center text-gray-600">
+                PDF not viewed yet
+              </p>): <p className="text-center text-gray-600">
                 Specification not found
-              </p>
+              </p> }
+              </div>
             )}
             {active === 3 && (
               <div className="grid grid-cols-3 gap-5">
     {(productData.measurements.length > 0 && productData.measurements.some(item=> item.measurementName !== "" && item.measurementValue !== "" ))? productData.measurements.map((item, index) => (
-      <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-        <div className="flex items-center justify-between">
+      <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex justify-center w-full">
+        <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             {/* <div className="w-2 h-2 bg-orange-500 rounded-full"></div> */}
            <span className=" text-orange-500 "><TbRulerMeasure /></span> 

@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 
+
 const UpdateWebsiteComponent = ({
   handleSubmit,
   handleChange,
@@ -10,6 +11,7 @@ const UpdateWebsiteComponent = ({
   errMessage,
   setFormData, 
 }) => {
+
   const fileInputRef = useRef(null);
 
   const handleLogoUpload = (e) => {
@@ -29,6 +31,7 @@ const UpdateWebsiteComponent = ({
       }));
     }
   };
+
 
   const removeLogo = () => {
     setFormData((prev) => ({
@@ -54,8 +57,7 @@ const UpdateWebsiteComponent = ({
         <SectionTitle title="Email Management" />
         <GridTwo>
           {[
-            // ["Sales Enquiry Email", "contactDetails.emails.sales_enquiry", "email"],
-            // ["BDM Email", "contactDetails.emails.bdm", "email"],
+           
             ["Footer Email", "contactDetails.emails.footer", "email"],
           ].map(([label, path, type], i) => (
             <InputField
@@ -73,7 +75,7 @@ const UpdateWebsiteComponent = ({
         <SectionTitle title="Contact Number Management" />
         <GridTwo>
           {[
-            // ["Service Depot", "contactDetails.phoneNumbers.service_depot", "tel"],
+           
             ["Contact One", "contactDetails.phoneNumbers.contact_one", "tel"],
             ["Contact Two", "contactDetails.phoneNumbers.contact_two", "tel"],
           ].map(([label, path, type], i) => (
