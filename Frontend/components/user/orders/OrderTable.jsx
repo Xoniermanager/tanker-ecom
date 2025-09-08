@@ -189,7 +189,7 @@ const OrderTable = ({
                   )}
                 </tbody>
               </table>
-              {isAuthenticated && (orderData.length > 0 && <div className="flex items-center gap-4 justify-center">
+              {isAuthenticated && (orderData?.length > 0 && <div className="flex items-center gap-4 justify-center">
                 {[...Array(totalPages)].map((item, index) => (
                   <button
                     className={` ${
