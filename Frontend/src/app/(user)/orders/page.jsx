@@ -4,6 +4,7 @@ import PageBanner from "../../../../components/user/common/PageBanner";
 
 import OrderTable from "../../../../components/user/orders/OrderTable";
 import api from "../../../../components/user/common/api";
+import PageLoader from "../../../../components/common/PageLoader";
 
 const page = () => {
    const [orderData, setOrderData] = useState(null);
@@ -48,6 +49,10 @@ const page = () => {
           getOrderData();
          
         }, [currentPage, pageLimit]);
+
+    if(isLoading){
+      return <PageLoader/>
+    }
 
         
 
