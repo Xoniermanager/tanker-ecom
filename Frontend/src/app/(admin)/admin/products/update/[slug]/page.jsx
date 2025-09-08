@@ -6,6 +6,7 @@ import UpdateProductForm from "../../../../../../../components/admin/products/Up
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
   const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -39,6 +40,7 @@ const Page = () => {
   const { slug } = useParams();
 
   const getProduct = async () => {
+    setIsLoading(true)
     try {
       const response = await api.get(`/products/${slug}`);
       if (response.status === 200) {
@@ -79,6 +81,8 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error fetching product:", error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -88,7 +92,7 @@ const Page = () => {
     getProduct();
   }, []);
 
-  if (!formData) {
+  if (isLoading || !formData) {
     return (
       <div className="flex justify-center items-center h-screen">
         <p className="text-purple-950 font-semibold text-lg animate-pulse">

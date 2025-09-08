@@ -8,9 +8,12 @@ import {FaFacebookF, FaPaperPlane, FaRegEnvelope, FaTwitter, FaLinkedinIn, FaIns
 import { IoLocationOutline } from "react-icons/io5";
 import Image from "next/image";
 
-const Footer = ({ siteData }) => {
+
+const Footer = ({siteData}) => {
   const [email, setEmail] = useState("");
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
+
+  
 
   const icons = {
     facebook: FaFacebookF,

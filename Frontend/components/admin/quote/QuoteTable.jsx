@@ -20,10 +20,10 @@ const QuoteTable = ({
   return (
     <>
       <div className="min-h-screen bg-[#f4f2ff] p-6">
-        <div className="mb-4">
-          <h2 className="text-2xl font-semibold text-black">Quotes List</h2>
+        <div className="mb-4 bg-white p-4 px-6 rounded-lg">
+          <h2 className="text-2xl font-semibold text-black">Queries List</h2>
           <div className="text-sm text-gray-500 mt-1">
-            <span className="text-orange-500 mr-1">Admin</span> &gt; Quotes
+            <span className="text-orange-500 mr-1">Admin</span> &gt; Queries
           </div>
         </div>
 
@@ -87,7 +87,7 @@ const QuoteTable = ({
                     {" "}
                     <p className="flex items-center gap-2 justify-center">
                       {" "}
-                      <BsCartX className="text-lg text-orange-400" /> Quote Data
+                      <BsCartX className="text-lg text-orange-400" /> Queries Data
                       not found{" "}
                     </p>
                   </td>

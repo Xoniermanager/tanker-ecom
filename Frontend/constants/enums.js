@@ -134,6 +134,13 @@ export const COUNTRIES = Object.freeze({
     ECUADOR: { code: "EC", name: "Ecuador", value: "ecuador" }
 })
 
+export const specType = Object.freeze({
+    IMAGE: "image",
+    PDF: "pdf"
+})
+
+
+
 // 0212345678
 
 // 0298765432

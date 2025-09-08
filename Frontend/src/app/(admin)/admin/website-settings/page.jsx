@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import UpdateWebsiteComponent from "../../../../../components/admin/website-setting/UpdateWebsiteComponent";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
+import PageLoader from "../../../../../components/common/PageLoader";
+import UploadingLogo from "../../../../../components/admin/website-setting/UploadingLogo";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +69,7 @@ const Page = () => {
 
 
    const getWebsiteSettingData = async () => {
+    setIsLoading(true)
     try {
       const response = await api.get(`/site-settings`);
       if (response.status === 200) {
@@ -121,6 +124,8 @@ const Page = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -142,10 +147,15 @@ const Page = () => {
       .map((k) => k.trim())
       .filter((k) => k); 
 
-      
+    const newFormData = new FormData()
+    console.log("logo file: ", formData.siteDetails.logo.file)
+    if(formData.siteDetails.logo.file){
+      newFormData.append("logo", formData.siteDetails.logo.file)
+    }
 
     const payload = {
       ...formData,
+      ...newFormData,
       seoDetails: {
         ...formData.seoDetails,
         keywords: keyArr, 
@@ -170,8 +180,13 @@ const Page = () => {
     }
   };
 
+  if(isLoading){
+    return <PageLoader />
+  }
+
   return (
-    <div className="pl-86 pt-26 p-6 w-full min-h-screen bg-violet-50 flex items-start gap-6">
+    <div className="pl-86 pt-26 p-6 w-full min-h-screen bg-violet-50 flex flex-col items-start gap-6">
+      <UploadingLogo />
       <UpdateWebsiteComponent
         handleSubmit={handleSubmit}
         formData={formData}

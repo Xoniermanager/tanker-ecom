@@ -12,10 +12,13 @@ import { useAuth } from "../../../context/user/AuthContext";
 import { TbTruckLoading } from "react-icons/tb";
 import { MdOutlineDashboard } from "react-icons/md";
 
-const Navbar = ({ siteData }) => {
+
+const Navbar = ({siteData}) => {
   const [isSticky, setIsSticky] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const pathname = usePathname();
+
+
 
   const { cartData, isLoading, count } = useCart();
 
@@ -82,9 +85,10 @@ const Navbar = ({ siteData }) => {
           <div className="w-[20%]">
             <Link href={"/"}>
               <Image
-                src={"/images/tanker-solution-logo.png"}
+                src={siteData?.siteDetails?.logo?.url || "/images/tanker-solution-logo.png"}
                 width={190}
                 height={120}
+                className="h-18 object-contain"
                 alt="logo"
               />
             </Link>

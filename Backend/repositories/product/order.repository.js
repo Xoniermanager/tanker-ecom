@@ -179,7 +179,7 @@ class OrderRepository extends BaseRepository {
     session = null
   ) => {
     const filter = {
-      orderStatus: { $in: [ORDER_STATUS.PROCESSING, ORDER_STATUS.SHIPPED] },
+      orderStatus: { $in: [ORDER_STATUS.SHIPPED] },
       createdAt: {
         $gte: startDate,
         $lte: endDate,
