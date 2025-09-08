@@ -190,7 +190,7 @@ const Navbar = ({siteData}) => {
             {(isAuthenticated && userData.role === "user")  && <Link href={"/profile"} className="h-10 w-10 bg-purple-900 hover:bg-purple-950 rounded-full flex items-center justify-center text-white">
             <FaRegUser className=""/>
             </Link>}
-            { (isAuthenticated && userData.role === "user")  && <div className="relative">
+            {(userData?.role !== "admin")  && <div className="relative">
               <Link
                 href={"/cart"}
                 className="h-10 w-10 bg-orange-400 hover:bg-orange-500 rounded-full flex items-center justify-center text-white"
