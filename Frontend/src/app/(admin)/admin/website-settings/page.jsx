@@ -12,6 +12,7 @@ const Page = () => {
   const [websiteSettingData, setWebsiteSettingData] = useState(null)
 
   const [formData, setFormData] = useState({
+    shippingPrice: "",
     contactDetails: {
       emails: {
         // sales_enquiry: "",
@@ -78,6 +79,7 @@ const Page = () => {
        
         setFormData((prev) => ({
           ...prev,
+          shippingPrice: String(data.shippingPrice) || "",
           contactDetails: {
             emails: {
             //   sales_enquiry: data.contactDetails.emails.sales_enquiry || "",
@@ -147,15 +149,10 @@ const Page = () => {
       .map((k) => k.trim())
       .filter((k) => k); 
 
-    const newFormData = new FormData()
-    console.log("logo file: ", formData.siteDetails.logo.file)
-    if(formData.siteDetails.logo.file){
-      newFormData.append("logo", formData.siteDetails.logo.file)
-    }
 
     const payload = {
       ...formData,
-      ...newFormData,
+     
       seoDetails: {
         ...formData.seoDetails,
         keywords: keyArr, 

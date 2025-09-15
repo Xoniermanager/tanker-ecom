@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic'
 import { motion, useScroll, useTransform } from "framer-motion";
 
 // Icons
-import { BsBasket, BsThreeDots } from "react-icons/bs"
+import { BsBasket, BsThreeDots, BsCreditCard2Front } from "react-icons/bs"
 import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io"
+import { FaRegUser } from "react-icons/fa";
 import Link from 'next/link';
 import { useDashboard } from '../../../context/dashboard/DashboardContext';
 import CountUp from 'react-countup';
@@ -14,9 +15,9 @@ import { toast } from 'react-toastify';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const OrderMonitor = () => {
-     const [specShow, setSpecShow] = useState(false);
 
+const UserMonitor = () => {
+     const [specShow, setSpecShow] = useState(false)
      const {dashboardData} = useDashboard()
 
   const chartOptions = {
@@ -28,7 +29,7 @@ const OrderMonitor = () => {
       curve: 'smooth',
       width: 4,
     },
-    colors: ['#9932e7'], 
+    colors: ['#FF6385'], 
     tooltip: {
       enabled: false,
     }
@@ -44,25 +45,25 @@ const OrderMonitor = () => {
 
 
   return (
-    <div className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col gap-4.5 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
+    <div  className="bg-white shadow-[0_0_15px_#00000015] p-6 rounded-xl flex flex-col gap-4.5 hover:scale-104 hover:shadow-[0_0_18px_#00000018]">
       <div className="flex items-center justify-between gap-2">
-        <span className='text-3xl'><BsBasket /></span>
+        <span className='text-3xl'><FaRegUser /></span>
         <div className='relative' onMouseEnter={()=>setSpecShow(true)} onMouseLeave={()=>setSpecShow(false)}><button ><BsThreeDots /></button>
         <motion.ul
          animate={specShow ? {opacity: 1, y: 0, display: "flex"} : {opacity: 0, y: 10, display: "none"}}
          transition={{ duration: .3}}
          viewport={{ once: true }}
-        className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-20 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
-           <li><Link  href={'/admin/orders'} className="hover:text-orange-500">View Detail</Link></li>
+        className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-9000 -left-22 px-6 rounded-lg flex flex-col gap-1.5`}>
+           <li><Link href={'/admin/customers'} className="hover:text-orange-500">View Detail</Link></li>
            {/* <li><button className="hover:text-orange-500" onClick={()=>toast.info("Temporarily disabled")}>Download</button></li> */}
         </motion.ul>
         </div>
       </div>
 
-      <h2 className='text-xl font-semibold'>Orders</h2>
+      <h2 className='text-xl font-semibold'>New Users</h2>
 
       <div className="flex justify-between items-center gap-2">
-        <CountUp className='text-3xl ' start={0} end={dashboardData?.totalOrders?.count || 0} duration={2} suffix={(dashboardData?.totalOrders?.isPositive === true) && "+"}/>
+       <CountUp className='text-3xl' start={0} end={Number(dashboardData?.totalUsers?.count) || 0} duration={2}  suffix={"+"}/>
         <div className="w-24 h-10">
           <Chart
             options={chartOptions}
@@ -74,13 +75,12 @@ const OrderMonitor = () => {
         </div>
       </div>
 
-      <p className={`${(dashboardData?.totalOrders?.isPositive === true) ? "text-green-500" : "text-red-500"}  font-medium flex items-center gap-0.5`}>
-        Over last month {dashboardData?.totalOrders?.salesPercent}% 
-        {(dashboardData?.totalOrders?.isPositive === true ) ? <IoIosArrowRoundUp className='text-xl wavy'/> : <IoIosArrowRoundDown className='text-xl wavy text-red-500'/>}
+      <p className={`${(dashboardData?.totalUsers?.isPositive === true) ? "text-green-500" : "text-red-500"}  font-medium flex items-center gap-0.5`}>
+        Over last month {dashboardData?.totalUsers?.queryPercent}% 
+        {(dashboardData?.totalUsers?.isPositive === true ) ? <IoIosArrowRoundUp className='text-xl wavy'/> : <IoIosArrowRoundDown className='text-xl wavy text-red-500'/>}
       </p>
     </div>
   )
 }
 
-export default OrderMonitor
-
+export default UserMonitor

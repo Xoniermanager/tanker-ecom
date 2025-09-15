@@ -28,24 +28,26 @@ const userRegistrationSchema = z
       .optional(),
 
     country: z.string().min(1, { message: "Country is required." }),
-    preferredLanguage: z
-      .string()
-      .min(1, { message: "Preferred language is required." }),
+    // preferredLanguage: z
+    //   .string()
+    //   .min(1, { message: "Preferred language is required." }),
     communicationPreference: z.enum(
       Object.values(ENUMS.COMMUNICATION_PREFERENCE),
       {
         message: "Invalid communication preference.",
       }
     ),
+    captchaToken: z.string({required_error: "Captcha token is required.",})
+    .min(1, "Captcha token cannot be empty"),
 
     password: passwordSchema,
     confirmPassword: z.string(),
   })
+  
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
     message: "Passwords must match.",
   });
-
 
   const userUpdateSchema = z
   .object({
@@ -57,9 +59,9 @@ const userRegistrationSchema = z
       .regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid mobile number" }),
     country: z.string().min(1, { message: "Country is required." }),
     profileImage : z.string().optional(),
-    preferredLanguage: z
-      .string()
-      .optional(),
+    // preferredLanguage: z
+    //   .string()
+    //   .optional(),
     communicationPreference: z.enum(
       Object.values(ENUMS.COMMUNICATION_PREFERENCE),
       {

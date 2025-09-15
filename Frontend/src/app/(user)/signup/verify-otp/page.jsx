@@ -12,6 +12,7 @@ const VerifyOtpPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [timer, setTimer] = useState(60); 
   const [resendActive, setResendActive] = useState(false);
+  const [loading, setLoading] = useState(false)
   const inputRefs = useRef([]);
 
   const router = useRouter()
@@ -85,6 +86,8 @@ const VerifyOtpPage = () => {
   };
 
   const handleResend = async() => {
+    setErrMessage(null)
+  setLoading(true)
     if(!verifyEmail) return setErrMessage(`Email id not found`)
     try {
         const response = await api.post(`/auth/resend-email-otp`, {email: verifyEmail})
@@ -99,6 +102,8 @@ const VerifyOtpPage = () => {
   error?.response?.data?.message ||  "Something went wrong";
 
 setErrMessage(message);
+    } finally {
+      setLoading(false)
     }
     
   };
@@ -154,7 +159,7 @@ setErrMessage(message);
               type="button"
               className="text-blue-600 font-medium hover:underline"
             >
-              Resend OTP
+              {loading ? "Sending..." : "Resend OTP"}
             </button>
           ) : (
             <p>

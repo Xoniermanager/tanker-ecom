@@ -7,8 +7,8 @@ const { sendEmail } = require("./email");
  * @returns {string} - A 6-digit OTP.
  */
 function generateOtp() {
-    if (process.env.NODE_ENV !== 'production')
-        return "123456";
+    // if (process.env.NODE_ENV !== 'production')
+    //     return "123456";
 
     const otp = Math.floor(100000 + Math.random() * 900000);
     return otp.toString().padStart(6, "0");
@@ -68,7 +68,7 @@ async function sendOtpEmail(email, otp, type = "generic") {
         // const queue = queueManager.getQueue('general');
         // await queue.addJob('sendEmail', mailOptions);
 
-        console.log(`[OTP:${type}] sent to ${email}`);
+       
     } catch (error) {
         console.error(
             `[OTP:${type}] send failed for ${email}: ${error.message}`

@@ -241,7 +241,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
                                src={item?.product?.images[0]?.source} 
                                height={70} 
                                width={70} 
-                               className={`h-18 w-18 object-cover rounded-xl border-2 transition-all ${
+                               className={`h-18 w-18 object-contain rounded-xl border-2 transition-all ${
                                  viewOrderData?.orderStatus === 'cancelled' ? 
                                    'border-red-200 opacity-70' : 
                                    'border-stone-200'
@@ -357,7 +357,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
                                       src={image.source} 
                                       height={90} 
                                       width={90} 
-                                      className='h-22 w-22 object-cover rounded-lg border border-stone-200 flex-shrink-0 hover:scale-105 transition-transform cursor-pointer' 
+                                      className='h-22 w-22 object-contain rounded-lg border border-stone-200 flex-shrink-0 hover:scale-105 transition-transform cursor-pointer' 
                                       alt={`${item.name} ${idx + 1}`}
                                     />
                                   ))}

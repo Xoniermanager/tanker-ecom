@@ -5,6 +5,7 @@ const productRepository = require("../repositories/product/product.repository");
 const inventoryRepository = require("../repositories/product/inventory.repository");
 const productCategoryRepository = require("../repositories/product/product-category.repository");
 const contactRepository = require("../repositories/contact.repository");
+const userRepository = require("../repositories/user.repository");
 
 
 class DashboardService{
@@ -23,31 +24,37 @@ class DashboardService{
                 
                 const currentEndDate = new Date();
                 const currentStartDate = new Date();
+
                 currentStartDate.setDate(currentEndDate.getDate() - days);
+                const weekStartDate = new Date();
+        weekStartDate.setDate(currentEndDate.getDate() - 7);
 
                 const previousEndDate = new Date(currentStartDate);
                 const previousStartDate = new Date(currentStartDate);
                 previousStartDate.setDate(previousStartDate.getDate() - days);
 
                 
-                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, totalQuery, topSellingProducts, topSellingCategories] = await Promise.all([
+                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, totalQuery, topSellingProducts, topSellingCategories, newUsers, weeklyOrderCount] = await Promise.all([
                     orderRepository.getOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getDeliveredOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getArrivedOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getTotalRevenue(currentStartDate, currentEndDate, session),
                     contactRepository.getTotalQuery(currentStartDate, currentEndDate, session),
                     inventoryRepository.getTopSellingProducts(null, session),
-                    productCategoryRepository.getTopCategories(8,"totalSales")
+                    productCategoryRepository.getTopCategories(8,"totalSales"),
+                    userRepository.getUsers(currentStartDate, currentEndDate, session),
+                    orderRepository.getWeeklyOrderCount(weekStartDate, session)
                     
                 ]);
 
                 
-                const [prevTotalOrders, prevDeliveredOrders, prevArrivedOrders, prevTotalSales, prevTotalQuery] = await Promise.all([
+                const [prevTotalOrders, prevDeliveredOrders, prevArrivedOrders, prevTotalSales, prevTotalQuery, prevNewUsers] = await Promise.all([
                     orderRepository.getOrdersCount(previousStartDate, previousEndDate, session),
                     orderRepository.getDeliveredOrdersCount(previousStartDate, previousEndDate, session),
                     orderRepository.getArrivedOrdersCount(previousStartDate, previousEndDate, session),
                     orderRepository.getTotalRevenue(previousStartDate, previousEndDate, session),
                     contactRepository.getTotalQuery(previousStartDate, previousEndDate, session),
+                    userRepository.getUsers(previousStartDate, previousEndDate, session)
                 ]);
 
                 
@@ -84,7 +91,13 @@ class DashboardService{
                             isPositive: totalQuery >= prevTotalQuery
                         },
                         topSellingProducts,
-                        topSellingCategories
+                        topSellingCategories,
+                        totalUsers:{
+                            count: newUsers,
+                            queryPercent: calculateProfiteWithPrev(newUsers, prevNewUsers),
+                            isPositive: newUsers >= prevNewUsers
+                        },
+                        weeklyOrderCount
 
                         
                     },

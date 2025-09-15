@@ -31,6 +31,7 @@ const ProductList = ({
   selectedCategories,
   setSelectedCategories,
   handleCategoryChange,
+  handleToggleStatus
 }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
@@ -87,6 +88,7 @@ const ProductList = ({
                     <th className="p-4">Category</th>
                     <th className="p-4">Price</th>
                     <th className="p-4">Stock</th>
+                    <th className="p-4">Status</th>
                     <th className="p-4">Actions</th>
                   </tr>
                 </thead>
@@ -144,6 +146,25 @@ const ProductList = ({
                                 {product.inventory?.status?.replace("_", " ")}
                               </span>
                             </td>
+                            <td className="px-6 py-6">
+                    <div className="flex items-center justify-between mt-2 bg-purple-50  rounded-lg">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(product?._id)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+                          (product?.status === "active") ? "bg-green-600" : "bg-gray-400"
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                            (product?.status === "active")
+                              ? "translate-x-6"
+                              : "translate-x-1"
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </td>
                             <td
                               className="py-5 px-4 relative"
                               onMouseLeave={() => setOpenMenuIndex(null)}
@@ -199,7 +220,7 @@ const ProductList = ({
                     ) : (
                       <tr className=" bg-white">
                         {" "}
-                        <td colSpan={6} className=" py-5 px-4 text-center">
+                        <td colSpan={7} className=" py-5 px-4 text-center">
                           {" "}
                           Data not found
                         </td>{" "}
@@ -209,7 +230,7 @@ const ProductList = ({
                 ) : (
                   <tbody>
   <tr className="bg-white">
-    <td colSpan={6} className="py-5 px-4 text-center">
+    <td colSpan={7} className="py-5 px-4 text-center">
       <div className="flex items-center justify-center gap-2">
         <FaSpinner className="animate-spin text-orange-400 text-xl" />
         <span>Loading...</span>

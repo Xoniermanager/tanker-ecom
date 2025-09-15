@@ -80,6 +80,26 @@ class UserRepository extends BaseRepository {
     await user.save()
     }
 
+    
+getUsers = async (startDate, endDate, session) => {
+    // try {
+        const query = {
+            createdAt: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        };
+        
+        const count = await User.countDocuments(query).session(session);
+        return count;
+    // } catch (error) {
+    //     throw new Error(`Error getting users count: ${error.message}`);
+    // }
+};
+
+
+
+
 }
 
 module.exports = new UserRepository();

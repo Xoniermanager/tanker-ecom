@@ -26,7 +26,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
   useEffect(() => {
     startAutoScroll();
     return () => stopAutoScroll();
-  }, [testimonials.length]);
+  }, [testimonials?.length]);
 
   return (
     <>

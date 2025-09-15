@@ -62,9 +62,14 @@ router.post(
     authController.resendLoginOtp
 );
 router.post("/refresh-token", authController.refreshToken);
-router.post('/logout', authorize(['admin', 'user']), authController.logout )
-router.patch('/change-password', authorize(['admin', 'user']), validateChangePassword, authController.changePassword)
+router.post('/logout', authorize(['admin', 'user']), authController.logout);
+router.patch('/change-password', authorize(['admin', 'user']), validateChangePassword, authController.changePassword);
 router.get('/me', authorize(['admin', 'user']), authController.getMe);
-router.put('/profile-update', authorize(['admin', 'user']), upload.single("file"), validateUpdateUser, authController.updateProfile)
+router.get('/user/:id', authorize(['admin']), authController.getUserByID);
+router.get('/all-users', authorize(['admin']), authController.getall);
+router.post('/activate/:id', authorize(['admin']), authController.activate);
+router.post('/deactivate/:id', authorize(['admin']), authController.deactivate);
+router.put('/profile-update', authorize(['admin', 'user']), upload.single("file"), validateUpdateUser, authController.updateProfile);
+
 
 module.exports = router;

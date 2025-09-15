@@ -247,6 +247,112 @@ class OrderRepository extends BaseRepository {
     return result.length > 0 ? result[0].totalRevenue : 0;
   };
 
+
+getWeeklyOrderCount = async (customStartDate) => {
+  try {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
+    
+    // Calculate start date (7 days ago from today)
+    const startDate = customStartDate || new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000));
+    startDate.setHours(0, 0, 0, 0); // Start of that day
+    
+    const pipeline = [
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: today }
+        }
+      },
+      {
+        $addFields: {
+          // Calculate days ago from today (0 = today, 1 = yesterday, etc.)
+          daysAgo: {
+            $floor: {
+              $divide: [
+                { $subtract: [today, "$createdAt"] },
+                86400000 // milliseconds in a day
+              ]
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            daysAgo: "$daysAgo",
+            dayOfWeek: { $dayOfWeek: "$createdAt" },
+            dayName: {
+              $switch: {
+                branches: [
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 1] }, then: "Sunday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 2] }, then: "Monday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 3] }, then: "Tuesday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 4] }, then: "Wednesday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 5] }, then: "Thursday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 6] }, then: "Friday" },
+                  { case: { $eq: [{ $dayOfWeek: "$createdAt" }, 7] }, then: "Saturday" }
+                ],
+                default: "Unknown"
+              }
+            },
+            date: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$createdAt"
+              }
+            }
+          },
+          totalOrders: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { "_id.daysAgo": 1 } // Sort by days ago (oldest first, today last)
+      },
+      {
+        $project: {
+          _id: 0,
+          daysAgo: "$_id.daysAgo",
+          dayOfWeek: "$_id.dayOfWeek",
+          dayName: "$_id.dayName",
+          date: "$_id.date",
+          totalOrders: 1
+        }
+      }
+    ];
+
+    const result = await Order.aggregate(pipeline);
+
+    // Create a complete 7-day array starting from 6 days ago to today
+    const weekData = [];
+    
+    for (let i = 6; i >= 0; i--) {
+      const currentDate = new Date(today.getTime() - (i * 24 * 60 * 60 * 1000));
+      const dayOfWeek = currentDate.getDay() + 1; // Convert to MongoDB format (1=Sunday, 7=Saturday)
+      const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayName = dayNames[currentDate.getDay()];
+      const dateString = currentDate.toISOString().split('T')[0];
+      
+      // Find matching data from aggregation result
+      const matchingData = result.find(item => item.daysAgo === i);
+      
+      weekData.push({
+        daysAgo: i,
+        dayOfWeek: dayOfWeek,
+        dayName: dayName,
+        date: dateString,
+        totalOrders: matchingData ? matchingData.totalOrders : 0,
+        isToday: i === 0
+      });
+    }
+
+    return weekData;
+    
+  } catch (error) {
+    throw new Error(`Error getting weekly order count: ${error.message}`);
+  }
+};
+
+
   
 }
 

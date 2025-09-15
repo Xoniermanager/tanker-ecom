@@ -11,9 +11,10 @@ import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { userData } = useAuth();
-  const { cartData, discountPrice, withShippingChargesPrice, fetchCartData } = useCart();
+  const { cartData, discountPrice, withShippingChargesPrice, fetchCartData, shippingPrice } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
+  const [addressIsSame, setAddressIsSame] = useState(true);
   const router = useRouter();
   
   const [formData, setFormData] = useState({
@@ -22,13 +23,13 @@ const Page = () => {
     email: "",
     phone: "",
     products: [],
-    billingAddress: {
+    shippingAddress: {
       address: "",
       country: "",
       city: "",
       pincode: "",
     },
-    shippingAddress: {
+    billingAddress: {
       address: "",
       country: "",
       city: "",
@@ -96,8 +97,8 @@ const Page = () => {
         phone: String(formData.phone),
         products: formData.products,
         address: {
-          billingAddress: formData.billingAddress,
-          shippingAddress: formData.shippingAddress
+          shippingAddress: formData.shippingAddress,
+          billingAddress: addressIsSame ? formData.shippingAddress : formData.billingAddress
         },
         paymentMethod: formData.paymentMethod,
         orderNotes: formData.orderNotes,
@@ -169,6 +170,9 @@ const Page = () => {
         errMessage={errMessage}
         isLoading={isLoading}
         onPaymentSuccess={handlePaymentSuccess}
+        shippingPrice={shippingPrice}
+        addressIsSame={addressIsSame}
+        setAddressIsSame={setAddressIsSame}
       />
     </>
   );

@@ -25,6 +25,8 @@ const contactSchema = z.object({
         required_error: "Message is required.",
         invalid_type_error: "Message must be a string.",
     }).min(1, "Message cannot be empty."),
+    captchaToken: z.string({required_error: "Captcha token is required.",})
+    .min(1, "Captcha token cannot be empty"),
 });
 
 module.exports = {
