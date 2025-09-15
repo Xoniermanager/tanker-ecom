@@ -24,6 +24,11 @@ const productSchema = new Schema(
       required: true,
       min: 0,
     },
+    // shippingPrice: {
+    //   type: Number,
+    //   required: true,
+    //   min: 0,
+    // },
     shortDescription: {
       type: String,
       required: true,

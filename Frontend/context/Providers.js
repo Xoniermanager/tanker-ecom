@@ -7,16 +7,17 @@ import SiteDataContextProvider from "./siteData/SiteDataContextProvider";
 
 const Providers = ({ children }) => {
   return (
-    <>
+    <><SiteDataContextProvider>
       <AuthContextProvider>
         <CartContextProvider>
           <DashBoardContextProvider>
-            <SiteDataContextProvider>
+            
           {children}
-          </SiteDataContextProvider>
+         
          </DashBoardContextProvider>
         </CartContextProvider>
       </AuthContextProvider>
+       </SiteDataContextProvider>
     </>
   );
 };

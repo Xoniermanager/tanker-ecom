@@ -36,7 +36,7 @@ const page = () => {
     mobileNumber: "",
     alternativeEmail: "",
     country: "",
-    preferredLanguage: "",
+    // preferredLanguage: "",
     communicationPreference: "",
     password: "",
     confirmPassword: "",
@@ -50,33 +50,33 @@ const page = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const formDisable = formData.fullName === "" || formData.companyName === "" || formData.alternativeEmail === "" || formData.communicationPreference === "" || formData.confirmPassword === "" || formData.country === "" || formData.designation === "" || formData.mobileNumber === "" || formData.password === "" || formData.preferredLanguage === "" || formData.password.length < 8 || !captchaToken;
+  const formDisable = formData.fullName === "" || formData.companyName === "" || formData.alternativeEmail === "" || formData.communicationPreference === "" || formData.confirmPassword === "" || formData.country === "" || formData.designation === "" || formData.mobileNumber === "" || formData.password === "" ||  formData.password.length < 8;
 
-  const handleCaptcha = (token) => {
+  // const handleCaptcha = (token) => {
     
-    setCaptchaToken(token);
-    if (errMessage && errMessage.includes("robot")) setErrMessage(null);
-  };
+  //   setCaptchaToken(token);
+  //   if (errMessage && errMessage.includes("robot")) setErrMessage(null);
+  // };
 
-  const handleCaptchaExpired = () => {
+  // const handleCaptchaExpired = () => {
    
-    setCaptchaToken(null);
-  };
+  //   setCaptchaToken(null);
+  // };
 
-  const handleCaptchaError = () => {
+  // const handleCaptchaError = () => {
     
-    setCaptchaToken(null);
-    setErrMessage("reCAPTCHA error occurred. Please try again.");
-  };
+  //   setCaptchaToken(null);
+  //   setErrMessage("reCAPTCHA error occurred. Please try again.");
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      if (!captchaToken) {
-        setErrMessage("Please verify that you are not a robot");
-        return;
-      }
+
+      const token = await recaptchaRef.current.executeAsync();
+    recaptchaRef.current.reset();
+      
       if (formData.password.trim() !== formData.confirmPassword.trim())
         return setErrMessage(
           "Your password does not matching please fill again"
@@ -84,7 +84,7 @@ const page = () => {
 
       if (formData.password.trim().length < 8)
         return setErrMessage("Password should be 8 words or above");
-      const response = await api.post(`/auth/register`, formData, {
+      const response = await api.post(`/auth/register`, {...formData, captchaToken: token}, {
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -97,7 +97,7 @@ const page = () => {
           mobileNumber: "",
           alternativeEmail: "",
           country: "",
-          preferredLanguage: "",
+          // preferredLanguage: "",
           communicationPreference: "",
           password: "",
           confirmPassword: "",
@@ -116,7 +116,7 @@ const page = () => {
       setErrMessage(message);
     } finally {
       setIsLoading(false);
-      setCaptchaToken(null);
+     
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
       }
@@ -259,7 +259,7 @@ const page = () => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2">
                 <label
                   htmlFor="country"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -282,7 +282,7 @@ const page = () => {
                   ))}
                 </select>
               </div>
-              <div className="w-full flex flex-col gap-2">
+              {/* <div className="w-full flex flex-col gap-2">
                 <label
                   htmlFor="preferredLanguage"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -302,7 +302,7 @@ const page = () => {
                   <option value="mandarin">Mandarin</option>
                   <option value="spanish">Spanish</option>
                 </select>
-              </div>
+              </div> */}
               <div className="w-full flex flex-col gap-2 col-span-2">
                 <label
                   htmlFor="communicationPreference"
@@ -405,13 +405,10 @@ const page = () => {
               </div>
             )}
             <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-              onChange={handleCaptcha}
-              onExpired={handleCaptchaExpired}
-              onError={handleCaptchaError}
-              theme="light"
-            />
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                  />
             <div className="flex relative group">
               <button
                 type="submit"

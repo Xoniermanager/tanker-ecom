@@ -40,6 +40,14 @@ const productSchema = z.object({
     .transform(Number)
     .refine(val => val >= 0, { message: "Selling price cannot be negative." }),
 
+  // shippingPrice: z
+  //   .string({
+  //     required_error: "Shipping price is required.",
+  //   })
+  //   .regex(/^\d+(\.\d+)?$/, "Shipping price must be a valid number.")
+  //   .transform(Number)
+  //   .refine(val => val >= 0, { message: "Shipping price cannot be negative." }),
+
   shortDescription: z.string({
     required_error: "Short description is required.",
     invalid_type_error: "Short description must be a string.",

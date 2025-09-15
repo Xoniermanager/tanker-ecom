@@ -19,7 +19,7 @@ const UserProfileUpdate = () => {
         mobileNumber: "",
         companyName: "",
         designation: "",
-        preferredLanguage:"",
+        // preferredLanguage:"",
         country: "",
         communicationPreference:"",
         profileImage: ""
@@ -36,7 +36,7 @@ const UserProfileUpdate = () => {
         mobileNumber: userData.mobileNumber || "",
         companyName: userData.companyName || "",
         designation : userData.designation || "",
-        preferredLanguage: userData.preferredLanguage || "",
+        // preferredLanguage: userData.preferredLanguage || "",
         country: userData.country || "",
         communicationPreference: userData.communicationPreference || "",
         profileImage: ""
@@ -94,7 +94,7 @@ const UserProfileUpdate = () => {
             mobileNumber: formData.mobileNumber,
             companyName: formData.companyName,
             designation: formData.designation,
-            preferredLanguage: formData.preferredLanguage,
+            // preferredLanguage: formData.preferredLanguage,
             country: formData.country,
             communicationPreference: formData.communicationPreference,
             profileImage: profileImageUrl
@@ -309,7 +309,7 @@ const UserProfileUpdate = () => {
                                             ))}
                                         </select>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
                                         <select
                                             name="preferredLanguage"
@@ -323,8 +323,8 @@ const UserProfileUpdate = () => {
                   <option value="spanish">Spanish</option>
                                             
                                         </select>
-                                    </div>
-                                    <div className='col-span-2'>
+                                    </div> */}
+                                    <div className=''>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">Communication Preference</label>
                                         <select
                                             name="communicationPreference"

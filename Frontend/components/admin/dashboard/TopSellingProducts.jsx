@@ -36,8 +36,8 @@ const TopSellingProducts = () => {
             transition={{ duration: 0.3 }}
             className="absolute right-0 mt-2 shadow-[0_0_15px_#00000020] bg-white w-40 p-3 z-20 rounded-md flex flex-col gap-2"
           >
-            <li><Link href={''} className="text-sm hover:text-orange-500">View Detail</Link></li>
-            <li><button className="text-sm hover:text-orange-500">Download</button></li>
+            <li><Link href={'/admin/products'} className="text-sm hover:text-orange-500">View Detail</Link></li>
+            {/* <li><button className="text-sm hover:text-orange-500">Download</button></li> */}
           </motion.ul>
         </div>
       </div>
@@ -66,7 +66,7 @@ const TopSellingProducts = () => {
                       alt={item?.product[0]?.name}
                       width={40}
                       height={40}
-                      className="rounded-md object-cover h-12 w-12 group-hover:scale-105"
+                      className="rounded-md object-contain h-12 w-12 group-hover:scale-105"
                     />
                     <span className={`font-medium text-purple-900 group-hover:text-orange-500`}>{item?.product[0]?.name}</span>
                   </Link>

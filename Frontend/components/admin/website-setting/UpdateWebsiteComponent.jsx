@@ -129,7 +129,7 @@ const UpdateWebsiteComponent = ({
         </GridTwo>
 
         
-        <SectionTitle title="Site Details" />
+        <SectionTitle title="Site Details & Shipping Price" />
         <div className="p-4 bg-purple-50/50 rounded-lg flex flex-col gap-4">
           
           {/* <div>
@@ -189,6 +189,13 @@ const UpdateWebsiteComponent = ({
             value={formData.siteDetails.copyright}
             onChange={(e) => handleChange(e, "siteDetails.copyright")}
           />
+          <InputField
+    label="Shipping Price ($)"
+    type="number"
+    value={formData.shippingPrice}
+    onChange={(e) => handleChange(e, "shippingPrice")}
+    placeholder="Enter shipping price"
+  />
         </div>
 
         

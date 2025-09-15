@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import ProductList from "../../../../../components/admin/products/ProductList";
 import api from "../../../../../components/user/common/api";
 import { toast } from "react-toastify";
+import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
 
 const page = () => {
   const [categoryData, setCategoryData] = useState(null);
@@ -51,7 +52,7 @@ const page = () => {
     }
   };
 
-   useEffect(() => {
+  useEffect(() => {
     const delayDebouncing = setTimeout(() => {
       setFilterByName(searchInput)
       setCurrentPage(1)
@@ -107,10 +108,28 @@ const page = () => {
   );
 };
 
+const handleToggleStatus = async(id)=>{
+  // setIsLoading(true)
+    try {
+      const response = await api.patch(`/products/${id}`)
+      if(response.status === 200){
+        toast.success(response.data.message || "Product status changed successfully");
+        getProducts()
+      }
+    } catch (error) {
+      const message =
+      (Array.isArray(error?.response?.data?.errors) && error.response.data.errors[0]?.message) ||
+      error?.response?.data?.message ||
+      "Something went wrong";
+    setErrMessage(message);
+     toast.error(message)
+    } 
+}
+
   return (
     <>
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
-        <ProductList categoryData={categoryData} productData={productData} totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage} deletePopupShow={deletePopupShow} setDeletePopupShow={setDeletePopupShow} setDeleteProduct={setDeleteProduct} handleDelete={handleDelete} isLoading={isLoading} errMessage={errMessage} searchInput={searchInput} setSearchInput={setSearchInput} setPageLimit={setPageLimit} selectedCategories={selectedCategories} setSelectedCategories={setSelectedCategories} handleCategoryChange={handleCategoryChange}/>
+        <ProductList categoryData={categoryData} productData={productData} totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage} deletePopupShow={deletePopupShow} setDeletePopupShow={setDeletePopupShow} setDeleteProduct={setDeleteProduct} handleDelete={handleDelete} isLoading={isLoading} errMessage={errMessage} searchInput={searchInput} setSearchInput={setSearchInput} setPageLimit={setPageLimit} selectedCategories={selectedCategories} setSelectedCategories={setSelectedCategories} handleCategoryChange={handleCategoryChange} handleToggleStatus={handleToggleStatus}/>
       </div>
     </>
   );

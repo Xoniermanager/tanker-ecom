@@ -259,7 +259,7 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                {/* <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-blue-100 rounded-lg">
                       <FaGlobe className="w-4 h-4 text-blue-600" />
@@ -273,7 +273,7 @@ const UserProfile = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">

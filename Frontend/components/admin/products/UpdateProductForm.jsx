@@ -235,6 +235,7 @@ const UpdateProductForm = ({
       formPayload.append("category", formData.category);
       formPayload.append("regularPrice", formData.regularPrice);
       formPayload.append("sellingPrice", formData.sellingPrice);
+      // formPayload.append("shippingPrice", formData.shippingPrice);
       formPayload.append("shortDescription", formData.shortDescription);
       formPayload.append("description", formData.description);
       formPayload.append("brand", formData.brand);
@@ -437,6 +438,31 @@ const UpdateProductForm = ({
               />{" "}
             </div>
           </div>
+          {/* <div className="flex flex-col gap-2 col-span-2">
+                      <label
+                        htmlFor="shippingPrice"
+                        className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                      >
+                        <span className="text-red-500 text-[8px]">
+                          <FaStarOfLife />
+                        </span>{" "}
+                        Shipping Price
+                      </label>
+                      <div className="border border-gray-300 rounded-md bg-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-400 gap-2.5">
+                        <AiOutlineDollar className="text-lg text-orange-400" />
+                        <input
+                          type="number"
+                          id="shippingPrice"
+                          name="shippingPrice"
+                          placeholder="Shipping Price"
+                          value={formData.shippingPrice}
+                          onChange={handleInputChange}
+                          onWheel={(e) => e.currentTarget.blur()}
+                          className="w-full outline-none"
+                          required
+                        />{" "}
+                      </div>
+                    </div> */}
 
           {/* <div className="flex flex-col gap-2">
             <label

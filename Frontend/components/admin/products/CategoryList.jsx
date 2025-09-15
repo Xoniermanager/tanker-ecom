@@ -168,9 +168,9 @@ const CategoryList = ({
                   </td>
 
                   <td className="px-6 py-6 text-xl text-gray-500 flex items-center gap-2">
-                    <button className="flex items-center justify-center h-8 w-8 rounded-lg text-white bg-orange-400 hover:bg-orange-500">
+                    {/* <button className="flex items-center justify-center h-8 w-8 rounded-lg text-white bg-orange-400 hover:bg-orange-500">
                       <FaEye />
-                    </button>
+                    </button> */}
                     <button
                       className="flex items-center justify-center h-8 w-8 rounded-lg text-white bg-green-400 hover:bg-green-500"
                       onClick={() => handleEdit(item._id, item.name)}

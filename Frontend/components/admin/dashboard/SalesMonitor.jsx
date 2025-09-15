@@ -54,7 +54,7 @@ const SalesMonitor = () => {
          viewport={{ once: true }}
         className={` absolute shadow-[0_0_15px_#00000020] bg-white w-42 p-4 z-9000 -left-16 px-6 rounded-lg flex flex-col gap-1.5`}>
            <li><Link href={'/admin/orders'} className="hover:text-orange-500">View Detail</Link></li>
-           <li><button className="hover:text-orange-500" onClick={()=>toast.info("Temporarily disabled")}>Download</button></li>
+           {/* <li><button className="hover:text-orange-500" onClick={()=>toast.info("Temporarily disabled")}>Download</button></li> */}
         </motion.ul>
         </div>
       </div>

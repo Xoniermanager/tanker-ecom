@@ -10,6 +10,7 @@ export const DashBoardContextProvider = ({ children }) => {
   const [topSellingCategories, setTopSellingCategories] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [isDashboardLoading, setIsDashboardLoading] = useState(false);
+  const [weeklySale, setWeeklySale]= useState(null)
   const [timeframe, setTimeframe] = useState(30);
 
   const fetchDashboardData = async () => {
@@ -22,6 +23,7 @@ export const DashBoardContextProvider = ({ children }) => {
         setDashboardAllData(response?.data?.data);
         setTopSellingProductData(response?.data?.data?.data?.topSellingProducts)
         setTopSellingCategories(response?.data?.data?.data?.topSellingCategories)
+        setWeeklySale(response?.data?.data?.data?.weeklyOrderCount)
        
       }
     } catch (error) {
@@ -45,6 +47,6 @@ export const DashBoardContextProvider = ({ children }) => {
   }, [timeframe]);
 
   return (
-    <DashboardContext.Provider value={{dashboardData, isDashboardLoading, topSellingProductsData, topSellingCategories}}>{children}</DashboardContext.Provider>
+    <DashboardContext.Provider value={{dashboardData, isDashboardLoading, weeklySale, topSellingProductsData, topSellingCategories}}>{children}</DashboardContext.Provider>
   );
 };

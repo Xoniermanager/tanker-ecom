@@ -1,4 +1,3 @@
-
 const { UserService } = require("../services/user.service");
 const customResponse = require("../utils/response");
 
@@ -232,6 +231,28 @@ class AuthController {
         }
     }
 
+    getUserByID = async (req,res,next)=>{
+        try {
+            const {id} = req.params
+            const user = await this.userService.getUserByID(id);
+            return customResponse(res, "User data get successfully", user)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+    getall = async(req,res,next)=>{
+        try {
+            const { page = 1, limit = 10, ...filters } = req.query;
+            const users = await this.userService.getall(page, limit, filters)
+            
+            return customResponse(res, "Users fetched successfully", users)
+        } catch (error) {
+            next(error)
+        }
+    }
+
 
     changePassword = async (req, res, next) => {
         try {
@@ -277,6 +298,30 @@ class AuthController {
             customResponse(res, "logout successful")
         }
         catch (error) {
+            next(error)
+        }
+    }
+
+
+    activate = async(req, res, next)=>{
+        try {
+            const {id} = req.params;
+
+            const response = await this.userService.activate(id)
+            return customResponse(res, `${response.fullName} account activate successfully`)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+    deactivate = async(req, res, next)=>{
+        try {
+            const {id} = req.params;
+
+            const response = await this.userService.deactivate(id)
+            return customResponse(res, `${response.fullName} account deactivate successfully`)
+        } catch (error) {
             next(error)
         }
     }

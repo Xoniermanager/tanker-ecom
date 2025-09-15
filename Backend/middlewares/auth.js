@@ -1,5 +1,6 @@
 const { verifyAccessToken } = require("../utils/jwt");
 const User = require('../models/user.model');
+const { USER_STATUS } = require("../constants/enums");
 
 /**
  * Middleware to authenticate and authorize based on roles.
@@ -35,6 +36,12 @@ const authorize = (allowedRoles = []) => {
             if (!user) {
                 const error = new Error("User not found");
                 error.statusCode = 401;
+                next(error)
+            }
+
+            if(user.status !== USER_STATUS.ACTIVE){
+                const error = new Error("Your account is inactive. You can't log in. Please contact the admin");
+                error.statusCode = 403;
                 next(error)
             }
 

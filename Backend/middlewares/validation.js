@@ -51,6 +51,12 @@ const optionalUrl = z
  ** Site Setting Schema
  */
 const siteSettingSchema = z.object({
+    shippingPrice: z.string({
+      required_error: "Regular price is required.",
+    })
+    .regex(/^\d+(\.\d+)?$/, "Regular price must be a valid number.")
+    .transform(Number)
+    .refine(val => val >= 0, { message: "Regular price cannot be negative." }),
     contactDetails: z.object({
         emails: z.object({
 

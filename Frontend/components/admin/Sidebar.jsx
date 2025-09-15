@@ -454,13 +454,13 @@ const Sidebar = () => {
 
           {/* CUSTOMERS */}
 
-          {/* <li>
+          <li>
             {" "}
             <Link
-              href={`/admin/dashboard/customers`}
+              href={`/admin/customers`}
               className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
-                pathpop === "customers"
-                  ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
+                pathname.includes("customers")
+                  ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
                   : "bg-transparent  "
               } `}
             >
@@ -479,7 +479,7 @@ const Sidebar = () => {
                 Customers
               </span>
             </Link>
-          </li> */}
+          </li>
 
           {/* INVOICE */}
 

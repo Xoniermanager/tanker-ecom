@@ -4,12 +4,14 @@ import { CartContext } from "./CartContext.js";
 import api from "../../components/user/common/api.js";
 import { useAuth } from "../user/AuthContext.js";
 import { toast } from "react-toastify";
+import { useSite } from "../siteData/SiteDataContext.js";
 
 const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { isAuthenticated } = useAuth();
+    const {shippingPrice, isSiteDataLoading} = useSite()
 
   const fetchCartData = async () => {
     if (!isAuthenticated) {
@@ -87,10 +89,12 @@ const CartContextProvider = ({ children }) => {
     0
   );
   const withShippingChargesPrice =
-    Number(discountPrice) + Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE);
+    Number(discountPrice) + Number(shippingPrice);
   useEffect(() => {
     fetchCartData();
   }, []);
+
+ 
 
   return (
     <CartContext.Provider
@@ -105,6 +109,7 @@ const CartContextProvider = ({ children }) => {
         regularPrice,
         discountPrice,
         withShippingChargesPrice,
+        shippingPrice
       }}
     >
       {children}

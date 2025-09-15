@@ -8,6 +8,7 @@ import {
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { FaXmark, FaCheck } from "react-icons/fa6";
 import StripePaymentModal from "./StripePaymentModal";
+import Link from "next/link";
 
 const CheckOut = ({
   formData,
@@ -20,23 +21,24 @@ const CheckOut = ({
   discountPrice,
   withShippingChargesPrice,
   errMessage,
-  onPaymentSuccess, 
+  onPaymentSuccess,
+  shippingPrice,
+  addressIsSame,
+  setAddressIsSame,
 }) => {
   const [showStripeModal, setShowStripeModal] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState(null);
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    
-    if (formData.paymentMethod === 'online_payment') {
-     
-      const result = await handleSubmit(e, true); 
+
+    if (formData.paymentMethod === "online_payment") {
+      const result = await handleSubmit(e, true);
       if (result?.orderId) {
         setCreatedOrderId(result.orderId);
         setShowStripeModal(true);
       }
     } else {
-     
       handleSubmit(e);
     }
   };
@@ -48,8 +50,6 @@ const CheckOut = ({
     }
   };
   return (
-
-    
     <>
       <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
         <div className="w-[72%] flex flex-col gap-3">
@@ -117,113 +117,38 @@ const CheckOut = ({
               />
             </div>
             <div className="w-full col-span-2 border-b-1 border-stone-200 "></div>
-            <div className="col-span-2 grid grid-cols-2 gap-5 p-5 bg-white/90 border-stone-200 border-1 rounded-lg capitalize">
-              <h3 className="text-lg font-medium text-purple-950 col-span-2">
-                {" "}
-                <span className="text-red-500">*</span> Billing address{" "}
-              </h3>
-              <div className="flex flex-col gap-2 col-span-2">
-                <label htmlFor="billingAddress.address"> Address</label>
-                <input
-                  type="text"
-                  name="billingAddress.address"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
-                  placeholder="Enter you address"
-                  value={formData.billingAddress.address}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* <div className="flex flex-col gap-2 col-span-2">
-                <label htmlFor="billingAddress.state"> State</label>
-                <select
-                  type="text"
-                  name="billingAddress.state"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
-                  placeholder="Enter you address"
-                  value={formData.billingAddress.state}
-                  onChange={handleChange}
-                  required
+            <div className="w-full col-span-2 flex justify-between bg-white p-4 px-6 rounded-lg">
+              <h2 className="text-purple-950 font-semibold text-xl">
+                Shipping & Billing Address
+              </h2>
+              <div className="flex items-center gap-4">
+                <span
+                  className={`${
+                    addressIsSame ? "bg-green-500" : "bg-orange-500 "
+                  } rounded-lg tracking-wide px-3 py-1 text-sm text-white`}
                 >
-                  <option value="" hidden>
-                    {" "}
-                    Choose your state{" "}
-                  </option>
-                  {Object.values(NEWZEALAND_REGIONS).map((item, i) => (
-                    <option value={item} className="capitalize" key={i}>
-                      {item.split("_").join(" ")}
-                    </option>
-                  ))}
-                </select>
-              </div> */}
-              <div className="flex flex-col gap-2 col-span-2">
-                <label htmlFor="billingAddress.country"> Country</label>
-                <select
-                  type="text"
-                  name="billingAddress.country"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
-                  placeholder="Enter you address"
-                  value={formData.billingAddress.country}
-                  onChange={handleChange}
-                  required
+                  {addressIsSame ? "Same" : "Different"}{" "}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setAddressIsSame(!addressIsSame)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+                    addressIsSame ? "bg-orange-500" : "bg-gray-400"
+                  }`}
                 >
-                  <option value="" hidden>
-                    {" "}
-                    Choose your Country{" "}
-                  </option>
-                  {Object.values(COUNTRIES).map((item, i) => (
-                    <option value={item.value} className="capitalize" key={i}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="billingAddress.city"> Town/City</label>
-                <input
-                  type="text"
-                  name="billingAddress.city"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
-                  placeholder="City"
-                  value={formData.billingAddress.city}
-                  onChange={handleChange}
-                  required
-                />
-                {/* <div className="flex items-center justify-end w-full">
-                  {formData.billingAddress.city &&
-                    (!Object.values(NEWZEALAND_CITIES).includes(
-                      formData.billingAddress.city.toLowerCase()
-                    ) ? (
-                      <p className="text-red-500 text-sm flex items-center gap-1 first-letter:capitalize">
-                        {" "}
-                        <span>*</span> You entered city is invalid
-                      </p>
-                    ) : (
-                      <p className="text-green-500 text-sm flex items-center gap-1 capitalize">
-                        {" "}
-                        <FaCheck /> valid city{" "}
-                      </p>
-                    ))}
-                </div> */}
-              </div>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="billingAddress.pincode">Zip Code</label>
-                <input
-                  type="number"
-                  name="billingAddress.pincode"
-                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
-                  placeholder="Zip Code"
-                  value={formData.billingAddress.pincode}
-                  onChange={handleChange}
-                  required
-                />
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                      addressIsSame ? "translate-x-6" : "translate-x-1"
+                    }`}
+                  />
+                </button>
               </div>
             </div>
             <div className="col-span-2 grid grid-cols-2 gap-5 p-5 bg-white/90 border-stone-200 border-1 rounded-lg">
               <h3 className="text-lg font-medium text-purple-950 col-span-2 capitalize">
                 {" "}
-                <span className="text-red-500">*</span> Shipping address{" "}
+                <span className="text-red-500">*</span>{" "}
+                {!addressIsSame && "Shipping"} address{" "}
               </h3>
               <div className="flex flex-col gap-2 col-span-2">
                 <label htmlFor="shippingAddress.address"> Address</label>
@@ -300,6 +225,112 @@ const CheckOut = ({
                 />
               </div>
             </div>
+            {!addressIsSame && (
+              <div className="col-span-2 grid grid-cols-2 gap-5 p-5 bg-white/90 border-stone-200 border-1 rounded-lg capitalize">
+                <h3 className="text-lg font-medium text-purple-950 col-span-2">
+                  {" "}
+                  <span className="text-red-500">*</span> Billing address{" "}
+                </h3>
+                <div className="flex flex-col gap-2 col-span-2">
+                  <label htmlFor="billingAddress.address"> Address</label>
+                  <input
+                    type="text"
+                    name="billingAddress.address"
+                    className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                    placeholder="Enter you address"
+                    value={formData.billingAddress.address}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {/* <div className="flex flex-col gap-2 col-span-2">
+                <label htmlFor="billingAddress.state"> State</label>
+                <select
+                  type="text"
+                  name="billingAddress.state"
+                  className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
+                  placeholder="Enter you address"
+                  value={formData.billingAddress.state}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" hidden>
+                    {" "}
+                    Choose your state{" "}
+                  </option>
+                  {Object.values(NEWZEALAND_REGIONS).map((item, i) => (
+                    <option value={item} className="capitalize" key={i}>
+                      {item.split("_").join(" ")}
+                    </option>
+                  ))}
+                </select>
+              </div> */}
+                <div className="flex flex-col gap-2 col-span-2">
+                  <label htmlFor="billingAddress.country"> Country</label>
+                  <select
+                    type="text"
+                    name="billingAddress.country"
+                    className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3 capitalize"
+                    placeholder="Enter you address"
+                    value={formData.billingAddress.country}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="" hidden>
+                      {" "}
+                      Choose your Country{" "}
+                    </option>
+                    {Object.values(COUNTRIES).map((item, i) => (
+                      <option value={item.value} className="capitalize" key={i}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="billingAddress.city"> Town/City</label>
+                  <input
+                    type="text"
+                    name="billingAddress.city"
+                    className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                    placeholder="City"
+                    value={formData.billingAddress.city}
+                    onChange={handleChange}
+                    required
+                  />
+                  {/* <div className="flex items-center justify-end w-full">
+                  {formData.billingAddress.city &&
+                    (!Object.values(NEWZEALAND_CITIES).includes(
+                      formData.billingAddress.city.toLowerCase()
+                    ) ? (
+                      <p className="text-red-500 text-sm flex items-center gap-1 first-letter:capitalize">
+                        {" "}
+                        <span>*</span> You entered city is invalid
+                      </p>
+                    ) : (
+                      <p className="text-green-500 text-sm flex items-center gap-1 capitalize">
+                        {" "}
+                        <FaCheck /> valid city{" "}
+                      </p>
+                    ))}
+                </div> */}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="billingAddress.pincode">Zip Code</label>
+                  <input
+                    type="number"
+                    name="billingAddress.pincode"
+                    className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
+                    placeholder="Zip Code"
+                    value={formData.billingAddress.pincode}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col gap-2 col-span-2">
               <h3 className="text-lg font-medium text-purple-950  capitalize">
                 {" "}
@@ -354,8 +385,7 @@ const CheckOut = ({
                 </span>{" "}
                 <div className="text-black/75 text-[15px]">
                   {" "}
-                  Flat Rate: $
-                  {Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE).toFixed(2)}
+                  Flat Rate: ${Number(shippingPrice).toFixed(2)}
                 </div>{" "}
               </li>
             </ul>
@@ -367,7 +397,10 @@ const CheckOut = ({
                 Total{" "}
               </span>
               <span className="font-semibold text-purple-950 text-xl">
-                ${cartData?.length > 0 ? withShippingChargesPrice?.toFixed(2) : "--"}
+                $
+                {cartData?.length > 0
+                  ? withShippingChargesPrice?.toFixed(2)
+                  : "--"}
               </span>
             </div>
           </div>
@@ -427,9 +460,13 @@ const CheckOut = ({
               />
               <label htmlFor="terms" className="text-sm text-stone-700">
                 I have read and agree to the{" "}
-                <span className="text-purple-700 underline cursor-pointer">
+                <Link
+                  href={`/terms-and-conditions`}
+                  target="_blank"
+                  className="text-purple-700 underline cursor-pointer"
+                >
                   Terms & Conditions
-                </span>
+                </Link>
               </label>
             </div>
             <div className="flex">
@@ -439,10 +476,22 @@ const CheckOut = ({
               <button
                 onClick={handlePlaceOrder}
                 disabled={
-                  !formData.terms ||  formData.billingAddress.country === "" || formData.shippingAddress.country === "" || formData.billingAddress.address === "" || formData.shippingAddress.address === "" || formData.shippingAddress.pincode === 0 || formData.shippingAddress.pincode.toString().length < 4 || formData.billingAddress.pincode.toString().length < 4 ||  formData.shippingAddress.pincode === "" || formData.billingAddress.pincode === "" || formData.billingAddress.pincode == 0 ||
+                  !formData.terms ||
+                  formData.shippingAddress.country === "" ||
+                  
+                  formData.shippingAddress.address === "" ||
+                  formData.shippingAddress.pincode === 0 ||
+                  formData.shippingAddress.pincode.toString().length < 4 ||
+                  formData.shippingAddress.pincode === "" ||
+                  (!addressIsSame &&
+                    (formData.billingAddress.pincode === "" ||
+                      formData.billingAddress.address === "" ||
+                      formData.billingAddress.pincode == 0 ||
+                      formData.billingAddress.country === "" ||
+                      formData.billingAddress.pincode.toString().length < 4)) ||
                   !Object.values(PAYMENT_METHODS).includes(
                     formData.paymentMethod
-                  ) 
+                  )
                 }
                 className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase w-full relative"
               >
@@ -450,7 +499,15 @@ const CheckOut = ({
                 {!isLoading && <MdShoppingCartCheckout className="text-lg" />}
               </button>
 
-              {(!formData.terms || formData.billingAddress.country === "" || formData.shippingAddress.country === "" || formData.billingAddress.address === "" || formData.shippingAddress.address === "" || formData.shippingAddress.pincode === "" || formData.shippingAddress.pincode == 0 || formData.billingAddress.pincode === "" || formData.billingAddress.pincode == 0 ||
+              {(!formData.terms ||
+                formData.shippingAddress.country === "" ||
+                formData.billingAddress.address === "" ||
+                formData.shippingAddress.address === "" ||
+                formData.shippingAddress.pincode === "" ||
+                formData.shippingAddress.pincode == 0 ||
+                formData.billingAddress.pincode === "" ||
+                formData.billingAddress.pincode == 0 ||
+                formData.billingAddress.country === "" ||
                 !Object.values(PAYMENT_METHODS).includes(
                   formData.paymentMethod
                 )) && (

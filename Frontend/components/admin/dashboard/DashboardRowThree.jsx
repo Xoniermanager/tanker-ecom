@@ -5,6 +5,7 @@ import ReviewsBox from './ReviewsBox'
 import CustomerRating from '../common/CustomerRating'
 import ProductSold from './ProductSold'
 import CountryMonitor from './CountryMonitor'
+import UserMonitor from './UserMonitor'
 
 const DashboardRowThree = () => {
   return (
@@ -12,10 +13,11 @@ const DashboardRowThree = () => {
       <div className="w-full py-6 pb-4 grid grid-cols-3 gap-8">
         <OrderMonitor/>
         <SalesMonitor/>
-        <ReviewsBox/>
+        {/* <ReviewsBox/> */}
+        <UserMonitor/>
       </div>
-      <div className="w-full pb-6 grid grid-cols-2 gap-6">
-        <CustomerRating/>
+      <div className="w-full pb-6 grid grid-cols-1 gap-6">
+        {/* <CustomerRating/> */}
         <ProductSold/>
         {/* <CountryMonitor /> */}
         

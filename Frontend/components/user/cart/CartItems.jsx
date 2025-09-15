@@ -8,6 +8,8 @@ import { FaMinus, FaPlus, FaXmark } from "react-icons/fa6";
 import { TbShoppingCartX } from "react-icons/tb";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "../../../context/user/AuthContext";
+import { useSite } from "../../../context/siteData/SiteDataContext";
+import PageLoader from "../../common/PageLoader";
 
 const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartData }) => {
   const {
@@ -17,7 +19,8 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
     decreesCount,
     regularPrice,
     discountPrice,
-    withShippingChargesPrice
+    withShippingChargesPrice,
+    shippingPrice
     
   } = useCart();
 
@@ -27,6 +30,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
 
   const pathname = usePathname()
 
+  
 
   return (
     <>
@@ -65,7 +69,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                       Number(item?.product?.regularPrice)) *
                     100;
                   return (
-                    <tr>
+                    <tr key={index}>
                       <td className="py-5 ">
                         <Link
                           href={`products/${item.product?.slug}`}
@@ -75,7 +79,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
                             src={item?.product?.images[0]?.source || item?.product?.images[0] || '/images/dummy.jpg' }
                             height={80}
                             width={80}
-                            className="h-16 w-18 group-hover:scale-104 rounded-lg object-cover"
+                            className="h-16 w-18 group-hover:scale-104 rounded-lg object-contain "
                             alt="product"
                           />
                           <span className="text-lg text-purple-950 capitalize font-medium group-hover:text-orange-500">
@@ -169,7 +173,7 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
               <div className="text-black/75 text-[15px]">
                   {" "}
                   Flat Rate: $
-                  {Number(process.env.NEXT_PUBLIC_SHIPPING_PRICE).toFixed(2)}
+                  {(isAuthenticated && cartData?.length > 0) ? Number(shippingPrice).toFixed(2) : "--"}
                 </div>{" "}
             </li>
             <li className="flex items-center justify-between bg-orange-50/60 py-5 px-6">

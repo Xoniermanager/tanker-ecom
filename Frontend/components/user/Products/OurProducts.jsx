@@ -205,7 +205,7 @@ const OurProducts = ({
                   width={75}
                   height={75}
                   alt="truck icon"
-                  className="h-16 w-20 object-cover"
+                  className="h-16 w-20 object-contain"
                 />
                 <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
                   {item.name}

@@ -6,6 +6,11 @@ const { getPublicFileUrl } = require("../utils/storage");
 
 const siteSettingSchema = new mongoose.Schema(
   {
+     shippingPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
     contactDetails: {
       emails: {
         // sales_enquiry: { type: String, required: true },

@@ -58,7 +58,7 @@ const LoginForm = () => {
         <div className='max-w-7xl mx-auto flex items-start gap-8'>
              <div className='w-[42%] flex flex-col gap-2'>
                       <h1 className='text-[40px] font-bold text-purple-950 '>Welcome Back</h1>
-                      <p className='text-zinc-500 text-lg font-medium'>Login to access your dashboard and manage your company profile.</p>
+                      <p className='text-zinc-500 text-lg font-medium'>Please login to shopping with us and manage your profile and orders</p>
                       <Image src={'/images/login.webp'} width={460} height={460} alt='signup image'/>
                     </div>
                     <div className='w-[57%] bg-white rounded-lg shadow-[0_0_14px_#00000015] p-9 flex flex-col gap-6'>
