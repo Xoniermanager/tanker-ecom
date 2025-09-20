@@ -22,6 +22,7 @@ const CheckOut = ({
   withShippingChargesPrice,
   errMessage,
   onPaymentSuccess,
+  onPaymentFailed,
   shippingPrice,
   addressIsSame,
   setAddressIsSame,
@@ -49,6 +50,13 @@ const CheckOut = ({
       onPaymentSuccess(createdOrderId);
     }
   };
+
+  const handlePaymentFiled = () =>{
+     setShowStripeModal(false);
+     if(onPaymentFailed){
+      onPaymentFailed(createdOrderId)
+     }
+  }
   return (
     <>
       <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
@@ -525,6 +533,7 @@ const CheckOut = ({
         orderId={createdOrderId}
         totalAmount={withShippingChargesPrice?.toFixed(2)}
         onSuccess={handlePaymentComplete}
+        onFailed={handlePaymentFiled}
       />
     </>
   );

@@ -180,7 +180,7 @@ class OrderService {
         throw customError("Order not found", 404);
       }
 
-      // Ownership check (unless admin)
+      
       if (
         role !== USER_ROLES.ADMIN &&
         order.user._id.toString() !== userId.toString()
@@ -188,19 +188,18 @@ class OrderService {
         throw customError("Not authorized to cancel this order", 403);
       }
 
-      // Status check
-      if (
-        ![ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING].includes(
+      
+      if (![ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING].includes(
           order.orderStatus
         )
       ) {
         throw customError("Order cannot be cancelled at this stage", 400);
       }
 
-      // Update order status
+      
       order.orderStatus = ORDER_STATUS.CANCELLED;
 
-      // Log history
+     
       order.statusHistory.push({
         status: ORDER_STATUS.CANCELLED,
         changedAt: new Date(),
@@ -211,8 +210,7 @@ class OrderService {
       });
 
       await order.save({ session });
-
-      // Restore inventory if stock was reduced
+      
       if (order.stockReduced) {
         await orderRepository.updateProductInventory(
           order.products,
@@ -315,17 +313,17 @@ class OrderService {
     try {
       const order = await orderRepository.findById(orderId);
       if (!order) throw customError("Order not found", 404);
-
+   
       if (order.orderStatus !== ORDER_STATUS.PENDING)
         throw customError("Payment can not made for this order", 400);
-
+     
       const totalAmount = order.totalPrice;
       const paymentIntent = await stripeService.createPaymentIntent(totalAmount);
-      console.log('payment Intent: ', paymentIntent)
+    
 
       order.payment.paymentIntentId = paymentIntent.paymentIntentId;
       await order.save();
-
+      
       return {
         ...paymentIntent,
         orderId
@@ -335,18 +333,38 @@ class OrderService {
     }
   }
 
-  /**
-   * Handles incoming Stripe webhook events.
-   * 
-   * Supported event types:
-   *  - payment_intent.succeeded → calls handleSuccess to mark the order as paid
-   *  - payment_intent.payment_failed → calls handleFailed to mark the order payment as failed
-   *  - payment_intent.canceled → calls handleCanceled to mark the order payment as canceled
-   * 
-   * @param {string} signature - The Stripe webhook signature from the request headers
-   * @param {Buffer|string} rawBody - The raw request body from Stripe webhook
-   * @returns {Promise<boolean>} Returns true if event was processed successfully, undefined on error
-   */
+  handleStripeWebhookManually = async (paymentIntentId) => {
+    try {
+
+      const result = await stripeService.getPayment(paymentIntentId);
+      let updatedOrderData;
+      switch (result.status) {
+        case "succeeded":
+         updatedOrderData =  await this.handleSuccess(result);
+          break;
+
+        case "payment_failed":
+         updatedOrderData =  await this.handleFailed(result);
+          break;
+
+        case "canceled":
+         updatedOrderData = await this.handleCanceled(result);
+          break;
+
+        case "requires_action":
+          console.log(`Payment requires action for PaymentIntent: ${result.id}`);
+          break;
+
+        default:
+          console.log("Unhandled event:", result.type);
+      }
+
+      return updatedOrderData
+    } catch (err) {
+      console.error("Webhook error:", err.message);
+    }
+  };
+
   handleStripeWebhook = async (signature, rawBody) => {
     try {
       const event = stripeService.constructEvent(rawBody, signature);
@@ -386,8 +404,10 @@ class OrderService {
     order.orderStatus = ORDER_STATUS.PROCESSING;
     order.payment.status = PAYMENT_STATUS.SUCCESS;
     order.payment.paidAt = Date.now();
+    order.payment.transactionId = paymentIntent.latest_charge;
     order.payment.paymentSystemData = paymentIntent;
-    await order.save();
+   const savedOrder =  await order.save();
+    return savedOrder
   }
 
   async handleFailed(paymentIntent) {
@@ -396,7 +416,9 @@ class OrderService {
 
     order.payment.status = PAYMENT_STATUS.FAILED;
     order.payment.paymentSystemData = paymentIntent;
-    await order.save();
+    order.payment.failedAt = Date.now();
+    const savedOrder =  await order.save();
+    return savedOrder
   }
 
   async handleCanceled(paymentIntent) {
@@ -406,7 +428,70 @@ class OrderService {
     order.orderStatus = ORDER_STATUS.CANCELLED;
     order.payment.status = PAYMENT_STATUS.CANCELLED;
     order.payment.paymentSystemData = paymentIntent;
-    await order.save();
+    const savedOrder =  await order.save();
+    return savedOrder
+  }
+
+  confirmPayment = async(orderId, paymentMethodId)=>{
+    if(!paymentMethodId){
+      throw customError("payment method id not found", 404)
+    }
+    const session = await startSession();
+    try {
+      session.startTransaction()
+      const order = await orderRepository.findById(orderId, session);
+
+      if(!order){
+        throw customError("Invalid order or order not found" , 404);
+      }
+
+      if (!order.payment.paymentIntentId) {
+            throw customError("No payment intent found for this order", 400);
+        }
+
+        const confirmPayment = await stripeService.confirmPayment(order.payment.paymentIntentId, paymentMethodId);
+        if(confirmPayment.status === 'succeeded'){
+          order.payment.status === PAYMENT_STATUS.SUCCESS;
+          order.status === ORDER_STATUS.PROCESSING;
+          order.payment.paidAt = new Date();
+          order.payment.transactionId = confirmPayment.id;
+        }
+
+       const saveOrder =  await order.save({session});
+       if(!saveOrder){
+        throw customError("payment is confirmed but order data not updated", 400);
+       }
+
+
+    } catch (error) {
+      throw error
+    }
+
+  }
+
+
+  testConfirmPayment = async(orderId)=>{
+    try {
+       const order = await orderRepository.findById(orderId);
+
+      if(!order){
+        throw customError("Invalid order or order not found" , 404);
+      }
+
+      if (!order.payment.paymentIntentId) {
+            throw customError("No payment intent found for this order", 400);
+        }
+
+      // if(order.payment.status === PAYMENT_STATUS.SUCCESS){
+      //   throw customError("Payment already done for this order", 400)
+      // }
+
+        const response = await this.handleStripeWebhookManually(order.payment.paymentIntentId)
+        console.log("response: ", response)
+        return response
+    } catch (error) {
+      throw error
+    }
   }
 }
 

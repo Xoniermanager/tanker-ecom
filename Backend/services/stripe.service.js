@@ -7,11 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
  * Handles creating and managing payments.
  */
 class StripeService {
-    /**
-     * Create a Payment Intent
-     * @param {Number} amount - Amount in NZD
-     * @param {String} currency - Currency code (default: "nzd")
-     */
+    
     async createPaymentIntent(amount, currency = "nzd") {
         try {
             const amountInCents = Math.round(amount * 100);
@@ -22,7 +18,7 @@ class StripeService {
                 automatic_payment_methods: { enabled: true },
             });
 
-            console.log('paymentIntent', paymentIntent);
+            console.log('paymentIntent: ', paymentIntent);
 
             return {
                 clientSecret: paymentIntent.client_secret,
@@ -35,14 +31,7 @@ class StripeService {
         }
     }
 
-    /**
-     * Verifies and constructs a Stripe webhook event.
-     *
-     * @param {Buffer|string} rawBody - The raw request body.
-     * @param {string} signature - The Stripe signature header.
-     * @returns {Object} The verified Stripe event.
-     * @throws {Error} If the signature verification fails.
-     */
+
     constructEvent(rawBody, signature) {
         return stripe.webhooks.constructEvent(
             rawBody,
@@ -51,11 +40,7 @@ class StripeService {
         );
     }
 
-    /**
-     * Confirm Payment Intent (if using manual confirmation)
-     * @param {String} paymentIntentId
-     * @param {String} paymentMethodId
-     */
+    
     async confirmPayment(paymentIntentId, paymentMethodId) {
         try {
             const confirmedIntent = await stripe.paymentIntents.confirm(
@@ -68,11 +53,7 @@ class StripeService {
         }
     }
 
-    /**
-     * Refund Payment
-     * @param {String} paymentIntentId
-     * @param {Number} amount (optional, full refund if not given)
-     */
+    
     async refundPayment(paymentIntentId, amount = null) {
         try {
             const refund = await stripe.refunds.create({
@@ -85,10 +66,7 @@ class StripeService {
         }
     }
 
-    /**
-     * Retrieve Payment Intent
-     * @param {String} paymentIntentId
-     */
+   
     async getPayment(paymentIntentId) {
         try {
             const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -98,14 +76,7 @@ class StripeService {
         }
     }
 
-    /**
-     * Create a Stripe Checkout Session
-     * @param {Object} payload - checkout details
-     * @param {Array} payload.items - List of line items
-     * @param {String} payload.successUrl - Redirect URL on success
-     * @param {String} payload.cancelUrl - Redirect URL on cancel
-     * @returns {Object} session
-     */
+
     async createCheckoutSession({ items, successUrl, cancelUrl }) {
         try {
             const session = await stripe.checkout.sessions.create({
@@ -114,7 +85,7 @@ class StripeService {
                 mode: "payment",
                 success_url: successUrl,
                 cancel_url: cancelUrl,
-                currency: "nzd", // New Zealand Dollar
+                currency: "nzd", 
             });
 
             return session;

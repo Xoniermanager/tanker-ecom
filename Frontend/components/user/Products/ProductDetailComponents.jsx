@@ -56,15 +56,15 @@ const ProductDetailComponents = ({
 
   return (
     <>
-      <div className="py-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
+      <div className="py-20 px-5 md:py-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-start gap-14">
-            <div className="w-[45%] relative">
+          <div className="flex items-start flex-col md:flex-row gap-14">
+            <div className="w-full md:w-[45%] relative">
               <div className="bg-white p-6 rounded-4xl flex flex-col items-center gap-4 w-full">
                 <div className="absolute top-2/3 left-6 z-10 transform -translate-y-1/2">
                   <button
                     ref={prevRef}
-                    className="bg-[#e3ebed] shadow-lg rounded-full p-5 hover:bg-orange-400 hover:text-white transition"
+                    className="bg-[#e3ebed] shadow-lg rounded-full p-2 md:p-4 lg:m-5 hover:bg-orange-400 hover:text-white transition"
                   >
                     <FaChevronLeft size={20} />
                   </button>
@@ -72,7 +72,7 @@ const ProductDetailComponents = ({
                 <div className="absolute top-2/3 right-6 z-10 transform -translate-y-1/2">
                   <button
                     ref={nextRef}
-                    className="bg-[#e3ebed] shadow-lg rounded-full p-5 hover:bg-orange-400 hover:text-white transition"
+                    className="bg-[#e3ebed] shadow-lg rounded-full p-2 md:p-4 lg:m-5 hover:bg-orange-400 hover:text-white transition"
                   >
                     <FaChevronRight size={20} />
                   </button>
@@ -116,6 +116,12 @@ const ProductDetailComponents = ({
                   slidesPerView={4}
                   watchSlidesProgress
                   className="w-full mt-4"
+                  breakpoints={{
+    0: { slidesPerView: 2 },      
+    640: { slidesPerView: 3 },    
+    768: { slidesPerView: 3 },    
+    1024: { slidesPerView: 4 },  
+  }}
                 >
                   {productData?.images?.map((item, index) => (
                     <SwiperSlide className="mb-3" key={`thumb-${index}`}>
@@ -132,12 +138,12 @@ const ProductDetailComponents = ({
               </div>
             </div>
 
-            <div className="w-[55%] flex flex-col gap-5">
-              <h2 className="text-4xl font-bold text-purple-950 capitalize">
+            <div className="w-full md:w-[55%] flex flex-col gap-5">
+              <h2 className="text-3xl lg:text-4xl font-bold text-purple-950 capitalize text-center md:text-start">
                 {productData?.name}
               </h2>
-              <div className="flex items-center gap-5">
-                <span className="font-semibold text-purple-950 text-3xl tracking-wide">
+              <div className="flex items-center justify-center md:justify-start gap-3 md:gap-5">
+                <span className="font-semibold text-purple-950 text-2xl md:text-3xl tracking-wide">
                   ${productData?.sellingPrice.toFixed(2)}
                 </span>{" "}
                 <span className="text-[#00000080] line-through">
@@ -155,7 +161,7 @@ const ProductDetailComponents = ({
                   {productData?.inventory?.status.split("_").join(" ")}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <span className="flex items-center gap-1">
                   {[...Array(5)].map((_, index) =>
                     index < 3 ? (
@@ -166,19 +172,19 @@ const ProductDetailComponents = ({
                   )}
                 </span>
                 <span className="font-medium">( 3 Customer Reviews )</span>
-              </div>
-              <p className="text-gray-700 ">{productData.shortDescription}</p>
+              </div> */}
+              <p className="text-gray-700 text-center md:text-start ">{productData.shortDescription}</p>
               <ul className="flex flex-col gap-2">
                 {productData.highlights.map((item, index) => (
                   <li
-                    className="flex items-center gap-1.5 capitalize"
+                    className="flex items-center gap-1.5 text-base capitalize"
                     key={index}
                   >
-                    <FaCheck className="text-purple-950" /> {item}
+                    <FaCheck className="text-purple-950 min-w-3" /> {item}
                   </li>
                 ))}
               </ul>
-              <div className="flex items-end gap-4">
+              <div className="flex items-end justify-center md:justify-start gap-4">
                 <div className="flex flex-col gap-2">
                   <h4 className="font-semibold text-purple-950">Quantity:</h4>
                   <div className="flex items-center justify-between border border-slate-300 rounded-lg w-28 bg-white">
@@ -200,7 +206,7 @@ const ProductDetailComponents = ({
                 </div>
 
                 {isInCart ? (
-                  <button className="text-orange-400  disabled:bg-orange-300 bg-orange-100 px-8 py-3 font-medium rounded-lg transition-all capitalize flex items-center gap-2">
+                  <button className="text-orange-400  disabled:bg-orange-300 bg-orange-100 px-8 py-3 font-medium rounded-lg transition-all text-sm md:text-base capitalize flex items-center gap-2">
                     <FaCheck /> Already in cart
                   </button>
                 ) : productData.inventory.status === "in_stock" ? (
@@ -223,16 +229,16 @@ const ProductDetailComponents = ({
               <ul className="flex flex-col gap-2">
                 <li className="flex items-center gap-1.5">
                   <FaCheck className="text-purple-950" />{" "}
-                  <b className="text-black">Estimated Delivery: </b>{" "}
-                  <p className="text-purple-950"> 60-60 days</p>{" "}
+                  <b className="text-black text-sm md:text-base">Estimated Delivery: </b>{" "}
+                  <p className="text-purple-950 text-sm md:text-base"> 60-60 days</p>{" "}
                 </li>
                 <li className="flex items-center gap-1.5">
                   <FaCheck className="text-purple-950" />{" "}
-                  <b className="text-black">Free Shipping: </b>{" "}
-                  <p className="text-purple-950"> Via Super Economy Global</p>{" "}
+                  <b className="text-black text-sm md:text-base">Free Shipping: </b>{" "}
+                  <p className="text-purple-950 text-sm md:text-base"> Via Super Economy Global</p>{" "}
                 </li>
               </ul>
-              <div className="flex gap-2.5">
+              <div className="flex justify-center md:justify-start gap-2.5">
                 {" "}
                 <b className="text-black">Share: </b>{" "}
                 <button className="hover:text-orange-500" onClick={handleShare}>
@@ -246,13 +252,13 @@ const ProductDetailComponents = ({
           </div>
         </div>
         <div className="max-w-7xl mx-auto border-1 border-zinc-300 bg-white rounded-3xl w-full">
-          <ul className="flex items-center justify-center w-full rounded-b-lg overflow-hidden">
+          <ul className="flex items-center flex-col md:flex-row justify-center w-full rounded-b-lg overflow-hidden">
             <li className="border-r-1 border-gray-200 ">
               {" "}
               <button
                 className={`${
                   active === 1 ? "bg-orange-500 text-white" : "bg-slate-100"
-                } text-lg font-medium px-9 py-2 border-b-lg`}
+                } text-lg font-medium px-9 py-2 border-b-lg w-full`}
                 onClick={() => setActive(1)}
               >
                 Description

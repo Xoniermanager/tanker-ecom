@@ -27,17 +27,17 @@ class BlogService {
 
             const categoryObjectIds = categories.map(id => {
                 try {
-                    return new Types.ObjectId(id);
+                    return new Types(id);
                 } catch {
                     return null;
                 }
-            }).filter(Boolean); // remove invalid ones
+            }).filter(Boolean); 
 
             query.categories = { $in: categoryObjectIds };
         }
 
         if (filters.title) {
-            query.title = { $regex: filters.title, $options: 'i' }; // case-insensitive search
+            query.title = { $regex: filters.title, $options: 'i' }; 
         }
 
         if (filters.isPublished) {

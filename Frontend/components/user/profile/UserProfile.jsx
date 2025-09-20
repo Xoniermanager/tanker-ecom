@@ -82,21 +82,17 @@ const UserProfile = () => {
             <div className="flex items-center justify-between flex-wrap gap-6">
               <div className="flex items-center space-x-8">
                 <div className="relative">
-                  {userData?.profileImage ? (
+                  {/* {userData?.profileImage ? ( */}
                     <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white/30 shadow-xl">
                       <Image
-                        src={userData.profileImage}
+                        src={userData?.profileImage || "/images/admin-avatar.png"}
                         alt="Profile"
                         className="w-full h-full object-cover"
                         height={80}
                         width={80}
                       />
                     </div>
-                  ) : (
-                    <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-3xl font-bold border-4 border-white/30 shadow-xl">
-                      {getInitials(userData?.fullName)}
-                    </div>
-                  )}
+                   
                   <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
                     <FaUserCircle className="w-5 h-5 text-gray-400" />
                   </div>

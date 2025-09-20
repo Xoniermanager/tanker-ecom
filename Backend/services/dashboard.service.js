@@ -9,7 +9,7 @@ const userRepository = require("../repositories/user.repository");
 
 
 class DashboardService{
-     getDashboardStatus = async (days = 30) => {
+     getDashboardStatus = async (days = 30, month = 1) => {
         
         if (days < 1 || days > 365) {
             throw customError("Invalid day range, days should be between 1 to 365", 400);
@@ -34,7 +34,7 @@ class DashboardService{
                 previousStartDate.setDate(previousStartDate.getDate() - days);
 
                 
-                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, totalQuery, topSellingProducts, topSellingCategories, newUsers, weeklyOrderCount] = await Promise.all([
+                const [totalOrders, deliveredOrders, arrivedOrders, totalSales, totalQuery, topSellingProducts, topSellingCategories, newUsers, weeklyOrderCount, orderSaleCountWithSale] = await Promise.all([
                     orderRepository.getOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getDeliveredOrdersCount(currentStartDate, currentEndDate, session),
                     orderRepository.getArrivedOrdersCount(currentStartDate, currentEndDate, session),
@@ -43,7 +43,8 @@ class DashboardService{
                     inventoryRepository.getTopSellingProducts(null, session),
                     productCategoryRepository.getTopCategories(8,"totalSales"),
                     userRepository.getUsers(currentStartDate, currentEndDate, session),
-                    orderRepository.getWeeklyOrderCount(weekStartDate, session)
+                    orderRepository.getWeeklyOrderCount(weekStartDate, session),
+                    orderRepository.getOrderCountWithSaleCount(month, session)
                     
                 ]);
 
@@ -97,9 +98,9 @@ class DashboardService{
                             queryPercent: calculateProfiteWithPrev(newUsers, prevNewUsers),
                             isPositive: newUsers >= prevNewUsers
                         },
-                        weeklyOrderCount
+                        weeklyOrderCount,
+                        orderSaleCountWithSale
 
-                        
                     },
                     meta: {
                         days,

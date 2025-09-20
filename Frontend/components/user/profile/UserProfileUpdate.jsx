@@ -199,7 +199,7 @@ const UserProfileUpdate = () => {
                                         {(prevImage || userData?.profileImage) ? (
                                             <Image src={prevImage || userData?.profileImage} alt="Profile" className="w-full h-full object-cover" height={80} width={80}/>
                                         ) : (
-                                            <span>Y</span>
+                                            <Image src={`/images/admin-avatar.png`} alt="Profile" className="w-full h-full object-cover" height={80} width={80}/>
                                         )}
                                     </div>
                                     <input

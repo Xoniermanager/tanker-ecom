@@ -11,14 +11,14 @@ const WhoWeAre = ({whoWeAreData}) => {
 
   return (
     <>
-      <div className='w-full py-28 relative'>
-        <div className="max-w-7xl mx-auto flex items-center gap-12">
-            <div className="w-1/2 flex flex-col gap-3">
+      <div className='w-full py-22 md:py-28 px-6 relative'>
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2 w-full flex flex-col items-center md:items-start gap-3">
               <div className='flex items-center gap-2'> 
-                <h4 className='text-lg font-semibold text-[22px] text-orange-400 uppercase'>{whoWeAreData?.subheading || "N/A"}</h4>
+                <h4 className='text-lg font-semibold md:text-xl lg:text-[22px] text-orange-400 uppercase'>{whoWeAreData?.subheading || "N/A"}</h4>
                 <Image src={'/images/arrows.png'} width={43} height={11} alt='arrow'/></div>
-                <h2 className='font-black text-7xl text-purple-950 capitalize'>{whoWeAreData?.heading || "N/A"}</h2>
-                <p className='text-zinc-500  mt-8 text-lg font-medium'>{para || "N/A"}</p>
+                <h2 className='font-black text-4xl md:text-5xl lg:text-7xl text-purple-950 capitalize text-center md:text-start'>{whoWeAreData?.heading || "N/A"}</h2>
+                <p className='text-zinc-500 mt-4  md:mt-8 text-lg font-medium text-center md:text-start'>{para || "N/A"}</p>
 
                 <ul className="flex flex-col gap-8 mt-8">
   {listGroups.map((group, i) => {
@@ -26,13 +26,13 @@ const WhoWeAre = ({whoWeAreData}) => {
     const description = group?.contents?.find(item => item.label === "Description")?.text || "N/A";
 
     return (
-      <li key={i} className="flex items-start gap-7">
+      <li key={i} className="flex flex-col md:flex-row items-center  md:items-start gap-7">
         <span className="border-1 border-stone-200 rounded-full h-20 min-w-20 w-20 flex items-center justify-center bg-[#ecfbfe]">
           <Image src={`/images/icon_${i + 1}.png`} height={50} width={50} alt={`icon-${i + 1}`} />
         </span>
         <div className="flex flex-col gap-3">
-          <h4 className="text-xl font-semibold">{heading}</h4>
-          <p className="text-zinc-500 w-[65%] leading-7 font-medium">{description}</p>
+          <h4 className="text-xl font-semibold text-center md:text-start">{heading}</h4>
+          <p className="text-zinc-500 w-full text-center md:text-start md:w-[65%] leading-7 font-medium">{description}</p>
         </div>
       </li>
     );
@@ -40,7 +40,7 @@ const WhoWeAre = ({whoWeAreData}) => {
 </ul>
 
             </div>
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
             <Image className='w-full rounded-[58px] rounded-tr-[0]' 
                 src={'/images/truck.jpg'} width={200} height={200} alt='truck'
               /></div>

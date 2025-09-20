@@ -37,7 +37,7 @@ const Sidebar = () => {
 
   const router = useRouter()
 
-  const {userData} = useAuth()
+  const {userData, fetchUserData} = useAuth()
 
 
 
@@ -47,13 +47,14 @@ const Sidebar = () => {
 
         const response = await api.post('/auth/logout', {})
         if (response.status === 200) {
-          toast.success('Account logged out successfully')
-          setLogoutPopup(false)
-          router.push('/')
+          toast.success('Account logged out successfully');
+          setLogoutPopup(false);
+          router.push('/');
+          await fetchUserData();
         }
       } catch (error) {
-        console.error("Logout error:", error)
-        toast.error('Logout failed')
+        console.error("Logout error:", error);
+        toast.error('Logout failed');
       }
       finally{
         setIsLoading(false)

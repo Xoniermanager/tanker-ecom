@@ -7,7 +7,7 @@ const OurPeople = ({peopleData}) => {
     <>
       <div
         style={{ backgroundImage: "url('/images/counter-bg.jpg')" }}
-        className="py-28 w-full bg-no-repeat bg-cover"
+        className="py-22 md:py-28 pb-42 md:pb-28  px-6 w-full bg-no-repeat bg-cover"
       >
         <div className="max-w-7xl mx-auto flex flex-col gap-14">
           <div className="flex flex-col gap-4 items-center">
@@ -18,7 +18,7 @@ const OurPeople = ({peopleData}) => {
                 height={11}
                 alt="arrow"
               />
-              <span className="text-orange-400 font-semibold text-[22px] uppercase">
+              <span className="text-orange-400 font-semibold md:text-xl lg:text-[22px] uppercase">
                 {peopleData?.subheading || "N/A"}
               </span>
               <Image
@@ -28,11 +28,11 @@ const OurPeople = ({peopleData}) => {
                 alt="arrow"
               />
             </div>
-            <h2 className="font-black text-7xl text-purple-950 w-1/2 text-center">
+            <h2 className="font-black text-5xl lg:text-7xl text-purple-950 md:w-1/2 text-center">
               {peopleData?.heading || "N/A"}
             </h2>
           </div>
-          <div className="grid grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-32 md:gap-10">
             {cards?.map((item, index)=>(
                <div key={index} className="flex flex-col justify-between items-center relative group">
               <div style={{backgroundImage: "url('/images/services-bg.jpg')"}} className="p-8 pb-26 bg-cover bg-center border-1 people-card relative border-[#e7e7e7] rounded-[40px] rounded-tl-[0px] group-hover:rounded-tl-[40px] group-hover:rounded-tr-[0px] w-full z-20 flex items-center flex-col justify-center gap-5">
@@ -68,7 +68,7 @@ const OurPeople = ({peopleData}) => {
             </div> */}
 
           </div>
-          <div  className=" mt-16 flex justify-center">
+          <div  className=" hidden md:flex mt-16  justify-center">
 
           <div className="line w-[70%] relative border-b-1 border-[#e3d6c5]"></div>
           </div>

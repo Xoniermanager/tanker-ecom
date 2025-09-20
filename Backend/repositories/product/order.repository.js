@@ -251,11 +251,11 @@ class OrderRepository extends BaseRepository {
 getWeeklyOrderCount = async (customStartDate) => {
   try {
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // End of today
+    today.setHours(23, 59, 59, 999); 
     
-    // Calculate start date (7 days ago from today)
+    
     const startDate = customStartDate || new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000));
-    startDate.setHours(0, 0, 0, 0); // Start of that day
+    startDate.setHours(0, 0, 0, 0); 
     
     const pipeline = [
       {
@@ -265,12 +265,12 @@ getWeeklyOrderCount = async (customStartDate) => {
       },
       {
         $addFields: {
-          // Calculate days ago from today (0 = today, 1 = yesterday, etc.)
+
           daysAgo: {
             $floor: {
               $divide: [
                 { $subtract: [today, "$createdAt"] },
-                86400000 // milliseconds in a day
+                86400000 
               ]
             }
           }
@@ -306,7 +306,7 @@ getWeeklyOrderCount = async (customStartDate) => {
         }
       },
       {
-        $sort: { "_id.daysAgo": 1 } // Sort by days ago (oldest first, today last)
+        $sort: { "_id.daysAgo": 1 } 
       },
       {
         $project: {
@@ -322,17 +322,16 @@ getWeeklyOrderCount = async (customStartDate) => {
 
     const result = await Order.aggregate(pipeline);
 
-    // Create a complete 7-day array starting from 6 days ago to today
+    
     const weekData = [];
     
     for (let i = 6; i >= 0; i--) {
       const currentDate = new Date(today.getTime() - (i * 24 * 60 * 60 * 1000));
-      const dayOfWeek = currentDate.getDay() + 1; // Convert to MongoDB format (1=Sunday, 7=Saturday)
+      const dayOfWeek = currentDate.getDay() + 1; 
       const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const dayName = dayNames[currentDate.getDay()];
       const dateString = currentDate.toISOString().split('T')[0];
       
-      // Find matching data from aggregation result
       const matchingData = result.find(item => item.daysAgo === i);
       
       weekData.push({
@@ -352,6 +351,114 @@ getWeeklyOrderCount = async (customStartDate) => {
   }
 };
 
+getOrderCountWithSaleCount = async (monthNumber, session, year = null) => {
+  try {
+  
+    if (!monthNumber || monthNumber < 1 || monthNumber > 12) {
+      throw new Error(`Invalid month number provided: ${monthNumber}. Must be between 1-12`);
+    }
+    
+    const currentYear = year || new Date().getFullYear();
+    const monthIndex = monthNumber - 1; 
+    
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    const monthName = monthNames[monthIndex];
+   
+    const startDate = new Date(currentYear, monthIndex, 1);
+    const endDate = new Date(currentYear, monthIndex + 1, 0, 23, 59, 59, 999);
+    
+    const weeks = await this.getWeekBoundaries(startDate, endDate);
+    
+    const result = {
+      monthNumber: monthNumber,
+      monthName: monthName,
+      year: currentYear,
+      weeks: [],
+      sales: [], 
+      orders: [], 
+      total: 0 
+    };
+    
+
+    for (let i = 0; i < weeks.length; i++) {
+      const weekStart = weeks[i].start;
+      const weekEnd = weeks[i].end;
+
+      const weeklyData = await Order.aggregate([
+        {
+          $match: {
+
+            createdAt: {
+              $gte: weekStart,
+              $lte: weekEnd
+            },
+
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalSales: { 
+              $sum: "$totalPrice" 
+            },
+            orderCount: { $sum: 1 }
+          }
+        }
+      ]).session(session);
+
+      console.log("weekly data: ", weeklyData)
+      
+      const weekData = weeklyData[0] || { totalSales: 0, orderCount: 0 };
+      
+      result.weeks.push({
+        weekNumber: i + 1,
+        start: weekStart,
+        end: weekEnd,
+        sales: Math.ceil(weekData.totalSales),
+        orders: weekData.orderCount
+      });
+      
+      result.sales.push(Math.ceil(weekData.totalSales));
+      result.orders.push(weekData.orderCount);
+      result.total += weekData.totalSales;
+    }
+    
+    return result;
+    
+  } catch (error) {
+    console.error('Error in getOrderCountWithSaleCount:', error);
+    throw error;
+  }
+};
+
+
+getWeekBoundaries = (startDate, endDate) => {
+  const weeks = [];
+  let currentWeekStart = new Date(startDate);
+  
+  while (currentWeekStart <= endDate) {
+    let currentWeekEnd = new Date(currentWeekStart);
+    currentWeekEnd.setDate(currentWeekEnd.getDate() + 6);
+    
+
+    if (currentWeekEnd > endDate) {
+      currentWeekEnd = new Date(endDate);
+    }
+    
+    weeks.push({
+      start: new Date(currentWeekStart),
+      end: new Date(currentWeekEnd.getFullYear(), currentWeekEnd.getMonth(), currentWeekEnd.getDate(), 23, 59, 59, 999)
+    });
+    
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+  }
+  
+  return weeks;
+};
 
   
 }

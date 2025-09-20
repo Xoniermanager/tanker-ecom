@@ -30,16 +30,16 @@ const OurArticles = ({ articleData }) => {
 
   return (
     <>
-      <div className="bg-[#f2edf6] py-28 w-full px-4">
-        <div className="flex flex-col gap-4 items-center mb-20">
-          <div className="flex items-center gap-2">
+      <div className="bg-[#f2edf6] py-22 md:py-28 w-full px-6">
+        <div className="flex flex-col gap-4 items-center mb-16 md:mb-20">
+          <div className="flex items-center gap-1.5 md:gap-2">
             <Image
               src="/images/arrows.png"
               width={43}
               height={11}
               alt="arrow"
             />
-            <span className="text-orange-400 font-semibold text-[22px] uppercase">
+            <span className="text-orange-400 font-semibold md:text-xl lg:text-[22px] text-center uppercase">
               {articleData?.subheading || "N/A"}
             </span>
             <Image
@@ -49,11 +49,11 @@ const OurArticles = ({ articleData }) => {
               alt="arrow"
             />
           </div>
-          <h2 className="font-black text-7xl text-purple-950 w-[60%] text-center">
+          <h2 className="font-black text-5xl lg:text-7xl text-purple-950 w-[60%] text-center">
             {articleData?.heading || "N/A"}
           </h2>
         </div>
-        <div className="flex items-start gap-7">
+        <div className="flex flex-col md:flex-row items-start gap-7">
           {blogData?.slice(0,4).map((item, index) => {
             const date = new Date(item.createdAt).toLocaleDateString("en-GB",{
               day: "2-digit",
@@ -85,7 +85,7 @@ const OurArticles = ({ articleData }) => {
                   </li>
                 </ul>
               </div>
-              <div className="flex flex-col items-center gap-3 p-7 px-9 border-r-4 border-orange-400">
+              <div className="flex flex-col items-center gap-3 p-7 px-7 md:px-9 border-r-4 border-orange-400">
                 <div className="flex items-center justify-between w-full">
                   <h5 className="flex items-center gap-1 text-orange-400 font-semibold text-sm">
                     <span className="text-orange-400 text-sm">

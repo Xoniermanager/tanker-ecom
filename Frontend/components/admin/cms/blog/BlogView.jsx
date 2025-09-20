@@ -22,7 +22,7 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
                         </div>
           
                         <div className="flex flex-col gap-0.5">
-                          <h3 className='text-purple-900 text-xl font-semibold capitalize line-clamp-2'>{item.title}</h3>
+                          <h3 className='text-purple-900 text-xl font-semibold capitalize h-14 line-clamp-2'>{item.title}</h3>
                          
                         </div>
                         <div className="flex items-center justify-between mt-2 bg-purple-50 px-4 py-2 rounded-lg">

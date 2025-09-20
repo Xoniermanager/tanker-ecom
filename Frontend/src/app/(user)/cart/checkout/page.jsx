@@ -152,8 +152,14 @@ const Page = () => {
     toast.success("Payment completed successfully!");
     fetchCartData();
     resetForm();
-    router.push('/orders');
+    router.push(`/orders/confirm?orderId=${orderId}`);
   };
+
+  const onPaymentFailed = (orderId)=>{
+    toast.error("Payment Failed!");
+    router.push(`/orders/failed?orderId=${orderId}`);
+    resetForm();
+  }
 
   return (
     <>
@@ -170,6 +176,7 @@ const Page = () => {
         errMessage={errMessage}
         isLoading={isLoading}
         onPaymentSuccess={handlePaymentSuccess}
+        onPaymentFailed={onPaymentFailed}
         shippingPrice={shippingPrice}
         addressIsSame={addressIsSame}
         setAddressIsSame={setAddressIsSame}

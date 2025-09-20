@@ -63,11 +63,6 @@ class OrderController {
         }
     }
 
-    /**
-     * Cancel an order by the user.
-     * Only allowed if order is in PENDING or PROCESSING status.
-     * Restores inventory if stock was reduced.
-     */
     cancelOrder = async (req, res, next) => {
         try {
             const { orderId } = req.params;
@@ -105,6 +100,27 @@ class OrderController {
             return customResponse(res, "Payment initialized successfully", response);
         } catch (error) {
             next(error);
+        }
+    }
+
+    testConfirmPayment = async(req,res,next)=>{
+        try {
+            const {orderId} = req.params;
+            const result = await orderService.testConfirmPayment(orderId)
+            return customResponse(res, "payment successful", result)
+        } catch (error) {
+             next(error)
+        }
+    }
+
+    confirmPayment = async(req, res, next)=>{
+        try {
+            const {orderId} = req.params;
+            const {paymentMethodId} = req.body;
+            const response = await orderService.confirmPayment(orderId, paymentMethodId);
+
+        } catch (error) {
+            next(error)
         }
     }
 }

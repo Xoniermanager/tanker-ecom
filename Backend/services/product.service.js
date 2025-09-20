@@ -38,6 +38,10 @@ class ProductService {
             query.status = filters.status;
         }
 
+        if(filters.id){
+            query._id = {$regex: filters.id, $options: "m"}
+        }
+
         if (filters.name) {
             query.name = { $regex: filters.name, $options: "i" };
         }

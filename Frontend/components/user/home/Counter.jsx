@@ -14,7 +14,7 @@ const CounterItem = ({ end, suffix = '', label }) => {
 
   return (
     <div className='flex flex-col items-center gap-3 w-full' ref={ref}>
-      <h3 className='text-6xl font-black tracking-wide'>
+      <h3 className='text-5xl md:text-6xl font-black tracking-wide'>
         {inView ? <CountUp start={0} end={end} duration={2} /> : 0}{suffix}
       </h3>
       <p className='capitalize text-lg font-medium text-center '>{label}</p>
@@ -28,9 +28,9 @@ const Counter = ({counterData}) => {
   return (
     <div
       style={{ backgroundImage: "url('/images/counter-bg.jpg')" }}
-      className='w-full py-22 pb-18 flex items-center bg-cover bg-center'
+      className='w-full py-18 md:py-22 px-6 pb-18 flex items-center bg-cover bg-center'
     >
-      <div className="max-w-7xl mx-auto flex gap-12 items-start w-full">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-17 md:gap-12 items-start w-full">
         {data?.map((item, i)=>(
           <CounterItem end={item.contents.find(item=>item.label === "Number").text}  suffix={item.contents.find(item=>item.label === "Number").suffix} label={item.contents.find(item=>item.label === "Text").text} key={i}/>
 

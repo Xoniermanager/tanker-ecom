@@ -26,7 +26,7 @@ const page = () => {
   const [passShow, setPassShow] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [captchaToken, setCaptchaToken] = useState(null);
   const [formData, setFormData] = useState({
     companyEmail: "",
@@ -50,21 +50,31 @@ const page = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const formDisable = formData.fullName === "" || formData.companyName === "" || formData.alternativeEmail === "" || formData.communicationPreference === "" || formData.confirmPassword === "" || formData.country === "" || formData.designation === "" || formData.mobileNumber === "" || formData.password === "" ||  formData.password.length < 8;
+  const formDisable =
+    formData.fullName === "" ||
+    formData.companyName === "" ||
+    formData.alternativeEmail === "" ||
+    formData.communicationPreference === "" ||
+    formData.confirmPassword === "" ||
+    formData.country === "" ||
+    formData.designation === "" ||
+    formData.mobileNumber === "" ||
+    formData.password === "" ||
+    formData.password.length < 8;
 
   // const handleCaptcha = (token) => {
-    
+
   //   setCaptchaToken(token);
   //   if (errMessage && errMessage.includes("robot")) setErrMessage(null);
   // };
 
   // const handleCaptchaExpired = () => {
-   
+
   //   setCaptchaToken(null);
   // };
 
   // const handleCaptchaError = () => {
-    
+
   //   setCaptchaToken(null);
   //   setErrMessage("reCAPTCHA error occurred. Please try again.");
   // };
@@ -73,10 +83,9 @@ const page = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-
       const token = await recaptchaRef.current.executeAsync();
-    recaptchaRef.current.reset();
-      
+      recaptchaRef.current.reset();
+
       if (formData.password.trim() !== formData.confirmPassword.trim())
         return setErrMessage(
           "Your password does not matching please fill again"
@@ -84,9 +93,13 @@ const page = () => {
 
       if (formData.password.trim().length < 8)
         return setErrMessage("Password should be 8 words or above");
-      const response = await api.post(`/auth/register`, {...formData, captchaToken: token}, {
-        withCredentials: true,
-      });
+      const response = await api.post(
+        `/auth/register`,
+        { ...formData, captchaToken: token },
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
         window.localStorage.setItem("verify-email", formData.companyEmail);
         setFormData({
@@ -116,7 +129,7 @@ const page = () => {
       setErrMessage(message);
     } finally {
       setIsLoading(false);
-     
+
       if (recaptchaRef.current) {
         recaptchaRef.current.reset();
       }
@@ -127,28 +140,29 @@ const page = () => {
 
   return (
     <>
-      <div className="py-24 max-w-7xl mx-auto flex items-start gap-5">
-        <div className="w-[43%] flex flex-col gap-2 sticky top-28">
-          <h1 className="text-[40px] font-bold text-purple-950 ">
+      <div className="py-16 md:py-24 max-w-7xl px-5 mx-auto flex flex-col md:flex-row items-start gap-5">
+        <div className="w-full md:w-[43%] flex flex-col items-center lg:items-start gap-2 md:sticky top-28">
+          <h1 className="text-4xl lg:text-[40px] font-bold text-center md:text-start text-purple-950 ">
             Create Your Account
           </h1>
-          <p className="text-zinc-500 text-lg font-medium">
+          <p className="text-zinc-500 text-base lg:text-lg font-medium text-center md:text-start">
             Fill in your details to register and join our platform.
           </p>
           <Image
             src={"/images/signup.avif"}
             width={460}
             height={460}
+            className="hidden md:block"
             alt="signup image"
           />
         </div>
-        <div className="w-[57%] bg-white rounded-lg shadow-[0_0_14px_#00000015] p-9 flex flex-col gap-6">
+        <div className="md:w-[57%] w-full bg-white rounded-lg shadow-[0_0_14px_#00000015] p-6 lg:p-9 flex flex-col gap-6">
           <div className="bg-orange-100 p-3 px-4 font-semibold text-purple-950 text-xl rounded">
             Login Details
           </div>
-          <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
-            <div className="flex items-center gap-5">
-              <div className="w-1/2 flex flex-col gap-2">
+          <form className="flex w-full flex-col gap-7" onSubmit={handleSubmit}>
+            <div className="flex items-center flex-col lg:flex-row gap-5">
+              <div className="w-full lg:w-1/2 flex flex-col gap-2">
                 <label
                   htmlFor="companyEmail"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -165,7 +179,7 @@ const page = () => {
                   required
                 />
               </div>
-              <div className="w-1/2 flex flex-col gap-2">
+              <div className="w-full lg:w-1/2 flex flex-col gap-2">
                 <label
                   htmlFor="companyName"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -186,8 +200,8 @@ const page = () => {
             <div className="bg-orange-100 p-3 px-4 font-semibold text-purple-950 text-xl rounded">
               Contact Person Details
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="w-full flex flex-col gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="fullName"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -205,7 +219,7 @@ const page = () => {
                   required
                 />
               </div>
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="designation"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -223,7 +237,7 @@ const page = () => {
                   required
                 />
               </div>
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="mobileNumber"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -242,7 +256,7 @@ const page = () => {
                 />
               </div>
 
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="alternativeEmail"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -325,7 +339,7 @@ const page = () => {
                   <option value="whatsapp">WhatsApp</option>
                 </select>
               </div>
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="password"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -381,7 +395,7 @@ const page = () => {
                 </div>
               </div>
 
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 col-span-2 lg:col-span-1">
                 <label
                   htmlFor="confirmPassword"
                   className="text-purple-950 flex gap-1.5 items-center font-medium"
@@ -405,28 +419,27 @@ const page = () => {
               </div>
             )}
             <ReCAPTCHA
-                    ref={recaptchaRef}
-                    size="invisible"
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-                  />
+              ref={recaptchaRef}
+              size="invisible"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+            />
             <div className="flex relative group">
               <button
                 type="submit"
                 disabled={formDisable}
-               
                 className="bg-purple-900 disabled:bg-purple-400 hover:bg-purple-950 text-white px-9 tracking-wide py-3 rounded-md font-medium"
               >
                 {isLoading ? "Submitting..." : "Sign Up"}
               </button>
               {formDisable && (
-                              <span className="absolute left-0 -translate-x-4 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
-                                Please fill all the fields properly
-                              </span>
-                            )}
+                <span className="absolute left-0 -translate-x-4 top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs px-3 py-1 rounded-md shadow-lg whitespace-nowrap">
+                  Please fill all the fields properly
+                </span>
+              )}
             </div>
 
             <div className="flex">
-              <p className="text-zinc-500 text-lg font-medium">
+              <p className="text-zinc-500 lg:text-lg font-medium">
                 {" "}
                 Already have an account? please{" "}
                 <Link
