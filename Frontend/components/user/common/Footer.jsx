@@ -4,15 +4,45 @@ import React, { useState, useEffect } from "react";
 
 import { FiPhoneCall } from "react-icons/fi";
 
-import {FaFacebookF, FaPaperPlane, FaRegEnvelope, FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaPaperPlane,
+  FaRegEnvelope,
+  FaTwitter,
+  FaLinkedinIn,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
-import Image from "next/image";
+import api from "./api";
 
-
-const Footer = ({siteData}) => {
+const Footer = ({ siteData }) => {
   const [email, setEmail] = useState("");
+  const [errMessage, setErrMessage] = useState("");
+  const [blogData, setBlogData] = useState(null);
   const year = new Date().getFullYear();
 
+  const fetchBlogForFooter = async () => {
+    try {
+      const response = await api.get(`/blogs/published`)
+      if(response.status === 200){
+        console.log("Blog data: ", response.data.data.data)
+        setBlogData(response.data.data.data)
+      }
+    } catch (error) {
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+
+      setErrMessage(message)
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogForFooter()
+  }, [])
   
 
   const icons = {
@@ -27,10 +57,11 @@ const Footer = ({siteData}) => {
   return (
     <div
       style={{ backgroundImage: "url('/images/footer-img.jpg')" }}
-      className="w-full py-28 pb-16 footer object-cover object-center relative"
+      className="w-full py-20 md:py-24  lg:py-28 pb-16 lg:pb-16 footer object-cover object-center relative"
     >
-      <div className="flex  gap-12 max-w-full px-4 mx-auto relative z-20">
-        <ul className="bg-black px-6 py-12 flex flex-col gap-7 w-[28%]">
+      <div className="flex flex-col md:flex-row flex-wrap lg:flex-nowrap gap-12 max-w-full px-6 mx-auto relative z-20">
+        <ul className="bg-black px-6 py-12 flex flex-col gap-7 md:w-[46%] lg:w-[28%]">
+          
           <li className="flex items-center gap-3 text-white">
             {" "}
             <span className="min-w-8 text-2xl">
@@ -38,8 +69,18 @@ const Footer = ({siteData}) => {
               <FiPhoneCall />{" "}
             </span>{" "}
             <div className="flex flex-col gap-1">
-              <Link href={`tel:${siteData.contactDetails.phoneNumbers.contact_one}`} className="hover:text-orange-500">{siteData.contactDetails.phoneNumbers.contact_one}</Link>{" "}
-              <Link href={`tel:${siteData.contactDetails.phoneNumbers.contact_two}`} className="hover:text-orange-500">{siteData.contactDetails.phoneNumbers.contact_two}</Link>
+              <Link
+                href={`tel:${siteData.contactDetails.phoneNumbers.contact_one}`}
+                className="hover:text-orange-500"
+              >
+                {siteData.contactDetails.phoneNumbers.contact_one}
+              </Link>{" "}
+              <Link
+                href={`tel:${siteData.contactDetails.phoneNumbers.contact_two}`}
+                className="hover:text-orange-500"
+              >
+                {siteData.contactDetails.phoneNumbers.contact_two}
+              </Link>
             </div>{" "}
           </li>
           <li className="flex items-center gap-3 text-white">
@@ -57,55 +98,56 @@ const Footer = ({siteData}) => {
           </li>
           <li className="flex items-center gap-2">
             <ul className="flex gap-3">
-      {Object.entries(siteData.contactDetails.socialMediaLinks).map(([platform, url]) => {
-        if (!url) return null; 
+              {Object.entries(siteData.contactDetails.socialMediaLinks).map(
+                ([platform, url]) => {
+                  if (!url) return null;
 
-        const Icon = icons[platform]; 
-        return (
-          <li key={platform} className="flex items-center gap-2">
-            <Link
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-9 w-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-400 hover:text-white hover:scale-105"
-            >
-              <Icon />
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+                  const Icon = icons[platform];
+                  return (
+                    <li key={platform} className="flex items-center gap-2">
+                      <Link
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-9 w-9 bg-white rounded-full flex items-center justify-center hover:bg-orange-400 hover:text-white hover:scale-105"
+                      >
+                        <Icon />
+                      </Link>
+                    </li>
+                  );
+                }
+              )}
+            </ul>
           </li>
         </ul>
 
-        <div className=" flex flex-col gap-6 w-[22%]">
-          <h4 className="text-[22px] font-semibold capitalize text-white tracking-wide">
+        <ul className=" flex flex-col  gap-6 md:w-[46%] lg:w-[22%]">
+          {blogData && (blogData?.slice(0,2)?.map((item, index)=>(
+<li key={item._id}>
+          <h4 className="text-lg md:text-[22px] font-semibold capitalize text-white tracking-wide">
             Latest post
           </h4>
           <div className="flex flex-col gap-2">
-            <span className="text-white/70">25 August 2025</span>
+            <span className="text-white/70 text-sm md:text-base">{new Date(item?.createdAt).toLocaleDateString('en-NZ', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric'
+})}</span>
             <Link
               href={""}
-              className="text-white font-semibold text-lg hover:underline"
+              className="text-white font-semibold capitalize line-clamp-3 text-base md:text-lg hover:underline"
             >
-              Meet the Team: 100+ Years of Fuel Industry Experience Under One
-              Roof
+              {item?.title}
             </Link>
           </div>
           <span className="w-full border-b-1 border-white/40"></span>
-          <div className="flex flex-col gap-2">
-            <span className="text-white/70">25 August 2025</span>
-            <Link
-              href={""}
-              className="text-white font-semibold text-lg hover:underline"
-            >
-              Meet the Team: 100+ Years of Fuel Industry Experience Under One
-              Roof
-            </Link>
-          </div>
-        </div>
-        <div className="flex flex-col gap-6 w-[20%]">
-          <h4 className="text-[22px] font-semibold capitalize text-white tracking-wide">
+           </li>
+          ))
+          
+)}
+        </ul>
+        <div className="flex flex-col gap-5 md:gap-6 md:w-[46%] lg:w-[20%]">
+          <h4 className="text-xl md:text-[22px] font-semibold capitalize text-white tracking-wide">
             Services
           </h4>
           <ul className="flex flex-col gap-2">
@@ -152,8 +194,8 @@ const Footer = ({siteData}) => {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-6 w-[30%]">
-          <h4 className="text-[22px] font-semibold capitalize text-white tracking-wide">
+        <div className="flex flex-col gap-6 md:w-[46%] lg:w-[30%]">
+          <h4 className="text-xl md:text-[22px] font-semibold capitalize text-white tracking-wide">
             Newsletter
           </h4>
           <p className=" text-white">
@@ -187,7 +229,7 @@ const Footer = ({siteData}) => {
           </Link>
         </div>
       </div>
-      <div className="border-t-[1] border-white/50 mt-24 pt-16 max-w-full  mx-4 relative z-2 flex justify-center">
+      <div className="border-t-[1] border-white/50 mt-16 md:mt-24  pt-16  max-w-full  mx-4 relative z-2 flex justify-center">
         <p className="text-white">
           &copy; {year} {siteData.siteDetails.copyright}
         </p>

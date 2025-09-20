@@ -32,13 +32,13 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
     <>
       <div
         style={{ backgroundImage: 'url("/images/feedback-bg.jpg")' }}
-        className="py-28 w-full"
+        className="py-22 md:py-28 px-6 w-full"
       >
-        <div className="max-w-7xl mx-auto flex items-center gap-12">
-          <div className="w-[42%] flex flex-col gap-8">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+          <div className="md:w-[42%] flex flex-col gap-8">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <h4 className="text-orange-400 font-black text-lg uppercase">
+              <div className="flex items-center justify-center md:justify-start gap-2">
+                <h4 className="text-orange-400 font-black md:text-xl lg:text-[22px] uppercase">
                   {testimonialData?.subheading || "N/A"}{" "}
                 </h4>
                 <Image
@@ -48,7 +48,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
                   alt="arrow"
                 />
               </div>
-              <h2 className="font-black text-6xl text-purple-950">
+              <h2 className="font-black text-4xl md:text-5xl lg:text-6xl text-purple-950 text-center md:text-start">
                 {" "}
                 {testimonialData?.heading || "N/A"}
               </h2>
@@ -73,7 +73,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
           </div>
            
           
-<div className="w-[58%] bg-white p-9 px-14 rounded-[50px] rounded-tl-none flex flex-col gap-6" onMouseEnter={stopAutoScroll}
+<div className="md:w-[58%] bg-white p-5 md:p-9 px-8 md:px-14 rounded-[50px] rounded-tl-none flex flex-col gap-6" onMouseEnter={stopAutoScroll}
           onMouseLeave={startAutoScroll}>
   <div className="flex justify-between items-center">
     <Image
@@ -81,25 +81,27 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
       width={80}
       height={80}
       alt="quote"
+      className="w-14 md:w-22"
     />
     <Image
       src={"/images/shape_22.png"}
       width={80}
       height={80}
       alt="quote"
+      className="w-14 md:w-22"
     />
   </div>
 
   <div
     key={show}
-    className="text-purple-950 font-bold text-3xl leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
+    className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
   >
     {testimonials[show]?.message}
   </div>
 
   <div className="flex justify-between items-center gap-12">
     
-    <div className="flex justify-center slick-dots relative w-1/2">
+    <div className="flex justify-center slick-dots relative w-full md:w-1/2">
       {testimonials.slice(0,3).map((_, index) => (
         <button
           key={index}
@@ -117,10 +119,10 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
 
     
     <div className="w-1/2 flex flex-col items-end">
-      <h4 className="font-bold text-2xl text-purple-950 transition-all duration-700 ease-in-out opacity-0 animate-fade-in ">
+      <h4 className="font-bold text-xl md:text-2xl text-purple-950 transition-all duration-700 ease-in-out opacity-0 animate-fade-in ">
         {testimonials[show]?.name}
       </h4>
-      <span className="font-bold text-orange-400 text-base transition-all duration-700 ease-in-out opacity-0 animate-fade-in">
+      <span className="font-bold text-end md:text-start text-orange-400 text-sm md:text-base transition-all duration-700 ease-in-out opacity-0 animate-fade-in">
         {testimonials[show]?.designation}
       </span>
     </div>

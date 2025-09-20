@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { IoIosArrowBack } from "react-icons/io"
 import { toast } from 'react-toastify'
 import api from '../common/api'
+import { ORDER_STATUS, PAYMENT_METHODS, PAYMENT_STATUS } from '../../../constants/enums'
 
 const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setActive }) => {
   const [expandedProducts, setExpandedProducts] = useState({})
@@ -393,8 +394,8 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
              <div className="flex justify-between">
                <span className="text-gray-600 font-medium">Payment Status:</span>
                <span className={`font-semibold capitalize ${
-                 viewOrderData.payment.status === 'pending' ? 'text-yellow-600' :
-                 viewOrderData.payment.status === 'completed' ? 'text-green-600' :
+                 viewOrderData.payment.status === PAYMENT_STATUS.PENDING ? 'text-yellow-600' :
+                 viewOrderData.payment.status === PAYMENT_STATUS.SUCCESS ? 'text-green-600' :
                  'text-gray-600'
                }`}>
                  {viewOrderData.payment.status}

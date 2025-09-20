@@ -623,6 +623,19 @@ content: "";
   animation: slideDown 1.2s ease forwards;
 }
 
+@media only screen and (max-width: 768px) {
+  .slick-dots::before, .slick-dots::after {
+    content: "";
+    background: linear-gradient(90deg, rgb(255, 236, 196) 0%, rgb(255, 179, 54) 48%, rgb(255, 236, 196) 100%);
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    top: calc(50% - 1px);
+    left: 0;
+
+}
+}
+
 
 
 

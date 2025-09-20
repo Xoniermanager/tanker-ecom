@@ -35,32 +35,6 @@ const OurProducts = ({ productData }) => {
 
   const para = productData?.contents?.find((item) => item.type === "text").text;
 
-  const slides = [
-    {
-      id: 1,
-      img: "/images/truckOne.jpg",
-      heading: "CIVACON",
-      para: "Tank truck products including API bottom loading adaptors...",
-    },
-    {
-      id: 2,
-      img: "/images/truckOne.jpg",
-      heading: "Knappco and SureSeal",
-      para: "Specialist equipment for transporting dry bulk products.",
-    },
-    {
-      id: 3,
-      img: "/images/truckOne.jpg",
-      heading: "CLA-VAL",
-      para: "Aviation fueling products including underwing couplers.",
-    },
-    {
-      id: 4,
-      img: "/images/truckOne.jpg",
-      heading: "CIVACON",
-      para: "Tank truck products including API bottom loading adaptors...",
-    },
-  ];
 
   useEffect(() => {
     if (
@@ -79,19 +53,19 @@ const OurProducts = ({ productData }) => {
   }, [swiperInstance]);
 
   return (
-    <div className="w-full py-28 px-4">
-      <div className="flex flex-col gap-4 items-center mb-20">
+    <div className="w-full py-22 md:py-28 px-6">
+      <div className="flex flex-col gap-4 items-center mb-14 md:mb-20">
         <div className="flex items-center gap-2">
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-          <span className="text-orange-400  font-semibold text-[22px] uppercase">
+          <span className="text-orange-400  font-semibold md:text-xl lg:text-[22px] uppercase">
             {productData?.subheading || "N/A"}
           </span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-7xl text-purple-950 capitalize">
+        <h2 className="font-black text-5xl lg:text-7xl text-center lg:text-start text-purple-950 capitalize">
           {productData?.heading || "N/A"}
         </h2>
-        <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
+        <p className="text-zinc-500 w-[90%] md:w-1/2 text-center md:text-lg font-medium">
           {para || "N/A"}
         </p>
       </div>
@@ -103,6 +77,15 @@ const OurProducts = ({ productData }) => {
         loop={true}
         onSwiper={setSwiperInstance}
         className=""
+         breakpoints={{
+    0: {
+      slidesPerView: 1, 
+    },
+    768: {
+      slidesPerView: 3, 
+    },
+  }}
+        
       >
         {productData ? (
           productDatas?.slice(0, 8)?.map((item, index) => (
@@ -111,7 +94,7 @@ const OurProducts = ({ productData }) => {
                 style={{ backgroundImage: `url(${item.images[0].source})` }}
                 className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-3xl flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
               ></div>
-              <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
+              <div className="bg-white content-box p-3 w-[90%] md:w-4/5 -mt-52 mx-auto z-20 relative">
                 <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
                   <Image
                     src={item.images[0].source || "/images/dummy.jpg"}
@@ -156,7 +139,7 @@ const OurProducts = ({ productData }) => {
         )}
       </Swiper>
 
-      {/* Navigation Buttons */}
+      
       <div className="border-b-1 border-sky-200 w-full mt-18"></div>
       <div className="flex justify-center gap-4 bg-white -mt-2 w-fit mx-auto px-6">
         <button

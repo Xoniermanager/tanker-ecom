@@ -1,27 +1,73 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { BsQuestionCircle, BsThreeDots } from 'react-icons/bs'
-
+import { useDashboard } from '../../../context/dashboard/DashboardContext'
+import {months} from "../../../constants/enums"
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June']
+
 
 const SalesChart = () => {
-  const [selectedMonth, setSelectedMonth] = useState('June')
-
+  const { monthlySaleswithOrder, setSalesQueryMonth, salesQueryMonth } = useDashboard()
   
-  const salesData = {
-    January: { sales: [800, 1000, 1200], orders: [600, 700, 900], total: 3000 },
-    February: { sales: [1000, 1200, 1400], orders: [700, 800, 1000], total: 3600 },
-    March: { sales: [1200, 1500, 1800], orders: [1000, 1200, 1400], total: 4500 },
-    April: { sales: [1500, 1700, 1900], orders: [1300, 1400, 1600], total: 5100 },
-    May: { sales: [1700, 2000, 2300], orders: [1400, 1600, 1800], total: 6000 },
-    June: { sales: [1900, 2200, 2500], orders: [1600, 1800, 2000], total: 6600 },
+  // Initialize with current month or October based on your data
+  const getCurrentMonthName = () => {
+    if (monthlySaleswithOrder && monthlySaleswithOrder.monthName) {
+      return monthlySaleswithOrder.monthName
+    }
+    return 'October' // Default fallback
+  }
+  
+  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthName())
+  const [salesData, setSalesData] = useState({})
+
+
+  useEffect(() => {
+    if (monthlySaleswithOrder && monthlySaleswithOrder.monthName) {
+      setSelectedMonth(monthlySaleswithOrder.monthName)
+    }
+  }, [monthlySaleswithOrder])
+
+  useEffect(() => {
+    if (monthlySaleswithOrder) {
+      const formattedData = {
+        [monthlySaleswithOrder.monthName]: {
+          sales: monthlySaleswithOrder.sales || [],
+          orders: monthlySaleswithOrder.orders || [],
+          total: monthlySaleswithOrder.total || 0,
+          weeks: monthlySaleswithOrder.weeks || []
+        }
+      }
+      setSalesData(formattedData)
+    }
+  }, [monthlySaleswithOrder])
+
+  // Get current data for selected month
+  const getCurrentData = () => {
+    if (salesData[selectedMonth]) {
+      return salesData[selectedMonth]
+    }
+    
+    // Fallback empty data
+    return {
+      sales: [0, 0, 0, 0],
+      orders: [0, 0, 0, 0],
+      total: 0,
+      weeks: []
+    }
   }
 
-  const data = salesData[selectedMonth]
+  const data = getCurrentData()
+
+  // Generate week labels dynamically based on data length
+  const getWeekCategories = () => {
+    if (data.weeks && data.weeks.length > 0) {
+      return data.weeks.map((_, index) => `Week ${index + 1}`)
+    }
+    return data.sales.map((_, index) => `Week ${index + 1}`)
+  }
 
   const chartOptions = {
     chart: {
@@ -38,7 +84,7 @@ const SalesChart = () => {
       size: 4
     },
     xaxis: {
-      categories: ['Week 1', 'Week 2', 'Week 3'],
+      categories: getWeekCategories(),
     },
     legend: {
       position: 'top',
@@ -50,12 +96,19 @@ const SalesChart = () => {
     tooltip: {
       shared: true,
       intersect: false,
+      formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+        if (seriesIndex === 0) {
+          return `Sales: $${value?.toLocaleString() || 0}`
+        } else {
+          return `Orders: ${value || 0}`
+        }
+      }
     }
   }
 
   const chartSeries = [
     {
-      name: 'Sales',
+      name: 'Sales ($)',
       data: data.sales
     },
     {
@@ -64,9 +117,9 @@ const SalesChart = () => {
     }
   ]
 
+
   return (
-    <div className='w-full flex flex-col gap-6 '>
-   
+    <div className='w-full flex flex-col gap-6'>
       <div className='flex items-center justify-between gap-8'>
         <h2 className='text-2xl font-semibold flex gap-3 items-center'>
           Sales Chart 
@@ -74,42 +127,87 @@ const SalesChart = () => {
             <BsQuestionCircle />
           </span>
         </h2>
-        <button className='hover:text-orange-500 hover:scale-105 transition'>
+        {/* <button className='hover:text-orange-500 hover:scale-105 transition'>
           <BsThreeDots />
-        </button>
+        </button> */}
       </div>
 
       <div className='p-8 bg-white rounded-2xl shadow-[0_0_8px_#00000015]'> 
-      <div className='flex items-center justify-between flex-wrap gap-4'>
-        
-        <div className='flex items-center gap-2'>
-          <label className='text-sm font-medium'>Select Month:</label>
-          <select
-            className='border px-3 py-1 rounded-md outline-none text-sm'
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          >
-            {months.map((month) => (
-              <option key={month} value={month}>{month}</option>
-            ))}
-          </select>
+        <div className='flex items-center justify-between flex-wrap gap-4'>
+          <div className='flex items-center gap-2'>
+            <label className='text-sm font-medium'>Select Month:</label>
+            <select
+              className='border px-3 py-1 rounded-md outline-none text-sm'
+              value={salesQueryMonth}
+              onChange={(e) => setSalesQueryMonth(e.target.value)}
+            >
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>{month.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className='text-sm font-semibold text-green-600'>
+            Total Income: 
+            <span className='text-black text-base font-bold ml-1'>
+              ${data.total?.toLocaleString() || '0'}
+            </span>
+          </div>
         </div>
 
-        
-        <div className='text-sm font-semibold text-green-600'>
-          Total Income: <span className='text-black text-base font-bold'>${data.total.toLocaleString()}</span>
-        </div>
-      </div>
+        {/* Loading state */}
+        {!monthlySaleswithOrder ? (
+          <div className='flex justify-center items-center h-[350px]'>
+            <div className='text-gray-500'>Loading chart data...</div>
+          </div>
+        ) : (
+          <div className='w-full mt-4'>
+            <Chart
+              options={chartOptions}
+              series={chartSeries}
+              type='line'
+              height={350}
+            />
+          </div>
+        )}
 
-      
-      <div className='w-full'>
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type='line'
-          height={350}
-        />
-      </div>
+        {/* Data summary */}
+        {/* {monthlySaleswithOrder && (
+          <div className='mt-4 p-4 bg-gray-50 rounded-lg'>
+            <div className='text-sm text-gray-600 mb-2'>
+              <strong>{monthlySaleswithOrder.monthName} {monthlySaleswithOrder.year} Summary:</strong>
+            </div>
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
+              <div>
+                <span className='text-gray-500'>Total Sales:</span>
+                <div className='font-semibold text-green-600'>
+                  ${monthlySaleswithOrder.total?.toLocaleString() || '0'}
+                </div>
+              </div>
+              <div>
+                <span className='text-gray-500'>Total Orders:</span>
+                <div className='font-semibold text-blue-600'>
+                  {monthlySaleswithOrder.orders?.reduce((sum, count) => sum + count, 0) || 0}
+                </div>
+              </div>
+              <div>
+                <span className='text-gray-500'>Weeks Tracked:</span>
+                <div className='font-semibold'>
+                  {monthlySaleswithOrder.weeks?.length || 0}
+                </div>
+              </div>
+              <div>
+                <span className='text-gray-500'>Avg Weekly Sales:</span>
+                <div className='font-semibold text-orange-600'>
+                  ${monthlySaleswithOrder.weeks?.length > 0 
+                    ? Math.round(monthlySaleswithOrder.total / monthlySaleswithOrder.weeks.length).toLocaleString()
+                    : '0'
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        )} */}
       </div>
     </div>
   )

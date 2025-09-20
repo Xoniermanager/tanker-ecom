@@ -65,6 +65,7 @@ const orderSchema = new Schema(
       transactionId: String,
       paymentIntentId: String,
       paidAt: Date,
+      failedAt: Date,
       paymentSystemData: {}
     },
 

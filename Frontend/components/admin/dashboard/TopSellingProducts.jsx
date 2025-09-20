@@ -12,12 +12,12 @@ import PageLoader from '../../common/PageLoader'
 const TopSellingProducts = () => {
   const [specShow, setSpecShow] = useState(false);
 
-  const {topSellingProductsData} = useDashboard();
+  const {topSellingProductsData, isDashboardLoading} = useDashboard();
 
   const products = topSellingProductsData
   const length = topSellingProductsData?.length || 0;
 
-  if(!topSellingProductsData){
+  if(isDashboardLoading){
     return <PageLoader />
   }
 
@@ -71,7 +71,7 @@ const TopSellingProducts = () => {
                     <span className={`font-medium text-purple-900 group-hover:text-orange-500`}>{item?.product[0]?.name}</span>
                   </Link>
                 </td>
-                <td className="py-4 px-4  "> <span className={`${(item?.quantity <= 10 ) ? "text-red-500 bg-red-50 animate-pulse" :"text-purple-900 bg-purple-50 pulse"} text-sm px-4 py-2 font-medium tracking-wide rounded-md`}>{item?.quantity} {(item?.quantity <= 10 ) && "left" } </span></td>
+                <td className="py-4 px-4  "> <span className={`${(item?.quantity <= 10 ) ? "text-red-500 bg-red-50 animate-pulse" :"text-purple-900 bg-purple-50 pulse"} text-sm px-4 py-2 font-medium tracking-wide rounded-md`}>{(item.quantity !== 0) && item?.quantity} {(item?.quantity <= 10 && item?.quantity > 0) ? "left" : (item?.quantity === 0) && "Out of stock" } </span></td>
                 <td className="py-4 px-4 "> <span className='bg-purple-900 px-4 py-1 rounded-md text-white min-w-20 text-md'>{item?.salesCount}</span></td>
                 <td className="py-4 px-4 "> <span className='text-white px-2 py-1 text-sm capitalize rounded-lg bg-green-400 tracking-wide '>${item?.product[0]?.sellingPrice?.toFixed(2)}</span></td>
                 <td className="py-4 px-4 text-right flex justify-end">

@@ -11,6 +11,7 @@ import api from '../common/api';
 
 import stripePromise from '../../../lib/stripe';
 
+
 const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -18,12 +19,13 @@ const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError }) => {
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     
     const initPayment = async () => {
       try {
         const response = await api.post(`/order/payment/${orderId}`);
-        setClientSecret(response.data.data.clientSecret);
+        setClientSecret(response?.data?.data?.clientSecret);
       } catch (error) {
         onError(error.response?.data?.message || 'Failed to initialize payment');
       } finally {
@@ -46,28 +48,26 @@ const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError }) => {
     const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: card,
-        billing_details:{
-            name: "Mridul Saklani",
-            email: "mriduldummy@gmail.com",
-            address: {
-                city: "Indirapuram",
-                country: "IN",
-                line1: "Gyan khand galli no 2",
-                postal_code: 696969
-            }
-        },
+        // billing_details:{
+        //     name: "Mridul Saklani",
+        //     email: "mriduldummy@gmail.com",
+        //     address: {
+        //         city: "Indirapuram",
+        //         country: "IN",
+        //         line1: "Gyan khand galli no 2",
+        //         postal_code: 696969
+        //     }
+        // },
         
       },
-      receipt_email: "mriduldummy@gmail.com"
+      // receipt_email: "mriduldummy@gmail.com"
     });
 
     setIsProcessing(false);
 
     if (error) {
-      
       onError(error.message);
     } else if (paymentIntent.status === 'succeeded') {
-        console.log("payment Intent: ", paymentIntent)
       onSuccess();
     }
   };
@@ -134,7 +134,8 @@ const StripePaymentModal = ({
   onClose, 
   orderId, 
   totalAmount, 
-  onSuccess 
+  onSuccess,
+  onFailed
 }) => {
   const [error, setError] = useState('');
 
@@ -145,6 +146,8 @@ const StripePaymentModal = ({
 
   const handleError = (errorMessage) => {
     setError(errorMessage);
+    onFailed()
+    onClose()
   };
 
   const handleOnClose = ()=>{

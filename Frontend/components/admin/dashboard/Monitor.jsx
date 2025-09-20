@@ -6,10 +6,10 @@ import Link from 'next/link'
 import PageLoader from '../../common/PageLoader'
 
 const Monitor = () => {
-    const {dashboardData} = useDashboard();
+    const {dashboardData, isDashboardLoading} = useDashboard();
 
 
-    if(!dashboardData){
+    if(isDashboardLoading){
         return <PageLoader/>
     }
 

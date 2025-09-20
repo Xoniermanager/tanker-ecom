@@ -19,5 +19,7 @@ router.get('/by-number/:orderNumber', authorize(['user', 'admin']), orderControl
 router.post('/cancel/:orderId', validateCancelOrderByUser, authorize(['user']), orderController.cancelOrder);
 router.patch('/status/:orderId', validateChangeOrderStatus, authorize(['admin']), orderController.changeOrderStatus);
 router.post('/payment/:orderId', authorize(['user', 'admin']), orderController.initializePayment);
+router.get('/retrieve-payment/:orderId', authorize(['user', 'admin']), orderController.testConfirmPayment)
+router.post('/payment/confirm/:orderId', authorize(['user', 'admin']), orderController.confirmPayment);
 
 module.exports = router

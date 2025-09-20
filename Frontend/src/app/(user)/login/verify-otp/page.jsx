@@ -107,7 +107,12 @@ const VerifyOtpPage = () => {
         redirect ? router.push(`${redirect}`) : router.push("/");
       }
     } catch (error) {
-      setErrMessage("Verification failed. Try again.");
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+      setErrMessage(message);
     } finally {
       setIsLoading(false);
     }

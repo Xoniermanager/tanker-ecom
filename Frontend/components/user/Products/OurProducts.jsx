@@ -115,23 +115,23 @@ const OurProducts = ({
     }
 
   return (
-    <div className="w-full py-28 px-4 flex flex-col gap-10">
-      <div className="flex flex-col gap-4 items-center mb-20">
+    <div className="w-full my-22 md:py-28 px-6 flex flex-col gap-10">
+      <div className="flex flex-col gap-4 items-center mb-8 md:mb-20">
         <div className="flex items-center gap-2">
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
-          <span className="text-orange-400 font-semibold text-[22px]">
+          <span className="text-orange-400 font-semibold md:text-xl lg:text-[22px]">
             WHAT WE OFFER
           </span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-7xl text-purple-950"> Our Products </h2>
-        <p className="text-zinc-500 w-1/2 text-center text-lg font-medium">
+        <h2 className="font-black text-5xl lg:text-7xl text-center text-purple-950"> Our Products </h2>
+        <p className="text-zinc-500 md:w-1/2 text-center md:text-lg font-medium">
           Tanker Solutions is the New Zealand distributor for some of the very
           best global petroleum equipment suppliers for tankers and tank
           trailers.
         </p>
       </div>
-      <div className="grid grid-cols-4 gap-5 border-1 border-gray-200 rounded-lg max-w-7xl mx-auto w-full p-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 border-1 border-gray-200 rounded-lg max-w-7xl mx-auto w-full p-3">
         <div className="flex flex-col gap-2 col-span-2">
           <label htmlFor="" className="text-sm font-semibold text-gray-700">
             {" "}
@@ -191,14 +191,14 @@ const OurProducts = ({
        
       </div>
 
-      <div className="grid grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
         {productData?.length > 0  ? productData?.map((item, index) => (
           <div className="main-box w-full" key={index}>
             <div
               style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
               className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-[46px] flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
             ></div>
-            <div className="bg-white content-box p-3 w-4/5 -mt-52 mx-auto z-20 relative">
+            <div className="bg-white content-box p-3 w-[88%] md:w-4/5 -mt-52 mx-auto z-20 relative">
               <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
                 <Image
                   src={item.images[0]?.source || "/images/dummy.jpg"}
@@ -210,7 +210,7 @@ const OurProducts = ({
                 <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
                   {item.name}
                 </h3>
-                <p className="text-zinc-500 font-medium text-base text-center leading-8 line-clamp-3 h-22">
+                <p className="text-zinc-500 font-medium text-base text-center leading-7 md:leading-8 line-clamp-3 h-20 md:h-22">
                   {item.shortDescription}
                 </p>
 

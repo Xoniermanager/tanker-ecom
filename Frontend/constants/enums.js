@@ -24,6 +24,15 @@ export const PAYMENT_METHODS = Object.freeze({
         ONLINE_PAYMENT: "online_payment"
 })
 
+export const PAYMENT_STATUS = Object.freeze({
+
+        PENDING: "pending",
+        FAILED: "failed",
+        CANCELLED: "cancelled",
+        SUCCESS: "success",
+   
+})
+
 export const  ORDER_STATUS = Object.freeze({
         PENDING: "pending",
         PROCESSING: "processing",
@@ -138,6 +147,21 @@ export const specType = Object.freeze({
     IMAGE: "image",
     PDF: "pdf"
 })
+
+export const months = Object.freeze([
+  { name: "January", value: 1 },
+  { name: "February", value: 2 },
+  { name: "March", value: 3 },
+  { name: "April", value: 4 },
+  { name: "May", value: 5 },
+  { name: "June", value: 6 },
+  { name: "July", value: 7 },
+  { name: "August", value: 8 },
+  { name: "September", value: 9 },
+  { name: "October", value: 10 },
+  { name: "November", value: 11 },
+  { name: "December", value: 12 },
+])
 
 
 

@@ -7,7 +7,7 @@ import PageLoader from '../../common/PageLoader';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const CategoryChart = () => {
-  const {topSellingCategories} = useDashboard();
+  const {topSellingCategories, isDashboardLoading} = useDashboard();
 
   
   
@@ -80,7 +80,7 @@ const CategoryChart = () => {
 
   const chartSeries = chartData?.map(item => item.revenue);
 
-  if(!topSellingCategories){
+  if(isDashboardLoading){
     return <PageLoader/>
   }
   
@@ -94,9 +94,9 @@ const CategoryChart = () => {
               <BsQuestionCircle />
             </span>
           </h2>
-          <button className='hover:text-orange-500 hover:scale-105 transition'>
+          {/* <button className='hover:text-orange-500 hover:scale-105 transition'>
             <BsThreeDots />
-          </button>
+          </button> */}
         </div>
         <div className="bg-white rounded-xl p-4 flex justify-center items-center w-full min-h-[400px]">
           <p className="text-gray-500">No sales data available</p>
@@ -114,9 +114,9 @@ const CategoryChart = () => {
             <BsQuestionCircle />
           </span>
         </h2>
-        <button className='hover:text-orange-500 hover:scale-105 transition'>
+        {/* <button className='hover:text-orange-500 hover:scale-105 transition'>
           <BsThreeDots />
-        </button>
+        </button> */}
       </div>
 
       <div className="bg-white rounded-xl p-4 flex justify-center items-center w-full">

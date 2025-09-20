@@ -3,6 +3,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { FaEye } from "react-icons/fa";
 import { IoArrowForward } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { BsCartX } from "react-icons/bs";
 import Link from "next/link";
 import DataNotFount from "../../common/DataNotFount";
@@ -13,6 +14,7 @@ const QuoteTable = ({
   currentPage,
   setCurrentPage,
   setPageLimit,
+  handleDeleteQuote
 }) => {
   if (quoteData?.length <= 0) {
     return <DataNotFount />;
@@ -71,13 +73,16 @@ const QuoteTable = ({
                       </span>
                     </td>
 
-                    <td className="px-6 py-6 text-xl text-gray-500">
+                    <td className="px-6 py-6 text-xl text-gray-500 flex items-center justify-center gap-2">
                       <Link
                         href={`quote/detail/${order._id}`}
                         className="flex items-center justify-center h-8 w-8 rounded-lg text-white bg-orange-500"
                       >
                         <FaEye />
                       </Link>
+                      <button onClick={()=>handleDeleteQuote(order._id, `${order.firstName} ${order.lastName}`)} className="bg-red-500 h-8 w-8 rounded-lg text-white flex items-center justify-center">
+                          <MdDeleteOutline className=""/>
+                      </button>
                     </td>
                   </tr>
                 ))
