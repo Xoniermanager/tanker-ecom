@@ -97,9 +97,18 @@ const productSchema = new Schema(
     },
     
     measurements: [{
-       measurementName : {type: String, trim: true},
+       measurementName: {type: String, trim: true},
        measurementValue: {type: String, trim: true}
     }],
+    deliveryDays: {
+  type: String,
+  required: true,
+  default: "1"
+},
+    shipping:{
+      type: String,
+
+    },
     seo: {
       metaTitle: String,
       metaDescription: String,

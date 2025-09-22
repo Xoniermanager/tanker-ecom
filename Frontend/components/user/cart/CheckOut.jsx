@@ -59,14 +59,14 @@ const CheckOut = ({
   }
   return (
     <>
-      <div className="py-24 max-w-7xl mx-auto flex items-start gap-10">
-        <div className="w-[72%] flex flex-col gap-3">
+      <div className="px-5 py-16 lg:py-24 max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-10">
+        <div className="w-full lg:w-[72%] flex flex-col gap-2 lg:gap-3">
           <h2 className="text-xl font-semibold text-purple-950 ">
             Billing Details
           </h2>
           <div className="w-full border-b-1 border-slate-200 my-3"></div>
-          <form className="grid grid-cols-2 gap-5 p-6 rounded-lg bg-purple-50/80">
-            <div className="flex flex-col gap-2">
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5 p-5 lg:p-6 rounded-lg bg-purple-50/80">
+            <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
               <label htmlFor="firstName">
                 {" "}
                 <span className="text-red-500">*</span> First Name
@@ -81,10 +81,10 @@ const CheckOut = ({
                 required
               />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
               <label htmlFor="lastName">
                 {" "}
-                <span className="text-red-500">*</span>Last Name
+                <span className="text-red-500">*</span> Last Name
               </label>
               <input
                 type="text"
@@ -96,7 +96,7 @@ const CheckOut = ({
                 required
               />
             </div>
-            <div className="flex flex-col gap-2 ">
+            <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
               <label htmlFor="email">
                 <span className="text-red-500">*</span> Email
               </label>
@@ -110,7 +110,7 @@ const CheckOut = ({
                 required
               />
             </div>
-            <div className="flex flex-col gap-2 ">
+            <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
               <label htmlFor="phone">
                 <span className="text-red-500">*</span> Contact Number
               </label>
@@ -125,15 +125,15 @@ const CheckOut = ({
               />
             </div>
             <div className="w-full col-span-2 border-b-1 border-stone-200 "></div>
-            <div className="w-full col-span-2 flex justify-between bg-white p-4 px-6 rounded-lg">
-              <h2 className="text-purple-950 font-semibold text-xl">
+            <div className="w-full col-span-2 flex justify-between bg-white p-4 px-4 md:px-6 rounded-lg">
+              <h2 className="text-purple-950 font-semibold lg:text-xl">
                 Shipping & Billing Address
               </h2>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 md:gap-4">
                 <span
                   className={`${
                     addressIsSame ? "bg-green-500" : "bg-orange-500 "
-                  } rounded-lg tracking-wide px-3 py-1 text-sm text-white`}
+                  } rounded-lg tracking-wide px-2 md:px-3 py-1 text-[12px] md:text-sm text-white`}
                 >
                   {addressIsSame ? "Same" : "Different"}{" "}
                 </span>
@@ -152,7 +152,7 @@ const CheckOut = ({
                 </button>
               </div>
             </div>
-            <div className="col-span-2 grid grid-cols-2 gap-5 p-5 bg-white/90 border-stone-200 border-1 rounded-lg">
+            <div className="col-span-2 grid grid-cols-2 gap-4 md:gap-5 p-5 bg-white/90 border-stone-200 border-1 rounded-lg">
               <h3 className="text-lg font-medium text-purple-950 col-span-2 capitalize">
                 {" "}
                 <span className="text-red-500">*</span>{" "}
@@ -192,7 +192,7 @@ const CheckOut = ({
                   ))}
                 </select>
               </div>
-              <div className="flex flex-col gap-2 ">
+              <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
                 <label htmlFor="shippingAddress.city"> Town/City </label>
                 <input
                   type="text"
@@ -220,7 +220,7 @@ const CheckOut = ({
                     ))}
                 </div> */}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
                 <label htmlFor="shippingAddress.pincode">Zip Code</label>
                 <input
                   type="number"
@@ -296,7 +296,7 @@ const CheckOut = ({
                     ))}
                   </select>
                 </div>
-                <div className="flex flex-col gap-2 ">
+                <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
                   <label htmlFor="billingAddress.city"> Town/City</label>
                   <input
                     type="text"
@@ -324,7 +324,7 @@ const CheckOut = ({
                     ))}
                 </div> */}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
                   <label htmlFor="billingAddress.pincode">Zip Code</label>
                   <input
                     type="number"
@@ -356,7 +356,7 @@ const CheckOut = ({
             </div>
           </form>
         </div>
-        <div className="w-[28%] sticky top-28 flex flex-col gap-5">
+        <div className="w-full lg:w-[28%] sticky top-28 flex flex-col gap-5">
           <div className="px-5 py-5 bg-orange-50 flex flex-col gap-4 rounded-lg border-1 border-stone-800">
             <h2 className="text-xl font-semibold text-purple-950 pb-4 border-b-1 border-stone-300">
               Order summary

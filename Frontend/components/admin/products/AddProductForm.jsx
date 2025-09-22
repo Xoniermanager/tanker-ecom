@@ -34,7 +34,8 @@ const AddProductForm = () => {
     slug: "",
     initialQuantity: "",
     measurements: [],
-    
+    deliveryDays:"",
+    shipping:"",
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -247,6 +248,8 @@ const AddProductForm = () => {
       formPayload.append("brand", formData.brand);
       formPayload.append("origin", formData.origin);
       formPayload.append("slug", formData.slug);
+      formPayload.append("deliveryDays", formData.deliveryDays);
+      formPayload.append("shipping", formData.shipping)
       formPayload.append("initialQuantity", formData.initialQuantity);
 
       formData.highlights.forEach((highlight, index) => {
@@ -313,6 +316,8 @@ const AddProductForm = () => {
         measurementValue: "",
       },
     ],
+    deliveryDays:0,
+    shipping:"",
           images: [],
           slug: "",
           initialQuantity: "",
@@ -799,6 +804,49 @@ const AddProductForm = () => {
               ))}
             </div>
           )}
+
+           <div className="flex flex-col gap-2">
+            <label
+              htmlFor="deliveryDays"
+              className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+            >
+              <span className="text-red-500 text-[8px]">
+                <FaStarOfLife />
+              </span>{" "}
+             Estimated Delivery Days
+            </label>
+            <input
+              type="number"
+              id="deliveryDays"
+              name="deliveryDays"
+              value={formData.deliveryDays}
+              onChange={handleInputChange}
+              placeholder="Estimated Delivery Days"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
+           <div className="flex flex-col gap-2">
+            <label
+              htmlFor="shipping"
+              className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+            >
+              <span className="text-red-500 text-[8px]">
+                <FaStarOfLife />
+              </span>{" "}
+             Free Shipping
+            </label>
+            <input
+              type="text"
+              id="shipping"
+              name="shipping"
+              value={formData.shipping}
+              onChange={handleInputChange}
+              placeholder="Free Shipping With"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-1 gap-5 col-span-2">
 
             <div className="col-span-2 flex flex-col gap-4">
@@ -871,6 +919,8 @@ const AddProductForm = () => {
               </button>
             </div>
           </div>
+
+          
 
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-2 gap-5 col-span-2">
             <div className="flex flex-col gap-2">

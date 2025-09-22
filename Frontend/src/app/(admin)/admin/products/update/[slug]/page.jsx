@@ -29,6 +29,8 @@ const Page = () => {
         measurementValue: "",
       },
     ],
+    deliveryDays:"",
+    shipping:"",
     images: [],
     // slug: "",
     // initialQuantity: "",
@@ -62,6 +64,8 @@ const Page = () => {
           brand: product.brand || "",
           origin: product.origin || "",
           highlights: product.highlights || [],
+          deliveryDays: product.deliveryDays || "",
+          shipping: product.shipping || "",
           specifications: {
             type: product?.specifications?.type || "",
             source: ""

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
 import { useAuth } from "../../../../../context/user/AuthContext";
+import { useCart } from "../../../../../context/cart/CartContext";
 
 const VerifyOtpPage = () => {
   const [verifyCredentials, setVerifyCredentials] = useState({
@@ -15,6 +16,7 @@ const VerifyOtpPage = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isVerificationOTPSend, setIsVerificationOTPSend] = useState(false);
   const [timer, setTimer] = useState(60);
   const [resendActive, setResendActive] = useState(false);
@@ -28,6 +30,7 @@ const VerifyOtpPage = () => {
 
 
   const {fetchUserData} = useAuth();
+  const {fetchCartData} = useCart()
 
   useEffect(() => {
     const getVerifyLoginEmail = localStorage.getItem("verify-login-email");
@@ -96,7 +99,8 @@ const VerifyOtpPage = () => {
       if (response?.status === 200) {
         toast.success("OTP verify successfully");
         setOtp(Array(6).fill(""));
-        fetchUserData()
+        fetchUserData();
+       
         setVerifyCredentials({
           email: null,
           password: null,
@@ -105,6 +109,7 @@ const VerifyOtpPage = () => {
         window.localStorage.removeItem("verify-login-password");
 
         redirect ? router.push(`${redirect}`) : router.push("/");
+        
       }
     } catch (error) {
       const message =
@@ -120,6 +125,7 @@ const VerifyOtpPage = () => {
 
   const handleResend = async () => {
     if (!verifyCredentials.email) return setErrMessage(`Email id not found`);
+    setLoading(true)
     try {
       const response = await api.post(`/auth/resend-login-otp`, {
         email: verifyCredentials.email,
@@ -140,16 +146,18 @@ const VerifyOtpPage = () => {
         "Something went wrong";
 
       setErrMessage(message);
+    } finally {
+      setLoading(false)
     }
   };
 
   const isOtpFilled = otp.every((digit) => digit !== "");
 
   return (
-    <div className="py-36 flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-10 max-w-xl w-full flex flex-col gap-7">
+    <div className="py-20 md:py-28 lg:py-36 flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white shadow-xl rounded-2xl p-6 md:p-8 lg:p-10 max-w-xl w-full flex flex-col gap-7">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-1 capitalize text-purple-950">
+          <h2 className="text-xl md:text-2xl font-semibold mb-1 capitalize text-purple-950">
             Verify Your Email for login
           </h2>
           <p className="text-gray-600 text-sm">
@@ -161,7 +169,7 @@ const VerifyOtpPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-6 gap-2 md:gap-3">
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -172,7 +180,7 @@ const VerifyOtpPage = () => {
                 value={digit}
                 onChange={(e) => handleChange(e.target.value, index)}
                 onKeyDown={(e) => handleBackspace(e, index)}
-                className="h-14 w-full text-xl text-center border border-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
+                className="h-10 lg:h-14 w-full text-xl text-center border border-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300"
               />
             ))}
           </div>
@@ -201,7 +209,7 @@ const VerifyOtpPage = () => {
               type="button"
               className="text-blue-600 flex items-center justify-center gap-1 font-medium hover:underline"
             >
-              Resend OTP {isVerificationOTPSend && <FaCheckCircle />}
+              {loading ? "Resending..." : "Resend OTP"} {isVerificationOTPSend && <FaCheckCircle />}
             </button>
           ) : (
             <p>

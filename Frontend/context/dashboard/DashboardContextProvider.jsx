@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { DashboardContext } from "./DashboardContext";
 import api from "../../components/user/common/api";
 import { useAuth } from "../user/AuthContext";
+import { USER_ROLES } from "../../constants/enums";
 
 export const DashBoardContextProvider = ({ children }) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -19,7 +20,7 @@ export const DashBoardContextProvider = ({ children }) => {
   const [salesQueryMonth, setSalesQueryMonth] = useState(Number(month))
   const [timeframe, setTimeframe] = useState(30);
 
-  const {isAuthenticated} = useAuth()
+  const {isAuthenticated, userData} = useAuth()
 
   const fetchDashboardData = async () => {
     setIsDashboardLoading(true);
@@ -47,12 +48,15 @@ export const DashBoardContextProvider = ({ children }) => {
         console.error(error);
       }
     } finally {
+      
       setIsDashboardLoading(false);
     }
   };
 
   useEffect(() => {
+    if(userData?.role === USER_ROLES.ADMIN){
     fetchDashboardData();
+    }
   }, [timeframe, salesQueryMonth, isAuthenticated]);
 
   return (

@@ -11,6 +11,7 @@ import { IoArrowForward } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../context/user/AuthContext";
 import OrderHistoryTable from "./OrderHistoryTable";
+import ScrollToTopByEvent from "../../common/ScrollToTopOnEvent";
 
 const OrderTable = ({
   orderData,
@@ -29,20 +30,26 @@ const OrderTable = ({
   const handleViewOrder = (item, number) => {
     setViewOrderData(item);
     setActive(number);
+    
   };
+
+  const handleTabChange=(num)=>{
+    setActive(num);
+    ScrollToTopByEvent(200);
+  }
 
   return (
     <>
-      <div className="py-24 max-w-7xl mx-auto flex items-start gap-10 ">
-        <div className="w-1/4 sticky top-34">
+      <div className="py-20 lg:py-24 px-5 max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-10 ">
+        <div className="w-full lg:w-1/4 sticky bg-white top-30 z-200 lg:top-34">
           <ul className="border-1 border-slate-200 rounded-xl p-4 flex flex-col gap-3 bg-sky-50/10">
             <li
               className={`px-6 py-3 ${
-                active === 1
+                (active === 1 || active === 11)
                   ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
                   : "hover:bg-slate-50"
               } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
-              onClick={() => setActive(1)}
+              onClick={() => handleTabChange(1)}
             >
               {" "}
               <TbTruckLoading /> Orders{" "}
@@ -65,7 +72,7 @@ const OrderTable = ({
                   ? "bg-[#16a34a12] text-orange-400 border-l-3 border-orange-400"
                   : "hover:bg-slate-50"
               } cursor-pointer font-medium rounded-lg flex items-center gap-2`}
-              onClick={() => setActive(3)}
+              onClick={() => handleTabChange(3)}
               // onClick={()=>toast.info("Sorry it is under development")}
             >
               {" "}
@@ -73,11 +80,11 @@ const OrderTable = ({
             </li>
           </ul>
         </div>
-        <div className="w-3/4">
+        <div className="w-full lg:w-3/4 overflow-hidden">
           {active === 1 && (
-            <div className="flex flex-col gap-8">
+            <div className="w-full flex flex-col gap-8 overflow-x-scroll">
               {" "}
-              <table className="w-full">
+              <table className="w-full overflow-x-scroll">
                 <thead>
                   <tr className="bg-gray-100 rounded-lg">
                     <th className="p-4 text-start font-medium">Order Id</th>
@@ -103,7 +110,7 @@ const OrderTable = ({
                           >
                             <td className="p-4 py-6">
                               <span
-                                className="font-medium text-sm text-purple-950 cursor-pointer"
+                                className="font-medium text-[12px] text-nowrap lg:text-sm text-purple-950 cursor-pointer"
                                 onClick={() => handleViewOrder(item, 11)}
                               >
                                 {item.orderNumber}

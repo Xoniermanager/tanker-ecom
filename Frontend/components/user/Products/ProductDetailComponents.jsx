@@ -58,7 +58,7 @@ const ProductDetailComponents = ({
     <>
       <div className="py-20 px-5 md:py-24 w-full bg-[#fbf2f2] flex flex-col gap-12">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="flex items-start flex-col md:flex-row gap-14">
+          <div className="flex items-start flex-col md:flex-row gap-10 lg:gap-14">
             <div className="w-full md:w-[45%] relative">
               <div className="bg-white p-6 rounded-4xl flex flex-col items-center gap-4 w-full">
                 <div className="absolute top-2/3 left-6 z-10 transform -translate-y-1/2">
@@ -211,7 +211,7 @@ const ProductDetailComponents = ({
                   </button>
                 ) : productData.inventory.status === "in_stock" ? (
                   <button
-                    className="bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white px-8 py-3 font-medium rounded-lg transition-all"
+                    className="bg-orange-400 hover:bg-orange-500 disabled:bg-orange-300 text-white px-6 py-2 md:px-8 md:py-3 font-medium rounded-lg transition-all"
                     onClick={handleCartSubmit}
                     disabled={cartIsLoading}
                   >
@@ -230,12 +230,12 @@ const ProductDetailComponents = ({
                 <li className="flex items-center gap-1.5">
                   <FaCheck className="text-purple-950" />{" "}
                   <b className="text-black text-sm md:text-base">Estimated Delivery: </b>{" "}
-                  <p className="text-purple-950 text-sm md:text-base"> 60-60 days</p>{" "}
+                  <p className="text-purple-950 text-sm md:text-base"> {productData?.deliveryDays || "1"} {parseInt(productData?.deliveryDays || "1") === 1 ? "day" : "days"}</p>{" "}
                 </li>
                 <li className="flex items-center gap-1.5">
                   <FaCheck className="text-purple-950" />{" "}
                   <b className="text-black text-sm md:text-base">Free Shipping: </b>{" "}
-                  <p className="text-purple-950 text-sm md:text-base"> Via Super Economy Global</p>{" "}
+                  <p className="text-purple-950 text-sm md:text-base">  {productData?.shipping || "Standard shipping"}</p>{" "}
                 </li>
               </ul>
               <div className="flex justify-center md:justify-start gap-2.5">
@@ -251,36 +251,36 @@ const ProductDetailComponents = ({
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto border-1 border-zinc-300 bg-white rounded-3xl w-full">
+        <div className="max-w-7xl mx-auto border-1 border-zinc-300 bg-white rounded-3xl w-full overflow-hidden">
           <ul className="flex items-center flex-col md:flex-row justify-center w-full rounded-b-lg overflow-hidden">
-            <li className="border-r-1 border-gray-200 ">
+            <li className="border-r-1 border-gray-200 w-full md:w-fit">
               {" "}
               <button
                 className={`${
                   active === 1 ? "bg-orange-500 text-white" : "bg-slate-100"
-                } text-lg font-medium px-9 py-2 border-b-lg w-full`}
+                } text-lg font-medium px-9 py-2 border-b-lg w-full md:w-fit`}
                 onClick={() => setActive(1)}
               >
                 Description
               </button>
             </li>
-            <li className="border-r-1 border-gray-200">
+            <li className="border-r-1 border-gray-200 w-full md:w-fit">
               {" "}
               <button
                 className={`${
                   active === 2 ? "bg-orange-500 text-white" : "bg-slate-100"
-                } text-lg font-medium px-9 py-2 border-b-lg`}
+                } text-lg font-medium px-9 py-2 border-b-lg w-full md:w-fit`}
                 onClick={() => setActive(2)}
               >
                 Specifications
               </button>
             </li>
-            <li className="">
+            <li className=" w-full md:w-fit">
               {" "}
               <button
                 className={`${
                   active === 3 ? "bg-orange-500 text-white" : "bg-slate-100"
-                } text-lg font-medium px-9 py-2 border-b-lg`}
+                } text-lg font-medium px-9 py-2 border-b-lg w-full md:w-fit`}
                 onClick={() => setActive(3)}
               >
                 Measurements
@@ -304,7 +304,7 @@ const ProductDetailComponents = ({
               </div>
             )}
             {active === 3 && (
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     {(productData.measurements.length > 0 && productData.measurements.some(item=> item.measurementName !== "" && item.measurementValue !== "" ))? productData.measurements.map((item, index) => (
       <div key={index} className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex justify-center w-full">
         <div className="flex items-center justify-between w-full">

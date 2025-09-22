@@ -10,6 +10,7 @@ import Link from "next/link";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Image from "next/image";
+import FailedDataLoading from "../../../../../../../components/common/FailedDataLoading";
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
@@ -24,6 +25,7 @@ const Page = () => {
 
 
   const getProduct = async () => {
+    setIsLoading(true)
     try {
       const response = await api.get(`/products/${slug}`);
       if (response.status === 200) {
@@ -31,6 +33,8 @@ const Page = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -73,10 +77,14 @@ const Page = () => {
     setDeletedProductId(id);
   };
 
-  if (!productData) {
+  if (isLoading) {
     return (
       <PageLoader/>
     );
+  }
+
+  if(!productData){
+    return <FailedDataLoading />
   }
 
   return (
@@ -91,13 +99,13 @@ const Page = () => {
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-purple-950 capitalize">
-            {productData.name}
+            {productData?.name}
           </h1>
           <div className="flex gap-3">
-            <Link href={`/admin/products/update/${productData.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
+            <Link href={`/admin/products/update/${productData?.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
               <MdOutlineEdit className="text-lg"/> Edit Product
             </Link>
-            <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition flex items-center gap-2" onClick={()=>setDeleteProduct(productData._id)}>
+            <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition flex items-center gap-2" onClick={()=>setDeleteProduct(productData?._id)}>
              <MdDeleteOutline className="text-xl"/> Delete Product
             </button>
             <button className="bg-orange-500 text-white px-6 py-2 rounded-lg shadow hover:bg-orange-600 transition flex items-center gap-2" onClick={()=>router.back()}>
@@ -110,13 +118,13 @@ const Page = () => {
           <div className="space-y-4 sticky top-24 left-0 w-1/2">
             <div className="bg-white rounded-xl shadow p-4">
               <Image
-                src={selectedImage || (productData.images[0]?.source ? productData.images[0]?.source :'/images/dummy.jpg')} height={350} width={350}
-                alt={productData.name}
+                src={selectedImage || (productData?.images[0]?.source ? productData?.images[0]?.source :'/images/dummy.jpg')} height={350} width={350}
+                alt={productData?.name}
                 className="rounded-xl shadow border-1 border-stone-200 w-full h-80 object-contain"
               />
 
               <div className="flex gap-3 mt-4 overflow-x-auto">
-                {productData.images.map((img) => (
+                {productData?.images?.map((img) => (
                   <img
                     key={img._id}
                     src={img.source}
@@ -140,19 +148,19 @@ const Page = () => {
               </h2>
               <p className="text-gray-700">
                 <span className="font-semibold text-purple-950">Category:</span>{" "}
-                {productData.category.name}
+                {productData?.category?.name}
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold text-purple-950">Brand:</span>{" "}
-                {productData.brand}
+                {productData?.brand}
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold text-purple-950">Origin:</span>{" "}
-                {productData.origin}
+                {productData?.origin}
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold text-purple-950">Slug:</span>{" "}
-                {productData.slug}
+                {productData?.slug}
               </p>
             </div>
 
@@ -168,6 +176,25 @@ const Page = () => {
                   ${productData.regularPrice.toFixed(2)}
                 </p>
               </div>
+            </div>
+
+            {/* New Shipping & Delivery Section */}
+            <div className="bg-white rounded-xl shadow p-6 space-y-3">
+              <h2 className="text-xl font-semibold text-purple-950 mb-3">
+                Shipping & Delivery
+              </h2>
+              <p className="text-gray-700">
+                <span className="font-semibold text-purple-950">Delivery Days:</span>{" "}
+                <span className="text-orange-500 font-medium">
+                  {productData.deliveryDays || "1"} {parseInt(productData.deliveryDays || "1") === 1 ? "day" : "days"}
+                </span>
+              </p>
+              <p className="text-gray-700">
+                <span className="font-semibold text-purple-950">Shipping Info:</span>{" "}
+                <span className="text-gray-800">
+                  {productData.shipping || "Standard shipping"}
+                </span>
+              </p>
             </div>
 
             <div className="bg-white rounded-xl shadow p-6 space-y-3">
