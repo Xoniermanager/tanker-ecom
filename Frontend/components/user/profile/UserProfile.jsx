@@ -74,13 +74,13 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-24 ">
+    <div className="max-w-7xl mx-auto py-20 px-5 md:py-24 ">
       <div className="bg-white rounded-3xl   overflow-hidden">
-        <div className="relative bg-purple-100 p-10">
+        <div className="relative bg-purple-100 p-6 md:p-10">
           <div className="absolute inset-0 "></div>
           <div className="relative z-10">
             <div className="flex items-center justify-between flex-wrap gap-6">
-              <div className="flex items-center space-x-8">
+              <div className="flex items-center flex-col md:flex-row w-full gap-6 space-x-8">
                 <div className="relative">
                   {/* {userData?.profileImage ? ( */}
                     <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white/30 shadow-xl">
@@ -98,14 +98,14 @@ const UserProfile = () => {
                   </div>
                 </div>
 
-                <div className="text-slate-800">
-                  <h1 className="text-4xl font-bold mb-2">
+                <div className="text-slate-800 ">
+                  <h1 className="text-2xl md:text-4xl text-center md:text-start font-bold mb-2">
                     {userData?.fullName}
                   </h1>
-                  <p className="text-xl text-slate-600 font-medium mb-1">
+                  <p className="text-xl text-slate-600 text-center md:text-start font-medium mb-1">
                     {userData?.designation}
                   </p>
-                  <p className="text-slate-600 font-medium">
+                  <p className="text-slate-600 text-center md:text-start font-medium">
                     {userData?.companyName}
                   </p>
                 </div>
@@ -115,7 +115,7 @@ const UserProfile = () => {
                 <div
                   className={`${
                     userData?.status === "active" ? "bg-green-50" : "bg-red-50"
-                  } backdrop-blur-sm rounded-full px-6 py-3 border ${
+                  } backdrop-blur-sm rounded-full px-5 md:px-6 py-3 border ${
                     userData?.status === "active"
                       ? "border-green-500"
                       : "border-red-500"
@@ -140,7 +140,7 @@ const UserProfile = () => {
                 </div>
                 <Link
                   href={`/profile/update`}
-                  className="bg-purple-600 hover:bg-purple-700  backdrop-blur-sm flex items-center gap-2 text-white rounded-full px-6 py-3"
+                  className="bg-purple-600 hover:bg-purple-700  backdrop-blur-sm flex items-center gap-2 text-white rounded-full md:px-6 px-4 py-3 text-nowrap"
                 >
                   <FaUserEdit className="text-xl" /> Update Profile
                 </Link>

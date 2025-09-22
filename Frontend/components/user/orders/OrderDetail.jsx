@@ -106,14 +106,14 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
              {canCancelOrder() && (
                <button 
                  onClick={() => setShowCancelModal(true)}
-                 className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors font-medium"
+                 className="px-3 md:px-4 py-2 text-xs md:text-base  bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors font-medium"
                >
                  Cancel Order
                </button>
              )}
              <button 
                onClick={onBack}
-               className="px-6 py-2 bg-purple-100 text-purple-700 flex items-center gap-2 rounded-lg hover:bg-purple-950 hover:text-white transition-colors"
+               className="px-4 md:px-6 py-2 text-sm md:text-base bg-purple-100 text-purple-700 flex items-center gap-2 rounded-lg hover:bg-purple-950 hover:text-white transition-colors"
              >
                <IoIosArrowBack /> Back to Orders
              </button>
@@ -142,7 +142,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
          </div>
 
         
-         <div className="bg-gradient-to-r from-gray-50 to-blue-50/30 p-5 md:p-6 rounded-xl border border-gray-100">
+         <div className="bg-gradient-to-r from-gray-50 to-blue-50/30 p-4 md:p-6 rounded-xl border border-gray-100">
            <h3 className="text-xl font-semibold mb-6 text-purple-950">Order Status & Tracking</h3>
            <div className="relative">
             
@@ -233,10 +233,10 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
                 }`}>
                    
                     <div 
-                      className="flex items-center flex-col md:flex-row justify-between gap-4 cursor-pointer hover:bg-white/70 p-3 rounded-lg transition-colors"
+                      className="flex items-center flex-col md:flex-row justify-between gap-8 md:gap-4 cursor-pointer hover:bg-white/70 md:p-3 rounded-lg transition-colors"
                       onClick={() => toggleProductExpansion(item?._id)}
                     >
-                         <div className='flex gap-4 items-center'> 
+                         <div className='flex gap-4 items-center '> 
                            <div className="relative">
                              <Image 
                                src={item?.product?.images[0]?.source} 
@@ -266,7 +266,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
                            </div>
                          </div>
                          
-                         <div className="flex items-center gap-3">
+                         <div className="flex items-center justify-between md:justify-start w-full md:w-fit gap-3">
                            <span className="text-xl font-bold text-green-600">
                              ${(item.sellingPrice * item.quantity).toFixed(2)}
                            </span>

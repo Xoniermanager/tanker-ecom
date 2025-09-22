@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaCheckCircle } from "react-icons/fa";
 import { useAuth } from "../../../../../context/user/AuthContext";
-import { useCart } from "../../../../../context/cart/CartContext";
 
 const VerifyOtpPage = () => {
   const [verifyCredentials, setVerifyCredentials] = useState({
@@ -23,14 +22,10 @@ const VerifyOtpPage = () => {
   const inputRefs = useRef([]);
 
   const router = useRouter();
-
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
-
-
-  const {fetchUserData} = useAuth();
-  const {fetchCartData} = useCart()
+  const { fetchUserData } = useAuth();
 
   useEffect(() => {
     const getVerifyLoginEmail = localStorage.getItem("verify-login-email");
@@ -83,6 +78,7 @@ const VerifyOtpPage = () => {
     const enteredOtp = otp.join("");
     if (enteredOtp.length !== 6) {
       setErrMessage("Please enter a 6-digit OTP.");
+      setIsLoading(false);
       return;
     }
 
@@ -96,20 +92,28 @@ const VerifyOtpPage = () => {
         },
         { withCredentials: true }
       );
+      
       if (response?.status === 200) {
         toast.success("OTP verify successfully");
         setOtp(Array(6).fill(""));
-        fetchUserData();
+        
+        // Fetch user data - this will trigger isAuthenticated to become true
+        // The CartContextProvider will automatically handle guest cart sync
+        await fetchUserData();
        
         setVerifyCredentials({
           email: null,
           password: null,
         });
+        
+        // Clean up localStorage
         window.localStorage.removeItem("verify-login-email");
         window.localStorage.removeItem("verify-login-password");
 
-        redirect ? router.push(`${redirect}`) : router.push("/");
-        
+        // Small delay to allow cart sync to complete
+        setTimeout(() => {
+          redirect ? router.push(`${redirect}`) : router.push("/");
+        }, 500);
       }
     } catch (error) {
       const message =
@@ -125,17 +129,21 @@ const VerifyOtpPage = () => {
 
   const handleResend = async () => {
     if (!verifyCredentials.email) return setErrMessage(`Email id not found`);
-    setLoading(true)
+    setLoading(true);
+    
     try {
       const response = await api.post(`/auth/resend-login-otp`, {
         email: verifyCredentials.email,
         password: verifyCredentials.password,
       });
+      
       if (response.status === 200) {
         toast.success("OTP resend successfully");
         setOtp(Array(6).fill(""));
         setErrMessage(null);
         setIsVerificationOTPSend(true);
+        setTimer(60);
+        setResendActive(false);
       }
     } catch (error) {
       console.error(error);
@@ -147,7 +155,7 @@ const VerifyOtpPage = () => {
 
       setErrMessage(message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
