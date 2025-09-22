@@ -65,7 +65,7 @@ const page = () => {
   return (
     <div className=" bg-violet-50 flex items-center justify-center px-4 py-18">
       <div className="max-w-3xl w-full">
-        {/* Success Icon and Message */}
+       
         <div className="text-center mb-8">
           <div className="flex justify-center mb-6">
             <div className="relative">
@@ -81,16 +81,16 @@ const page = () => {
           </p>
         </div>
 
-        {/* Order Summary Card */}
+        
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
           <div className="bg-gradient-to-r from-purple-800 to-purple-900 p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold mb-1">Order Confirmed</h2>
-                <p className="text-green-100">{orderData?.orderNumber}</p>
+                <p className="text-white">{orderData?.orderNumber}</p>
               </div>
               <div className="text-right">
-                <p className="text-green-100 text-sm">Total Amount</p>
+                <p className="text-white text-sm">Total Amount</p>
                 <p className="text-2xl font-bold">${orderData?.totalPrice}</p>
               </div>
             </div>
@@ -132,7 +132,7 @@ const page = () => {
                 </div>
               </div>
 
-              {/* Delivery Info */}
+              
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
                   <FaCalendarAlt className="w-5 h-5 mr-2 text-gray-600" />
@@ -156,7 +156,7 @@ const page = () => {
               </div>
             </div>
 
-            {/* Order Items */}
+            
             {/* <div className="border-t pt-6 mt-6">
               <h3 className="font-semibold text-gray-900 mb-4">Order Items</h3>
               <div className="space-y-3">
@@ -179,7 +179,7 @@ const page = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        
         {/* <div className="grid sm:grid-cols-2 gap-4 mb-8">
           <button className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
             <FaDownload className="w-5 h-5 mr-2" />
@@ -191,7 +191,7 @@ const page = () => {
           </button>
         </div> */}
 
-        {/* Next Steps */}
+        
         {/* <div className="bg-blue-50 rounded-xl p-6 mb-8">
           <h3 className="font-semibold text-blue-900 mb-3">What's Next?</h3>
           <div className="space-y-2 text-sm text-blue-800">
@@ -201,7 +201,7 @@ const page = () => {
           </div>
         </div> */}
 
-        {/* Navigation Buttons */}
+        
         <div className="flex flex-col sm:flex-row gap-4">
           <Link href={'/products'} className="flex items-center justify-center px-6 py-3 bg-orange-500 text-white font-medium rounded-xl hover:bg-orange-600 transition-colors flex-1">
             Continue Shopping

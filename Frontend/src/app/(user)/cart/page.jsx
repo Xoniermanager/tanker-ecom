@@ -11,7 +11,7 @@ import withReactContent from "sweetalert2-react-content";
 
 const page = () => {
   const [errMessage, setErrMessage] = useState(null);
-  const { cartData, fetchCartData } = useCart();
+  const { cartData, fetchCartData, setCartData } = useCart();
 
   const { isAuthenticated } = useAuth();
 
@@ -82,7 +82,7 @@ const page = () => {
 
     if (!isAuthenticated) {
       localStorage.clear("guestCart");
-      fetchCartData();
+      setCartData(null);
       toast.success("Cart clear successfully");
       return;
     }
@@ -91,7 +91,7 @@ const page = () => {
       const response = await api.delete(`/cart`);
       if (response.status === 200) {
         toast.success("Cart clear successfully");
-        fetchCartData();
+        await fetchCartData();
       }
     } catch (error) {
       if (process.env.NODE_ENV === "development") {

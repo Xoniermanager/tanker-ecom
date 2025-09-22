@@ -59,6 +59,7 @@ const AuthContextProvider = ({ children }) => {
         setUserData(null);
         setIsAuthenticated(false);
         router.push("/");
+        
       }
     } catch (error) {
       if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
@@ -88,6 +89,7 @@ const AuthContextProvider = ({ children }) => {
             });
             if (response.status === 200) {
               localStorage.removeItem("guestCart");
+              
             }
           } catch (error) {
             const message =

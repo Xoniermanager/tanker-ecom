@@ -23,9 +23,14 @@ const Navbar = ({siteData}) => {
 
 
 
-  const { cartData, isLoading, count } = useCart();
+  const { cartData, isLoading, count, setCartData } = useCart();
 
   const { isAuthenticated, handleLogout, userData } = useAuth();
+
+  const handleLogoutMain = async()=> {
+    await handleLogout()
+    setCartData(null)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -347,7 +352,7 @@ const Navbar = ({siteData}) => {
               </Link> <span className="bg-slate-900 p-0.5 px-2 rounded-md text-[12px] text-white hidden group-hover:block absolute text-nowrap w-fit top-[114%]  z-100 -left-1/2">Go to dashboard</span> </div>}
             {isAuthenticated ? (
               <>
-              <button className="hidden lg:block btn-two" onClick={handleLogout}>
+              <button className="hidden lg:block btn-two" onClick={handleLogoutMain}>
                 {" "}
                 Logout{" "}
               </button>

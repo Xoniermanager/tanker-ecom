@@ -84,6 +84,18 @@ const productSchema = z.object({
 
   status: z.enum(Object.values(PRODUCT_STATUS)).default(PRODUCT_STATUS.ACTIVE),
   measurements: z.array(measurementsSchema).optional(),
+    deliveryDays: z
+    .string({
+      required_error: "Delivery days is required.",
+      invalid_type_error: "Delivery days must be a string.",
+    })
+    .regex(/^\d+$/, "Delivery days must contain only digits.")
+    .refine(val => parseInt(val) >= 0, { message: "Delivery days cannot be negative." })
+    .default("1"),
+
+  shipping: z.string({
+    invalid_type_error: "Shipping must be a string.",
+  }).optional(), 
   seo: z.object({
     metaTitle: z.string().optional(),
     metaDescription: z.string().optional(),

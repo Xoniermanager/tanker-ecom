@@ -19,6 +19,11 @@ export const NEWZEALAND_REGIONS = Object.freeze({
     SOUTHLAND: "southland"
 })
 
+export const USER_ROLES = Object.freeze({
+        USER: "user",
+        ADMIN: "admin",
+})
+
 export const PAYMENT_METHODS = Object.freeze({
         COD:"cod",
         ONLINE_PAYMENT: "online_payment"

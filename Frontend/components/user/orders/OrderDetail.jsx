@@ -98,9 +98,9 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
 
   return (
     <>
-      <div className='w-full border border-stone-200 p-8 rounded-xl flex flex-col gap-6 bg-white shadow-sm'>
+      <div className='w-full border border-stone-200 p-5 md:p-8 rounded-xl flex flex-col gap-6 bg-white shadow-sm'>
          
-         <div className="flex items-center justify-between">
+         <div className="flex items-start md:items-center flex-col md:flex-row gap-5 justify-between">
            <h2 className='text-2xl font-semibold text-purple-950'>Order Details</h2>
            <div className="flex items-center gap-3">
              {canCancelOrder() && (
@@ -142,7 +142,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
          </div>
 
         
-         <div className="bg-gradient-to-r from-gray-50 to-blue-50/30 p-6 rounded-xl border border-gray-100">
+         <div className="bg-gradient-to-r from-gray-50 to-blue-50/30 p-5 md:p-6 rounded-xl border border-gray-100">
            <h3 className="text-xl font-semibold mb-6 text-purple-950">Order Status & Tracking</h3>
            <div className="relative">
             
@@ -213,7 +213,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
          </div>
 
          <div className="flex items-center justify-between">
-           <h2 className='text-2xl font-semibold text-purple-950'>Products ({viewOrderData.totalQuantity} items)</h2>
+           <h2 className='text-xl md:text-2xl font-semibold text-purple-950'>Products ({viewOrderData.totalQuantity} items)</h2>
            {viewOrderData.orderStatus === 'cancelled' && (
              <span className="bg-red-50 text-red-700 px-4 py-2 rounded-lg font-medium">
                Order Cancelled
@@ -233,7 +233,7 @@ const OrderDetail = ({ viewOrderData, onBack, onOrderCancel, getOrderData, setAc
                 }`}>
                    
                     <div 
-                      className="flex items-center justify-between gap-4 cursor-pointer hover:bg-white/70 p-3 rounded-lg transition-colors"
+                      className="flex items-center flex-col md:flex-row justify-between gap-4 cursor-pointer hover:bg-white/70 p-3 rounded-lg transition-colors"
                       onClick={() => toggleProductExpansion(item?._id)}
                     >
                          <div className='flex gap-4 items-center'> 
