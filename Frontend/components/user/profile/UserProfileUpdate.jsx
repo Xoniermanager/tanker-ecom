@@ -132,19 +132,19 @@ const UserProfileUpdate = () => {
 
     return (
         <div className=" bg-gray-50">
-            <div className="max-w-7xl py-20 mx-auto ">
+            <div className="max-w-7xl py-20 px-5 mx-auto ">
                 {/* Header */}
-                <div className="bg-purple-100/70 rounded-lg shadow-sm p-6 px-8 mb-6">
-                    <div className="flex items-center justify-between">
+                <div className="bg-purple-100/70 rounded-lg shadow-sm p-4 md:p-6 px-5 md:px-8 mb-6">
+                    <div className="flex items-center flex-col gap-4 md:flex-row justify-between">
                         <div className="flex flex-col gap-2">
-                            <h1 className='font-semibold text-3xl text-purple-950'>Edit Profile</h1>
+                            <h1 className='font-semibold text-2xl md:text-3xl text-purple-950'>Edit Profile</h1>
                             <p className='text-gray-500'>Update your personal and professional information.</p>
                         </div>
                        
                         <div className="flex items-center gap-3">
                             <button 
                                 onClick={() => router.back()}
-                                className='bg-purple-200 hover:bg-purple-900 px-6 py-2.5 rounded-lg flex items-center gap-2 text-md font-medium tracking-wide text-purple-900 hover:text-white group transition-colors'
+                                className='bg-purple-200 hover:bg-purple-900 px-6 py-2.5 rounded-lg flex items-center gap-2 text-md font-medium tracking-wide text-purple-900 text-sm md:text-base hover:text-white group transition-colors'
                             >
                                 <MdClose size={20} className='group-hover:rotate-90'/>
                                 Cancel
@@ -152,7 +152,7 @@ const UserProfileUpdate = () => {
                             <button 
                                 onClick={handleSubmit}
                                 disabled={isLoading}
-                                className='bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5 rounded-lg flex items-center gap-2 text-md font-medium tracking-wide text-white transition-colors'
+                                className='bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed px-4 md:px-6 py-2.5 rounded-lg flex items-center text-sm md:text-base gap-2 text-md font-medium tracking-wide text-white transition-colors'
                             >
                                 <MdOutlineCloudUpload size={20} />
                                 {isLoading ? "Saving Changes..." : "Save Changes"}

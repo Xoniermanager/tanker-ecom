@@ -89,8 +89,8 @@ const Navbar = ({siteData}) => {
                 </li>
                 <li
                   className="relative"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
+                  // onMouseEnter={() => setIsHovered(true)}
+                  // onMouseLeave={() => setIsHovered(false)}
                 >
                   <Link
                     href="/products"
@@ -102,7 +102,7 @@ const Navbar = ({siteData}) => {
                     Product
                   </Link>
 
-                  <AnimatePresence>
+                  {/* <AnimatePresence>
                     {(isHovered && userData?.role === "user" ) && (
                       <motion.ul
                         initial={{ opacity: 0, y: 10 }}
@@ -121,8 +121,19 @@ const Navbar = ({siteData}) => {
                         </li>
                       </motion.ul>
                     )}
-                  </AnimatePresence>
+                  </AnimatePresence> */}
                 </li>
+               {isAuthenticated && <li>
+                  <Link
+                    href={"/orders"}
+                    className={`${
+                      pathname === "/orders" && "text-orange-400"
+                    } text-neutral-900 text-lg hover:text-orange-400 text-nowrap`}
+                    onClick={()=>setSideMenuShow(false)}
+                  >
+                    Orders
+                  </Link>
+                </li>}
                 <li>
                   <Link
                     href={"/news"}
@@ -167,10 +178,10 @@ const Navbar = ({siteData}) => {
               </>
             ) : (
               <>
-                <Link href={"/login"} className="btn-one font-semibold">
+                <Link href={"/login"} onClick={()=>setSideMenuShow(false)} className="btn-one font-semibold">
                   B2B Login
                 </Link>
-                <Link href={"/signup"} className="btn-two font-semibold">
+                <Link href={"/signup"} onClick={()=>setSideMenuShow(false)} className="btn-two font-semibold">
                   Sign Up
                 </Link>
               </>

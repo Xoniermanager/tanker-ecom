@@ -38,9 +38,9 @@ const OrderHistoryTable = ({handleViewOrder}) => {
             }, [])
             
   return (
-     <div className="flex flex-col gap-8">
+     <div className="flex flex-col gap-8 overflow-x-scroll w-full">
               {" "}
-              <table className="w-full">
+              <table className="w-full overflow-x-scroll">
                 <thead>
                   <tr className="bg-gray-100 rounded-lg">
                     <th className="p-4 text-start font-medium">Order Id</th>

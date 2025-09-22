@@ -9,17 +9,20 @@ import { useSite } from "../siteData/SiteDataContext.js";
 const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSyncedGuestCart, setHasSyncedGuestCart] = useState(false);
 
   const { isAuthenticated } = useAuth();
-    const {shippingPrice, isSiteDataLoading} = useSite()
+  const { shippingPrice, isSiteDataLoading } = useSite();
 
   const fetchCartData = async () => {
     if (!isAuthenticated) {
       const guestCart = localStorage.getItem("guestCart");
-      if(guestCart){
+      if (guestCart) {
         setCartData(JSON.parse(guestCart));
       }
+      return;
     }
+    
     setIsLoading(true);
     try {
       const response = await api.get(`/cart`);
@@ -32,6 +35,53 @@ const CartContextProvider = ({ children }) => {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Function to sync guest cart with server cart
+  const syncGuestCartWithServer = async () => {
+    if (!isAuthenticated || hasSyncedGuestCart) return;
+    
+    const localCart = localStorage.getItem("guestCart")
+      ? JSON.parse(localStorage.getItem("guestCart"))
+      : [];
+
+    if (localCart.length > 0) {
+      const payload = localCart.map((item) => {
+        return { productId: item.product._id, quantity: item.quantity };
+      });
+
+      try {
+        const response = await api.post("/cart/sync", {
+          localCart: payload,
+        });
+        
+        if (response.status === 200) {
+          localStorage.removeItem("guestCart");
+          toast.success("Cart synced successfully!");
+          setHasSyncedGuestCart(true);
+          
+          // Fetch updated cart data after successful sync
+          await fetchCartData();
+        }
+      } catch (error) {
+        const message =
+          (Array.isArray(error?.response?.data?.errors) &&
+            error.response.data.errors[0]?.message) ||
+          error?.response?.data?.message ||
+          "Something went wrong syncing cart";
+       
+        toast.info(message);
+        localStorage.removeItem("guestCart");
+        setHasSyncedGuestCart(true);
+        
+        // Still fetch cart data even if sync fails
+        await fetchCartData();
+      }
+    } else {
+      // No guest cart, just fetch server cart data
+      setHasSyncedGuestCart(true);
+      await fetchCartData();
     }
   };
 
@@ -90,11 +140,22 @@ const CartContextProvider = ({ children }) => {
   );
   const withShippingChargesPrice =
     Number(discountPrice) + Number(shippingPrice);
-  useEffect(() => {
-    fetchCartData();
-  }, []);
 
- 
+  // Handle initial cart fetch and guest cart sync
+  useEffect(() => {
+    if (isAuthenticated && !hasSyncedGuestCart) {
+      syncGuestCartWithServer();
+    } else if (!isAuthenticated) {
+      fetchCartData();
+    }
+  }, [isAuthenticated]);
+
+  // Reset sync flag when user logs out
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setHasSyncedGuestCart(false);
+    }
+  }, [isAuthenticated]);
 
   return (
     <CartContext.Provider
@@ -109,7 +170,8 @@ const CartContextProvider = ({ children }) => {
         regularPrice,
         discountPrice,
         withShippingChargesPrice,
-        shippingPrice
+        shippingPrice,
+        syncGuestCartWithServer, 
       }}
     >
       {children}
