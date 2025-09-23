@@ -12,7 +12,7 @@ import api from '../common/api';
 import stripePromise from '../../../lib/stripe';
 
 
-const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError }) => {
+const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError, setErrMessage }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -64,11 +64,16 @@ const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError }) => {
     });
 
     setIsProcessing(false);
+    console.log("error result: ", error)
+    console.log("result payment intent: ", paymentIntent)
 
     if (error) {
-      onError(error.message);
+     setErrMessage(error.message)
     } else if (paymentIntent.status === 'succeeded') {
       onSuccess();
+    }
+    else if(paymentIntent.status !== "succeeded"){
+       onError(error.message);
     }
   };
 
@@ -150,6 +155,10 @@ const StripePaymentModal = ({
     onClose()
   };
 
+  const setErrMessage = (err) =>{
+    setError(err)
+  }
+
   const handleOnClose = ()=>{
     setError('')
      onClose()
@@ -183,6 +192,7 @@ const StripePaymentModal = ({
             totalAmount={totalAmount}
             onSuccess={handleSuccess}
             onError={handleError}
+            setErrMessage={setErrMessage}
           />
         </Elements>
       </div>

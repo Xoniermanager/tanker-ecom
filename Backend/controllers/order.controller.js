@@ -103,15 +103,47 @@ class OrderController {
         }
     }
 
-    testConfirmPayment = async(req,res,next)=>{
-        try {
-            const {orderId} = req.params;
-            const result = await orderService.testConfirmPayment(orderId)
-            return customResponse(res, "payment successful", result)
-        } catch (error) {
-             next(error)
+   testConfirmPayment = async (req, res, next) => {
+    try {
+        const { orderId } = req.params;
+        const result = await orderService.testConfirmPayment(orderId);
+        
+      
+        if (result && result.paymentStatus) {
+            switch (result.paymentStatus) {
+                case 'succeeded':
+                    return customResponse(res, "Payment successful", result);
+                
+                case 'requires_payment_method':
+                    return customResponse(res, "Payment method required, payment failed", result, null, 200); 
+                
+                case 'requires_confirmation':
+                    return customResponse(res, "Payment requires confirmation", result, 200);
+                
+                case 'requires_action':
+                    return customResponse(res, "Payment requires additional action", result, 200);
+                
+                case 'processing':
+                    return customResponse(res, "Payment is being processed", result, 200);
+                
+                case 'payment_failed':
+                    return customResponse(res, "Payment failed", result, null, 200);
+                
+                case 'canceled':
+                    return customResponse(res, "Payment was canceled", result, null, 200);
+                
+                default:
+                    return customResponse(res, "Payment status unknown", result, 200);
+            }
         }
+        
+      
+        return customResponse(res, "Payment confirmation checked", result, 200);
+        
+    } catch (error) {
+        next(error);
     }
+};
 
     confirmPayment = async(req, res, next)=>{
         try {

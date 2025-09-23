@@ -38,7 +38,7 @@ const CartContextProvider = ({ children }) => {
     }
   };
 
-  // Function to sync guest cart with server cart
+  
   const syncGuestCartWithServer = async () => {
     if (!isAuthenticated || hasSyncedGuestCart) return;
     
@@ -61,7 +61,7 @@ const CartContextProvider = ({ children }) => {
           toast.success("Cart synced successfully!");
           setHasSyncedGuestCart(true);
           
-          // Fetch updated cart data after successful sync
+         
           await fetchCartData();
         }
       } catch (error) {
@@ -75,11 +75,11 @@ const CartContextProvider = ({ children }) => {
         localStorage.removeItem("guestCart");
         setHasSyncedGuestCart(true);
         
-        // Still fetch cart data even if sync fails
+       
         await fetchCartData();
       }
     } else {
-      // No guest cart, just fetch server cart data
+      
       setHasSyncedGuestCart(true);
       await fetchCartData();
     }
@@ -141,7 +141,7 @@ const CartContextProvider = ({ children }) => {
   const withShippingChargesPrice =
     Number(discountPrice) + Number(shippingPrice);
 
-  // Handle initial cart fetch and guest cart sync
+
   useEffect(() => {
     if (isAuthenticated && !hasSyncedGuestCart) {
       syncGuestCartWithServer();
@@ -150,7 +150,7 @@ const CartContextProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  // Reset sync flag when user logs out
+  
   useEffect(() => {
     if (!isAuthenticated) {
       setHasSyncedGuestCart(false);

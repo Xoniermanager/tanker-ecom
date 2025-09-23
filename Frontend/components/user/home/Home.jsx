@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 const HomePage = ({ bannerData }) => {
-  console.log("bannerData: ", bannerData);
+
 
   const para = bannerData?.contents?.find(
     (item) => item.label === "Description"

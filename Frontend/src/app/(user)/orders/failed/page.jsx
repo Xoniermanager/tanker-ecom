@@ -13,6 +13,7 @@ import {
 import PageLoader from "../../../../../components/common/PageLoader";
 import api from "../../../../../components/user/common/api";
 import { ORDER_STATUS } from "../../../../../constants/enums";
+import DataNotFount from "../../../../../components/common/DataNotFount";
 
 const page = () => {
   const [orderData, setOrderData] = useState(null);
@@ -28,10 +29,17 @@ const page = () => {
     setErrMessage(null);
 
     try {
-      const response = await api.get(`/order/retrieve-payment/${orderId}`);
+      const response = await api.get(`/order/confirm-payment/${orderId}`);
       if (response.status === 200) {
         let data = response.data.data || null;
-        setOrderData(data);
+      
+        if((data.paymentStatus === "requires_payment_method") || (data.paymentStatus ==="payment_failed") || (data.paymentStatus === "canceled")){
+
+          setOrderData(data);
+        }
+        else if(data.paymentStatus === "succeeded"){
+          router.push(`/orders/confirm?orderId=${orderId}`);
+        }
       }
     } catch (error) {
       const message =
@@ -56,7 +64,7 @@ const page = () => {
   }
 
   if (!orderData) {
-    return <h1> Content not found </h1>;
+    return <DataNotFount/>;
   }
   return (
     <div className="min-h-screen bg-violet-50/50 flex items-center justify-center px-4 py-12">
@@ -86,11 +94,11 @@ const page = () => {
                 <h2 className="text-xl font-semibold mb-1">
                   Transaction Failed
                 </h2>
-                <p className="text-red-100">{orderData?.orderNumber}</p>
+                <p className="text-red-100">{orderData?.order?.orderNumber}</p>
               </div>
               <div className="text-right">
                 <p className="text-red-100 text-sm">Attempted Amount</p>
-                <p className="text-2xl font-bold">{orderData?.totalPrice}</p>
+                <p className="text-2xl font-bold">{orderData?.order?.totalPrice}</p>
               </div>
             </div>
           </div>
@@ -100,10 +108,10 @@ const page = () => {
             <div className="bg-red-50 rounded-xl p-4 mb-6">
               <h3 className="font-semibold text-red-900 mb-2">Payment Error</h3>
               <p className="text-red-800 text-sm mb-2">
-                Your card was declined by your bank.
+                {orderData?.message}
               </p>
               <p className="text-red-700 text-xs">
-                Error Code: CARD_DECLINED_001
+                Error Code: {orderData?.paymentStatus}
               </p>
             </div>
 
@@ -117,15 +125,15 @@ const page = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Method</span>
-                    <span className="font-medium">•••• •••• •••• 4242</span>
+                    <span className="font-medium">{orderData?.order?.payment?.method}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Attempt Time</span>
-                    <span className="font-medium">{orderData?.payment?.failedAt}</span>
+                    <span className="font-medium">{orderData?.order?.payment?.failedAt}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status</span>
-                    <span className={`font-medium text-red-600`}>{orderData?.payment?.status}</span>
+                    <span className={`font-medium text-red-600`}>{orderData?.order?.payment?.status}</span>
                   </div>
                 </div>
               </div>
@@ -139,15 +147,15 @@ const page = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Total Quantity</span>
-                    <span className="font-medium">{orderData?.totalQuantity}</span>
+                    <span className="font-medium">{orderData?.order?.totalQuantity}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Billing Address</span>
                     <span className="font-medium text-right">
-                      {orderData?.address?.billingAddress?.address}
+                      {orderData?.order?.address?.billingAddress?.address}
                       <br />
-                      {orderData?.address?.billingAddress?.city},{" "}
-                      {orderData?.address?.billingAddress?.pincode}
+                      {orderData?.order?.address?.billingAddress?.city},{" "}
+                      {orderData?.order?.address?.billingAddress?.pincode}
                     </span>
                   </div>
                 </div>
