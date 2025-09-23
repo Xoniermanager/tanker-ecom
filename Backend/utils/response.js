@@ -13,14 +13,14 @@
  *   "data": { ... }
  * }
  */
-const customResponse = (res, message, data = null, accessToken = null) => {
+const customResponse = (res, message, data = null, accessToken = null, statusCode = 200) => {
     const response = {
         status: true,
         message: message,
         data: data
     };
 
-    res.json(response);
+    res.status(statusCode).json(response);
 };
 
 module.exports = customResponse;

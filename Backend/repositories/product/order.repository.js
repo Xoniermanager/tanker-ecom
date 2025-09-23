@@ -2,7 +2,7 @@ const BaseRepository = require("../base.repository");
 const Order = require("../../models/product/order.model");
 const Product = require("../../models/product/product.model");
 const Inventory = require("../../models/product/inventory.model");
-const { STOCK_STATUS, ORDER_STATUS } = require("../../constants/enums");
+const { STOCK_STATUS, ORDER_STATUS, PAYMENT_STATUS } = require("../../constants/enums");
 const customError = require("../../utils/error");
 
 class OrderRepository extends BaseRepository {
@@ -10,32 +10,7 @@ class OrderRepository extends BaseRepository {
     super(Order);
   }
 
-  /**
-   * Validate that all products in the order exist, are in stock,
-   * and have sufficient quantity available.
-   *
-   * @param {Array} products - Array of products from cart/order.
-   *   Each item should include:
-   *     - {ObjectId} product - Product ID
-   *     - {Number} quantity - Desired quantity
-   * @param {Object} session - Mongoose session for transaction safety
-   *
-   * @throws {Error} If:
-   *   - Any product is not found in the database
-   *   - Product is unavailable (status = false)
-   *   - Product inventory status is not "IN_STOCK"
-   *   - Requested quantity exceeds available stock
-   *
-   * @returns {Array} finalProductData - Array of validated product data:
-   *   [
-   *     {
-   *       product: ObjectId,
-   *       name: String,
-   *       quantity: Number,
-   *       sellingPrice: Number
-   *     }
-   *   ]
-   */
+
   checkProductExistWithQuantity = async (products, session) => {
     const ids = products.map((p) => p.product);
 
@@ -83,24 +58,7 @@ class OrderRepository extends BaseRepository {
     return finalProductData;
   };
 
-  /**
-   * Updates product inventory in bulk for a given list of products.
-   *
-   * This function performs a bulk write operation to adjust the quantity of each product.
-   * It also updates the inventory status based on the resulting quantity:
-   * - If quantity <= 0 → status is set to `OUT_OF_STOCK`
-   * - If quantity > 0 → status is set to `IN_STOCK`
-   *
-   * Can handle both decreasing (after an order) or increasing (e.g., order cancellation) stock.
-   *
-   * @param {Array<Object>} products - Array of products to update. Each object should contain:
-   *   @property {ObjectId} product - The product ID.
-   *   @property {number} quantity - The amount to increase or decrease.
-   * @param {Object} session - Optional Mongoose session for transaction support.
-   * @param {string} [direction="decrease"] - Operation type: `"decrease"` to reduce stock, `"increase"` to restore stock.
-   *
-   * @returns {Promise<boolean>} Returns true if inventory was successfully updated.
-   */
+ 
   updateProductInventory = async (
     products,
     session,
@@ -351,6 +309,17 @@ getWeeklyOrderCount = async (customStartDate) => {
   }
 };
 
+findByPaymentIntentId = async (paymentIntentId) => {
+    try {
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntentId 
+        });
+        return order;
+    } catch (error) {
+        throw error;
+    }
+};
+
 getOrderCountWithSaleCount = async (monthNumber, session, year = null) => {
   try {
   
@@ -458,6 +427,129 @@ getWeekBoundaries = (startDate, endDate) => {
   }
   
   return weeks;
+};
+
+
+handleRequiresPaymentMethod = async (paymentIntent) => {
+    
+        
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntent.id 
+        });
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_payment_method',
+            message: 'Payment method required. Please complete the payment.'
+        };
+    
+};
+
+handleRequiresConfirmation = async (paymentIntent) => {
+   
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntent.id 
+        });
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+           
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_confirmation',
+            message: 'Payment requires confirmation.'
+        };
+    
+};
+
+handleRequiresAction = async (paymentIntent) => {
+    
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntent.id 
+        });
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_action',
+            message: 'Payment requires additional action (like 3D Secure).',
+            nextAction: paymentIntent.next_action
+        };
+    
+};
+
+handleProcessing = async (paymentIntent) => {
+    
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntent.id 
+        });
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PROCESSING,
+           
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'processing',
+            message: 'Payment is being processed.'
+        };
+    
+};
+
+handleRequiresCapture = async (paymentIntent) => {
+    
+        const order = await Order.findOne({ 
+            'payment.paymentIntentId': paymentIntent.id 
+        });
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PROCESSING,
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_capture',
+            message: 'Payment authorized, awaiting capture.'
+        };
+   
 };
 
   

@@ -333,37 +333,171 @@ class OrderService {
     }
   }
 
-  handleStripeWebhookManually = async (paymentIntentId) => {
+handleStripeWebhookManually = async (paymentIntentId) => {
     try {
-
       const result = await stripeService.getPayment(paymentIntentId);
+      console.log("result status: ", result.status);
+      
       let updatedOrderData;
+      
       switch (result.status) {
         case "succeeded":
-         updatedOrderData =  await this.handleSuccess(result);
+          updatedOrderData = await this.handleSuccess(result);
           break;
 
         case "payment_failed":
-         updatedOrderData =  await this.handleFailed(result);
+          updatedOrderData = await this.handleFailed(result);
           break;
 
         case "canceled":
-         updatedOrderData = await this.handleCanceled(result);
+          updatedOrderData = await this.handleCanceled(result);
+          break;
+
+        case "requires_payment_method":
+          
+          updatedOrderData = await this.handleRequiresPaymentMethod(result);
+          break;
+
+        case "requires_confirmation":
+          
+          updatedOrderData = await this.handleRequiresConfirmation(result);
           break;
 
         case "requires_action":
-          console.log(`Payment requires action for PaymentIntent: ${result.id}`);
+          
+          updatedOrderData = await this.handleRequiresAction(result);
+          break;
+
+        case "processing":
+          
+          updatedOrderData = await this.handleProcessing(result);
+          break;
+
+        case "requires_capture":
+         
+          updatedOrderData = await this.handleRequiresCapture(result);
           break;
 
         default:
-          console.log("Unhandled event:", result.type);
+          
+          const order = await orderRepository.findByPaymentIntentId(paymentIntentId);
+          updatedOrderData = order;
       }
 
-      return updatedOrderData
+      return updatedOrderData;
     } catch (err) {
       console.error("Webhook error:", err.message);
+      throw err;
     }
-  };
+};
+
+
+
+handleRequiresPaymentMethod = async (paymentIntent) => {
+    try {
+        const order = await orderRepository.findByPaymentIntentId(paymentIntent.id);
+        
+        if (!order) {
+            throw customError("Order not found", 404);
+        }
+
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.FAILED,
+            'orderStatus': ORDER_STATUS.CANCELLED,
+            'payment.failedAt': new Date()
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_payment_method',
+            message: 'Payment method required. Please complete the payment.'
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+handleRequiresConfirmation = async (paymentIntent) => {
+    try {
+        const order = await orderRepository.findByPaymentIntentId(paymentIntent.id);
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+           
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_confirmation',
+            message: 'Payment requires confirmation.'
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+handleRequiresAction = async (paymentIntent) => {
+    try {
+        const order = await orderRepository.findByPaymentIntentId(paymentIntent.id);
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+           
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_action',
+            message: 'Payment requires additional action (like 3D Secure).',
+            nextAction: paymentIntent.next_action
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+handleProcessing = async (paymentIntent) => {
+    try {
+        const order = await orderRepository.findByPaymentIntentId(paymentIntent.id);
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PENDING,
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'processing',
+            message: 'Payment is being processed.'
+        };
+    } catch (error) {
+        throw error;
+    }
+};
+
+handleRequiresCapture = async (paymentIntent) => {
+    try {
+        const order = await orderRepository.findByPaymentIntentId(paymentIntent.id);
+        
+        const updatedOrder = await orderRepository.update(order._id, {
+            'payment.status': PAYMENT_STATUS.PENDING,
+            'orderStatus': ORDER_STATUS.PROCESSING,
+            
+        });
+
+        return {
+            order: updatedOrder,
+            paymentStatus: 'requires_capture',
+            message: 'Payment authorized, awaiting capture.'
+        };
+    } catch (error) {
+        throw error;
+    }
+};
 
   handleStripeWebhook = async (signature, rawBody) => {
     try {
@@ -407,7 +541,11 @@ class OrderService {
     order.payment.transactionId = paymentIntent.latest_charge;
     order.payment.paymentSystemData = paymentIntent;
    const savedOrder =  await order.save();
-    return savedOrder
+    return {
+      order: savedOrder,
+      paymentStatus: "succeeded",
+      message: "Payment done successfully"
+    }
   }
 
   async handleFailed(paymentIntent) {
@@ -418,7 +556,11 @@ class OrderService {
     order.payment.paymentSystemData = paymentIntent;
     order.payment.failedAt = Date.now();
     const savedOrder =  await order.save();
-    return savedOrder
+    return { 
+      order:savedOrder,
+      paymentStatus: "payment_failed",
+      message: "payment failed"
+    }
   }
 
   async handleCanceled(paymentIntent) {
@@ -429,7 +571,11 @@ class OrderService {
     order.payment.status = PAYMENT_STATUS.CANCELLED;
     order.payment.paymentSystemData = paymentIntent;
     const savedOrder =  await order.save();
-    return savedOrder
+    return {
+      order: savedOrder,
+      paymentStatus: "canceled",
+      message: "Payment canceled"
+    }
   }
 
   confirmPayment = async(orderId, paymentMethodId)=>{

@@ -28,10 +28,16 @@ const page = () => {
     setErrMessage(null);
 
     try {
-      const response = await api.get(`/order/retrieve-payment/${orderId}`);
+      const response = await api.get(`/order/confirm-payment/${orderId}`);
       if (response.status === 200) {
+
         let data = response.data.data || null;
-        setOrderData(data);
+        if((data.paymentStatus === "succeeded")){
+          setOrderData(data);
+        }
+        else{
+         router.push(`/orders/failed?orderId=${orderId}`);
+        }
       
       }
     } catch (error) {
@@ -87,11 +93,11 @@ const page = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-semibold mb-1">Order Confirmed</h2>
-                <p className="text-white">{orderData?.orderNumber}</p>
+                <p className="text-white">{orderData?.order?.orderNumber}</p>
               </div>
               <div className="text-right">
                 <p className="text-white text-sm">Total Amount</p>
-                <p className="text-2xl font-bold">${orderData?.totalPrice}</p>
+                <p className="text-2xl font-bold">${orderData?.order?.totalPrice}</p>
               </div>
             </div>
           </div>
@@ -107,16 +113,16 @@ const page = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Method</span>
-                    <span className="font-medium">•••• •••• •••• 4242</span>
+                    <span className="font-medium">{orderData?.order?.payment?.method}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Transaction ID</span>
-                    <span className="font-medium">{orderData?.payment?.transactionId}</span>
+                    <span className="font-medium">{orderData?.order?.payment?.transactionId}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Payment Date</span>
                     <span className="font-medium">
-                      {new Date(orderData?.payment?.paidAt).toLocaleDateString(
+                      {new Date(orderData?.order?.payment?.paidAt).toLocaleDateString(
                         "en-NZ",
                         {
                          year: 'numeric',
@@ -146,10 +152,10 @@ const page = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Address</span>
                     <span className="font-medium text-right">
-                      {orderData?.address?.shippingAddress?.address}
+                      {orderData?.order?.address?.shippingAddress?.address}
                       <br />
-                      {orderData?.address?.shippingAddress?.city},{" "}
-                      {orderData?.address?.shippingAddress?.pincode}
+                      {orderData?.order?.address?.shippingAddress?.city},{" "}
+                      {orderData?.order?.address?.shippingAddress?.pincode}
                     </span>
                   </div>
                 </div>
