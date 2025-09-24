@@ -48,7 +48,6 @@ const page = () => {
         "Something went wrong";
       setErrMessage(message);
       
-
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +82,7 @@ const page = () => {
             Payment Successful!
           </h1>
           <p className="text-lg text-gray-600">
-            Thank you for your purchase. Your order has been confirmed.
+            Thank you for your purchase. Your order has been confirmed
           </p>
         </div>
 

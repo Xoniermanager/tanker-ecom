@@ -23,12 +23,14 @@ const Navbar = ({siteData}) => {
 
 
 
-  const { cartData, isLoading, count, setCartData } = useCart();
+  const { cartData, isLoading, count, setCartData, } = useCart();
 
   const { isAuthenticated, handleLogout, userData } = useAuth();
 
   const handleLogoutMain = async()=> {
+
     await handleLogout()
+    setSideMenuShow(false)
     setCartData(null)
   }
 
@@ -48,7 +50,7 @@ const Navbar = ({siteData}) => {
   return (
     <>
       <div className={`backdrop-blur-sm bg-black/10 top-0 left-0 right-0 bottom-0 fixed z-1000 ${sideMenuShow ? "block" : "hidden"}`}onClick={()=>setSideMenuShow(false)}></div>
-      <div className={`fixed top-0 ${sideMenuShow ? "right-0 w-full md:w-[50%]" : "-right-[100%]  "}  h-[100%] z-1001 bg-white px-6 py-4 flex flex-col gap-4`}>
+      <div className={`fixed top-0 ${sideMenuShow ? "right-0 w-full md:w-[50%]" : "-right-[100%]  "} h-[100%] z-1001 bg-white px-6 py-4 flex flex-col gap-4`}>
         <div className="flex items-center justify-between">
           <Link href={"/"} className="">
               <Image
@@ -171,7 +173,7 @@ const Navbar = ({siteData}) => {
      <div className="w-full border-b-1 border-slate-200"></div>
                {isAuthenticated ? (
               <>
-              <button className="btn-two w-fit" onClick={handleLogout}>
+              <button className="btn-two w-fit" onClick={handleLogoutMain}>
                 {" "}
                 Logout{" "}
               </button>
@@ -341,7 +343,7 @@ const Navbar = ({siteData}) => {
           </div>
 
           <div className="w-[40%] flex items-center justify-end gap-3 md:gap-5">
-            {(isAuthenticated && userData.role === "user")  && (userData.profileImage ? <Link href={"/profile"} className="h-11 group w-11 rounded-full overflow-hidden"><Image src={userData.profileImage} height={100} width={100} alt={userData.fullName} className="object-cover object-center group-hover:scale-115" /></Link> : <Link href={"/profile"} className="h-10 w-10 bg-purple-900 hover:bg-purple-950 rounded-full flex items-center justify-center text-white">
+            {(isAuthenticated && userData.role === "user")  && (userData.profileImage ? <Link href={"/profile"} className="h-11 group w-11 rounded-full overflow-hidden"><Image src={userData.profileImage} height={100} width={100} alt={userData.fullName} className="object-cover h-11 w-11 object-center  group-hover:scale-115" /></Link> : <Link href={"/profile"} className="h-11 w-11 bg-purple-900 hover:bg-purple-950 rounded-full flex items-center justify-center text-white">
             <FaRegUser className=""/>
             </Link>)}
             {(userData?.role !== "admin")  && <div className="relative">

@@ -74,7 +74,7 @@ const productSchema = new Schema(
       ],
       validate: {
         validator: function (val) {
-          // Only enforce on creation
+          
           if (this.isNew) {
             return Array.isArray(val) && val.length >= 1;
           }

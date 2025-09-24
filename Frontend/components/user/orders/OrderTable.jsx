@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../context/user/AuthContext";
 import OrderHistoryTable from "./OrderHistoryTable";
 import ScrollToTopByEvent from "../../common/ScrollToTopOnEvent";
+import { ORDER_STATUS } from "../../../constants/enums";
 
 const OrderTable = ({
   orderData,
@@ -124,14 +125,14 @@ const OrderTable = ({
                             <td className="p-4 py-6">
                               <span
                                 className={`${
-                                  item.orderStatus === "pending"
+                                  item.orderStatus === ORDER_STATUS.PENDING
                                     ? "bg-yellow-500"
-                                    : item.orderStatus === "failed"
+                                    : item.orderStatus === ORDER_STATUS.PROCESSING
                                     ? "bg-blue-500"
-                                    : // item.orderStatus === "shipped" ? "bg-purple-500" :
-                                    item.orderStatus === "delivered"
+                                    :  item.orderStatus === ORDER_STATUS.SHIPPED ? "bg-purple-500" :
+                                    item.orderStatus === ORDER_STATUS.DELIVERED
                                     ? "bg-green-500"
-                                    : item.orderStatus === "cancelled"
+                                    : item.orderStatus === ORDER_STATUS.CANCELLED
                                     ? "bg-red-500"
                                     : "bg-gray-500"
                                 } text-white px-2 py-1 text-[12px] capitalize rounded-lg `}

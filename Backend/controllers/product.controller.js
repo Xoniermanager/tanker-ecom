@@ -63,6 +63,52 @@ class ProductController {
         }
     };
 
+    createBulkProduct = async (req, res, next) => {
+    try {
+        // const files = req.files || [];
+        const { productData } = req.body;
+
+        if (!productData) {
+            throw customError("Product data is required", 400);
+        }
+
+        let parsedData;
+        try {
+            parsedData = JSON.parse(productData);
+        } catch (parseError) {
+            throw customError("Invalid product data format", 400);
+        }
+
+        const { headers, data } = parsedData;
+
+        if (!headers || !data || !Array.isArray(data) || data.length === 0) {
+            throw customError("Invalid CSV data structure", 400);
+        }
+
+        
+        const requiredHeaders = ['Name', 'Category', 'Regular Price', 'Selling Price', 'Brand', 'Origin', 'Quantity', 'Description', 'Short Description', 'Delivery Days'];
+        const missingHeaders = requiredHeaders.filter(header => 
+            !headers.some(h => h.toLowerCase().includes(header.toLowerCase()))
+        );
+
+        if (missingHeaders.length > 0) {
+            throw customError(`Missing required headers: ${missingHeaders.join(', ')}`, 400);
+        }
+
+        const result = await productService.createBulkProducts(headers, data);
+        
+        customResponse(res, "Bulk products created successfully", {
+            totalProcessed: data.length,
+            successful: result.successful,
+            failed: result.failed,
+            errors: result.errors
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
     updateProduct = async (req, res, next) => {
         try {
             const data = req.body;

@@ -2,8 +2,10 @@ const mongoose = require("mongoose");
 const { Types } = require("mongoose");
 const productRepository = require("../repositories/product/product.repository");
 const inventoryRepository = require("../repositories/product/inventory.repository");
+const ProductCategoryRepository = require("../repositories/product/product-category.repository")
 const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
+const { PRODUCT_STATUS } = require("../constants/enums");
 
 const summaryFields = "";
 
@@ -102,11 +104,7 @@ class ProductService {
         }
     }
 
-    /**
-     * Creates a new product and its inventory entry.
-     * @param {object} data - Product data (name, slug, category, initialQuantity, etc.).
-     * @returns {Promise<object>} Created product.
-     */
+   
     async createProduct(data) {
         const session = await mongoose.startSession();
         try {
@@ -136,6 +134,165 @@ class ProductService {
         }
     }
 
+
+   async createBulkProducts(headers, data) {
+    const session = await mongoose.startSession();
+    const results = {
+        successful: 0,
+        failed: 0,
+        errors: []
+    };
+
+    try {
+        session.startTransaction();
+
+        const headerMap = {};
+        headers.forEach((header, index) => {
+            const cleanHeader = header.toLowerCase().trim();
+            if (cleanHeader.includes('s.no') || cleanHeader.includes('serial')) headerMap.sno = index;
+            if (cleanHeader.includes('name')) headerMap.name = index;
+            if (cleanHeader.includes('category')) headerMap.category = index;
+            if (cleanHeader.includes('regular') && cleanHeader.includes('price')) headerMap.regularPrice = index;
+            if (cleanHeader.includes('selling') && cleanHeader.includes('price')) headerMap.sellingPrice = index;
+            if (cleanHeader.includes('brand')) headerMap.brand = index;
+            if (cleanHeader.includes('origin')) headerMap.origin = index;
+            if (cleanHeader.includes('quantity')) headerMap.quantity = index;
+            if (cleanHeader.includes('highlight')) headerMap.highlights = index;
+            if (cleanHeader.includes('description') && !cleanHeader.includes('short')) headerMap.description = index;
+            if (cleanHeader.includes('short') && cleanHeader.includes('description')) headerMap.shortDescription = index;
+            if (cleanHeader.includes('delivery') && cleanHeader.includes('days')) headerMap.deliveryDays = index;
+        });
+
+
+        const categories = await ProductCategoryRepository.findAll({ status: true }, null, {createdAt: -1}, session);
+        const categoryMap = new Map(categories.map(cat => [cat.name.toLowerCase(), cat._id]));
+
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            const rowNumber = i + 2; 
+
+            try {
+
+                const productData = {
+                    name: row[headerMap.name]?.trim(),
+                    categoryName: row[headerMap.category]?.trim(),
+                    regularPrice: parseFloat(row[headerMap.regularPrice]) || 0,
+                    sellingPrice: parseFloat(row[headerMap.sellingPrice]) || 0,
+                    brand: row[headerMap.brand]?.trim(),
+                    origin: row[headerMap.origin]?.trim(),
+                    quantity: parseInt(row[headerMap.quantity]) || 0,
+                    highlights: row[headerMap.highlights]?.trim(),
+                    description: row[headerMap.description]?.trim(),
+                    shortDescription: row[headerMap.shortDescription]?.trim(),
+                    deliveryDays: row[headerMap.deliveryDays]?.toString() || "1"
+                };
+
+               
+                if (!productData.name) {
+                    throw new Error(`Product name is required`);
+                }
+
+                if (!productData.categoryName) {
+                    throw new Error(`Category is required`);
+                }
+
+                if (!productData.brand) {
+                    throw new Error(`Brand is required`);
+                }
+
+                if (!productData.description) {
+                    throw new Error(`Description is required`);
+                }
+
+                if (!productData.shortDescription) {
+                    throw new Error(`Short description is required`);
+                }
+
+                if (productData.regularPrice <= 0) {
+                    throw new Error(`Valid regular price is required`);
+                }
+
+                if (productData.sellingPrice <= 0) {
+                    throw new Error(`Valid selling price is required`);
+                }
+
+                const categoryId = categoryMap.get(productData.categoryName.toLowerCase());
+                if (!categoryId) {
+                    throw new Error(`Category "${productData.categoryName}" not found. Please use valid category names.`);
+                }
+
+                const highlightsArray = productData.highlights 
+                    ? productData.highlights.split(';').map(h => h.trim()).filter(h => h)
+                    : [];
+
+                if (highlightsArray.length > 10) {
+                    throw new Error(`Maximum 10 highlights allowed. Found ${highlightsArray.length}`);
+                }
+
+                const finalProductData = {
+                    name: productData.name,
+                    category: categoryId, 
+                    regularPrice: productData.regularPrice,
+                    sellingPrice: productData.sellingPrice,
+                    brand: productData.brand,
+                    origin: productData.origin || "", 
+                    highlights: highlightsArray,
+                    description: productData.description,
+                    shortDescription: productData.shortDescription,
+                    deliveryDays: productData.deliveryDays,
+                    initialQuantity: productData.quantity,
+                    images: [{ 
+                        source: "https://placehold.co/400x300?text=No+Image",
+                        type: "image" 
+                    }],
+                    status: PRODUCT_STATUS.ACTIVE, 
+                    measurements: [], 
+                    shipping: "", 
+                    seo: {
+                        metaTitle: productData.name,
+                        metaDescription: productData.shortDescription,
+                        keywords: [productData.brand, productData.categoryName]
+                    }
+                };
+
+                finalProductData.slug = await generateSlugIfNeeded(
+                    finalProductData.name,
+                    null,
+                    productRepository,
+                    session
+                );
+
+                const product = await productRepository.create(finalProductData, session);
+
+                await inventoryRepository.create(
+                    { product: product._id, quantity: finalProductData.initialQuantity },
+                    session
+                );
+
+                results.successful++;
+
+            } catch (rowError) {
+                results.failed++;
+                results.errors.push({
+                    row: rowNumber,
+                    data: row[headerMap.name] || `Row ${rowNumber}`,
+                    error: rowError.message
+                });
+
+                console.error(`Error processing row ${rowNumber}:`, rowError.message);
+            }
+        }
+
+        await session.commitTransaction();
+        return results;
+
+    } catch (err) {
+        await session.abortTransaction();
+        throw err;
+    } finally {
+        session.endSession();
+    }
+}
     /**
      * Updates an existing product by ID.
      * @param {string} id - Product ID.
