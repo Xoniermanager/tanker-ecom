@@ -224,7 +224,7 @@ const Sidebar = () => {
               </span>
             </div>
             <ul
-              className={`flex flex-col gap-4 pl-16  h-0 overflow-hidden ${
+              className={`flex flex-col gap-4 pl-16 h-0 overflow-hidden ${
                 active === 2 && "h-auto my-4"
               }`}
             >
@@ -250,7 +250,19 @@ const Sidebar = () => {
                   } `}
                 >
                   {" "}
-                  Add Product
+                  Add Single Product
+                </Link>
+              </li>
+
+              <li className="">
+                <Link
+                  href={`/admin/products/add-bulk-products`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathname.includes("add-product") && "text-orange-600"
+                  } `}
+                >
+                  {" "}
+                  Add Bulk Products
                 </Link>
               </li>
               

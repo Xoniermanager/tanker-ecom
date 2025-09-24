@@ -21,6 +21,7 @@ router.post(
     validateProduct,
     productController.createProduct
 );
+router.post("/bulk", authorize(["admin"]), upload.any(), productController.createBulkProduct)
 router.put(
     "/:id",
     authorize(['admin']),

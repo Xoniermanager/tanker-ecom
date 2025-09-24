@@ -831,7 +831,6 @@ const UpdateProductForm = ({
                         onChange={handleInputChange}
                         placeholder="Free Shipping With"
                         className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        required
                       />
                     </div>
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-1 gap-5 col-span-2">

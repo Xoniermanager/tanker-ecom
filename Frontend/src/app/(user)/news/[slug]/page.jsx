@@ -82,9 +82,9 @@ const page = () => {
   }, []);
 
   return (
-    <div className="flex max-w-7xl items-start gap-12 mx-auto my-24">
+    <div className="flex max-w-7xl items-start flex-col lg:flex-row gap-12 mx-auto my-20 md:my-24 px-5">
       
-      <div className="w-[64%] bg-[#f2edf6] rounded-t-2xl flex flex-col gap-4">
+      <div className="w-full lg:w-[64%] bg-[#f2edf6] rounded-t-2xl flex flex-col gap-4">
         {(isLoading || !blogData) ? (
           <Skeleton variant="rectangular" height={300} className="w-full rounded-2xl" />
         ) : (
@@ -94,10 +94,10 @@ const page = () => {
             height={500}
             alt="blog image"
             quality={100}
-            className="w-full h-98 object-cover rounded-2xl object-center"
+            className="w-full h-58 md:h-82 lg:h-98 object-cover rounded-2xl object-center"
           />
         )}
-        <div className="p-8 flex flex-col gap-4">
+        <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-4">
           
           {isLoading || !blogData ? (
             <Skeleton variant="text" width={160} height={30} />
@@ -141,7 +141,7 @@ const page = () => {
                 <Skeleton width={100} />
               ) : (
                 blogData?.tags?.map((item, index) => (
-                  <span key={index} className="bg-black border-1 text-white font-medium hover:bg-orange-500 cursor-pointer px-3 py-0.5 rounded capitalize">
+                  <span key={index} className="bg-black border-1 text-white font-medium hover:bg-orange-500 text-base sm:text-sm cursor-pointer px-3 py-0.5 rounded capitalize">
                     {item}
                   </span>
                 ))
@@ -152,7 +152,7 @@ const page = () => {
       </div>
 
       
-      <div className="w-[36%] flex flex-col gap-6">
+      <div className="w-full lg:w-[36%] flex flex-col gap-6">
         
         <div className="bg-[#f2edf6] p-6 px-8 rounded">
           <div className="rounded-full flex items-center bg-white overflow-hidden border-1 border-[#c8c8ca]">

@@ -634,6 +634,13 @@ content: "";
     left: 0;
 
 }
+.blog-contents h1 {
+  font-size: 22px;
+}
+.blog-contents{
+  padding: 14px 22px;
+}
+
 }
 
 
