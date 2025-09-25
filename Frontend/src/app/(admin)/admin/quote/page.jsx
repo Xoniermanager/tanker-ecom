@@ -55,7 +55,7 @@ const page = () => {
 
       const result = await Swal.fire({
         title: "Are you sure?",
-          text: `You want to delete ${name} quote.`,
+          text: `You want to delete ${name} queries.`,
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "Yes, delete it!",
@@ -69,7 +69,7 @@ const page = () => {
         }
         const response = await api.delete(`/contact/${id}`);
         if(response.status === 200){
-          toast.success(`${name} quote deleted successfully`);
+          toast.success(`${name} queries deleted successfully`);
           fetchQuote()
         }
       } catch (error) {
@@ -84,8 +84,6 @@ const page = () => {
       }
     }
 
-
-    
 
     if(isLoading){
         return <PageLoader/>

@@ -6,6 +6,7 @@ import { FaEye } from "react-icons/fa";
 import { IoArrowForward } from "react-icons/io5";
 import { BsCartX } from "react-icons/bs";
 import Link from 'next/link';
+import { ORDER_STATUS } from '../../../constants/enums';
 
 
 
@@ -93,14 +94,14 @@ const OrderlistTable = ({orderData, setTotalPages, totalPages, currentPage, setC
                 <td className="px-6 py-6">
                   <span
                     className={`text-xs px-3 py-1 rounded-full font-medium ${
-                                order.orderStatus === "pending"
+                                order.orderStatus === ORDER_STATUS.PENDING
                                   ? "bg-yellow-500"
-                                  : order.orderStatus === "failed"
+                                  : order.orderStatus === ORDER_STATUS.PROCESSING
                                   ? "bg-blue-500"
-                                  : // item.orderStatus === "shipped" ? "bg-purple-500" :
-                                  order.orderStatus === "delivered"
+                                  :  order.orderStatus === ORDER_STATUS.SHIPPED ? "bg-purple-500" :
+                                  order.orderStatus === ORDER_STATUS.DELIVERED
                                   ? "bg-green-500"
-                                  : order.orderStatus === "cancelled"
+                                  : order.orderStatus === ORDER_STATUS.CANCELLED
                                   ? "bg-red-500"
                                   : "bg-gray-500"
                               } text-white capitalize`}
