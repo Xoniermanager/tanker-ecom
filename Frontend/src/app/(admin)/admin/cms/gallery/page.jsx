@@ -47,7 +47,7 @@ const Page = () => {
       );
       if (response.status === 200) {
         setGalleryData(response.data.data.data);
-        console.log("sdf", response.data.data);
+        
         setTotalPages(response.data.data.totalPages);
         setCurrentPage(Number(response.data.data.page));
       }

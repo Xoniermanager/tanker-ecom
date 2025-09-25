@@ -20,7 +20,6 @@ const Page = () => {
         try{
          const pageData = await getPageData();
           setNewsData(pageData?.data || null)
-          console.log("blog data: ", pageData?.data)
           
         }
         catch(error){

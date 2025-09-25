@@ -17,7 +17,7 @@ const page = () => {
             const response = await api.get(`products/${id}/inventory`)
             if(response.status === 200){
                 setInventoryData(response.data.data)
-                console.log("inventory data: ", response.data.data)
+                
             }
         } catch (error) {
             console.error(error)

@@ -64,8 +64,8 @@ const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError, setErrMe
     });
 
     setIsProcessing(false);
-    console.log("error result: ", error)
-    console.log("result payment intent: ", paymentIntent)
+    // console.log("error result: ", error)
+    // console.log("result payment intent: ", paymentIntent)
 
     if (error) {
      setErrMessage(error.message)

@@ -144,7 +144,7 @@ const AboutUs = ({ aboutData }) => {
         source: file,
       },
     }));
-    console.log("source file: ", file);
+    
   };
 
   const handleSubmit = async (e) => {

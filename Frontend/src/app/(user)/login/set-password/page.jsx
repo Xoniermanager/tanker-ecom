@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import api from "../../../../../components/user/common/api";
 import { IoPlayBackOutline } from "react-icons/io5";
 import { AiOutlineHome } from "react-icons/ai";
-import { FaEye,  FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 const ResetPasswordPage = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [errMessage, setErrMessage] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     otp: ["", "", "", "", "", ""],
@@ -19,8 +20,6 @@ const ResetPasswordPage = () => {
   
   const inputRefs = useRef([]);
   const router = useRouter()
-
- 
 
   useEffect(() => {
     const email = window.localStorage.getItem("verifyEmail");
@@ -32,6 +31,7 @@ const ResetPasswordPage = () => {
   const handleOTPChange = (e, index) => {
     const value = e.target.value.replace(/\D/, ""); 
     if (!value) return;
+    setErrMessage(null)
 
     const newOtp = [...formData.otp];
     newOtp[index] = value[0];
@@ -44,6 +44,7 @@ const ResetPasswordPage = () => {
 
   const handleOTPKeyDown = (e, index) => {
     if (e.key === "Backspace") {
+      setErrMessage(null)
       const newOtp = [...formData.otp];
       if (newOtp[index]) {
         newOtp[index] = "";
@@ -55,11 +56,13 @@ const ResetPasswordPage = () => {
   };
 
   const handlePasswordChange = (e) => {
+    setErrMessage(null)
     setFormData((prev) => ({ ...prev, newPassword: e.target.value }));
   };
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    setErrMessage(null)
     const otpCode = formData.otp.join("");
     if (otpCode.length !== 6) {
       return toast.error("OTP must be 6 digits.");
@@ -84,7 +87,13 @@ const ResetPasswordPage = () => {
         toast.error(res.message || "Reset failed");
       }
     } catch (error) {
-      toast.error("Something went wrong!");
+      const message =
+        (Array.isArray(error?.response?.data?.errors) &&
+          error.response.data.errors[0]?.message) ||
+        error?.response?.data?.message ||
+        "Something went wrong";
+      toast.error(message);
+      setErrMessage(message)
     }
     finally{
       setIsLoading(false)
@@ -92,9 +101,9 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-[#f2edf6] px-4 py-10">
-      <div className="max-w-xl bg-white p-8 w-full rounded-xl shadow-lg space-y-6">
-        <h2 className="text-4xl font-semibold text-purple-950 text-center">
+    <div className="h-full flex items-center justify-center bg-[#f2edf6] px-4 py-14">
+      <div className="max-w-xl bg-white p-6 md:p-8 w-full rounded-xl shadow-lg space-y-6">
+        <h2 className="text-3xl md:text-4xl font-semibold text-purple-950 text-center">
           Reset Password
         </h2>
         <p className="text-center text-gray-600 first-letter:capitalize">
@@ -102,7 +111,7 @@ const ResetPasswordPage = () => {
         </p>
 
        
-        <div className="flex w-full justify-between gap-3">
+        <div className="flex w-full justify-between gap-2 md:gap-3">
           {formData.otp.map((digit, index) => (
             <input
               key={index}
@@ -112,7 +121,7 @@ const ResetPasswordPage = () => {
               ref={(el) => (inputRefs.current[index] = el)}
               onChange={(e) => handleOTPChange(e, index)}
               onKeyDown={(e) => handleOTPKeyDown(e, index)}
-              className="w-16 h-14 text-center border border-gray-300 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="md:w-16 w-10 h-10 md:h-14  text-center border border-gray-300 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
           ))}
         </div>
@@ -135,6 +144,9 @@ const ResetPasswordPage = () => {
             className="outline-none w-full"
           />} {passShow ? <button className="text-purple-900" onClick={()=>setPassShow(false)}><FaEye /></button>: <button className="text-purple-900" onClick={()=>setPassShow(true)}>< FaEyeSlash /></button>}</div>
         </div>
+        {errMessage && <div className="flex items-center justify-end">
+          <p className="text-red-500">{errMessage}</p>
+          </div>}
 
         <button
           onClick={handleSubmit}

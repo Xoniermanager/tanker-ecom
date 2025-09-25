@@ -27,7 +27,7 @@ const page = () => {
                 setPageLimit(Number(data.limit))
                 setTotalPages(Number(data.totalPages))
                 setCurrentPage(Number(data.page))
-                console.log("quoteData", response.data)
+
             }
         } catch (error) {
             const message =

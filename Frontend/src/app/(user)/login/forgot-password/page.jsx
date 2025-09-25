@@ -40,8 +40,8 @@ const page = () => {
   };
 
   return (
-    <div className="py-34 flex items-center justify-center bg-[#f2edf6] px-4" >
-      <div className="max-w-xl bg-white p-8 w-full rounded-xl shadow-lg space-y-6">
+    <div className="py-22 md:py-34 flex items-center justify-center bg-[#f2edf6] px-5" >
+      <div className="max-w-xl bg-white p-8 w-full rounded-xl shadow-lg space-y-3 md:space-y-6">
         <h2 className="text-2xl font-semibold text-gray-800 text-center">
           Forgot your password?
         </h2>

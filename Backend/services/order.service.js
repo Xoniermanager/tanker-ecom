@@ -217,7 +217,7 @@ class OrderService {
           session,
           "increase"
         );
-        console.log("products: ", order.products)
+      
 
         // await productCategoryRepository.manageCategorySalesMetrics(order.products, session, "decrease")
       }

@@ -48,7 +48,7 @@ const page = () => {
 
       setUpdateFormData({ ...updateFormData, [name]: value });
     }
-    console.log("formData: ", updateFormData)
+
   };
 
   const handleDeleteCategory = (ids, name)=>{
