@@ -6,20 +6,12 @@ const mailTransporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    connectionTimeout: 30000
+
 });
 
-/**
- * Send an email with provided details.
- * 
- * @param {Object} emailDetails - The email details.
- * @param {string} emailDetails.to - The recipient email address.
- * @param {string} emailDetails.subject - The subject of the email.
- * @param {string} emailDetails.text - The plain text content of the email.
- * @param {string} emailDetails.html - The HTML content of the email.
- * @returns {Promise<void>} - Resolves when the email is sent successfully, rejects if failed.
- * @throws {Error} - Throws an error if sending the email fails.
- */
+
 async function sendEmail({ to, subject, text, html }) {
     if (!to || !subject || (!text && !html)) {
         throw new Error('Failed to send email: Missing required email fields: to, subject, and either text or html');
