@@ -31,31 +31,12 @@ const ContactComponent = ({ addressData, contactsData }) => {
     if (errMessage) setErrMessage(null);
   };
 
-  // const handleCaptcha = (token)=>{
-  //     console.log("Captcha token received:", token);
-  //     setCaptchaToken(token)
-  //     if(errMessage && errMessage.includes('robot')) setErrMessage(null)
-  // }
-
-  // const handleCaptchaExpired = () => {
-  //     console.log("Captcha expired");
-  //     setCaptchaToken(null)
-  // }
-
-  // const handleCaptchaError = () => {
-  //     console.log("Captcha error");
-  //     setCaptchaToken(null)
-  //     setErrMessage("reCAPTCHA error occurred. Please try again.")
-  // }
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrMessage(null);
 
-    // if(!captchaToken) {
-    //     setErrMessage('Please verify that you are not a robot')
-    //     return
-    // }
 
     const token = await recaptchaRef.current.executeAsync();
     recaptchaRef.current.reset();
@@ -102,7 +83,7 @@ const ContactComponent = ({ addressData, contactsData }) => {
 
   useEffect(() => {
     const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-    console.log("reCAPTCHA Site Key:", siteKey);
+
 
     if (!siteKey) {
       console.error(

@@ -29,9 +29,7 @@ const WorkProcess = ({ workProcessData }) => {
       },
     ],
   });
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
+ 
 
   useEffect(() => {
     setSectionId(workProcessData?.section_id || "");

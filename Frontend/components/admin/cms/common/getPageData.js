@@ -12,7 +12,7 @@ export const getPageData = async () => {
     }
     const response = await api.get(`/cms/pages/${pageId}`);
     if (response.status === 200 || response.status === 304) {
-      console.log("page data: ", response.data);
+    
       return response.data;
     }
   } catch (error) {

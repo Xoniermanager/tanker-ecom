@@ -93,19 +93,23 @@ class UserService {
    * @returns {Promise<boolean>}
    */
   async requestLoginOtp({ email, password, role }) {
-    await this.validateUserAndPassword(email, password, role);
+    try {
+      await this.validateUserAndPassword(email, password, role);
 
-    const otp = generateOtp();
-    // TODO: implement queue (async) to send email
-    await sendOtpEmail(email, otp, "login_otp");
-    await userRepository.createOtp(
-      email,
-      otp,
-      Date.now() + OTP_EXPIRY_DURATION.login_otp,
-      "login_otp"
-    );
+      const otp = generateOtp();
 
-    return true;
+      await sendOtpEmail(email, otp, "login_otp");
+      await userRepository.createOtp(
+        email,
+        otp,
+        Date.now() + OTP_EXPIRY_DURATION.login_otp,
+        "login_otp"
+      );
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -118,7 +122,6 @@ class UserService {
     if (!isOtpValid) throw customError("Invalid or expired OTP", 400);
 
     const user = await this.validateUserAndPassword(email, password, role);
-
 
     const accessToken = generateAccessToken(user._id, role);
     const refreshToken = generateRefreshToken(user._id);
@@ -333,8 +336,11 @@ class UserService {
       throw customError("Please verify your email before continuing", 403);
     }
 
-    if(user.status !== USER_STATUS.ACTIVE){
-        throw customError("Your account is inactive. You can't log in. Please contact the admin", 403)
+    if (user.status !== USER_STATUS.ACTIVE) {
+      throw customError(
+        "Your account is inactive. You can't log in. Please contact the admin",
+        403
+      );
     }
 
     const isValid = await user.comparePassword(password);
@@ -425,83 +431,87 @@ class UserService {
     }
   };
 
-  activate = async(id)=>{
-     if(!Types.ObjectId.isValid(id)){
-            throw customError("Invalid user id")
-      }
-    
-      const session = await startSession()
-    try {
-        session.startTransaction();
-
-        const user = await userRepository.findById(id, session, "-password -refreshToken");
-
-        if(!user){
-            throw customError("User not found", 404);
-        }
-
-        if(user.status === USER_STATUS.ACTIVE){
-            throw customError(`${user.fullName} account is already active`,400);
-        }
-
-        user.status = USER_STATUS.ACTIVE
-
-        const newUser = await user.save({session});
-
-        if(!newUser){
-            throw customError(`${user.fullName} status not updated`, 400);
-        }
-        
-        await session.commitTransaction();
-
-        return newUser
-
-    } catch (error) {
-        await session.abortTransaction();
-        throw error
-    } finally{
-        await session.endSession();
+  activate = async (id) => {
+    if (!Types.ObjectId.isValid(id)) {
+      throw customError("Invalid user id");
     }
-  }
 
-  deactivate = async(id)=>{
-
-     if(!Types.ObjectId.isValid(id)){
-            throw customError("Invalid user id")
-      }
-    
-      const session = await startSession()
-
+    const session = await startSession();
     try {
-        session.startTransaction()
-       const user = await userRepository.findById(id, session, "-password -refreshToken");
-       if(!user){
-        throw customError("User not found", 404)
-       }
+      session.startTransaction();
 
-       if(user.status === USER_STATUS.INACTIVE){
-         throw customError(`${user.fullName}  account already deactivated`,400)
-       }
+      const user = await userRepository.findById(
+        id,
+        session,
+        "-password -refreshToken"
+      );
 
+      if (!user) {
+        throw customError("User not found", 404);
+      }
 
-        user.status = USER_STATUS.INACTIVE
+      if (user.status === USER_STATUS.ACTIVE) {
+        throw customError(`${user.fullName} account is already active`, 400);
+      }
 
-        const updatedUser = await user.save({session})
+      user.status = USER_STATUS.ACTIVE;
 
-        if(!updatedUser){
-            throw customError("User not updated", 400)
-        }
+      const newUser = await user.save({ session });
 
-        await session.commitTransaction()
-        return updatedUser
+      if (!newUser) {
+        throw customError(`${user.fullName} status not updated`, 400);
+      }
 
+      await session.commitTransaction();
+
+      return newUser;
     } catch (error) {
-        await session.abortTransaction();
-        throw error
+      await session.abortTransaction();
+      throw error;
     } finally {
-        await session.endSession();
+      await session.endSession();
     }
-  }
+  };
+
+  deactivate = async (id) => {
+    if (!Types.ObjectId.isValid(id)) {
+      throw customError("Invalid user id");
+    }
+
+    const session = await startSession();
+
+    try {
+      session.startTransaction();
+      const user = await userRepository.findById(
+        id,
+        session,
+        "-password -refreshToken"
+      );
+      if (!user) {
+        throw customError("User not found", 404);
+      }
+
+      if (user.status === USER_STATUS.INACTIVE) {
+        throw customError(`${user.fullName}  account already deactivated`, 400);
+      }
+
+      user.status = USER_STATUS.INACTIVE;
+
+      const updatedUser = await user.save({ session });
+
+      if (!updatedUser) {
+        throw customError("User not updated", 400);
+      }
+
+      await session.commitTransaction();
+      return updatedUser;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  };
 }
 
 module.exports = { UserService };

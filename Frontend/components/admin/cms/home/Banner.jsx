@@ -77,7 +77,7 @@ const Banner = ({ homeData }) => {
         source: file
       }
     }))
-    console.log("source file: ", file)
+    
   }
 
   useEffect(() => {

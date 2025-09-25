@@ -42,7 +42,7 @@ const OrderTable = ({
   return (
     <>
       <div className="py-20 lg:py-24 px-5 max-w-7xl mx-auto flex flex-col lg:flex-row items-start gap-10 ">
-        <div className="w-full lg:w-1/4 sticky bg-white top-30 z-200 lg:top-34">
+        <div className="w-full lg:w-1/4 sticky bg-white top-24 md:top-30 z-200 lg:top-34">
           <ul className="border-1 border-slate-200 rounded-xl p-4 flex flex-col gap-3 bg-sky-50/10">
             <li
               className={`px-6 py-3 ${

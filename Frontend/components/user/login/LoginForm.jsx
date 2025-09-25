@@ -30,6 +30,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrMessage(null);
     try {
       const response = await api.post(`/auth/request-login-otp`, {
         email: formData.companyEmail,
@@ -43,7 +44,7 @@ const LoginForm = () => {
         );
         window.localStorage.setItem("verify-login-password", formData.password);
         setFormData({ companyEmail: "", password: "" });
-        setErrMessage("");
+      
         router.push(`/login/verify-otp${redirect && `?redirect=${redirect}`}`);
       }
     } catch (error) {
@@ -167,7 +168,7 @@ const LoginForm = () => {
                   {isLoading ? "Submitting..." : "Login"}
                 </button>
               </div>
-              <div className="flex">
+              <div className="flex justify-center md:justify-start">
                 <p className="text-zinc-500 text-center lg:text-start lg:text-lg font-medium">
                   {" "}
                   Don't have an account? please{" "}

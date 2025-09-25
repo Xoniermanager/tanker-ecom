@@ -41,7 +41,7 @@ const page = () => {
     setPasswordData({ ...passwordData, [name]: value });
   
   };
-console.log(passwordData)
+
   
   const handleImageChange = (e) => {
     const file = e.target.files[0];

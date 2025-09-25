@@ -44,7 +44,7 @@ const Page = () => {
   const counterData = homePageData?.sections?.find(item=>item?.order === 5 )
   const articleData = homePageData?.sections?.find(item=>item?.order === 6 )
   
-  console.log("about data: ", aboutData)
+
 
   return (
     <>

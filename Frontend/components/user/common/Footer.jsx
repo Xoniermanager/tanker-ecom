@@ -26,7 +26,7 @@ const Footer = ({ siteData }) => {
     try {
       const response = await api.get(`/blogs/published`)
       if(response.status === 200){
-        console.log("Blog data: ", response.data.data.data)
+        
         setBlogData(response.data.data.data)
       }
     } catch (error) {
@@ -127,15 +127,15 @@ const Footer = ({ siteData }) => {
           <h4 className="text-lg md:text-[22px] font-semibold capitalize text-white tracking-wide">
             Latest post
           </h4>
-          <div className="flex flex-col gap-2">
-            <span className="text-white/70 text-sm md:text-base">{new Date(item?.createdAt).toLocaleDateString('en-NZ', {
+          <div className="flex flex-col gap-2 group">
+            <span className="text-white/70 group-hover:text-orange-300 text-sm md:text-base">{new Date(item?.createdAt).toLocaleDateString('en-NZ', {
   day: '2-digit',
   month: 'long',
   year: 'numeric'
 })}</span>
             <Link
-              href={""}
-              className="text-white font-semibold capitalize line-clamp-3 text-base md:text-lg hover:underline"
+              href={`/news/${item.slug}`}
+              className="text-white group-hover:text-orange-400 font-semibold capitalize line-clamp-3 text-base md:text-lg hover:underline"
             >
               {item?.title}
             </Link>

@@ -34,7 +34,7 @@ class CmsController {
     upsertPageWithSections = async (req, res, next) => {
         try {
             const { pageId } = req.params;
-            console.log('pageId', pageId);
+            
 
             const { seo, sections } = req.body;
 

@@ -11,7 +11,7 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
   return (
     <div className=" pb-20 lg:pb-28 px-5 w-full bg-[#fbf2f2] ">
       <div className="max-w-7xl mx-auto flex flex-col items-start gap-8">
-        <h2 className="font-bold text-purple-950 text-3xl">Related Product</h2>
+        <h2 className="font-bold text-purple-950 text-3xl w-full text-center md:text-start">Related Product</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 w-full gap-8">
           {relatedCategoryData.length > 0 ?  relatedCategoryData?.map((item, index) => (
             <Link href={`/products/${item?.slug}`}

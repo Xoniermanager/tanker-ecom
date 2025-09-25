@@ -21,7 +21,7 @@ const Page = () => {
     try{
      const pageData = await getPageData();
       setServiceData(pageData.data)
-      console.log("contact data: ", pageData.data)
+
     }
     catch(error){
       console.error("error: ", error)

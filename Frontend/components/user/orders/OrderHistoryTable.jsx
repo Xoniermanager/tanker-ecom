@@ -21,7 +21,7 @@ const OrderHistoryTable = ({handleViewOrder}) => {
                 if(response.status === 200){
                     const responseData = response.data.data
                   setOrderHistoryData(responseData.data || null)
-                  console.log(responseData)
+                
                 }
               } catch (error) {
                 const message =
