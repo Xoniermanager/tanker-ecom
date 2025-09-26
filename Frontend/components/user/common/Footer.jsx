@@ -70,22 +70,22 @@ const Footer = ({ siteData }) => {
             </span>{" "}
             <div className="flex flex-col gap-1">
               <Link
-                href={`tel:${siteData.contactDetails.phoneNumbers.contact_one}`}
+                href={`tel:${siteData?.contactDetails?.phoneNumbers?.contact_one}`}
                 className="hover:text-orange-500"
               >
-                {siteData.contactDetails.phoneNumbers.contact_one}
+                {siteData?.contactDetails?.phoneNumbers?.contact_one}
               </Link>{" "}
               <Link
-                href={`tel:${siteData.contactDetails.phoneNumbers.contact_two}`}
+                href={`tel:${siteData?.contactDetails?.phoneNumbers?.contact_two}`}
                 className="hover:text-orange-500"
               >
-                {siteData.contactDetails.phoneNumbers.contact_two}
+                {siteData?.contactDetails?.phoneNumbers?.contact_two}
               </Link>
             </div>{" "}
           </li>
           <li className="flex items-center gap-3 text-white">
             <Link
-              href={`${siteData.contactDetails.addresses.address_link}`}
+              href={`${siteData?.contactDetails?.addresses?.address_link}`}
               target="_blank"
               className="text-white flex items-center gap-3 hover:text-orange-500"
             >
@@ -93,12 +93,12 @@ const Footer = ({ siteData }) => {
               <span className="min-w-8 text-2xl">
                 <IoLocationOutline />
               </span>
-              {siteData.contactDetails.addresses.head_office}
+              {siteData?.contactDetails?.addresses?.head_office}
             </Link>
           </li>
           <li className="flex items-center gap-2">
             <ul className="flex gap-3">
-              {Object.entries(siteData.contactDetails.socialMediaLinks).map(
+              {Object.entries(siteData?.contactDetails?.socialMediaLinks).map(
                 ([platform, url]) => {
                   if (!url) return null;
 
@@ -134,7 +134,7 @@ const Footer = ({ siteData }) => {
   year: 'numeric'
 })}</span>
             <Link
-              href={`/news/${item.slug}`}
+              href={`/news/${item?.slug}`}
               className="text-white group-hover:text-orange-400 font-semibold capitalize line-clamp-3 text-base md:text-lg hover:underline"
             >
               {item?.title}
@@ -219,19 +219,19 @@ const Footer = ({ siteData }) => {
             </button>
           </form>
           <Link
-            href={`mailto:${siteData.contactDetails.emails.footer}`}
+            href={`mailto:${siteData?.contactDetails?.emails?.footer}`}
             className="flex items-center gap-4 bg-[#222627] text-white font-semibold hover:underline group rounded-lg overflow-hidden hover:text-orange-100"
           >
             <span className="bg-orange-400 h-11 w-11 flex items-center text-lg justify-center ">
               <FaRegEnvelope className="group-hover:scale-110" />
             </span>{" "}
-            {siteData.contactDetails.emails.footer}{" "}
+            {siteData?.contactDetails?.emails?.footer}{" "}
           </Link>
         </div>
       </div>
       <div className="border-t-[1] border-white/50 mt-16 md:mt-24  pt-16  max-w-full  mx-4 relative z-2 flex justify-center">
         <p className="text-white">
-          &copy; {year} {siteData.siteDetails.copyright}
+          &copy; {year} {siteData?.siteDetails?.copyright}
         </p>
         {/* <Image src={'/images/gaddi.png'}  width={70} height={70} alt='car' className='absolute left-right -top-19'/> */}
       </div>
