@@ -96,14 +96,14 @@ const page = () => {
               </div>
               <div className="text-right">
                 <p className="text-white text-sm">Total Amount</p>
-                <p className="text-2xl font-bold">${orderData?.order?.totalPrice}</p>
+                <p className="text-2xl font-bold">${orderData?.order?.totalPrice.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
           <div className="p-6">
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Payment Details */}
+             
               <div>
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
                   <FaCreditCard className="w-5 h-5 mr-2 text-gray-600" />
@@ -146,7 +146,7 @@ const page = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Estimated Delivery</span>
-                    <span className="font-medium">Sep 23-25, 2025</span>
+                    <span className="font-medium">Oct 09-12, 2025</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Address</span>

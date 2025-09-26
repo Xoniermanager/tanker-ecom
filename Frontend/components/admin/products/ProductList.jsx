@@ -113,7 +113,7 @@ const ProductList = ({
                              <Link className="w-10 h-10 rounded-full overflow-hidden group" href={`products/view/${product.slug}`}><img
                                 src={product?.images[0]?.source ? product?.images[0]?.source : '/images/dummy.jpg' }
                                 alt={product.name}
-                                className="w-10 h-10 rounded-full group-hover:scale-105 object-cover"
+                                className="w-10 h-10 rounded-full group-hover:scale-105 object-contain"
                               /></Link>
                             </td>
                             <td className=" max-w-[150px] truncate">

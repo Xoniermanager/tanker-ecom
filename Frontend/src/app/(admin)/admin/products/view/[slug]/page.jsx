@@ -7,10 +7,11 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import PageLoader from "../../../../../../../components/common/PageLoader";
 import Link from "next/link";
-import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit, MdOutlineInventory2 } from "react-icons/md";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Image from "next/image";
 import FailedDataLoading from "../../../../../../../components/common/FailedDataLoading";
+
 
 const Page = () => {
   const [productData, setProductData] = useState(null);
@@ -102,15 +103,21 @@ const Page = () => {
             {productData?.name}
           </h1>
           <div className="flex gap-3">
+            <div className="relative">
+            <Link href={`/admin/products/edit-inventory/${productData?._id}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
+              <MdOutlineInventory2 className="text-lg"/> Edit Inventory
+            </Link>
+            <span className={`min-w-5   w-fit flex items-center justify-center rounded-full absolute  -top-2 -right-2 z-50 ${(productData?.inventory?.quantity < 10) ? 'bg-red-500 animate-pulse text-[12px] p-0.5' : "bg-green-600 text-[9px] p-1"} text-white`}>{productData?.inventory?.quantity}</span>
+            </div>
             <Link href={`/admin/products/update/${productData?.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
               <MdOutlineEdit className="text-lg"/> Edit Product
             </Link>
             <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition flex items-center gap-2" onClick={()=>setDeleteProduct(productData?._id)}>
              <MdDeleteOutline className="text-xl"/> Delete Product
             </button>
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-lg shadow hover:bg-orange-600 transition flex items-center gap-2" onClick={()=>router.back()}>
+            {/* <button className="bg-orange-500 text-white px-6 py-2 rounded-lg shadow hover:bg-orange-600 transition flex items-center gap-2" onClick={()=>router.back()}>
              <IoChevronBackOutline className="text-xl"/> Back
-            </button>
+            </button> */}
           </div>
         </div>
 
