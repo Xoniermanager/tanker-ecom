@@ -100,7 +100,7 @@ const Page = () => {
 
   if (isLoading || !formData) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="pl-86 pt-26 flex justify-center items-center h-screen">
         <p className="text-purple-950 font-semibold text-lg animate-pulse">
           Loading Product...
         </p>

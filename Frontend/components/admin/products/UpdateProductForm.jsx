@@ -307,7 +307,7 @@ const UpdateProductForm = ({
         // setImagePreviews([]);
         // setSpecPreview(null);
 
-        toast.success("Product created successfully");
+        toast.success(`${formData.name} Product updated successfully`);
       }
     } catch (error) {
       console.error(error);
