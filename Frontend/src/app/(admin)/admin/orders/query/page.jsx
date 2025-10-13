@@ -1,7 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import api from '../../../../../components/user/common/api';
+
 import QueryOrderTable from '../../../../../../components/admin/orders/QueryOrderTable';
+import api from '../../../../../../components/user/common/api';
 
 const page = () => {
 const [orderData, setOrderData] = useState(null);
