@@ -10,10 +10,8 @@ const seedAppConfig = async () => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
-    try {
-        /**
-         ** Seed Admin User
-         */
+    try { 
+        // Seed Admin User
         console.log("Seeding admin user...");
 
         const existingAdmin = await User.findOne({ companyEmail: "admin@company.com", role: "admin" });

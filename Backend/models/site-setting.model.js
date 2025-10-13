@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const encryptionPlugin = require("../plugins/encryptionPlugin");
+const {encryptionPlugin} = require("../plugins/encryptionPlugin");
 const ENUMS = require("../constants/enums");
 const { getPublicFileUrl } = require("../utils/storage");
 

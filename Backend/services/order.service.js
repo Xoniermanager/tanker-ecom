@@ -7,25 +7,17 @@ const {
   ORDER_STATUS,
   PAYMENT_STATUS,
   USER_ROLES,
+  PAYMENT_METHODS,
 } = require("../constants/enums");
 const inventoryRepository = require("../repositories/product/inventory.repository");
 const cartRepository = require("../repositories/cart.repository");
 const { generateOrderNumber } = require("../utils/order-number");
 const stripeService = require("./stripe.service");
 const productCategoryRepository = require("../repositories/product/product-category.repository");
+const { sendOrderConfirmationEmail, sendAdminOrderNotificationEmail } = require("../utils/email");
 
 class OrderService {
-  /**
-   * Creates a new order for a user with full validation, stock management, and cart clearance.
-   *
-   * @async
-   * @function createOrder
-   * @param {Object} payload - The order payload.
-   * @param {Array} payload.products - List of products with `{ product: ObjectId, quantity: number }`.
-   * @param {string} payload.paymentMethod - Selected payment method.
-   * @param {Object} payload.user - User placing the order.
-   * @returns {Promise<Object>} - The created order document.
-   */
+  
   createOrder = async (payload) => {
     const session = await startSession();
     try {
@@ -37,7 +29,6 @@ class OrderService {
         session
       );
 
-      // Prepare final order payload
       payload.product = products;
       payload.payment = {
         method: payload.paymentMethod,
@@ -48,15 +39,14 @@ class OrderService {
       payload.orderNumber = generateOrderNumber();
       delete payload.paymentMethod;
 
-      
-
-      // Save Order
      const result = await orderRepository.create(payload, session);
+     if((payload.address.shippingAddress.country !== "NZ") && (payload.address.billingAddress.country !== "NZ") && (payload.payment.method === PAYMENT_METHODS.COD)){
+       await sendOrderConfirmationEmail(result);
+       await sendAdminOrderNotificationEmail(result)
+     }
 
-      // Clear cart after order success
       await cartRepository.clearCart(payload.user._id, session);
 
-      // Update product inventories
       await orderRepository.updateProductInventory(payload.products, session);
       await productCategoryRepository.manageCategorySalesMetrics(products, session)
 
@@ -72,26 +62,7 @@ class OrderService {
     }
   };
 
-  /**
-   * Fetch paginated orders with filtering and sorting.
-   *
-   * Supports:
-   *  - Filtering by status
-   *  - Filtering by date range (createdAt)
-   *  - Sorting by status, createdAt, or totalQuantity (asc/desc)
-   *
-   * @async
-   * @function getOrders
-   * @param {number} [page=1] - Current page number for pagination.
-   * @param {number} [limit=10] - Number of orders per page.
-   * @param {Object} [filters={}] - Filters and sorting options.
-   * @param {string} [filters.status] - Order status to filter (e.g., "pending", "completed").
-   * @param {string|Date} [filters.startDate] - Start date for createdAt filter.
-   * @param {string|Date} [filters.endDate] - End date for createdAt filter.
-   * @param {string} [filters.sortBy] - Field to sort by ("status", "createdAt", "totalQuantity").
-   * @param {string} [filters.sortOrder="desc"] - Sort order ("asc" or "desc").
-   * @returns {Promise<Object>} - Paginated list of orders.
-   */
+  
   getOrders = async (page = 1, limit = 10, filters = {}) => {
     const query = {};
 
@@ -105,6 +76,9 @@ class OrderService {
       query.orderStatus = filters.status;
     }
 
+    if (filters.paymentMethod) {
+  query["payment.method"] = filters.paymentMethod;
+}
     // Filter by date range
     if (filters.startDate || filters.endDate) {
       query.createdAt = {};
@@ -123,16 +97,11 @@ class OrderService {
       const sortOrder = filters.sortOrder === "asc" ? 1 : -1;
       sort = { [sortField]: sortOrder };
     }
-
+    console.log("query objs: ", query)
     return await orderRepository.paginate(query, page, limit, sort, null, null, "products.product");
   };
 
-  /**
-   * Get order details by MongoDB ObjectId with user check
-   * @param {string} orderId - MongoDB ObjectId of the order
-   * @param {string} user - Current user
-   * @returns {Promise<Object|null>} The order details or null if not found
-   */
+  
   getOrderById = async (orderId, user) => {
     const filters = { _id: orderId };
     if (user.role !== USER_ROLES.ADMIN) filters.user = user._id;
@@ -142,12 +111,7 @@ class OrderService {
     return order;
   };
 
-  /**
-   * Get order details by Order Number with user check
-   * @param {string} orderNumber - Unique order number
-   * @param {string} user - Current user
-   * @returns {Promise<Object|null>} The order details or null if not found
-   */
+
   getOrderByOrderNumber = async (orderNumber, user) => {
     const filters = { orderNumber: orderNumber };
     if (user.role !== USER_ROLES.ADMIN) filters.user = user._id;
@@ -157,15 +121,7 @@ class OrderService {
     return order;
   };
 
-  /**
-   * Cancel an order by a user or admin.
-   * Updates the order status to CANCELLED and restores inventory if stock was reduced.
-   * Also logs the status change in order's statusHistory.
-   *
-   * @param {String} orderId - The ID of the order to cancel.
-   * @param {Object} user - The user performing the cancellation (should include _id and role).
-   * @returns {Promise<Object>} - The updated order document.
-   */
+  
   cancelOrder = async (orderId, user, reason = null) => {
     const session = await startSession();
 
@@ -232,16 +188,7 @@ class OrderService {
     }
   };
 
-  /**
-   * Change order status (Admin only)
-   *
-   * @param {String} orderId - The ID of the order to update
-   * @param {String} newStatus - New status to set (must be one of ORDER_STATUS)
-   * @param {String} note - Optional note explaining the change
-   * @param {Object} adminUser - Admin user performing the action
-   * @returns {Object} Updated order
-   * @throws {Error} Throws if order not found or invalid status
-   */
+ 
   changeOrderStatus = async (orderId, newStatus, note = "", adminUser) => {
     const session = await startSession();
 
@@ -253,7 +200,7 @@ class OrderService {
         throw customError("Order not found", 404);
       }
 
-      // Validate new status
+
       if (!Object.values(ORDER_STATUS).includes(newStatus)) {
         throw customError("Invalid order status", 400);
       }
@@ -302,13 +249,7 @@ class OrderService {
 
   // -------------------------------- Payment Section --------------------------------
 
-  /**
-   * Creates a Stripe PaymentIntent for the given order.
-   *
-   * @param {string} orderId - The ID of the order.
-   * @returns {Promise<Object>} PaymentIntent details with clientSecret and orderId.
-   * @throws {Error} If the order is not found or Stripe fails.
-   */
+
   async initializePayment(orderId) {
     try {
       const order = await orderRepository.findById(orderId);

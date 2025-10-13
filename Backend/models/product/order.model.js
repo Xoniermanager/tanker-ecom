@@ -1,8 +1,14 @@
 const { Schema, model } = require("mongoose");
-const { ORDER_STATUS, PAYMENT_METHODS, NEWZEALAND_REGIONS, PAYMENT_STATUS, COUNTRIES } = require("../../constants/enums");
-const encryptionPlugin = require("../../plugins/encryptionPlugin");
+const {
+  ORDER_STATUS,
+  PAYMENT_METHODS,
+  NEWZEALAND_REGIONS,
+  PAYMENT_STATUS,
+  COUNTRIES,
+} = require("../../constants/enums");
+const { encryptionPlugin } = require("../../plugins/encryptionPlugin");
 
-const countries = Object.values(COUNTRIES).map(item => item.value);
+const countries = Object.values(COUNTRIES).map((item) => item.code);
 
 const orderSchema = new Schema(
   {
@@ -17,31 +23,44 @@ const orderSchema = new Schema(
 
     products: [
       {
-        product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
         name: { type: String, required: true },
         quantity: { type: Number, required: true, min: 1 },
         sellingPrice: { type: Number, required: true, min: 0 },
-      }
+      },
     ],
 
     address: {
       billingAddress: {
         address: { type: String, required: true, trim: true },
         // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
-        country: { type: String, required: true, enum: Object.values(countries) },
+        country: {
+          type: String,
+          required: true,
+          enum: Object.values(countries),
+        },
         city: { type: String, required: true },
         pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
       shippingAddress: {
         address: { type: String, required: true, trim: true },
         // state: { type: String, required: true, enum: Object.values(NEWZEALAND_REGIONS) },
-        country: { type: String, required: true, enum: Object.values(countries) },
+        country: {
+          type: String,
+          required: true,
+          enum: Object.values(countries),
+        },
         city: { type: String, required: true },
         pincode: { type: Number, required: true, min: 1000, max: 999999 },
       },
     },
 
     totalPrice: { type: Number, min: 0 },
+    shippingPrice: { type: Number, min: 0 },
     totalQuantity: { type: Number, min: 1 },
 
     orderStatus: {
@@ -55,29 +74,36 @@ const orderSchema = new Schema(
         status: { type: String, enum: Object.values(ORDER_STATUS) },
         changedAt: { type: Date, default: Date.now },
         note: String,
-        reason: {type: String}
-      }
+        reason: { type: String },
+      },
     ],
 
     payment: {
-      method: { type: String, enum: Object.values(PAYMENT_METHODS), required: true },
-      status: { type: String, enum: Object.values(PAYMENT_STATUS), default: PAYMENT_STATUS.PENDING },
+      method: {
+        type: String,
+        enum: Object.values(PAYMENT_METHODS),
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: Object.values(PAYMENT_STATUS),
+        default: PAYMENT_STATUS.PENDING,
+      },
       transactionId: String,
       paymentIntentId: String,
       paidAt: Date,
       failedAt: Date,
-      paymentSystemData: {}
+      paymentSystemData: {},
     },
 
     stockReduced: { type: Boolean, default: false },
 
-    orderNotes: { type: String, trim: true }
+    orderNotes: { type: String, trim: true },
   },
   { timestamps: true }
 );
 
 orderSchema.pre("save", function (next) {
-
   if (this.products && this.products.length > 0) {
     this.totalPrice = this.products.reduce((acc, init) => {
       return acc + init.quantity * init.sellingPrice;
@@ -89,7 +115,10 @@ orderSchema.pre("save", function (next) {
 });
 
 orderSchema.pre("save", function (next) {
-  this.totalPrice = this.products.reduce((acc, p) => acc + p.quantity * p.sellingPrice, 0);
+  this.totalPrice = this.products.reduce(
+    (acc, p) => acc + p.quantity * p.sellingPrice,
+    0
+  );
   this.totalQuantity = this.products.reduce((acc, p) => acc + p.quantity, 0);
   next();
 });
@@ -102,7 +131,7 @@ orderSchema.plugin(encryptionPlugin, {
     "address.shippingAddress.name",
     "address.shippingAddress.address",
     "address.shippingAddress.pincode",
-  ]
-})
+  ],
+});
 
 module.exports = model("Order", orderSchema);

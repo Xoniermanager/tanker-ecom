@@ -149,7 +149,7 @@ const ProductDetailComponents = ({
                 <span className="text-[#00000080] line-through">
                   ${productData?.regularPrice.toFixed(2)}
                 </span>{" "}
-                <span className="text-red-500">{discount}%</span>{" "}
+                <span className="text-red-500">{(productData?.sellingPrice < productData?.regularPrice) && "-"}{discount}%</span>{" "}
                 <span
                   className={`text-white ${
                     productData?.inventory?.status.split("_").join(" ") !==
@@ -289,14 +289,16 @@ const ProductDetailComponents = ({
           </ul>
           <div className="w-full py-8 px-8">
             {active === 1 && (
-              <p className="text-center text-gray-600">
+              productData.description ? <p className="text-center text-gray-600">
                 {productData?.description}
-              </p>
+              </p> : <p className="text-center text-gray-600">
+                Description not found for this product
+              </p> 
             )}
             {active === 2 && (
               <div className="flex items-center justify-center">
-             {productData.specifications.source ?
-              ((productData.specifications.type === specType.IMAGE) ? <Image src={productData.specifications.source} height={350} width={350} className="object-cover" alt="Specification" quality={100}/> : <p className="text-center text-gray-600">
+             {productData?.specificationsDoc?.source ?
+              ((productData?.specificationsDoc?.type === specType.IMAGE) ? <Image src={productData.specificationsDoc.source} height={350} width={350} className="object-cover" alt="Specification" quality={100}/> : <p className="text-center text-gray-600">
                 PDF not viewed yet
               </p>): <p className="text-center text-gray-600">
                 Specification not found

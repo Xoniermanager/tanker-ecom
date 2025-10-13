@@ -1,9 +1,15 @@
 const { Schema, model } = require("mongoose");
-const { PRODUCT_STATUS } = require("../../constants/enums");
+const { PRODUCT_STATUS, PACKAGE_TYPE } = require("../../constants/enums");
 const inventoryModel = require("./inventory.model");
+
 
 const productSchema = new Schema(
   {
+    partNumber:{
+      type: String,
+      required: true,
+      trim: true
+    },
     name: {
       type: String,
       required: true,
@@ -31,12 +37,13 @@ const productSchema = new Schema(
     // },
     shortDescription: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
     },
     description: {
       type: String,
-      required: true,
+      // required: true,
+      trim: true,
     },
     brand: {
       type: String,
@@ -45,12 +52,13 @@ const productSchema = new Schema(
     origin: {
       type: String,
       trim: true,
+      default: "Not Found",
     },
     highlights: {
       type: [String],
       validate: [arrayLimit, "maximum highlights limit 10"],
     },
-    specifications: {
+    specificationsDoc: {
       type: {
         type: String,
         enum: ["pdf", "image"],
@@ -74,7 +82,6 @@ const productSchema = new Schema(
       ],
       validate: {
         validator: function (val) {
-          
           if (this.isNew) {
             return Array.isArray(val) && val.length >= 1;
           }
@@ -95,19 +102,70 @@ const productSchema = new Schema(
       enum: Object.values(PRODUCT_STATUS),
       default: "active",
     },
-    
-    measurements: [{
-       measurementName: {type: String, trim: true},
-       measurementValue: {type: String, trim: true}
-    }],
-    deliveryDays: {
-  type: String,
-  required: true,
-  default: "1"
-},
-    shipping:{
-      type: String,
 
+    measurements: [
+      {
+        measurementName: { type: String, trim: true },
+        measurementValue: { type: String, trim: true },
+      },
+    ],
+    deliveryDays: {
+      type: String,
+      // required: true,
+      default: "10",
+    },
+    specifications: {
+      height: {
+        type: String,
+        required: true,
+        trim: true,
+        match: [
+          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+          "Height must be a valid number (0-999.99)",
+        ],
+      },
+      length: {
+        type: String,
+        required: true,
+        trim: true,
+        match: [
+          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+          "Length must be a valid number (0-999.99)",
+        ],
+      },
+      width: {
+        type: String,
+        required: true,
+        trim: true,
+        match: [
+          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+          "Width must be a valid number (0-999.99)",
+        ],
+      },
+      weight: {
+        type: String,
+        required: true,
+        trim: true,
+         match: [/^[0-9]+$/, "Weight must be a valid integer (e.g., 34)"],
+      },
+      volume: {
+        type: String,
+        required: true,
+        trim: true,
+        match: [
+          /^(?:[0-9]|[1-9][0-9]{1,4})(?:\.[0-9]{1,2})?$/,
+          "Volume must be a valid number (0-99999.99)",
+        ],
+      },
+      packTypeCode:{
+        type: String,
+        required: true,
+        enum: Object.values(PACKAGE_TYPE).map(item => item.code),
+      }
+    },
+
+    shipping: {
+      type: String,
     },
     seo: {
       metaTitle: String,

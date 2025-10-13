@@ -22,6 +22,11 @@ const page = () => {
   const haveCartData =
     !cartData || !Array.isArray(cartData) || cartData?.length <= 0;
 
+
+ 
+
+  
+
   const handleRemoveProduct = async (id, product) => {
     const result = await popup.fire({
       title: "Are you sure?",
