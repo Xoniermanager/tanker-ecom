@@ -10,6 +10,7 @@ import { ORDER_STATUS } from '../../../constants/enums';
 
 
 
+
 const QueryOrderTable = ({orderData, setTotalPages, totalPages, currentPage, setCurrentPage, setPageLimit, setOrderStatus, orderStatus}) => {
   return (
     <div className="min-h-screen bg-[#f4f2ff] p-6">
@@ -23,7 +24,7 @@ const QueryOrderTable = ({orderData, setTotalPages, totalPages, currentPage, set
 
       <div className="bg-white rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3 flex-wrap">
-          <button className="text-sm px-4 py-2 rounded-md "> {(orderStatus === "") ?  "All Orders" : (orderStatus === "pending") ? "Pending Orders" : (orderStatus === "processing") ? "Orders Under Processing" : (orderStatus === "shipped") ? "Shipped Orders" : (orderStatus === "delivered") ? "Delivered orders" : (orderStatus === "cancelled") ? "Cancelled Orders" : "Orders"}</button>
+          <button className="text-sm px-4 py-2 rounded-md "> {(ORDER_STATUS === "") ?  "All Orders" : (orderStatus === "pending") ? "Pending Orders" : (orderStatus === "processing") ? "Orders Under Processing" : (orderStatus === "shipped") ? "Shipped Orders" : (orderStatus === "delivered") ? "Delivered orders" : (orderStatus === "cancelled") ? "Cancelled Orders" : "Orders"}</button>
 
           <select className="border border-gray-300 text-sm px-4 py-2 rounded-md text-gray-500 capitalize" onChange={(e)=>setOrderStatus(e.target.value)}>
             <option hidden>Sort by Status</option>
