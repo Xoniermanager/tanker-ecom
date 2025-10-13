@@ -175,7 +175,60 @@ NEWZEALAND_CITIES : {
     PERU: { code: "PE", name: "Peru", value: "peru" },
     VENEZUELA: { code: "VE", name: "Venezuela", value: "venezuela" },
     ECUADOR: { code: "EC", name: "Ecuador", value: "ecuador" }
-}
+},
+
+PACKAGE_TYPE: Object.freeze({
+  BAG: {
+    code: 'BAG',
+    description: 'Bag',
+    region: 'Australia, New Zealand, United States'
+  },
+  BDL: {
+    code: 'BDL',
+    description: 'Bundle',
+    region: 'Australia, New Zealand, United States'
+  },
+  CTN: {
+    code: 'CTN',
+    description: 'Carton',
+    region: 'Australia, New Zealand, United States'
+  },
+  DRM: {
+    code: 'DRM',
+    description: 'Drum',
+    region: 'Australia, New Zealand, United States'
+  },
+  IBC: {
+    code: 'IBC',
+    description: 'IBC',
+    region: 'Australia, New Zealand'
+  },
+  ITEM: {
+    code: 'ITEM',
+    description: 'Item',
+    region: 'Australia, New Zealand'
+  },
+  PAIL: {
+    code: 'PAIL',
+    description: 'Pail',
+    region: 'Australia, New Zealand, United States'
+  },
+  PLT: {
+    code: 'PLT',
+    description: 'Pallet',
+    region: 'Australia, New Zealand, United States'
+  },
+  ROLL: {
+    code: 'ROLL',
+    description: 'Roll',
+    region: 'Australia, New Zealand, United States'
+  },
+  ST: {
+    code: 'ST',
+    description: 'Stillage',
+    region: 'Australia, New Zealand, United States'
+  }
+})
 
 
 

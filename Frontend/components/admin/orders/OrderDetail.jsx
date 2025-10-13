@@ -55,7 +55,7 @@ const OrderDetail = ({
   return (
     <div className="min-h-screen  p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+       
         <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 mb-6 p-6 flex flex-col gap-4">
           <div className="flex justify-between items-start">
             <div>
@@ -160,9 +160,9 @@ const OrderDetail = ({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
+          
           <div className="lg:col-span-2 space-y-6">
-            {/* Products */}
+            
             <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-purple-950 mb-4 flex items-center gap-2">
                 <FaBox size={20} />
@@ -195,16 +195,24 @@ const OrderDetail = ({
                 ))}
               </div>
               <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center text-stone-700 text-base font-medium">
+                  <span>Shipping Price:</span>
+                  <span className="text-stone-500">
+                   {order.shippingPrice ? `$${order.shippingPrice.toFixed(2)}` : 'N/A' } 
+                  </span>
+                </div>
                 <div className="flex justify-between items-center text-lg font-semibold">
-                  <span>Total ({order.totalQuantity} items)</span>
+                  <span>Total ({order.totalQuantity} items):</span>
                   <span className="text-orange-500">
                     ${order.totalPrice.toFixed(2)}
                   </span>
                 </div>
+                </div>
               </div>
             </div>
 
-            {/* Addresses */}
+            
             <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-purple-950 mb-4 flex items-center gap-2">
                 <FaMapMarkerAlt size={20} />
@@ -330,7 +338,7 @@ const OrderDetail = ({
               </div>
             </div>
 
-            {/* Order Meta */}
+            
             <div className="bg-white rounded-lg shadow-[0_0_10px_#00000015] border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-purple-950 mb-4">
                 Order Meta

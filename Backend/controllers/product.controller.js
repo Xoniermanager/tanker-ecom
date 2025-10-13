@@ -85,8 +85,10 @@ class ProductController {
             throw customError("Invalid CSV data structure", 400);
         }
 
+        console.log("Data: ", headers)
+
         
-        const requiredHeaders = ['Name', 'Category', 'Regular Price', 'Selling Price', 'Brand', 'Origin', 'Quantity', 'Description', 'Short Description', 'Delivery Days'];
+        const requiredHeaders = ["Part No.", 'Name', 'Category', 'Regular Price', 'Selling Price', 'Brand', 'Quantity', 'height(m)', "length(m)", "width(m)", "weight(kg)", "volume(m3)", "Package Type"];
         const missingHeaders = requiredHeaders.filter(header => 
             !headers.some(h => h.toLowerCase().includes(header.toLowerCase()))
         );
@@ -112,9 +114,12 @@ class ProductController {
     updateProduct = async (req, res, next) => {
         try {
             const data = req.body;
+
             const files = req.files || [];
+            const incomingImages = data.images;
 
             const uploadedImages = [];
+
             for (const file of files) {
                 const source = await uploadImage(file.buffer, file.originalname, "uploads/product-images");
                 uploadedImages.push({
@@ -123,8 +128,10 @@ class ProductController {
                 });
             }
 
-            if(uploadedImages.length > 0){
-                data.images = uploadedImages;
+            let uploads = [...incomingImages, ...uploadedImages]
+
+            if(uploads.length > 0){
+                data.images = uploads;
             }
 
             const product = await productService.updateProduct(req.params.id, data);
@@ -142,6 +149,18 @@ class ProductController {
             next(error);
         }
     };
+
+    deleteBulkProducts = async(req, res, next)=>{
+        try {
+            const ids = req.body
+            console.log("ids: ", ids)
+            await productService.deleteBulkProducts(ids)
+            return customResponse(res,"All product deleted successfully", 200)
+
+        } catch (error) {
+            next(error)
+        }
+    }
 
     updateProductStatus = async (req, res, next) => {
         try {

@@ -12,6 +12,7 @@ import withReactContent from "sweetalert2-react-content";
 import { RiResetLeftFill } from "react-icons/ri";
 import { FaStarOfLife, FaTrash } from "react-icons/fa";
 import Image from "next/image";
+import { PACKAGE_TYPE } from "../../../constants/enums";
 
 const UpdateProductForm = ({
   formData,
@@ -30,9 +31,21 @@ const UpdateProductForm = ({
 
   const [highlights, setHighlights] = useState("");
   const popup = withReactContent(Swal);
-  const handleInputChange = (e) => {
+
+
+    const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "slug") {
+
+    if (name.startsWith("specifications.")) {
+      const field = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          [field]: value,
+        },
+      }));
+    } else if (name === "slug") {
       const newVal = value.replace(" ", "_").toLowerCase();
       setFormData((prev) => ({ ...prev, [name]: newVal }));
     } else {
@@ -158,8 +171,8 @@ const UpdateProductForm = ({
       const file = files[0];
       setFormData((prev) => ({
         ...prev,
-        specifications: {
-          ...prev.specifications,
+        specificationsDoc: {
+          ...prev.specificationsDoc,
           source: file,
         },
       }));
@@ -172,8 +185,8 @@ const UpdateProductForm = ({
     } else {
       setFormData((prev) => ({
         ...prev,
-        specifications: {
-          ...prev.specifications,
+        specificationsDoc: {
+          ...prev.specificationsDoc,
           [name]: value,
         },
       }));
@@ -181,13 +194,33 @@ const UpdateProductForm = ({
   };
 
   const removeImage = (index) => {
-    const updatedImages = [...productImages];
+  const existingImagesCount = formData.images.length;
+  
+  
+  if (index < existingImagesCount) {
+   
+    const updatedExistingImages = [...formData.images];
+    updatedExistingImages.splice(index, 1);
+    
     const updatedPreviews = [...imagePreviews];
-    updatedImages.splice(index, 1);
     updatedPreviews.splice(index, 1);
-    setProductImages(updatedImages);
+    
+    setFormData({ ...formData, images: updatedExistingImages });
     setImagePreviews(updatedPreviews);
-  };
+  } else {
+   
+    const newImageIndex = index - existingImagesCount;
+    
+    const updatedNewImages = [...productImages];
+    updatedNewImages.splice(newImageIndex, 1);
+    
+    const updatedPreviews = [...imagePreviews];
+    updatedPreviews.splice(index, 1);
+    
+    setProductImages(updatedNewImages);
+    setImagePreviews(updatedPreviews);
+  }
+};
 
   const handleHighlightRemove = (i) => {
     const newHighlights = formData.highlights.filter((_, index) => index !== i);
@@ -207,8 +240,8 @@ const UpdateProductForm = ({
 
   useEffect(() => {
     getCategoryData();
-    if (productData?.specifications?.source) {
-      setSpecPreview(productData?.specifications?.source);
+    if (productData?.specificationsDoc?.source) {
+      setSpecPreview(productData?.specificationsDoc?.source);
     }
   }, []);
 
@@ -224,13 +257,13 @@ const UpdateProductForm = ({
 
       let uploadedSpecUrl;
 
-      if (formData.specifications.source) {
-        formPayload.append("file", formData.specifications.source);
+      if (formData.specificationsDoc.source) {
+        formPayload.append("file", formData.specificationsDoc.source);
         const thumbRes = await api.put("/upload-files", formPayload);
         uploadedSpecUrl = thumbRes.data.data.file.url;
         formPayload.delete("file");
       }
-
+      formPayload.append("partNumber", formData.partNumber);
       formPayload.append("name", formData.name);
       formPayload.append("category", formData.category);
       formPayload.append("regularPrice", formData.regularPrice);
@@ -240,6 +273,7 @@ const UpdateProductForm = ({
       formPayload.append("description", formData.description);
       formPayload.append("brand", formData.brand);
       formPayload.append("origin", formData.origin);
+      formPayload.append("images", JSON.stringify(formData.images));
       // formPayload.append("slug", formData.slug);
       // formPayload.append("initialQuantity", formData.initialQuantity);
       formPayload.append("deliveryDays", formData.deliveryDays);
@@ -250,17 +284,42 @@ const UpdateProductForm = ({
       });
 
       if (
-        formData.specifications?.type &&
-        formData.specifications.type.trim() !== "" && uploadedSpecUrl
+        formData.specificationsDoc?.type &&
+        formData.specificationsDoc.type.trim() !== "" && uploadedSpecUrl
       ) {
         formPayload.append(
           "specifications[type]",
-          formData.specifications.type
+          formData.specificationsDoc.type
         );
       }
-      if (formData.specifications?.source && uploadedSpecUrl) {
-        formPayload.append("specifications[source]", uploadedSpecUrl);
+      if (formData.specificationsDoc?.source && uploadedSpecUrl) {
+        formPayload.append("specificationsDoc[source]", uploadedSpecUrl);
       }
+
+      formPayload.append(
+        "specifications[height]",
+        formData.specifications.height
+      );
+      formPayload.append(
+        "specifications[length]",
+        formData.specifications.length
+      );
+      formPayload.append(
+        "specifications[width]",
+        formData.specifications.width
+      );
+      formPayload.append(
+        "specifications[weight]",
+        formData.specifications.weight
+      );
+      formPayload.append(
+        "specifications[volume]",
+        formData.specifications.volume
+      );
+      formPayload.append(
+        "specifications[packTypeCode]",
+        formData.specifications.packTypeCode
+      );
 
       if (formData.seo?.metaTitle) {
         formPayload.append("seo[metaTitle]", formData.seo.metaTitle);
@@ -339,6 +398,27 @@ const UpdateProductForm = ({
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="grid grid-cols-2 gap-5 p-5 rounded-xl bg-purple-50/50">
+        <div className="flex flex-col gap-2">
+                    <label
+                      htmlFor="partNumber"
+                      className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+                    >
+                      <span className="text-red-500 text-[8px]">
+                        <FaStarOfLife />
+                      </span>{" "}
+                      Part Number
+                    </label>
+                    <input
+                      type="text"
+                      id="partNumber"
+                      name="partNumber"
+                      value={formData.partNumber}
+                      onChange={handleInputChange}
+                      placeholder="Part Number"
+                      className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      required
+                    />
+                  </div>
           <div className="flex flex-col gap-2">
             <label
               htmlFor="name"
@@ -361,7 +441,7 @@ const UpdateProductForm = ({
             />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col col-span-2 gap-2 grid-cols-2">
             <label
               htmlFor="category"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -654,6 +734,147 @@ const UpdateProductForm = ({
             ))}
           </div>
 
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.height"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Height (m)
+                        </label>
+                        <input
+                          type="text"
+                          id="specifications.height"
+                          name="specifications.height"
+                          placeholder="e.g., 3.5"
+                          value={formData.specifications.height}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+          
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.length"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Length (m)
+                        </label>
+                        <input
+                          type="text"
+                          id="specifications.length"
+                          name="specifications.length"
+                          placeholder="e.g., 3.0"
+                          value={formData.specifications.length}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+          
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.width"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Width (m)
+                        </label>
+                        <input
+                          type="text"
+                          id="specifications.width"
+                          name="specifications.width"
+                          placeholder="e.g., 34"
+                          value={formData.specifications.width}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+          
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.weight"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Weight (kg)
+                        </label>
+                        <input
+                          type="text"
+                          id="specifications.weight"
+                          name="specifications.weight"
+                          placeholder="e.g., 30"
+                          value={formData.specifications.weight}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+          
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.volume"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Volume (m³)
+                        </label>
+                        <input
+                          type="text"
+                          id="specifications.volume"
+                          name="specifications.volume"
+                          placeholder="e.g., 22.3"
+                          value={formData.specifications.volume}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        />
+                      </div>
+          
+                      <div className="flex flex-col gap-2">
+                        <label
+                          htmlFor="specifications.packTypeCode"
+                          className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+                        >
+                          <span className="text-red-500 text-[8px]">
+                            <FaStarOfLife />
+                          </span>{" "}
+                          Package Type
+                        </label>
+                        <select
+                          id="specifications.packTypeCode"
+                          name="specifications.packTypeCode"
+                          value={formData.specifications.packTypeCode}
+                          onChange={handleInputChange}
+                          className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          required
+                        >
+                          <option value="" hidden>
+                            Select Package Type
+                          </option>
+                          {Object.values(PACKAGE_TYPE).map(item=>(
+                            <option value={item.code}>{item.description} ({item.code})</option>
+                          ))}
+                         
+                          
+                        </select>
+                      </div>
+                    </div>
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor="type"
@@ -664,7 +885,7 @@ const UpdateProductForm = ({
             <select
               id="type"
               name="type"
-              value={formData.specifications.type}
+              value={formData.specificationsDoc.type}
               onChange={handleSpecificationChange}
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
@@ -688,7 +909,7 @@ const UpdateProductForm = ({
               name="source"
               type="file"
               accept={
-                formData.specifications.type === "image" ? "image/*" : ".pdf"
+                formData.specificationsDoc.type === "image" ? "image/*" : ".pdf"
               }
               onChange={handleSpecificationChange}
               className="block w-full text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 
@@ -707,8 +928,8 @@ const UpdateProductForm = ({
                       onClick={() => {
                         setFormData((prev) => ({
                           ...prev,
-                          specifications: {
-                            type: prev.specifications.type,
+                          specificationsDoc: {
+                            type: prev.specificationsDoc.type,
                             source: null,
                           },
                         }));
@@ -803,7 +1024,7 @@ const UpdateProductForm = ({
                        Estimated Delivery Days
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         id="deliveryDays"
                         name="deliveryDays"
                         value={formData.deliveryDays}

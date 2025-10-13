@@ -33,7 +33,8 @@ const { productCategorySchema,
     orderSchema,
     ordersFilterSchema,
     changeOrderStatusSchema,
-    cancelOrderByUserSchema
+    cancelOrderByUserSchema,
+    shippingRateSchema
 } = require("../requestSchemas/product.schema");
 const {
     syncCartSchema,
@@ -256,6 +257,7 @@ const validateChangeOrderStatus = (req, res, next) =>
 const validateCancelOrderByUser = (req, res, next) =>
     validateSchema(req, res, next, cancelOrderByUserSchema)
 const validateUpdateUser = (req, res, next) => validateSchema(req,res,next, userUpdateSchema)
+const shippingRate = (req, res, next) => validateSchema(req, res, next, shippingRateSchema)
 
 module.exports = {
     validateUserRegistration,
@@ -287,5 +289,5 @@ module.exports = {
     validateOrderFilter,
     validateChangeOrderStatus,
     validateCancelOrderByUser,
-    validateUpdateUser
+    validateUpdateUser, shippingRate
 };

@@ -258,7 +258,7 @@ const Sidebar = () => {
                 <Link
                   href={`/admin/products/add-bulk-products`}
                   className={`font-medium hover:text-orange-600 ${
-                    pathname.includes("add-product") && "text-orange-600"
+                    pathname.includes("add-bulk-products") && "text-orange-600"
                   } `}
                 >
                   {" "}
@@ -453,7 +453,7 @@ const Sidebar = () => {
                 <Link
                   href={`/admin/quote`}
                   className={`font-medium hover:text-orange-600 ${
-                    pathname.includes("home") && "text-orange-600"
+                    pathname.includes("quote") && "text-orange-600"
                   } `}
                 >
                   {" "}

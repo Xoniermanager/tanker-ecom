@@ -21,7 +21,7 @@ const QuoteTable = ({
   }
   return (
     <>
-      <div className="min-h-screen bg-[#f4f2ff] p-6">
+      <div className="min-h-screen bg-[#f4f2ff] ">
         <div className="mb-4 bg-white p-4 px-6 rounded-lg">
           <h2 className="text-2xl font-semibold text-black">Queries List</h2>
           <div className="text-sm text-gray-500 mt-1">

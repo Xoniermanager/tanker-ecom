@@ -26,6 +26,7 @@ const CheckOut = ({
   shippingPrice,
   addressIsSame,
   setAddressIsSame,
+  handleSubmitQuote, shippingLoading
 }) => {
   const [showStripeModal, setShowStripeModal] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState(null);
@@ -33,7 +34,12 @@ const CheckOut = ({
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
-    if (formData.paymentMethod === "online_payment") {
+    if(((formData.shippingAddress.country !== "NZ"))){
+      console.log("handle submit quote call")
+      return handleSubmitQuote()
+    }
+
+    if (formData.paymentMethod === "online_payment" && (formData.shippingAddress.country === "NZ")) {
       const result = await handleSubmit(e, true);
       if (result?.orderId) {
         setCreatedOrderId(result.orderId);
@@ -186,7 +192,7 @@ const CheckOut = ({
                     Choose your Country{" "}
                   </option>
                   {Object.values(COUNTRIES).map((item, i) => (
-                    <option value={item.value} className="capitalize" key={i}>
+                    <option value={item.code} className="capitalize" key={i}>
                       {item.name}
                     </option>
                   ))}
@@ -393,7 +399,7 @@ const CheckOut = ({
                 </span>{" "}
                 <div className="text-black/75 text-[15px]">
                   {" "}
-                  Flat Rate: ${Number(shippingPrice).toFixed(2)}
+                  {shippingLoading ? "fetching..." : shippingPrice ? `Flat Rate: ${Number(shippingPrice).toFixed(2)}` : "Please fill valid address"}
                 </div>{" "}
               </li>
             </ul>
@@ -406,7 +412,7 @@ const CheckOut = ({
               </span>
               <span className="font-semibold text-purple-950 text-xl">
                 $
-                {cartData?.length > 0
+                {(cartData?.length > 0)
                   ? withShippingChargesPrice?.toFixed(2)
                   : "--"}
               </span>
@@ -417,7 +423,7 @@ const CheckOut = ({
               Payment information
             </h2>
             <ul className="flex flex-col gap-3">
-              <li className="flex items-center gap-3 ">
+              {((formData.shippingAddress.country !== "NZ") && (formData.paymentMethod === PAYMENT_METHODS.COD))&& <li className="flex items-center gap-3 ">
                 <input
                   type="radio"
                   id={PAYMENT_METHODS.COD}
@@ -433,9 +439,9 @@ const CheckOut = ({
                 >
                   Cash on Delivery (COD)
                 </label>
-              </li>
+              </li>}
 
-              <li className="flex items-center gap-3">
+              {(formData.shippingAddress.country === "NZ") && <li className="flex items-center gap-3">
                 <input
                   type="radio"
                   id={PAYMENT_METHODS.ONLINE_PAYMENT}
@@ -453,7 +459,7 @@ const CheckOut = ({
                 >
                   Pay Online
                 </label>
-              </li>
+              </li>}
             </ul>
 
             <div className="flex items-start gap-3 ">
@@ -503,7 +509,7 @@ const CheckOut = ({
                 }
                 className="bg-orange-400 disabled:bg-orange-300 rounded-md hover:bg-orange-500 py-3 text-sm font-medium flex items-center justify-center gap-2 tracking-wide text-white uppercase w-full relative"
               >
-                {isLoading ? "Placing Order..." : "Place order"}{" "}
+                {isLoading ? "Placing Order..." : (formData.shippingAddress.country === "NZ") ? "Place order" : "Place Order Quote"}{" "}
                 {!isLoading && <MdShoppingCartCheckout className="text-lg" />}
               </button>
 

@@ -13,7 +13,7 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
       <div className="max-w-7xl mx-auto flex flex-col items-start gap-8">
         <h2 className="font-bold text-purple-950 text-3xl w-full text-center md:text-start">Related Product</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 w-full gap-8">
-          {relatedCategoryData.length > 0 ?  relatedCategoryData?.map((item, index) => (
+          {relatedCategoryData.length > 0 ?  relatedCategoryData?.slice(0,4).map((item, index) => (
             <Link href={`/products/${item?.slug}`}
               className=" flex flex-col rounded-lg group overflow-hidden bg-white"
               key={item._id}
@@ -37,7 +37,7 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
                 <span className="text-purple-950 text-lg tracking-wide font-black">
                   ${item.sellingPrice.toFixed(2)}
                 </span>
-                <ul className="flex items-center gap-1">
+                {/* <ul className="flex items-center gap-1">
                   {[...Array(5)].map((_, index) => (
                     <li key={index}>
                       {index < 4 ? (
@@ -47,7 +47,7 @@ const RelatedProductComponent = ({ relatedCategoryData, handleCartSubmit, cartIs
                       )}
                     </li>
                   ))}
-                </ul>
+                </ul> */}
               </div>
               <button className="bg-black disabled:bg-black/50 py-2 text-white font-semibold text-lg hover:bg-orange-500 flex justify-center items-center gap-2"  > Add to cart <MdOutlineShoppingCart /></button>
             </Link>

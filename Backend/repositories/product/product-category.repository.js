@@ -18,6 +18,8 @@ class ProductCategoryRepository extends BaseRepository {
     return result
   }
 
+  
+
   async updateCategoryStatus(id, updatedStatus, session = null) {
     const result = await this.model.findByIdAndUpdate(
       id,

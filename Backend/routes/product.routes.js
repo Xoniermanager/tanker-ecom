@@ -31,7 +31,7 @@ router.put(
 );
 router.patch("/:id", authorize(['admin']), productController.updateProductStatus);
 router.delete("/:id", authorize(['admin']), productController.deleteProduct);
-
+router.delete("/delete/bulk-delete", authorize(['admin']), productController.deleteBulkProducts)
 // ==================== Inventory Routes ====================
 router.get("/:productId/inventory", authorize(['admin']), inventoryController.getInventoryByProduct);
 router.put(

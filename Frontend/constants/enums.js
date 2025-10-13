@@ -1,4 +1,8 @@
-
+export const STOCK_STATUS = Object.freeze({
+    IN_STOCK: "in_stock",
+    OUT_OF_STOCK: "out_of_stock",
+    PRE_ORDER: "pre_order"
+})
 
 export const NEWZEALAND_REGIONS = Object.freeze({
     NORTHLAND: "northland",
@@ -167,6 +171,59 @@ export const months = Object.freeze([
   { name: "November", value: 11 },
   { name: "December", value: 12 },
 ])
+
+export const PACKAGE_TYPE = Object.freeze({
+  BAG: {
+    code: 'BAG',
+    description: 'Bag',
+    region: 'Australia, New Zealand, United States'
+  },
+  BDL: {
+    code: 'BDL',
+    description: 'Bundle',
+    region: 'Australia, New Zealand, United States'
+  },
+  CTN: {
+    code: 'CTN',
+    description: 'Carton',
+    region: 'Australia, New Zealand, United States'
+  },
+  DRM: {
+    code: 'DRM',
+    description: 'Drum',
+    region: 'Australia, New Zealand, United States'
+  },
+  IBC: {
+    code: 'IBC',
+    description: 'IBC',
+    region: 'Australia, New Zealand'
+  },
+  ITEM: {
+    code: 'ITEM',
+    description: 'Item',
+    region: 'Australia, New Zealand'
+  },
+  PAIL: {
+    code: 'PAIL',
+    description: 'Pail',
+    region: 'Australia, New Zealand, United States'
+  },
+  PLT: {
+    code: 'PLT',
+    description: 'Pallet',
+    region: 'Australia, New Zealand, United States'
+  },
+  ROLL: {
+    code: 'ROLL',
+    description: 'Roll',
+    region: 'Australia, New Zealand, United States'
+  },
+  ST: {
+    code: 'ST',
+    description: 'Stillage',
+    region: 'Australia, New Zealand, United States'
+  }
+})
 
 
 

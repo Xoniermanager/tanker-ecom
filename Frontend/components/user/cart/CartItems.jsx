@@ -167,13 +167,13 @@ const CartItems = ({ handleRemoveProduct, handleClearCart, DataLength, haveCartD
               </span>
             </li>
             <li className="flex items-center justify-between bg-orange-50/60 border-stone-200 border-b-1 py-5 px-6">
-              <span className="w-1/2 text-purple-950 text-lg font-medium">
+              <span className="w-1/3 text-purple-950 text-lg font-medium">
                 Shipping
               </span>
               <div className="text-black/75 text-[15px]">
                   {" "}
-                  Flat Rate: $
-                  {( cartData?.length > 0) ? Number(shippingPrice).toFixed(2) : "--"}
+                  
+                  {( (cartData?.length > 0) && (shippingPrice !== 0)) ?`Flat Rate: $${Number(shippingPrice).toFixed(2)}` : "Calculate in checkout page"}
                 </div>{" "}
             </li>
             <li className="flex items-center justify-between bg-orange-50/60 py-5 px-6">

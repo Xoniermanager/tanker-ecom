@@ -10,9 +10,10 @@ const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSyncedGuestCart, setHasSyncedGuestCart] = useState(false);
+  const [shippingPrice, setShippingPrice] = useState(0)
 
   const { isAuthenticated } = useAuth();
-  const { shippingPrice, isSiteDataLoading } = useSite();
+  // const { shippingPrice, isSiteDataLoading } = useSite();
 
   const fetchCartData = async () => {
     if (!isAuthenticated) {
@@ -171,6 +172,7 @@ const CartContextProvider = ({ children }) => {
         discountPrice,
         withShippingChargesPrice,
         shippingPrice,
+        setShippingPrice,
         syncGuestCartWithServer, 
       }}
     >

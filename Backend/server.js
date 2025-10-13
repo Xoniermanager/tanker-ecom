@@ -24,6 +24,7 @@ const CartRoutes = require("./routes/cart.routes");
 const OrderRoutes = require("./routes/order.routes");
 const DashboardRoutes = require("./routes/dashboard.route")
 const WebhookRoutes = require("./routes/webhook.routes");
+const ShippingRoutes = require("./routes/shipping-rate.routes")
 const upload = require("./config/multer");
 const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
@@ -47,7 +48,8 @@ const startServer = async () => {
             cors({
                 origin: process.env.CLIENT_URL,
                 methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-                credentials: true
+                credentials: true,
+                
             })
         );
         app.use(morgan("dev"));
@@ -71,6 +73,7 @@ const startServer = async () => {
         app.use("/api/cart", CartRoutes);
         app.use("/api/order", OrderRoutes);
         app.use("/api/dashboard", DashboardRoutes);
+        app.use("/api/shipping-charges", ShippingRoutes)
 
         // Route to upload files
         app.put("/api/upload-files", authorize(['admin', "user"]), upload.single("file"), async (req, res) => {

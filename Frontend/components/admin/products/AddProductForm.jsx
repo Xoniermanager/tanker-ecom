@@ -12,10 +12,12 @@ import { FaPlus, FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { FaStarOfLife, FaTrash } from "react-icons/fa";
 import { RiResetLeftFill } from "react-icons/ri";
+import { PACKAGE_TYPE } from "../../../constants/enums";
 
 const AddProductForm = () => {
   const [specPreview, setSpecPreview] = useState(null);
   const [formData, setFormData] = useState({
+    partNumber: "",
     name: "",
     category: "",
     regularPrice: "",
@@ -26,7 +28,7 @@ const AddProductForm = () => {
     brand: "",
     origin: "",
     highlights: [],
-    specifications: {
+    specificationsDoc: {
       type: "",
       source: "",
     },
@@ -34,8 +36,16 @@ const AddProductForm = () => {
     slug: "",
     initialQuantity: "",
     measurements: [],
-    deliveryDays:"",
-    shipping:"",
+    deliveryDays: "",
+    shipping: "",
+    specifications: {
+      height: "",
+      length: "",
+      width: "",
+      weight: "",
+      volume: "",
+      packTypeCode: "",
+    },
     seo: {
       metaTitle: "",
       metaDescription: "",
@@ -49,11 +59,21 @@ const AddProductForm = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [highlights, setHighlights] = useState("");
 
-    const popup = withReactContent(Swal);
+  const popup = withReactContent(Swal);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "slug") {
+
+    if (name.startsWith("specifications.")) {
+      const field = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          [field]: value,
+        },
+      }));
+    } else if (name === "slug") {
       const newVal = value.replace(" ", "_").toLowerCase();
       setFormData((prev) => ({ ...prev, [name]: newVal }));
     } else {
@@ -98,9 +118,8 @@ const AddProductForm = () => {
     }));
   };
 
-  const handleResetMeasurement = async() =>{
-
-     const result = await popup.fire({
+  const handleResetMeasurement = async () => {
+    const result = await popup.fire({
       title: "Are you sure?",
       text: `Do you really want to reset measurement`,
       icon: "warning",
@@ -115,13 +134,13 @@ const AddProductForm = () => {
     setFormData((prev) => ({
       ...prev,
       measurements: [
-       {
-        measurementName: "",
-        measurementValue: "",
-      },
+        {
+          measurementName: "",
+          measurementValue: "",
+        },
       ],
     }));
-  }
+  };
 
   const handleRemoveMeasurement = (index) => {
     // if(formData.measurements.length <= 1) return toast.info("At least one measurement is required")
@@ -152,8 +171,8 @@ const AddProductForm = () => {
       const file = files[0];
       setFormData((prev) => ({
         ...prev,
-        specifications: {
-          ...prev.specifications,
+        specificationsDoc: {
+          ...prev.specificationsDoc,
           source: file,
         },
       }));
@@ -166,8 +185,8 @@ const AddProductForm = () => {
     } else {
       setFormData((prev) => ({
         ...prev,
-        specifications: {
-          ...prev.specifications,
+        specificationsDoc: {
+          ...prev.specificationsDoc,
           [name]: value,
         },
       }));
@@ -228,16 +247,14 @@ const AddProductForm = () => {
       const formPayload = new FormData();
 
       let uploadedSpecUrl;
-    
-    if(formData.specifications.source !== ""){
-    formPayload.append('file', formData.specifications.source);
-    const thumbRes = await api.put("/upload-files", formPayload); 
-    uploadedSpecUrl = thumbRes.data.data.file.url;
-    formPayload.delete("file")
-  }
 
-
-
+      if (formData.specificationsDoc.source !== "") {
+        formPayload.append("file", formData.specificationsDoc.source);
+        const thumbRes = await api.put("/upload-files", formPayload);
+        uploadedSpecUrl = thumbRes.data.data.file.url;
+        formPayload.delete("file");
+      }
+      formPayload.append("partNumber", formData.partNumber);
       formPayload.append("name", formData.name);
       formPayload.append("category", formData.category);
       formPayload.append("regularPrice", formData.regularPrice);
@@ -249,22 +266,47 @@ const AddProductForm = () => {
       formPayload.append("origin", formData.origin);
       formPayload.append("slug", formData.slug);
       formPayload.append("deliveryDays", formData.deliveryDays);
-      formPayload.append("shipping", formData.shipping)
+      formPayload.append("shipping", formData.shipping);
       formPayload.append("initialQuantity", formData.initialQuantity);
 
       formData.highlights.forEach((highlight, index) => {
         formPayload.append(`highlights[${index}]`, highlight);
       });
 
-      if (formData.specifications?.type) {
-        formPayload.append("specifications[type]", formData.specifications.type);
-      }
-      if (formData.specifications?.source) {
+      if (formData.specificationsDoc?.type) {
         formPayload.append(
-          "specifications[source]",
-          uploadedSpecUrl
+          "specificationsDoc[type]",
+          formData.specificationsDoc.type
         );
       }
+      if (formData.specificationsDoc?.source) {
+        formPayload.append("specificationsDoc[source]", uploadedSpecUrl);
+      }
+
+      formPayload.append(
+        "specifications[height]",
+        formData.specifications.height
+      );
+      formPayload.append(
+        "specifications[length]",
+        formData.specifications.length
+      );
+      formPayload.append(
+        "specifications[width]",
+        formData.specifications.width
+      );
+      formPayload.append(
+        "specifications[weight]",
+        formData.specifications.weight
+      );
+      formPayload.append(
+        "specifications[volume]",
+        formData.specifications.volume
+      );
+      formPayload.append(
+        "specifications[packTypeCode]",
+        formData.specifications.packTypeCode
+      );
 
       if (formData.seo?.metaTitle) {
         formPayload.append("seo[metaTitle]", formData.seo.metaTitle);
@@ -275,18 +317,27 @@ const AddProductForm = () => {
           formData.seo.metaDescription
         );
       }
-      if (Array.isArray(formData.seo?.keywords) && (formData.measurements.length > 0)) {
+      if (
+        Array.isArray(formData.seo?.keywords) &&
+        formData.measurements.length > 0
+      ) {
         formData.seo.keywords.forEach((kw, index) => {
           formPayload.append(`seo[keywords][${index}]`, kw);
         });
       }
 
       if (Array.isArray(formData.measurements)) {
-  formData.measurements.forEach((m, index) => {
-    formPayload.append(`measurements[${index}][measurementName]`, m.measurementName);
-    formPayload.append(`measurements[${index}][measurementValue]`, m.measurementValue);
-  });
-}
+        formData.measurements.forEach((m, index) => {
+          formPayload.append(
+            `measurements[${index}][measurementName]`,
+            m.measurementName
+          );
+          formPayload.append(
+            `measurements[${index}][measurementValue]`,
+            m.measurementValue
+          );
+        });
+      }
 
       productImages.forEach((file) => {
         formPayload.append("images", file);
@@ -297,27 +348,37 @@ const AddProductForm = () => {
       });
 
       if (response.status === 200) {
-       
         setFormData({
+          partNumber: "",
           name: "",
           category: "",
           regularPrice: "",
           sellingPrice: "",
-          // shippingPrice: "",
           shortDescription: "",
           description: "",
           brand: "",
           origin: "",
           highlights: [],
-          specifications: { type: "", source: "" },
+          specificationsDoc:{
+             type: "",
+             source: "",
+          },
+          specifications: {
+            height: "",
+            length: "",
+            width: "",
+            weight: "",
+            volume: "",
+            packTypeCode: "",
+          },
           measurements: [
-      {
-        measurementName: "",
-        measurementValue: "",
-      },
-    ],
-    deliveryDays:0,
-    shipping:"",
+            {
+              measurementName: "",
+              measurementValue: "",
+            },
+          ],
+          deliveryDays: "",
+          shipping: "",
           images: [],
           slug: "",
           initialQuantity: "",
@@ -353,12 +414,33 @@ const AddProductForm = () => {
           className="bg-purple-500  text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-purple-600 transition flex items-center gap-2"
         >
           {" "}
-          <CiCircleList className="text-xl" /> Product List{" "}
+          <CiCircleList className="text-xl" /> Product List {" "}
         </Link>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="grid grid-cols-2 gap-5 p-5 rounded-xl bg-purple-50/50">
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="partNumber"
+              className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+            >
+              <span className="text-red-500 text-[8px]">
+                <FaStarOfLife />
+              </span>{" "}
+              Part Number
+            </label>
+            <input
+              type="text"
+              id="partNumber"
+              name="partNumber"
+              value={formData.partNumber}
+              onChange={handleInputChange}
+              placeholder="Part Number"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <label
               htmlFor="name"
@@ -381,7 +463,7 @@ const AddProductForm = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 col-span-2">
             <label
               htmlFor="category"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
@@ -460,31 +542,6 @@ const AddProductForm = () => {
               />{" "}
             </div>
           </div>
-          {/* <div className="flex flex-col gap-2 col-span-2">
-            <label
-              htmlFor="shippingPrice"
-              className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
-            >
-              <span className="text-red-500 text-[8px]">
-                <FaStarOfLife />
-              </span>{" "}
-              Shipping Price
-            </label>
-            <div className="border border-gray-300 rounded-md bg-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-400 gap-2.5">
-              <AiOutlineDollar className="text-lg text-orange-400" />
-              <input
-                type="number"
-                id="shippingPrice"
-                name="shippingPrice"
-                placeholder="Shipping Price"
-                value={formData.shippingPrice}
-                onChange={handleInputChange}
-                onWheel={(e) => e.currentTarget.blur()}
-                className="w-full outline-none"
-                required
-              />{" "}
-            </div>
-          </div> */}
 
           <div className="flex flex-col gap-2">
             <label
@@ -657,9 +714,13 @@ const AddProductForm = () => {
               <FaPlus className="group-hover:rotate-90" /> Add
             </button>{" "}
           </div>
+
           <div className="flex gap-3 items-center col-span-2 flex-wrap">
             {formData.highlights.map((item, i) => (
-              <span className="px-5 py-1 rounded-full text-orange-500 bg-orange-100 flex items-center gap-1" key={i}>
+              <span
+                className="px-5 py-1 rounded-full text-orange-500 bg-orange-100 flex items-center gap-1"
+                key={i}
+              >
                 {item}{" "}
                 <FaXmark
                   className="hover:rotate-90 cursor-pointer"
@@ -667,6 +728,145 @@ const AddProductForm = () => {
                 />
               </span>
             ))}
+          </div>
+
+          <div className="col-span-2 grid grid-cols-3 gap-3">
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.height"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Height (m)
+              </label>
+              <input
+                type="text"
+                id="specifications.height"
+                name="specifications.height"
+                placeholder="e.g., 3.5"
+                value={formData.specifications.height}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.length"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Length (m)
+              </label>
+              <input
+                type="text"
+                id="specifications.length"
+                name="specifications.length"
+                placeholder="e.g., 3.0"
+                value={formData.specifications.length}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.width"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Width (m)
+              </label>
+              <input
+                type="text"
+                id="specifications.width"
+                name="specifications.width"
+                placeholder="e.g., 34"
+                value={formData.specifications.width}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.weight"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Weight (kg)
+              </label>
+              <input
+                type="text"
+                id="specifications.weight"
+                name="specifications.weight"
+                placeholder="e.g., 30"
+                value={formData.specifications.weight}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.volume"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Volume (m³)
+              </label>
+              <input
+                type="text"
+                id="specifications.volume"
+                name="specifications.volume"
+                placeholder="e.g., 22.3"
+                value={formData.specifications.volume}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="specifications.packTypeCode"
+                className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
+              >
+                <span className="text-red-500 text-[8px]">
+                  <FaStarOfLife />
+                </span>{" "}
+                Package Type
+              </label>
+              <select
+                id="specifications.packTypeCode"
+                name="specifications.packTypeCode"
+                value={formData.specifications.packTypeCode}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              >
+                <option value="" hidden>
+                  Select Package Type
+                </option>
+                {Object.values(PACKAGE_TYPE).map(item=>(
+                 <option value={item.code}>{item.description} ({item.code})</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -679,7 +879,7 @@ const AddProductForm = () => {
             <select
               id="type"
               name="type"
-              value={formData.specifications.type}
+              value={formData.specificationsDoc.type}
               onChange={handleSpecificationChange}
               className="w-full border border-gray-300 bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
@@ -696,14 +896,15 @@ const AddProductForm = () => {
               htmlFor="specSource"
               className="flex gap-1 mb-1 text-sm font-medium text-gray-900"
             >
-             
               Specification File
             </label>
             <input
               id="specSource"
               name="source"
               type="file"
-              accept={(formData.specifications.type === "image") ?  "image/*" :  ".pdf"}
+              accept={
+                formData.specificationsDoc.type === "image" ? "image/*" : ".pdf"
+              }
               onChange={handleSpecificationChange}
               className="block w-full text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 
                file:rounded-full file:border-0 file:text-sm file:font-semibold 
@@ -721,8 +922,8 @@ const AddProductForm = () => {
                       onClick={() => {
                         setFormData((prev) => ({
                           ...prev,
-                          specifications: {
-                            type: prev.specifications.type,
+                          specificationsDoc: {
+                            type: prev.specificationsDoc.type,
                             source: null,
                           },
                         }));
@@ -745,8 +946,8 @@ const AddProductForm = () => {
                       onClick={() => {
                         setFormData((prev) => ({
                           ...prev,
-                          specifications: {
-                            type: prev.specifications.type,
+                          specificationsDoc: {
+                            type: prev.specificationsDoc.type,
                             source: null,
                           },
                         }));
@@ -805,7 +1006,7 @@ const AddProductForm = () => {
             </div>
           )}
 
-           <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="deliveryDays"
               className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
@@ -813,10 +1014,10 @@ const AddProductForm = () => {
               <span className="text-red-500 text-[8px]">
                 <FaStarOfLife />
               </span>{" "}
-             Estimated Delivery Days
+              Estimated Delivery Days
             </label>
             <input
-              type="number"
+              type="text"
               id="deliveryDays"
               name="deliveryDays"
               value={formData.deliveryDays}
@@ -826,7 +1027,7 @@ const AddProductForm = () => {
               required
             />
           </div>
-           <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="shipping"
               className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
@@ -834,7 +1035,7 @@ const AddProductForm = () => {
               <span className="text-red-500 text-[8px]">
                 <FaStarOfLife />
               </span>{" "}
-             Free Shipping
+              Free Shipping
             </label>
             <input
               type="text"
@@ -844,83 +1045,95 @@ const AddProductForm = () => {
               onChange={handleInputChange}
               placeholder="Free Shipping With"
               className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
+              
             />
           </div>
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-1 gap-5 col-span-2">
-
             <div className="col-span-2 flex flex-col gap-4">
               <div className="flex items-center gap-8 justify-between mb-5">
-              <h3 className="flex gap-1  text-md font-medium text-gray-900">
-                <span className="text-red-500 text-[8px]">
-                  <FaStarOfLife />
-                </span>{" "}
-                Measurements
-              </h3>
-              <button onClick={handleResetMeasurement} type="button" className="text-white group flex items-center gap-2 bg-red-400 hover:bg-red-500 px-5 py-2 rounded-md"> <RiResetLeftFill className="group-hover:-rotate-360"/> Reset Measurement</button>
+                <h3 className="flex gap-1  text-md font-medium text-gray-900">
+                  <span className="text-red-500 text-[8px]">
+                    <FaStarOfLife />
+                  </span>{" "}
+                  Measurements
+                </h3>
+                <button
+                  onClick={handleResetMeasurement}
+                  type="button"
+                  className="text-white group flex items-center gap-2 bg-red-400 hover:bg-red-500 px-5 py-2 rounded-md"
+                >
+                  {" "}
+                  <RiResetLeftFill className="group-hover:-rotate-360" /> Reset
+                  Measurement
+                </button>
               </div>
 
-              {(formData.measurements.length > 0) ? formData.measurements.map((item, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-2 gap-4 items-center border border-gray-200 rounded-lg p-4 relative"
-                >
-                 
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-gray-900">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      name="measurementName"
-                      placeholder="Ex: Length, Width, Height"
-                      value={item.measurementName}
-                      onChange={(e) => handleMeasurementChange(e, index)}
-                      className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                  </div>
+              {formData.measurements.length > 0 ? (
+                formData.measurements.map((item, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-2 gap-4 items-center border border-gray-200 rounded-lg p-4 relative"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium text-gray-900">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name="measurementName"
+                        placeholder="Ex: Length, Width, Height"
+                        value={item.measurementName}
+                        onChange={(e) => handleMeasurementChange(e, index)}
+                        className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                    </div>
 
-                 
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-gray-900">
-                      Value
-                    </label>
-                    <input
-                      type="text"
-                      name="measurementValue"
-                      placeholder="Ex: 200cm, 15kg"
-                      value={item.measurementValue}
-                      onChange={(e) => handleMeasurementChange(e, index)}
-                      className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                  </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-medium text-gray-900">
+                        Value
+                      </label>
+                      <input
+                        type="text"
+                        name="measurementValue"
+                        placeholder="Ex: 200cm, 15kg"
+                        value={item.measurementValue}
+                        onChange={(e) => handleMeasurementChange(e, index)}
+                        className="w-full border border-gray-300 bg-purple-50/30 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                    </div>
 
-                  
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveMeasurement(index)}
+                      className="absolute -top-3 -right-3 bg-red-500 text-white p-2 rounded-full shadow hover:bg-red-600 transition"
+                    >
+                      <FaTrash size={14} />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-slate-600 text-center w-full">
+                  {" "}
                   <button
                     type="button"
-                    onClick={() => handleRemoveMeasurement(index)}
-                    className="absolute -top-3 -right-3 bg-red-500 text-white p-2 rounded-full shadow hover:bg-red-600 transition"
+                    onClick={handleAddMeasurement}
+                    className="text-orange-400 hover:text-orange-500"
                   >
-                    <FaTrash size={14} />
-                  </button>
-                </div>
-              )): (
-                 <p className="text-slate-600 text-center w-full"> <button  type="button"
-                          onClick={handleAddMeasurement} className="text-orange-400 hover:text-orange-500">Tap to add measurement </button> to add measurement on it</p>
+                    Tap to add measurement{" "}
+                  </button>{" "}
+                  to add measurement on it
+                </p>
               )}
 
-             
               <button
                 type="button"
                 onClick={handleAddMeasurement}
                 className="flex items-center justify-end group gap-2 text-sm text-blue-600 hover:text-blue-800 mt-2"
               >
-                <FaPlus className="group-hover:rotate-90"/> Add Measurement
+                <FaPlus className="group-hover:rotate-90" /> Add Measurement
               </button>
             </div>
           </div>
-
-          
 
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-2 gap-5 col-span-2">
             <div className="flex flex-col gap-2">

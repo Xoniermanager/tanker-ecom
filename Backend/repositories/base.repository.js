@@ -25,7 +25,7 @@ class BaseRepository {
      * @returns {Promise<Array<Object>>} - The inserted documents.
      */
     async bulkCreate(docs, session = null) {
-        return await this.model.insertMany(docs, { session });
+        return await this.model.insertMany(docs, {ordered: false, session });
     }
 
     /**
@@ -219,6 +219,8 @@ class BaseRepository {
     async bulkWrite(operations, session) {
         return Inventory.bulkWrite(operations, { session });
     }
+
+  
 }
 
 module.exports = BaseRepository;

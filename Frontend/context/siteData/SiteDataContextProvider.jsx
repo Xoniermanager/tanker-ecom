@@ -6,7 +6,7 @@ const { default: api } = require("../../components/user/common/api");
 const SiteDataContextProvider = ({children})=>{
     const [siteData, setSiteData] = useState(null);
     const [isSiteDataLoading, setIsSiteDataLoading] = useState(false);
-    const [shippingPrice, setShippingPrice] = useState(0)
+    // const [shippingPrice, setShippingPrice] = useState(0)
 
     const fetchSiteData = async()=>{
         setIsSiteDataLoading(true)
@@ -14,7 +14,7 @@ const SiteDataContextProvider = ({children})=>{
             const response = await api.get(`/site-settings`)
             if(response.status === 200){
                 setSiteData(response.data.data)
-                setShippingPrice(response.data.data.shippingPrice || 0)
+                // setShippingPrice(response.data.data.shippingPrice || 0)
             }
         } catch (error) {
             if(process.env.NEXT_PUBLIC_NODE_ENV === "development"){
@@ -29,7 +29,7 @@ const SiteDataContextProvider = ({children})=>{
       fetchSiteData()
     }, [])
     
-    return <SiteContext.Provider value={{siteData, isSiteDataLoading, shippingPrice}}>
+    return <SiteContext.Provider value={{siteData, isSiteDataLoading}}>
       {children}
     </SiteContext.Provider>
 }

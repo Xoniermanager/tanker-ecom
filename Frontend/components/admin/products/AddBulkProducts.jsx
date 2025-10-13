@@ -33,7 +33,6 @@ const AddBulkProducts = () => {
   const [categories, setCategories] = useState([]);
   const [isCopy, setIsCopy] = useState(null);
 
-  // Sample CSV template data
   const sampleHeaders = [
     "S.No.",
     "Name",
@@ -47,6 +46,11 @@ const AddBulkProducts = () => {
     "Description",
     "Short Description",
     "Delivery Days",
+    "height(m)",
+    "length(m)",
+    "width(m)",
+    "weight(kg)",
+    "volume(m3)"
   ];
   const getSampleData = () => {
     const availableCategories =
@@ -67,7 +71,12 @@ const AddBulkProducts = () => {
         "Latest A16 chip; Pro camera system; Dynamic Island",
         "Latest iPhone with Pro features and advanced camera capabilities",
         "Premium smartphone with cutting-edge technology",
+        "3 to 6",
+        "3.5",
         "3",
+        "34",
+        "30",
+        "22.3"
       ],
       [
         "2",
@@ -81,7 +90,12 @@ const AddBulkProducts = () => {
         "S Pen included; 200MP camera; 5G ready",
         "Flagship Android smartphone with S Pen and exceptional camera quality",
         "Ultimate Android experience with S Pen",
-        "2",
+        "2 to 4",
+        "3.5",
+        "3",
+        "34",
+        "30",
+        "22.3"
       ],
       [
         "3",
@@ -95,7 +109,12 @@ const AddBulkProducts = () => {
         "M2 chip; Lightweight design; All-day battery",
         "Lightweight laptop with M2 chip for exceptional performance and battery life",
         "Powerful and portable laptop for professionals",
-        "5",
+        "5 to 9",
+        "3.5",
+        "3",
+        "34",
+        "30",
+        "22.3"
       ],
       [
         "4",
@@ -109,7 +128,12 @@ const AddBulkProducts = () => {
         "Noise cancelling; 30-hour battery; Premium sound",
         "Industry-leading noise canceling headphones with premium sound quality",
         "Premium wireless headphones with noise cancelling",
-        "1",
+        "3 to 8",
+        "3.5",
+        "3",
+        "34",
+        "30",
+        "22.3"
       ],
       [
         "5",
@@ -123,7 +147,12 @@ const AddBulkProducts = () => {
         "InfinityEdge display; Intel Core i7; Ultra-portable",
         "Premium ultrabook with stunning display and powerful performance",
         "Compact and powerful ultrabook for productivity",
-        "4",
+        "4 to 6",
+        "3.5",
+        "3",
+        "34",
+        "30",
+        "22.3"
       ],
     ];
   };
@@ -238,17 +267,17 @@ const AddBulkProducts = () => {
           }
         });
 
-        if (invalidCategories.length > 0) {
-          validationErrors.push(
-            `Invalid categories found: ${invalidCategories
-              .slice(0, 3)
-              .join(", ")}${
-              invalidCategories.length > 3
-                ? ` and ${invalidCategories.length - 3} more`
-                : ""
-            }`
-          );
-        }
+        // if (invalidCategories.length > 0) {
+        //   validationErrors.push(
+        //     `Invalid categories found: ${invalidCategories
+        //       .slice(0, 3)
+        //       .join(", ")}${
+        //       invalidCategories.length > 3
+        //         ? ` and ${invalidCategories.length - 3} more`
+        //         : ""
+        //     }`
+        //   );
+        // }
       }
 
       setErrors(validationErrors);
@@ -584,7 +613,7 @@ const AddBulkProducts = () => {
           </div>
          <div className="flex justify-center items-center gap-2 mt-4">
 
-  {currentPage > 1 && (
+  {(currentPage > 1) && (
     <button
       className="h-12 w-12 rounded-full bg-[#f6e7d3] hover:bg-orange-400 hover:text-white text-purple-950 font-bold transition-colors flex items-center justify-center"
       onClick={() => setCurrentPage(currentPage - 1)}
@@ -594,7 +623,7 @@ const AddBulkProducts = () => {
   )}
   
 
-  {getPaginationButtons().map((pageNum) => (
+  { getPaginationButtons().map((pageNum) => (
     <button
       className={`${
         currentPage === pageNum
@@ -609,7 +638,7 @@ const AddBulkProducts = () => {
   ))}
   
 
-  {currentPage < totalPages && (
+  {(currentPage < totalPages) && (
     <button
       className="h-12 w-12 rounded-full bg-[#f6e7d3] hover:bg-orange-400 hover:text-white text-purple-950 font-bold transition-colors flex items-center justify-center"
       onClick={() => setCurrentPage(currentPage + 1)}

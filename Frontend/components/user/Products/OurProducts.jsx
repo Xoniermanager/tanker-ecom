@@ -11,6 +11,7 @@ import Link from "next/link";
 import { IoArrowForward } from "react-icons/io5";
 import api from "../common/api";
 import BlockPageLoader from "../../common/BlockPageLoader";
+import { STOCK_STATUS } from "../../../constants/enums";
 
 const OurProducts = ({
  
@@ -37,6 +38,7 @@ const OurProducts = ({
       const response = await api.get(`/products/frontend?limit=${pageLimit}&page=${currentPage}&${filterCategory ? `category=${filterCategory}` : ""}&${filterByName ? `name=${filterByName}` : ""}&${filterBrand ? `brand=${filterBrand}` : ""}`);
       if(response.status === 200){
         setProductData(response?.data?.data.data || null);
+        console.log("prodcut: ", response?.data?.data.data )
         
         setTotalPages(response?.data?.data?.totalPages)
         setPageLimit(response?.data?.data?.limit)
@@ -214,14 +216,14 @@ const OurProducts = ({
                   {item.shortDescription}
                 </p>
 
-                <Link
+                  <Link
                   href={`/products/${item.slug}`}
                   className="relative inline-flex items-center justify-start w-46 h-12 px-8 overflow-hidden capitalize text-lg font-bold text-purple-950 group rounded-md ml-4"
                 >
-                  <span className="z-10 transition-all duration-300 transform group-hover:-translate-x-4">
-                    view product
+                  <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "" : "text-red-500"} z-10 transition-all duration-300 transform group-hover:-translate-x-4`}>
+                   {(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "view product" : "Out of stock" }
                   </span>
-                  <span className="absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[140px] text-orange-400">
+                  <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "text-orange-400" :"text-red-500"} absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[140px] `}>
                     <FaCircleArrowRight />
                   </span>
                 </Link>
@@ -233,29 +235,64 @@ const OurProducts = ({
         )}
       </div>
       <div className="flex items-center gap-4 justify-center">
-        {[...Array(totalPages)].map((item, index) => (
-          <button
-          
-            className={` ${
-              currentPage === index + 1
-                ? "bg-orange-400 text-white"
-                : "bg-[#f6e7d3]"
-            } hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950  font-bold border-1 border-dashed text-lg`}
-            key={index}
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
+  {/* Previous Button */}
+  <button
+    className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
+    onClick={() => setCurrentPage(Number(currentPage) - 1)}
+    disabled={currentPage === 1}
+  >
+    <IoArrowForward />
+  </button>
+
+
+  {(() => {
+    let startPage, endPage;
+
+    if (totalPages <= 3) {
+
+      startPage = 1;
+      endPage = totalPages;
+    } else if (currentPage === 1) {
+
+      startPage = 1;
+      endPage = 3;
+    } else if (currentPage === totalPages) {
+
+      startPage = totalPages - 2;
+      endPage = totalPages;
+    } else {
+   
+      startPage = currentPage - 1;
+      endPage = currentPage + 1;
+    }
+
+    return [...Array(endPage - startPage + 1)].map((_, index) => {
+      const pageNumber = startPage + index;
+      return (
         <button
-        disabled={productData?.length <= 0}
-          className={`h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#507b86c5] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl ${productData?.length <= 0 && "hidden"}`}
-          onClick={() => setCurrentPage(Number(activePage) + 1)}
+          className={`${
+            currentPage === pageNumber
+              ? "bg-orange-400 text-white"
+              : "bg-[#f6e7d3]"
+          } hover:bg-orange-400 hover:text-white h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+          key={pageNumber}
+          onClick={() => setCurrentPage(pageNumber)}
         >
-          {" "}
-          <IoArrowForward />{" "}
+          {pageNumber}
         </button>
-      </div>
+      );
+    });
+  })()}
+
+
+  <button
+    className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+    onClick={() => setCurrentPage(Number(currentPage) + 1)}
+    disabled={totalPages === currentPage}
+  >
+    <IoArrowForward />
+  </button>
+</div>
     </div>
   );
 };

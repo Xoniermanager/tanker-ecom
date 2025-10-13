@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 
-const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY, "hex"); // 64-char hex (32-byte key)
+const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY, "hex"); 
 const IV_LENGTH = 16;
 
 /**
@@ -22,7 +22,7 @@ function encrypt(value) {
  * @param {string} encrypted
  * @returns {string} Decrypted plaintext
  */
-function decrypt(encrypted) {
+ function decrypt(encrypted) {
     try {
         const [ivHex, encryptedData] = encrypted.split(":");
         const iv = Buffer.from(ivHex, "hex");
@@ -35,7 +35,7 @@ function decrypt(encrypted) {
         decrypted += decipher.final("utf8");
         return decrypted;
     } catch {
-        return encrypted; // Fallback: return raw if malformed
+        return encrypted; 
     }
 }
 
@@ -128,7 +128,7 @@ function setNestedValue(obj, path, transformFn) {
 // };
 
 
-module.exports = function encryptionPlugin(schema, options = {}) {
+function encryptionPlugin(schema, options = {}) {
     const fieldsToEncrypt = options.encryptable || [];
 
     // Encrypt on save
@@ -182,3 +182,6 @@ module.exports = function encryptionPlugin(schema, options = {}) {
         return decryptFields(this.toObject());
     };
 };
+
+
+module.exports = {encryptionPlugin, decrypt}

@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import PageLoader from "../../../../../../../components/common/PageLoader";
 import Link from "next/link";
-import { MdDeleteOutline, MdOutlineEdit, MdOutlineInventory2 } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit, MdOutlineInventory2, MdContentCopy } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Image from "next/image";
 import FailedDataLoading from "../../../../../../../components/common/FailedDataLoading";
@@ -20,6 +21,7 @@ const Page = () => {
   const [deletedProductId, setDeletedProductId] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [isSlugCopied, setIsSlugCopied] = useState(false)
   const { slug } = useParams();
 
   const router = useRouter()
@@ -77,6 +79,15 @@ const Page = () => {
     setDeletePopupShow(true);
     setDeletedProductId(id);
   };
+
+  const handleCopySlug = (slug)=>{
+    navigator.clipboard.writeText(slug)
+    setIsSlugCopied(true)
+
+    setTimeout(() => {
+       setIsSlugCopied(false)
+    }, 3000);
+  }
 
   if (isLoading) {
     return (
@@ -154,6 +165,10 @@ const Page = () => {
                 General Information
               </h2>
               <p className="text-gray-700">
+                <span className="font-semibold text-purple-950">Part Number:</span>{" "}
+                {productData?.partNumber}
+              </p>
+              <p className="text-gray-700">
                 <span className="font-semibold text-purple-950">Category:</span>{" "}
                 {productData?.category?.name}
               </p>
@@ -165,9 +180,10 @@ const Page = () => {
                 <span className="font-semibold text-purple-950">Origin:</span>{" "}
                 {productData?.origin}
               </p>
-              <p className="text-gray-700">
+              <p className="text-gray-700 flex items-center gap-1 w-full">
                 <span className="font-semibold text-purple-950">Slug:</span>{" "}
-                {productData?.slug}
+                <span className="line-clamp-1">{productData?.slug}</span>
+                <button onClick={()=>handleCopySlug(productData?.slug)}>{isSlugCopied ? <FaCheck /> : <MdContentCopy />}</button>
               </p>
             </div>
 
@@ -239,6 +255,64 @@ const Page = () => {
               </p>
             </div>
 
+            {productData?.specifications && (
+              <div className="bg-white rounded-xl shadow p-6">
+                <h2 className="text-xl font-semibold text-purple-950 mb-4 capitalize">
+                  Package Specifications
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {productData.specifications.height && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Height</span>
+                      <span className="text-lg text-purple-950 font-semibold">
+                        {productData.specifications.height} <span className="text-sm text-gray-500">m</span>
+                      </span>
+                    </div>
+                  )}
+                  {productData.specifications.length && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Length</span>
+                      <span className="text-lg text-purple-950 font-semibold">
+                        {productData.specifications.length} <span className="text-sm text-gray-500">m</span>
+                      </span>
+                    </div>
+                  )}
+                  {productData.specifications.width && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Width</span>
+                      <span className="text-lg text-purple-950 font-semibold">
+                        {productData.specifications.width} <span className="text-sm text-gray-500">m</span>
+                      </span>
+                    </div>
+                  )}
+                  {productData.specifications.weight && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Weight</span>
+                      <span className="text-lg text-purple-950 font-semibold">
+                        {productData.specifications.weight} <span className="text-sm text-gray-500">kg</span>
+                      </span>
+                    </div>
+                  )}
+                  {productData.specifications.volume && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Volume</span>
+                      <span className="text-lg text-purple-950 font-semibold">
+                        {productData.specifications.volume} <span className="text-sm text-gray-500">m³</span>
+                      </span>
+                    </div>
+                  )}
+                  {productData.specifications.packTypeCode && (
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600 font-medium">Package Type</span>
+                      <span className="text-lg text-orange-500 font-semibold uppercase">
+                        {productData.specifications.packTypeCode}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             <div className="bg-white rounded-xl shadow p-6">
                 <h2 className="text-xl font-semibold text-purple-950 mb-3 capitalize">measurements</h2>
                 {(productData.measurements.length > 0 ) ? productData.measurements.map((item,index)=>(
@@ -257,7 +331,7 @@ const Page = () => {
 
             <div className="bg-white rounded-xl shadow p-6">
                 <h2 className="text-xl font-semibold text-purple-950 mb-3 capitalize">Specifications</h2>
-                {(productData?.specifications ) ? (productData?.specifications?.type === 'image') ? <Image src={productData.specifications.source} height={350} width={350} alt="specification"/> : <span> PDF preview not showing yet </span> :(
+                {(productData?.specificationsDoc ) ? (productData?.specificationsDoc?.type === 'image') ? <Image src={productData.specificationsDoc.source} height={350} width={350} alt="specification"/> : <span> PDF preview not showing yet </span> :(
                   <p className="text-gray-600">No measurement data found</p>
                 )}
             </div>

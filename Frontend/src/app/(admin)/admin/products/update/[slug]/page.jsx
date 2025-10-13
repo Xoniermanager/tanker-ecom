@@ -9,6 +9,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
+    partNumber: "",
     name: "",
     category: "",
     regularPrice: "",
@@ -19,7 +20,8 @@ const Page = () => {
     brand: "",
     origin: "",
     highlights: [],
-    specifications: {
+    images:[],
+    specificationsDoc: {
       type: "",
       source: "",
     },
@@ -31,6 +33,14 @@ const Page = () => {
     ],
     deliveryDays:"",
     shipping:"",
+    specifications: {
+      height: "",
+      length: "",
+      width: "",
+      weight: "",
+      volume: "",
+      packTypeCode: "",
+    },
     images: [],
     // slug: "",
     // initialQuantity: "",
@@ -54,6 +64,7 @@ const Page = () => {
         setImagePreviews(product.images.map((item) => item.source));
 
         setFormData({
+          partNumber: product.partNumber || "",
           name: product.name || "",
           category: product.category._id || "",
           regularPrice: product.regularPrice || "",
@@ -66,17 +77,26 @@ const Page = () => {
           highlights: product.highlights || [],
           deliveryDays: product.deliveryDays || "",
           shipping: product.shipping || "",
-          specifications: {
-            type: product?.specifications?.type || "",
+          images: product.images,
+          specificationsDoc: {
+            type: product?.specificationsDoc?.type || "",
             source: ""
           },
           measurements: (product.measurements.length>0) ? product.measurements?.map((item) => ({
             measurementName: item.measurementName,
             measurementValue: item.measurementValue,
           })) : [],
-          images: product.images || [],
+          // images: product.images || [],
           // slug: product.slug || "",
           // initialQuantity: product.inventory?.quantity || "",
+          specifications: {
+      height: product.specifications.height || "",
+      length: product.specifications.length || "",
+      width: product.specifications.width || "",
+      weight: product.specifications.weight || "",
+      volume: product.specifications.volume || "",
+      packTypeCode: product.specifications.packTypeCode || "",
+    },
           seo: {
             metaTitle: product.seo?.metaTitle || "",
             metaDescription: product.seo?.metaDescription || "",
@@ -117,7 +137,7 @@ const Page = () => {
         productData={productData}
         imagePreviews={imagePreviews}
         setImagePreviews={setImagePreviews}
-        prev={productData?.specifications?.source || null}
+        prev={productData?.specificationsDoc?.source || null}
       />
     </div>
   );
