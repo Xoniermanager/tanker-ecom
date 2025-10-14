@@ -50,9 +50,11 @@ const AddBulkProducts = () => {
     "length(m)",
     "width(m)",
     "weight(kg)",
-    "volume(m3)"
+    "volume(m3)",
+    "Package Type"
+
   ];
-  const getSampleData = () => {
+    const getSampleData = () => {
     const availableCategories =
       categories.length > 0
         ? categories
@@ -76,7 +78,8 @@ const AddBulkProducts = () => {
         "3",
         "34",
         "30",
-        "22.3"
+        "22.3",
+        "CTN"
       ],
       [
         "2",
@@ -95,7 +98,8 @@ const AddBulkProducts = () => {
         "3",
         "34",
         "30",
-        "22.3"
+        "22.3",
+        "CTN"
       ],
       [
         "3",
@@ -114,7 +118,8 @@ const AddBulkProducts = () => {
         "3",
         "34",
         "30",
-        "22.3"
+        "22.3",
+        "CTN"
       ],
       [
         "4",
@@ -133,7 +138,8 @@ const AddBulkProducts = () => {
         "3",
         "34",
         "30",
-        "22.3"
+        "22.3",
+        "BAG"
       ],
       [
         "5",
@@ -152,10 +158,14 @@ const AddBulkProducts = () => {
         "3",
         "34",
         "30",
-        "22.3"
+        "22.3",
+        "CTN"
       ],
     ];
   };
+
+
+  const PACKAGE_TYPES = ["BAG", "BDL", "CTN", "DRM", "IBC", "ITEM", "PAIL", "PLT", "ROLL", "ST"];
 
   const getCategoryData = async (req, res) => {
     try {
