@@ -399,7 +399,7 @@ const CheckOut = ({
                 </span>{" "}
                 <div className="text-black/75 text-[15px]">
                   {" "}
-                  {shippingLoading ? "fetching..." : shippingPrice ? `Flat Rate: ${Number(shippingPrice).toFixed(2)}` : "Please fill valid address"}
+                  {shippingLoading ? "fetching..." : (formData.shippingAddress.country !== "NZ") ? "Applied for New zealand" :  shippingPrice ? `Flat Rate: ${Number(shippingPrice).toFixed(2)}` : "Please fill valid address"}
                 </div>{" "}
               </li>
             </ul>

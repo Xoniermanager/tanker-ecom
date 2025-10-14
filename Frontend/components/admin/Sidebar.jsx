@@ -173,22 +173,24 @@ const Sidebar = () => {
                 <Link
                   href={`/admin/orders`}
                   className={`font-medium hover:text-orange-600 ${
-                    pathname.includes("orders") && "text-orange-600"
+                    pathpop.includes("orders") && "text-orange-600"
                   } `}
                 >
                   {" "}
                   List{" "}
                 </Link>
               </li>
-              {/* <li className="">
+              <li className="">
                 <Link
-                  href={`/admin/detail`}
-                  className="font-medium hover:text-orange-600"
+                  href={`/admin/orders/query`}
+                  className={`font-medium hover:text-orange-600 ${
+                    pathpop.includes("query") && "text-orange-600"
+                  } `}
                 >
                   {" "}
-                  Details{" "}
+                  Order Queries
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </li>
           <li>
