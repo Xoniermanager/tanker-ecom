@@ -102,6 +102,7 @@ const StripeCheckoutForm = ({ orderId, totalAmount, onSuccess, onError, setErrMe
                   '::placeholder': { color: '#aab7c4' },
                 },
               },
+              hidePostalCode: true
             }}
           />
         </div>
