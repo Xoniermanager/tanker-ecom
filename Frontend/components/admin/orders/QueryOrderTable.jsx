@@ -83,7 +83,7 @@ const QueryOrderTable = ({orderData, setTotalPages, totalPages, currentPage, set
                 {/* <td className="px-6 py-6">
                   <input type="checkbox" />
                 </td> */}
-                <td className="px-6 py-6 "><Link href={`orders/detail/${order._id}`} className='text-red-500  font-semibold hover:text-rose-600'>  {order.orderNumber} </Link></td>
+                <td className="px-6 py-6 "><Link href={`detail/${order._id}`} className='text-red-500  font-semibold hover:text-rose-600'>  {order.orderNumber} </Link></td>
                 <td className="px-6 py-6 capitalize"><Link href={`/admin/customers/${order.user}`}> {order.firstName} {order.lastName} </Link></td>
                 <td className="px-6 py-6"><span className='text-white bg-purple-900 px-3 py-1 text-[12px] rounded-lg'>{new Date(order.createdAt).toLocaleDateString('en-US', { 
     weekday: 'short', 
@@ -110,7 +110,7 @@ const QueryOrderTable = ({orderData, setTotalPages, totalPages, currentPage, set
                   </span>
                 </td>
                 <td className="px-6 py-6 text-xl text-gray-500">
-                  <Link href={`orders/detail/${order._id}`} className='flex items-center justify-center h-8 w-8 rounded-lg text-white bg-orange-500 hover:bg-orange-600' ><FaEye /></Link>
+                  <Link href={`detail/${order._id}`} className='flex items-center justify-center h-8 w-8 rounded-lg text-white bg-orange-500 hover:bg-orange-600' ><FaEye /></Link>
                 </td>
               </tr>
             )): (

@@ -11,7 +11,7 @@ import {
   FaSave,
   FaTimes,
 } from "react-icons/fa";
-import { ORDER_STATUS } from "../../../constants/enums";
+import { COUNTRIES, ORDER_STATUS } from "../../../constants/enums";
 const OrderDetail = ({
   orderData,
   orderStatus,
@@ -228,7 +228,7 @@ const OrderDetail = ({
                     <p>{order.address.shippingAddress.address}</p>
                     <p>{order.address.shippingAddress.city}</p>
                     <p className="capitalize">
-                      {order.address.shippingAddress.country} -{" "}
+                      {Object.values(COUNTRIES).filter(item=>item.code === order.address.billingAddress.country).shift().name} -{" "}
                       {order.address.shippingAddress.pincode}
                     </p>
                   </div>
@@ -241,7 +241,7 @@ const OrderDetail = ({
                     <p>{order.address.billingAddress.address}</p>
                     <p>{order.address.billingAddress.city}</p>
                     <p className="capitalize">
-                      {order.address.billingAddress.country} -{" "}
+                      {Object.values(COUNTRIES).filter(item=>item.code === order.address.billingAddress.country).shift().name} - {" "}
                       {order.address.billingAddress.pincode}
                     </p>
                   </div>

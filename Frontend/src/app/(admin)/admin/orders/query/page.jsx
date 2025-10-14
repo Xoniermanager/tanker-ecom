@@ -20,7 +20,7 @@ const [orderData, setOrderData] = useState(null);
         const getOrderData = async () => {
           setIsLoading(true)
           try {
-            const response = await api.get(`/order?page=${currentPage}&limit=${pageLimit}&paymentMethod="cod"${orderStatus && `&status=${orderStatus}`}`);
+            const response = await api.get(`/order?page=${currentPage}&limit=${pageLimit}&paymentMethod=cod${orderStatus && `&status=${orderStatus}`}`);
             if (response.status === 200 || response.data === 304) {
               setOrderData(response.data.data.data || null)
               setOrderCount(response.data.data.total || null)

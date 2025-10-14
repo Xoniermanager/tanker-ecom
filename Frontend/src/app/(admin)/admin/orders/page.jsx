@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import OrderlistTable from '../../../../../components/admin/orders/OrderlistTable'
 import api from '../../../../../components/user/common/api';
+import { PAYMENT_METHODS } from '../../../../../constants/enums';
 
 const page = () => {
 const [orderData, setOrderData] = useState(null);
@@ -19,7 +20,7 @@ const [orderData, setOrderData] = useState(null);
         const getOrderData = async () => {
           setIsLoading(true)
           try {
-            const response = await api.get(`/order?page=${currentPage}&limit=${pageLimit}${orderStatus && `&status=${orderStatus}`}`);
+            const response = await api.get(`/order?page=${currentPage}&limit=${pageLimit}&paymentMethod=${PAYMENT_METHODS.ONLINE_PAYMENT}${orderStatus && `&status=${orderStatus}`}`);
             if (response.status === 200 || response.data === 304) {
               setOrderData(response.data.data.data || null)
               setOrderCount(response.data.data.total || null)

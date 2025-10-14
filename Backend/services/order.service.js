@@ -64,6 +64,7 @@ class OrderService {
 
   
   getOrders = async (page = 1, limit = 10, filters = {}) => {
+    
     const query = {};
 
     // Filter by user
@@ -77,8 +78,9 @@ class OrderService {
     }
 
     if (filters.paymentMethod) {
-  query["payment.method"] = filters.paymentMethod;
-}
+      query["payment.method"] = filters.paymentMethod; 
+    }
+
     // Filter by date range
     if (filters.startDate || filters.endDate) {
       query.createdAt = {};
@@ -97,7 +99,7 @@ class OrderService {
       const sortOrder = filters.sortOrder === "asc" ? 1 : -1;
       sort = { [sortField]: sortOrder };
     }
-    console.log("query objs: ", query)
+    
     return await orderRepository.paginate(query, page, limit, sort, null, null, "products.product");
   };
 
