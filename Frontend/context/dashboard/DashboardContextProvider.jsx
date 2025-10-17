@@ -13,7 +13,7 @@ export const DashBoardContextProvider = ({ children }) => {
   const [errMessage, setErrMessage] = useState(null);
   const [isDashboardLoading, setIsDashboardLoading] = useState(false);
   const [weeklySale, setWeeklySale]= useState(null);
-  const [monthlySaleswithOrder, setMontlySaleWithOrder] = useState(null)
+  const [monthlySaleswithOrder, setMontlySaleWithOrder] = useState(null);
 
   const month = Number(new Date().getMonth()) + 1 
 
