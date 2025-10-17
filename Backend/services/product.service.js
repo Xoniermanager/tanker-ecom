@@ -176,24 +176,27 @@ class ProductService {
         if (cleanHeader.includes("delivery") && cleanHeader.includes("days"))
           headerMap.deliveryDays = index;
 
-        if (cleanHeader.includes("height") && cleanHeader.includes("(m)")) {
-          headerMap.height = index;
-        }
-        if (cleanHeader.includes("length") && cleanHeader.includes("(m)")) {
-          headerMap.length = index;
-        }
-        if (cleanHeader.includes("width") && cleanHeader.includes("(m)")) {
-          headerMap.width = index;
-        }
-        if (cleanHeader.includes("weight") && cleanHeader.includes("(kg)")) {
-          headerMap.weight = index;
-        }
-        if (cleanHeader.includes("volume") && cleanHeader.includes("(m3)")) {
-          headerMap.volume = index;
-        }
-        if (cleanHeader.includes("package") && cleanHeader.includes("type")) {
-          headerMap.packTypeCode = index;
-        }
+        if (cleanHeader.includes("shipping") && cleanHeader.includes("charge"))
+          headerMap.shippingCharge = index;
+
+        // if (cleanHeader.includes("height") && cleanHeader.includes("(m)")) {
+        //   headerMap.height = index;
+        // }
+        // if (cleanHeader.includes("length") && cleanHeader.includes("(m)")) {
+        //   headerMap.length = index;
+        // }
+        // if (cleanHeader.includes("width") && cleanHeader.includes("(m)")) {
+        //   headerMap.width = index;
+        // }
+        // if (cleanHeader.includes("weight") && cleanHeader.includes("(kg)")) {
+        //   headerMap.weight = index;
+        // }
+        // if (cleanHeader.includes("volume") && cleanHeader.includes("(m3)")) {
+        //   headerMap.volume = index;
+        // }
+        // if (cleanHeader.includes("package") && cleanHeader.includes("type")) {
+        //   headerMap.packTypeCode = index;
+        // }
       });
 
       const categories = await ProductCategoryRepository.findAll(
@@ -286,14 +289,15 @@ class ProductService {
             description: row[headerMap.description]?.trim(),
             shortDescription: row[headerMap.shortDescription]?.trim(),
             deliveryDays: row[headerMap.deliveryDays]?.toString() || "1",
-            specifications: {
-              height: row[headerMap.height]?.trim() || "0",
-              length: row[headerMap.length]?.trim() || "0",
-              width: row[headerMap.width]?.trim() || "0",
-              weight: row[headerMap.weight]?.trim() || "0",
-              volume: row[headerMap.volume]?.trim() || "0",
-              packTypeCode: row[headerMap.packTypeCode]?.trim()
-            },
+            shippingCharge: row[headerMap.shippingCharge]
+            // specifications: {
+            //   height: row[headerMap.height]?.trim() || "0",
+            //   length: row[headerMap.length]?.trim() || "0",
+            //   width: row[headerMap.width]?.trim() || "0",
+            //   weight: row[headerMap.weight]?.trim() || "0",
+            //   volume: row[headerMap.volume]?.trim() || "0",
+            //   packTypeCode: row[headerMap.packTypeCode]?.trim()
+            // },
             
           };
 
@@ -305,26 +309,30 @@ class ProductService {
             throw new Error(`Product name is required on row number ${rowNumber}`);
           }
 
-          if(!productData.specifications.height){
-            throw new Error(`Product height is required on row number ${rowNumber}`)
+          if(!productData.shippingCharge){
+            throw new Error(`Product shipping price required on row number ${rowNumber}`);
           }
-          if(!productData.specifications.length){
-            throw new Error(`Product length is required on row number ${rowNumber}`)
-          }
-          if(!productData.specifications.volume){
-            throw new Error(`Product length is volume on row number ${rowNumber}`)
-          }
-          if(!productData.specifications.weight){
-            throw new Error(`Product length is weight on row number ${rowNumber}`)
-          }
-          if(!productData.specifications.width){
-            throw new Error(`Product length is width on row number ${rowNumber}`)
-          }
-          if(!productData.specifications.packTypeCode){
-            throw new Error(
-              `Product package Type not define in ${rowNumber}`
-            )
-          }
+
+          // if(!productData.specifications.height){
+          //   throw new Error(`Product height is required on row number ${rowNumber}`)
+          // }
+          // if(!productData.specifications.length){
+          //   throw new Error(`Product length is required on row number ${rowNumber}`)
+          // }
+          // if(!productData.specifications.volume){
+          //   throw new Error(`Product length is volume on row number ${rowNumber}`)
+          // }
+          // if(!productData.specifications.weight){
+          //   throw new Error(`Product length is weight on row number ${rowNumber}`)
+          // }
+          // if(!productData.specifications.width){
+          //   throw new Error(`Product length is width on row number ${rowNumber}`)
+          // }
+          // if(!productData.specifications.packTypeCode){
+          //   throw new Error(
+          //     `Product package Type not define in ${rowNumber}`
+          //   )
+          // }
 
           if (!productData.categoryName) {
             throw new Error(`Category is required on row number ${rowNumber}`);
@@ -396,14 +404,15 @@ class ProductService {
             status: PRODUCT_STATUS.ACTIVE,
             measurements: [],
             shipping: "",
-            specifications: {
-              height: productData.specifications.height,
-              length: productData.specifications.length,
-              width: productData.specifications.width,
-              weight: productData.specifications.weight,
-              volume: productData.specifications.volume,
-              packTypeCode: productData.specifications.packTypeCode
-            },
+            shippingCharge: Math.round(productData.shippingCharge * 100) / 100,
+            // specifications: {
+            //   height: productData.specifications.height,
+            //   length: productData.specifications.length,
+            //   width: productData.specifications.width,
+            //   weight: productData.specifications.weight,
+            //   volume: productData.specifications.volume,
+            //   packTypeCode: productData.specifications.packTypeCode
+            // },
             seo: {
               metaTitle: productData.name,
               metaDescription: productData.shortDescription,

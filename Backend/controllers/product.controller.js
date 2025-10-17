@@ -88,7 +88,7 @@ class ProductController {
         console.log("Data: ", headers)
 
         
-        const requiredHeaders = ["Part No.", 'Name', 'Category', 'Regular Price', 'Selling Price', 'Brand', 'Quantity', 'height(m)', "length(m)", "width(m)", "weight(kg)", "volume(m3)", "Package Type"];
+        const requiredHeaders = ["Part No.", 'Name', 'Category', 'Regular Price', 'Selling Price', 'Brand', 'Quantity', 'Delivery Days', 'shipping charge'];
         const missingHeaders = requiredHeaders.filter(header => 
             !headers.some(h => h.toLowerCase().includes(header.toLowerCase()))
         );

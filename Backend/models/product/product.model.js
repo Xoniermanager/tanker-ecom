@@ -114,56 +114,61 @@ const productSchema = new Schema(
       // required: true,
       default: "10",
     },
-    specifications: {
-      height: {
-        type: String,
-        required: true,
-        trim: true,
-        match: [
-          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
-          "Height must be a valid number (0-999.99)",
-        ],
-      },
-      length: {
-        type: String,
-        required: true,
-        trim: true,
-        match: [
-          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
-          "Length must be a valid number (0-999.99)",
-        ],
-      },
-      width: {
-        type: String,
-        required: true,
-        trim: true,
-        match: [
-          /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
-          "Width must be a valid number (0-999.99)",
-        ],
-      },
-      weight: {
-        type: String,
-        required: true,
-        trim: true,
-         match: [/^[0-9]+$/, "Weight must be a valid integer (e.g., 34)"],
-      },
-      volume: {
-        type: String,
-        required: true,
-        trim: true,
-        match: [
-          /^(?:[0-9]|[1-9][0-9]{1,4})(?:\.[0-9]{1,2})?$/,
-          "Volume must be a valid number (0-99999.99)",
-        ],
-      },
-      packTypeCode:{
-        type: String,
-        required: true,
-        enum: Object.values(PACKAGE_TYPE).map(item => item.code),
-      }
+    // specifications: {
+    //   height: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     match: [
+    //       /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+    //       "Height must be a valid number (0-999.99)",
+    //     ],
+    //   },
+    //   length: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     match: [
+    //       /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+    //       "Length must be a valid number (0-999.99)",
+    //     ],
+    //   },
+    //   width: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     match: [
+    //       /^(?:[0-9]|[1-9][0-9]|[1-9][0-9]{2})(?:\.[0-9]{1,2})?$/,
+    //       "Width must be a valid number (0-999.99)",
+    //     ],
+    //   },
+    //   weight: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //      match: [/^[0-9]+$/, "Weight must be a valid integer (e.g., 34)"],
+    //   },
+    //   volume: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     match: [
+    //       /^(?:[0-9]|[1-9][0-9]{1,4})(?:\.[0-9]{1,2})?$/,
+    //       "Volume must be a valid number (0-99999.99)",
+    //     ],
+    //   },
+    //   packTypeCode:{
+    //     type: String,
+    //     required: true,
+    //     enum: Object.values(PACKAGE_TYPE).map(item => item.code),
+    //   }
+    // },
+    
+    shippingCharge:{
+       type: Number,
+       min: 0,
+       required: true
     },
-
     shipping: {
       type: String,
     },

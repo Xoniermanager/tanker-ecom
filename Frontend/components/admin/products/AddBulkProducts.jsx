@@ -46,13 +46,6 @@ const AddBulkProducts = () => {
     "Description",
     "Short Description",
     "Delivery Days",
-    "height(m)",
-    "length(m)",
-    "width(m)",
-    "weight(kg)",
-    "volume(m3)",
-    "Package Type"
-
   ];
     const getSampleData = () => {
     const availableCategories =
@@ -74,12 +67,7 @@ const AddBulkProducts = () => {
         "Latest iPhone with Pro features and advanced camera capabilities",
         "Premium smartphone with cutting-edge technology",
         "3 to 6",
-        "3.5",
-        "3",
-        "34",
-        "30",
-        "22.3",
-        "CTN"
+        
       ],
       [
         "2",
@@ -94,12 +82,7 @@ const AddBulkProducts = () => {
         "Flagship Android smartphone with S Pen and exceptional camera quality",
         "Ultimate Android experience with S Pen",
         "2 to 4",
-        "3.5",
-        "3",
-        "34",
-        "30",
-        "22.3",
-        "CTN"
+        
       ],
       [
         "3",
@@ -114,12 +97,7 @@ const AddBulkProducts = () => {
         "Lightweight laptop with M2 chip for exceptional performance and battery life",
         "Powerful and portable laptop for professionals",
         "5 to 9",
-        "3.5",
-        "3",
-        "34",
-        "30",
-        "22.3",
-        "CTN"
+        
       ],
       [
         "4",
@@ -134,12 +112,7 @@ const AddBulkProducts = () => {
         "Industry-leading noise canceling headphones with premium sound quality",
         "Premium wireless headphones with noise cancelling",
         "3 to 8",
-        "3.5",
-        "3",
-        "34",
-        "30",
-        "22.3",
-        "BAG"
+        
       ],
       [
         "5",
@@ -154,18 +127,10 @@ const AddBulkProducts = () => {
         "Premium ultrabook with stunning display and powerful performance",
         "Compact and powerful ultrabook for productivity",
         "4 to 6",
-        "3.5",
-        "3",
-        "34",
-        "30",
-        "22.3",
-        "CTN"
+        
       ],
     ];
   };
-
-
-  const PACKAGE_TYPES = ["BAG", "BDL", "CTN", "DRM", "IBC", "ITEM", "PAIL", "PLT", "ROLL", "ST"];
 
   const getCategoryData = async (req, res) => {
     try {

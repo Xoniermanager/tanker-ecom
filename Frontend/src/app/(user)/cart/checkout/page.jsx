@@ -1,4 +1,4 @@
-// pages/checkout/page.js (Simplified)
+// pages/checkout/page.js (Fixed)
 "use client";
 import React, { useState, useEffect } from "react";
 import PageBanner from "../../../../../components/user/common/PageBanner";
@@ -19,11 +19,12 @@ const Page = () => {
     fetchCartData,
     shippingPrice,
     setShippingPrice,
+    setSelectedCountry, // Get this from context
   } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
   const [addressIsSame, setAddressIsSame] = useState(true);
-  const [shippingLoading, setShippingLoading] = useState(false)
+  const [shippingLoading, setShippingLoading] = useState(false);
   const [shippingCharges, setShippingCharges] = useState(0);
   const router = useRouter();
 
@@ -49,67 +50,6 @@ const Page = () => {
     terms: false,
     paymentMethod: PAYMENT_METHODS.ONLINE_PAYMENT,
   });
-
-  const getShippingCharges = async () => {
-  setShippingLoading(true)
-  try {
-   
-    const items = cartData || [];
-    
-   
-    if (!items.length) {
-      console.warn("No items found in cartData for shipping calculation.");
-      return;
-    }
-
-    const payload = {
-      destination: {
-        address: {
-          suburb: formData?.shippingAddress?.address || "",
-          postCode: String(formData?.shippingAddress?.pincode || ""),
-          city: formData?.shippingAddress?.city || "",
-          countryCode: formData?.shippingAddress?.country || "",
-        },
-      },
-      freightDetails: items.map((item) => ({
-          units: String(item?.quantity) ?? "0",
-          packTypeCode: item?.product?.specifications?.packTypeCode ?? "",
-          height: item?.product?.specifications?.height ?? "0",
-          length: item?.product?.specifications?.length ?? "0",
-          width: item?.product?.specifications?.width ?? "0",
-          weight: item?.product?.specifications?.weight ?? "0",
-          volume: item?.product?.specifications?.volume ?? "0",
-        })),
-    };
-
-    const response = await api.post(`/shipping-charges`, payload);
-
-    if (response.status === 200 && Array.isArray(response.data?.data?.charges)) {
-      const lastCharge = response.data.data.charges.pop();
-      
-      setShippingPrice(lastCharge.value);
-    } else {
-      console.warn("Unexpected response format from shipping-charges API:", response.data);
-    }
-
-  } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Error fetching shipping charges:", error);
-    }
-  } finally{
-    setShippingLoading(false)
-  }
-};
-
-
-  useEffect(() => {
-  const { address, city, country, pincode } = formData.shippingAddress;
-  console.log("Shipping fields:", address, city, country, pincode);
-  if (address && city && country && (String(pincode).length > 3) && (country === "NZ")) {
-    
-    getShippingCharges();
-  }
-}, [formData.shippingAddress]);
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -153,32 +93,32 @@ const Page = () => {
     }
   };
 
-
   const handleTerms = (e) => {
     setFormData({ ...formData, terms: !formData.terms });
   };
 
+  // Update country in context and adjust payment method
   useEffect(() => {
-  const country = formData.shippingAddress.country;
-  
-
-  if (country === "NZ") {
-    setFormData((prev) => ({
-      ...prev,
-      paymentMethod: PAYMENT_METHODS.ONLINE_PAYMENT,
-    }));
+    const country = formData.shippingAddress.country;
     
-    
-  } else if (country && country !== "NZ") {
-    setFormData((prev) => ({
-      ...prev,
-      paymentMethod: PAYMENT_METHODS.COD,
-    }));
-    setShippingPrice(0)
-  }
+    // Update the selected country in the cart context
+    if (setSelectedCountry) {
+      setSelectedCountry(country);
+    }
 
-}, [formData.shippingAddress.country]);
-
+    if (country === "NZ") {
+      setFormData((prev) => ({
+        ...prev,
+        paymentMethod: PAYMENT_METHODS.ONLINE_PAYMENT,
+      }));
+    } else if (country && country !== "NZ") {
+      setFormData((prev) => ({
+        ...prev,
+        paymentMethod: PAYMENT_METHODS.COD,
+      }));
+      // Shipping price will be automatically set to 0 by the context
+    }
+  }, [formData.shippingAddress.country, setSelectedCountry]);
 
   const handleSubmit = async (e, returnOrderData = false) => {
     e.preventDefault();
@@ -230,7 +170,6 @@ const Page = () => {
   };
 
   const handleSubmitQuote = async () => {
-    // e.preventDefault();
     setIsLoading(true);
     setErrMessage(null);
 
@@ -254,12 +193,10 @@ const Page = () => {
       const response = await api.post("/order", payload);
 
       if (response.status === 200) {
-        // const orderData = response.data.data;
-          toast.success("Your order quote send successfully");
-          fetchCartData();
-          resetForm();
-          router.push("/orders");
-      
+        toast.success("Your order quote send successfully");
+        fetchCartData();
+        resetForm();
+        router.push("/orders");
       }
     } catch (error) {
       const message = error?.response?.data?.message || "Something went wrong";

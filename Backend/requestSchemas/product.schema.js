@@ -172,9 +172,16 @@ const productSchema = z.object({
     .refine((val) => parseInt(val) >= 0, {
       message: "Delivery days cannot be negative.",
     })
-    .default("1"),
+    .default("10"),
 
-  specifications: specificationsSchema,
+shippingCharge: z
+  .coerce.number({
+    required_error: "Shipping charge is required",
+    invalid_type_error: "Shipping charge must be a number"
+  })
+  .min(0, "Shipping charge must be greater than or equal to 0")
+  .transform((val) => Math.round(val * 100) / 100),
+  // specifications: specificationsSchema,
 
   shipping: z
     .string({
@@ -249,7 +256,7 @@ const orderSchema = z.object({
     shippingAddress: addressSchema,
   }),
   paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
-  shippingPrice: z.number({ required_error: "Email is required" }).min(0).optional(),
+  shippingPrice: z.number({ required_error: "Shipping charge is required" }).min(0).optional(),
   paymentResult: z
     .string()
     .regex(/^[0-9a-fA-F]{24}$/, {

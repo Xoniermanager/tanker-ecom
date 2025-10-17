@@ -10,10 +10,10 @@ const CartContextProvider = ({ children }) => {
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSyncedGuestCart, setHasSyncedGuestCart] = useState(false);
-  const [shippingPrice, setShippingPrice] = useState(0)
+  const [shippingPrice, setShippingPrice] = useState(0);
+  const [selectedCountry, setSelectedCountry] = useState("NZ"); 
 
   const { isAuthenticated } = useAuth();
-  // const { shippingPrice, isSiteDataLoading } = useSite();
 
   const fetchCartData = async () => {
     if (!isAuthenticated) {
@@ -25,6 +25,7 @@ const CartContextProvider = ({ children }) => {
     }
     
     setIsLoading(true);
+
     try {
       const response = await api.get(`/cart`);
       if (response.status === 200 || response.status === 304) {
@@ -39,7 +40,6 @@ const CartContextProvider = ({ children }) => {
     }
   };
 
-  
   const syncGuestCartWithServer = async () => {
     if (!isAuthenticated || hasSyncedGuestCart) return;
     
@@ -61,8 +61,6 @@ const CartContextProvider = ({ children }) => {
           localStorage.removeItem("guestCart");
           toast.success("Cart synced successfully!");
           setHasSyncedGuestCart(true);
-          
-         
           await fetchCartData();
         }
       } catch (error) {
@@ -75,16 +73,27 @@ const CartContextProvider = ({ children }) => {
         toast.info(message);
         localStorage.removeItem("guestCart");
         setHasSyncedGuestCart(true);
-        
-       
         await fetchCartData();
       }
     } else {
-      
       setHasSyncedGuestCart(true);
       await fetchCartData();
     }
   };
+
+ 
+  useEffect(() => {
+    
+    if (selectedCountry === "NZ") {
+      const price = cartData?.reduce((acc, item) => {
+        return acc + ((item?.product?.shippingCharge || 0) * (item?.quantity || 1));
+      }, 0);
+      setShippingPrice(price || 0);
+    } else {
+      
+      setShippingPrice(0);
+    }
+  }, [cartData, selectedCountry]);
 
   const increaseCount = (id, count = 1) => {
     if (!id) return;
@@ -134,14 +143,15 @@ const CartContextProvider = ({ children }) => {
       Number(acc) + Number(init?.product?.sellingPrice) * init?.quantity,
     0
   );
+  
   const regularPrice = cartData?.reduce(
     (acc, init) =>
       Number(acc) + Number(init?.product?.regularPrice) * init?.quantity,
     0
   );
+  
   const withShippingChargesPrice =
     Number(discountPrice) + Number(shippingPrice);
-
 
   useEffect(() => {
     if (isAuthenticated && !hasSyncedGuestCart) {
@@ -151,7 +161,6 @@ const CartContextProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  
   useEffect(() => {
     if (!isAuthenticated) {
       setHasSyncedGuestCart(false);
@@ -173,7 +182,9 @@ const CartContextProvider = ({ children }) => {
         withShippingChargesPrice,
         shippingPrice,
         setShippingPrice,
-        syncGuestCartWithServer, 
+        syncGuestCartWithServer,
+        selectedCountry,
+        setSelectedCountry, 
       }}
     >
       {children}
