@@ -213,9 +213,9 @@ const Page = () => {
                 </span>
               </p>
               <p className="text-gray-700">
-                <span className="font-semibold text-purple-950">Shipping Info:</span>{" "}
-                <span className="text-gray-800">
-                  {productData.shipping || "Standard shipping"}
+                <span className="font-semibold text-purple-950">Shipping Charge:</span>{" "}
+                <span className="tracking-wide text-green-500">
+                  ${productData.shippingCharge || "Standard shipping"}
                 </span>
               </p>
             </div>

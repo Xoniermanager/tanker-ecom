@@ -277,7 +277,8 @@ const UpdateProductForm = ({
       // formPayload.append("slug", formData.slug);
       // formPayload.append("initialQuantity", formData.initialQuantity);
       formPayload.append("deliveryDays", formData.deliveryDays);
-      formPayload.append("shipping", formData.shipping)
+      // formPayload.append("shipping", formData.shipping)
+      formPayload.append("shippingCharge", Number(formData.shippingCharge))
 
       formData.highlights.forEach((highlight, index) => {
         formPayload.append(`highlights[${index}]`, highlight);
@@ -296,30 +297,30 @@ const UpdateProductForm = ({
         formPayload.append("specificationsDoc[source]", uploadedSpecUrl);
       }
 
-      formPayload.append(
-        "specifications[height]",
-        formData.specifications.height
-      );
-      formPayload.append(
-        "specifications[length]",
-        formData.specifications.length
-      );
-      formPayload.append(
-        "specifications[width]",
-        formData.specifications.width
-      );
-      formPayload.append(
-        "specifications[weight]",
-        formData.specifications.weight
-      );
-      formPayload.append(
-        "specifications[volume]",
-        formData.specifications.volume
-      );
-      formPayload.append(
-        "specifications[packTypeCode]",
-        formData.specifications.packTypeCode
-      );
+      // formPayload.append(
+      //   "specifications[height]",
+      //   formData.specifications.height
+      // );
+      // formPayload.append(
+      //   "specifications[length]",
+      //   formData.specifications.length
+      // );
+      // formPayload.append(
+      //   "specifications[width]",
+      //   formData.specifications.width
+      // );
+      // formPayload.append(
+      //   "specifications[weight]",
+      //   formData.specifications.weight
+      // );
+      // formPayload.append(
+      //   "specifications[volume]",
+      //   formData.specifications.volume
+      // );
+      // formPayload.append(
+      //   "specifications[packTypeCode]",
+      //   formData.specifications.packTypeCode
+      // );
 
       if (formData.seo?.metaTitle) {
         formPayload.append("seo[metaTitle]", formData.seo.metaTitle);
@@ -734,7 +735,7 @@ const UpdateProductForm = ({
             ))}
           </div>
 
-          <div className="col-span-2 grid grid-cols-3 gap-3">
+          {/* <div className="col-span-2 grid grid-cols-3 gap-3">
                       <div className="flex flex-col gap-2">
                         <label
                           htmlFor="specifications.height"
@@ -873,7 +874,7 @@ const UpdateProductForm = ({
                           
                         </select>
                       </div>
-                    </div>
+                    </div> */}
 
           <div className="flex flex-col gap-2">
             <label
@@ -1035,25 +1036,30 @@ const UpdateProductForm = ({
                       />
                     </div>
                      <div className="flex flex-col gap-2">
-                      <label
-                        htmlFor="shipping"
-                        className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
-                      >
-                        <span className="text-red-500 text-[8px]">
-                          <FaStarOfLife />
-                        </span>{" "}
-                       Free Shipping
-                      </label>
-                      <input
-                        type="text"
-                        id="shipping"
-                        name="shipping"
-                        value={formData.shipping}
-                        onChange={handleInputChange}
-                        placeholder="Free Shipping With"
-                        className="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      />
-                    </div>
+                                 <label
+                                   htmlFor="shippingCharge"
+                                   className=" mb-1 text-sm font-medium text-gray-900 flex gap-1 "
+                                 >
+                                   <span className="text-red-500 text-[8px]">
+                                     <FaStarOfLife />
+                                   </span>{" "}
+                                   Shipping Charge
+                                 </label>
+                                 <div className="border border-gray-300 rounded-md bg-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-400 gap-2.5">
+                                   <AiOutlineDollar className="text-lg text-orange-400" />
+                                 <input
+                                   type="number"
+                                   id="shippingCharge"
+                                   name="shippingCharge"
+                                   value={formData.shippingCharge}
+                                   onChange={handleInputChange}
+                                   onWheel={(e) => e.target.blur()}
+                                   placeholder="Free Shipping With"
+                                   className="w-full outline-none"
+                                   
+                                 />
+                                 </div>
+                               </div>
           <div className="bg-white shadow-[0_0_12px_#00000008] p-5 rounded-xl w-full grid grid-cols-1 gap-5 col-span-2">
             <div className="col-span-2 flex flex-col gap-4">
               <div className="flex items-center gap-8 justify-between mb-5">
