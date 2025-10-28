@@ -6,9 +6,6 @@ class AuthController {
         this.userService = new UserService();
     }
 
-    /**
-     * Registers a new user and sends OTP for email verification.
-     */
     register = async (req, res, next) => {
         try {
             const payload = req.body;
@@ -24,9 +21,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Verifies the email using the OTP sent after registration.
-     */
+  
     verifyEmailOtp = async (req, res, next) => {
         try {
 
@@ -39,9 +34,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Sends login OTP to regular user after validating credentials.
-     */
+   
     requestLoginOtp = async (req, res, next) => {
         try {
             const payload = {
@@ -55,9 +48,6 @@ class AuthController {
         }
     };
 
-    /**
-     * Sends login OTP to admin after validating credentials.
-     */
     requestAdminLoginOtp = async (req, res, next) => {
         try {
             const payload = {
@@ -71,9 +61,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Verifies login OTP for user, sets refresh token cookie, returns access token + user.
-     */
+   
     verifyLoginOtp = async (req, res, next) => {
         try {
             const payload = {
@@ -108,9 +96,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Verifies login OTP for admin, sets refresh token cookie.
-     */
+   
     verifyAdminLoginOtp = async (req, res, next) => {
         try {
             const payload = {
@@ -122,9 +108,9 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                // secure: true,
+               
                 // sameSite: "strict",
-                sameSite: "None",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
 
                 path: "/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
@@ -133,8 +119,8 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                // secure: true,
-                // sameSite: "Lax",
+                
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
                 sameSite: "None",
 
                 path: "/",
@@ -147,9 +133,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Sends OTP for password reset to registered email.
-     */
+  
     requestPasswordReset = async (req, res, next) => {
         try {
             const payload = req.body;
@@ -160,9 +144,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Resets password after verifying OTP.
-     */
+ 
     resetPassword = async (req, res, next) => {
         try {
             const payload = req.body;
@@ -173,9 +155,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Resends the OTP for email verification if no valid OTP is active.
-     */
+
     resendEmailVerificationOtp = async (req, res, next) => {
         try {
             const { email } = req.body;
@@ -186,9 +166,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Resends the OTP for login after checking credentials and no valid OTP exists.
-     */
+
     resendLoginOtp = async (req, res, next) => {
         try {
             const payload = {
@@ -202,9 +180,7 @@ class AuthController {
         }
     };
 
-    /**
-     * Refreshes access token using valid refresh token.
-     */
+
     refreshToken = async (req, res, next) => {
         try {
             const response = await this.userService.refreshToken(req);
