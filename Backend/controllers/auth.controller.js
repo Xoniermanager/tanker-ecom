@@ -84,8 +84,8 @@ class AuthController {
 
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
+                // secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
                 path: "/",
@@ -94,8 +94,8 @@ class AuthController {
 
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
+                // secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
                 path: "/",
@@ -121,8 +121,8 @@ class AuthController {
 
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
+                // secure: true,
                 // sameSite: "strict",
                 sameSite: "None",
 
@@ -132,8 +132,8 @@ class AuthController {
 
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
+                // secure: true,
                 // sameSite: "Lax",
                 sameSite: "None",
 
