@@ -403,7 +403,7 @@ const ProductList = ({
                   <FaAngleDown />
                 </button>
               </div>
-              <div className={`${showCategory ? "mt-5" : "hidden"}`}>
+              <div className={`${showCategory ? "mt-5" : "hidden"} h-[50vh] overflow-y-scroll `}>
                 <label className="flex items-center gap-2 mb-2">
                   <input
                     type="checkbox"

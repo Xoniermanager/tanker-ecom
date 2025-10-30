@@ -202,7 +202,7 @@ const Footer = ({ siteData }) => {
             Get the latest news, tips and latest messages, including special
             offers
           </p>
-          <form
+          {/* <form
             className="bg-black px-4 py-2 flex items-center"
             onSubmit={handleSubmit}
           >
@@ -217,7 +217,7 @@ const Footer = ({ siteData }) => {
               {" "}
               <FaPaperPlane className="text-lg group-hover:rotate-25" />
             </button>
-          </form>
+          </form> */}
           <Link
             href={`mailto:${siteData?.contactDetails?.emails?.footer}`}
             className="flex items-center gap-4 bg-[#222627] text-white font-semibold hover:underline group rounded-lg overflow-hidden hover:text-orange-100"

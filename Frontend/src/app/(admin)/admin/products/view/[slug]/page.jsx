@@ -352,16 +352,29 @@ const Page = () => {
             </div>
 
             <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-xl font-semibold text-purple-950 mb-3">
-                SEO Information
-              </h2>
-              <p className="text-gray-700">
-                <span className="font-semibold">Keywords:</span>{" "}
-                {productData.seo?.keywords?.length > 0
-                  ? productData.seo.keywords.join(", ")
-                  : "No keywords"}
-              </p>
-            </div>
+  <h2 className="text-xl font-semibold text-purple-950 mb-3">
+    SEO Information
+  </h2>
+  
+  <div className="space-y-2">
+    <p className="text-gray-700">
+      <span className="font-semibold">Meta Title:</span>{" "}
+      {productData.seo?.metaTitle || "No meta title"}
+    </p>
+    
+    <p className="text-gray-700">
+      <span className="font-semibold">Meta Description:</span>{" "}
+      {productData.seo?.metaDescription || "No meta description"}
+    </p>
+    
+    <p className="text-gray-700">
+      <span className="font-semibold">Keywords:</span>{" "}
+      {productData.seo?.keywords?.length > 0
+        ? productData.seo.keywords.join(", ")
+        : "No keywords"}
+    </p>
+  </div>
+</div>
           </div>
         </div>
       </div>

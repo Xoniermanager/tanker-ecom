@@ -41,7 +41,7 @@ const page = () => {
     password: "",
     confirmPassword: "",
   });
-  const recaptchaRef = useRef(null);
+  // const recaptchaRef = useRef(null);
 
   const router = useRouter();
 
@@ -62,29 +62,15 @@ const page = () => {
     formData.password === "" ||
     formData.password.length < 8;
 
-  // const handleCaptcha = (token) => {
 
-  //   setCaptchaToken(token);
-  //   if (errMessage && errMessage.includes("robot")) setErrMessage(null);
-  // };
-
-  // const handleCaptchaExpired = () => {
-
-  //   setCaptchaToken(null);
-  // };
-
-  // const handleCaptchaError = () => {
-
-  //   setCaptchaToken(null);
-  //   setErrMessage("reCAPTCHA error occurred. Please try again.");
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrMessage(null)
     try {
-      const token = await recaptchaRef.current.executeAsync();
-      recaptchaRef.current.reset();
+      // const token = await recaptchaRef.current.executeAsync();
+      // recaptchaRef.current.reset();
 
       if (formData.password.trim() !== formData.confirmPassword.trim())
         return setErrMessage(
@@ -95,7 +81,9 @@ const page = () => {
         return setErrMessage("Password should be 8 words or above");
       const response = await api.post(
         `/auth/register`,
-        { ...formData, captchaToken: token },
+        { ...formData,
+          //  captchaToken: token 
+          },
         {
           withCredentials: true,
         }
@@ -130,9 +118,9 @@ const page = () => {
     } finally {
       setIsLoading(false);
 
-      if (recaptchaRef.current) {
-        recaptchaRef.current.reset();
-      }
+      // if (recaptchaRef.current) {
+      //   recaptchaRef.current.reset();
+      // }
     }
   };
 
@@ -418,11 +406,11 @@ const page = () => {
                 <p className="text-red-500">{errMessage}</p>
               </div>
             )}
-            <ReCAPTCHA
+            {/* <ReCAPTCHA
               ref={recaptchaRef}
               size="invisible"
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-            />
+            /> */}
             <div className="flex relative group">
               <button
                 type="submit"

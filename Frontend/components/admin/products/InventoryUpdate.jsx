@@ -94,7 +94,7 @@ const InventoryUpdate = ({
               </option>
               <option value="in_stock">In stock</option>
               <option value="out_of_stock">Out of stock</option>
-              <option value="pre_order">Pre Order</option>
+              {/* <option value="pre_order">Pre Order</option> */}
             </select>
           </div>
         </div>

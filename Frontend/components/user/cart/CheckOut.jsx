@@ -515,13 +515,13 @@ const CheckOut = ({
 
               {(!formData.terms ||
                 formData.shippingAddress.country === "" ||
-                formData.billingAddress.address === "" ||
+                // formData.billingAddress.address === "" ||
                 formData.shippingAddress.address === "" ||
                 formData.shippingAddress.pincode === "" ||
                 formData.shippingAddress.pincode == 0 ||
-                formData.billingAddress.pincode === "" ||
-                formData.billingAddress.pincode == 0 ||
-                formData.billingAddress.country === "" ||
+                // formData.billingAddress.pincode === "" ||
+                // formData.billingAddress.pincode == 0 ||
+                // formData.billingAddress.country === "" ||
                 !Object.values(PAYMENT_METHODS).includes(
                   formData.paymentMethod
                 )) && (
