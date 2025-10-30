@@ -34,7 +34,7 @@ const AddBulkProducts = () => {
   const [isCopy, setIsCopy] = useState(null);
 
   const sampleHeaders = [
-    "S.No.",
+    "Part No.",
     "Name",
     "Category",
     "Regular Price",
@@ -46,6 +46,7 @@ const AddBulkProducts = () => {
     "Description",
     "Short Description",
     "Delivery Days",
+    "Shipping Charge"
   ];
     const getSampleData = () => {
     const availableCategories =
@@ -55,7 +56,7 @@ const AddBulkProducts = () => {
 
     return [
       [
-        "1",
+        "021-TS0769-90MM",
         "iPhone 14 Pro",
         availableCategories[1]?.name || "I Phone",
         "999.99",
@@ -66,11 +67,12 @@ const AddBulkProducts = () => {
         "Latest A16 chip; Pro camera system; Dynamic Island",
         "Latest iPhone with Pro features and advanced camera capabilities",
         "Premium smartphone with cutting-edge technology",
-        "3 to 6",
+        "3",
+        "20.33"
         
       ],
       [
-        "2",
+        "021-TS0769-90MM2",
         "Samsung Galaxy S23 Ultra",
         availableCategories[2]?.name || "Poco",
         "1199.99",
@@ -81,11 +83,11 @@ const AddBulkProducts = () => {
         "S Pen included; 200MP camera; 5G ready",
         "Flagship Android smartphone with S Pen and exceptional camera quality",
         "Ultimate Android experience with S Pen",
-        "2 to 4",
-        
+        "2",
+        "12.34"
       ],
       [
-        "3",
+        "121-TS0769-90MM",
         "MacBook Air M2",
         availableCategories[0]?.name || "Electronics",
         "1299.99",
@@ -96,11 +98,12 @@ const AddBulkProducts = () => {
         "M2 chip; Lightweight design; All-day battery",
         "Lightweight laptop with M2 chip for exceptional performance and battery life",
         "Powerful and portable laptop for professionals",
-        "5 to 9",
+        "9",
+        "11.11"
         
       ],
       [
-        "4",
+        "021-TS0769-90MMER",
         "Sony WH-1000XM5",
         availableCategories[0]?.name || "Electronics",
         "399.99",
@@ -111,11 +114,12 @@ const AddBulkProducts = () => {
         "Noise cancelling; 30-hour battery; Premium sound",
         "Industry-leading noise canceling headphones with premium sound quality",
         "Premium wireless headphones with noise cancelling",
-        "3 to 8",
+        "8",
+        "8.21"
         
       ],
       [
-        "5",
+        "021-TS0369-90MMOL",
         "Dell XPS 13",
         availableCategories[0]?.name || "Electronics",
         "1099.99",
@@ -126,8 +130,8 @@ const AddBulkProducts = () => {
         "InfinityEdge display; Intel Core i7; Ultra-portable",
         "Premium ultrabook with stunning display and powerful performance",
         "Compact and powerful ultrabook for productivity",
-        "4 to 6",
-        
+        "6",
+        "23.44"
       ],
     ];
   };

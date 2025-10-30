@@ -12,27 +12,19 @@ const { OTP_EXPIRY_DURATION, USER_STATUS } = require("../constants/enums");
 const { default: mongoose, startSession, Types } = require("mongoose");
 const { tryCatch } = require("bullmq");
 
-/**
- * UserService handles registration, login, email verification, password reset, and token refresh.
- */
 class UserService {
-  /**
-   * Registers a new user and sends an email verification OTP.
-   * @param {Object} userData - User data to register.
-   * @returns {Promise<Object>} - The created user.
-   * @throws {Error} - If email is already registered.
-   */
+ 
   async register(userData) {
     const session = await mongoose.startSession();
 
     try {
       session.startTransaction();
 
-      const verification = await verifyCaptcha(userData.captchaToken);
+      // const verification = await verifyCaptcha(userData.captchaToken);
 
-      if (!verification.success || verification.score < 0.5) {
-        throw customError("Recaptcha is not verified please try again", 400);
-      }
+      // if (!verification.success || verification.score < 0.5) {
+      //   throw customError("Recaptcha is not verified please try again", 400);
+      // }
 
       const existingUser = await userRepository.findOne(
         { companyEmail: userData.companyEmail },

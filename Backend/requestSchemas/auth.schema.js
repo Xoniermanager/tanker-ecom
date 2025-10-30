@@ -9,9 +9,7 @@ const passwordSchema = z
       "Password must include uppercase, lowercase, number, and special character.",
   });
 
-/**
- ** Registration Schema
- */
+
 const userRegistrationSchema = z
   .object({
     companyEmail: z.string().email({ message: "Invalid company email." }),
@@ -28,17 +26,15 @@ const userRegistrationSchema = z
       .optional(),
 
     country: z.string().min(1, { message: "Country is required." }),
-    // preferredLanguage: z
-    //   .string()
-    //   .min(1, { message: "Preferred language is required." }),
+
     communicationPreference: z.enum(
       Object.values(ENUMS.COMMUNICATION_PREFERENCE),
       {
         message: "Invalid communication preference.",
       }
     ),
-    captchaToken: z.string({required_error: "Captcha token is required.",})
-    .min(1, "Captcha token cannot be empty"),
+    // captchaToken: z.string({required_error: "Captcha token is required.",})
+    // .min(1, "Captcha token cannot be empty"),
 
     password: passwordSchema,
     confirmPassword: z.string(),

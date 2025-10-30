@@ -234,8 +234,8 @@ const ProductDetailComponents = ({
                 </li>
                 <li className="flex items-center gap-1.5">
                   <FaCheck className="text-purple-950" />{" "}
-                  <b className="text-black text-sm md:text-base">Free Shipping: </b>{" "}
-                  <p className="text-purple-950 text-sm md:text-base">  {productData?.shipping || "Standard shipping"}</p>{" "}
+                  <b className="text-black text-sm md:text-base">Product Shipping: </b>{" "}
+                  <p className="text-purple-950 text-sm md:text-base">  {"Standard shipping"}</p>{" "}
                 </li>
               </ul>
               {/* <div className="flex justify-center md:justify-start gap-2.5">
