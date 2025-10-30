@@ -238,7 +238,7 @@ const ProductDetailComponents = ({
                   <p className="text-purple-950 text-sm md:text-base">  {productData?.shipping || "Standard shipping"}</p>{" "}
                 </li>
               </ul>
-              <div className="flex justify-center md:justify-start gap-2.5">
+              {/* <div className="flex justify-center md:justify-start gap-2.5">
                 {" "}
                 <b className="text-black">Share: </b>{" "}
                 <button className="hover:text-orange-500" onClick={handleShare}>
@@ -247,7 +247,7 @@ const ProductDetailComponents = ({
                 <button className="hover:text-orange-500" onClick={handleShare}>
                   <FaSquareInstagram />
                 </button>{" "}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

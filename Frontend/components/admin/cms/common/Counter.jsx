@@ -130,6 +130,7 @@ const Counter = ({ counterData }) => {
               onChange={(e) =>
                 handleBoxChange(boxKey, "order", e.target.value)
               }
+              onWheel={(e) => e.target.blur()}
             />
           </div>
           <div className="flex flex-col gap-2 col-span-2">

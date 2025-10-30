@@ -91,13 +91,13 @@ const AboutCompany = ({ aboutData }) => {
               </div>
             </Link>
             <div></div>
-            <Link
+            {/* <Link
               style={{ fontWeight: 600 }}
               href={redirectBtn?.link}
               className="btn-one"
             >
               {redirectBtn?.text || "N/A"}
-            </Link>
+            </Link> */}
           </div>
           <p className="text-zinc-500 font-medium md:text-lg text-center md:text-start leading-6 md:leading-8 group-hover:text-white pt-8">
             {secondPara || "N/A"}

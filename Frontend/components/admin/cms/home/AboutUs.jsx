@@ -385,6 +385,7 @@ const AboutUs = ({ aboutData }) => {
                     placeholder="1,2,3..."
                     value={item.order}
                     onChange={(e) => handleListChange(index, "order", e)}
+                    onWheel={(e) => e.target.blur()}
                   />
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">

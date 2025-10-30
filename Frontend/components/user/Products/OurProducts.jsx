@@ -195,7 +195,7 @@ const OurProducts = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
         {productData?.length > 0  ? productData?.map((item, index) => (
-          <div className="main-box w-full" key={index}>
+          <Link href={`/products/${item.slug}`} className="main-box w-full" key={index}>
             <div
               style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
               className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-[46px] flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
@@ -216,8 +216,8 @@ const OurProducts = ({
                   {item.shortDescription}
                 </p>
 
-                  <Link
-                  href={`/products/${item.slug}`}
+                  <div
+                  
                   className="relative inline-flex items-center justify-start w-46 h-12 px-8 overflow-hidden capitalize text-lg font-bold text-purple-950 group rounded-md ml-4"
                 >
                   <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "" : "text-red-500"} z-10 transition-all duration-300 transform group-hover:-translate-x-4`}>
@@ -226,10 +226,10 @@ const OurProducts = ({
                   <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "text-orange-400" :"text-red-500"} absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[140px] `}>
                     <FaCircleArrowRight />
                   </span>
-                </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         )) : (
           <div className="flex items-center justify-center w-full col-span-3 text-stone-500"> Product data not found</div>
         )}

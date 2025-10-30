@@ -86,7 +86,8 @@ const CartContextProvider = ({ children }) => {
     
     if (selectedCountry === "NZ") {
       const price = cartData?.reduce((acc, item) => {
-        return acc + ((item?.product?.shippingCharge || 0) * (item?.quantity || 1));
+        // return acc + ((item?.product?.shippingCharge || 0) * (item?.quantity || 1));
+        return acc + item?.product?.shippingCharge ;
       }, 0);
       setShippingPrice(price || 0);
     } else {

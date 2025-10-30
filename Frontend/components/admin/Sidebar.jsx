@@ -65,7 +65,7 @@ const Sidebar = () => {
     <>
     {logoutPopup && <Logout logout={handleLogout} isLoading={isLoading} close={()=>setLogoutPopup(false)}/>}
     <div className="fixed top-0 left-0 w-80 z-100 flex flex-col gap-8 p-6 bg-violet-100 h-full">
-      <div className="">
+      <Link href={'/'} className="">
         <Image
           className="bg-contain"
           src={"/images/tanker-solution-logo.png"}
@@ -73,7 +73,7 @@ const Sidebar = () => {
           width={200}
           alt="Tanker Logo"
         />
-      </div>
+      </Link>
       <div className="bg-white flex items-center gap-4 p-3 relative rounded-lg cursor-pointer" onMouseEnter={()=>setInView(true)} onMouseLeave={()=>setInView(false)}>
         <Link href={'/admin/profile'} className="flex items-center gap-4" ><Image
           className="bg-cover rounded-full w-11 h-11"

@@ -193,6 +193,8 @@ const UpdateProductForm = ({
     }
   };
 
+  console.log(formData)
+
   const removeImage = (index) => {
   const existingImagesCount = formData.images.length;
   
@@ -289,7 +291,7 @@ const UpdateProductForm = ({
         formData.specificationsDoc.type.trim() !== "" && uploadedSpecUrl
       ) {
         formPayload.append(
-          "specifications[type]",
+          "specificationsDoc[type]",
           formData.specificationsDoc.type
         );
       }

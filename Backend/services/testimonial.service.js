@@ -11,7 +11,13 @@ class TestimonialService {
      * @param {Object} filters - Filter conditions.
      * @returns {Promise<Array>} List of all testimonials.
      */
-    async getAllTestimonials(filters, limit = 3) {
+    async getAllTestimonials(filters) {
+        const testimonialData =  await testimonialRepository.findAll(filters, null , {createdAt: -1});
+
+        return testimonialData
+    }
+
+    async getFrontendTestimonials(filters, limit = 3) {
         const testimonialData =  await testimonialRepository.findAll(filters, null , {createdAt: -1});
 
         return testimonialData.slice(0,Number(limit))

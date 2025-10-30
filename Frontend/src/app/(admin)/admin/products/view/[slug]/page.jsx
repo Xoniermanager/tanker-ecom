@@ -110,15 +110,15 @@ const Page = () => {
       /> }
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-purple-950 capitalize">
+          <h1 className="w-[46%] text-2xl font-bold text-purple-950 capitalize">
             {productData?.name}
           </h1>
-          <div className="flex gap-3">
+          <div className="w-[54%] flex justify-end gap-3">
             <div className="relative">
             <Link href={`/admin/products/edit-inventory/${productData?._id}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
               <MdOutlineInventory2 className="text-lg"/> Edit Inventory
             </Link>
-            <span className={`min-w-5   w-fit flex items-center justify-center rounded-full absolute  -top-2 -right-2 z-50 ${(productData?.inventory?.quantity < 10) ? 'bg-red-500 animate-pulse text-[12px] p-0.5' : "bg-green-600 text-[9px] p-1"} text-white`}>{productData?.inventory?.quantity}</span>
+            <span className={`min-w-5 w-fit flex items-center justify-center rounded-full absolute  -top-2 -right-2 z-50 ${(productData?.inventory?.quantity < 10) ? 'bg-red-500 animate-pulse text-[12px] p-0.5' : "bg-green-600 text-[9px] p-1"} text-white`}>{productData?.inventory?.quantity}</span>
             </div>
             <Link href={`/admin/products/update/${productData?.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2">
               <MdOutlineEdit className="text-lg"/> Edit Product

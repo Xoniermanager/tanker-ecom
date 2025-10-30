@@ -32,7 +32,7 @@ const ProductList = ({
   errMessage,
   searchInput,
   setSearchInput,
-  setPageLimit,
+  handlePageLimit,
   selectedCategories,
   setSelectedCategories,
   handleCategoryChange,
@@ -72,7 +72,7 @@ const ProductList = ({
                   name="productCount"
                   id="productCount"
                   className="p-2 w-32 rounded-lg border-1 outline-none border-slate-200"
-                  onChange={(e) => setPageLimit(e.target.value)}
+                  onChange={(e) => handlePageLimit(e.target.value)}
                 >
                   <option value="10">10</option>
                   <option value="20">20</option>
