@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React, { useState, useEffect } from "react";
 import PageBanner from "../../../../components/user/common/PageBanner";
 import GalleryComponent from "../../../../components/user/gallery/GalleryComponent";

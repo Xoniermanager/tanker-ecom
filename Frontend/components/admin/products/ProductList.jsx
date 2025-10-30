@@ -345,7 +345,7 @@ const ProductList = ({
                 });
               })()}
 
-              {/* Next Button */}
+              
               <button
                 className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
                 onClick={() => setCurrentPage(Number(currentPage) + 1)}

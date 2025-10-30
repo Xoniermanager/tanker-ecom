@@ -13,7 +13,7 @@ const GalleryComponent = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-
+ console.log("current page: ", currentPage)
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === "Escape") {
@@ -116,6 +116,59 @@ const GalleryComponent = ({
             <IoArrowForward />
           </button>
         </div>
+        {/* <div className="flex items-center gap-4 justify-center">
+                      <button
+                        className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
+                        onClick={() => setCurrentPage(Number(currentPage) - 1)}
+                        disabled={currentPage === 1}
+                      >
+                        <IoArrowForward />
+                      </button>
+        
+                      {(() => {
+                        let startPage, endPage;
+        
+                        if (totalPages <= 3) {
+                          startPage = 1;
+                          endPage = totalPages;
+                        } else if (currentPage === 1) {
+                          startPage = 1;
+                          endPage = 3;
+                        } else if (currentPage === totalPages) {
+                          startPage = totalPages - 2;
+                          endPage = totalPages;
+                        } else {
+                          startPage = currentPage - 1;
+                          endPage = currentPage + 1;
+                        }
+        
+                        return [...Array(endPage - startPage + 1)].map((_, index) => {
+                          const pageNumber = startPage + index;
+                          return (
+                            <button
+                              className={`${
+                                currentPage === pageNumber
+                                  ? "bg-orange-400 text-white"
+                                  : "bg-[#f6e7d3]"
+                              } hover:bg-orange-400 hover:text-white h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+                              key={pageNumber}
+                              onClick={() => setCurrentPage(pageNumber)}
+                            >
+                              {pageNumber}
+                            </button>
+                          );
+                        });
+                      })()}
+        
+                      
+                      <button
+                        className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+                        onClick={() => setCurrentPage(Number(currentPage) + 1)}
+                        disabled={totalPages === currentPage}
+                      >
+                        <IoArrowForward />
+                      </button>
+                    </div> */}
       </div>
 
      
@@ -154,16 +207,7 @@ const GalleryComponent = ({
             
            
             <div className="text-center mt-4 text-white">
-              {/* <div className="flex justify-center gap-2 mb-2">
-                {blogData[currentImageIndex]?.tags?.map((tag, index) => (
-                  <span 
-                    key={index}
-                    className="bg-orange-400 px-3 py-1 rounded text-sm font-semibold capitalize"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div> */}
+              
               <h3 className="text-xl font-bold mb-2 text-purple-900">
                 {blogData[currentImageIndex]?.title}
               </h3>

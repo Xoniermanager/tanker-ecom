@@ -129,7 +129,12 @@ const page = () => {
         toast.success(
           `All ${selectedProducts.length} selected categories deleted successfully`
         );
-        setCurrentPage(1);
+        if(currentPage !== 1) {
+           setCurrentPage(1)
+        } else{
+           getProducts()
+        } 
+       
         setSelectedProduct([]);
       }
     } catch (error) {
