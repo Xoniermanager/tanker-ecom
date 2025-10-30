@@ -4,6 +4,7 @@ import React from "react";
 
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaUser, FaComment } from "react-icons/fa";
+import { FiDivide } from "react-icons/fi";
 
 const OurArticle = ({ blogData }) => {
   return (
@@ -42,7 +43,7 @@ const OurArticle = ({ blogData }) => {
               }
             );
             return (
-              <div className="bg-white group" key={index}>
+              <Link href={`/news/${item.slug}`} className="bg-white group" key={index}>
                 <div className="w-full h-40 md:h-60 overflow-hidden">
                   <Image
                     src={item?.thumbnail?.fullUrl || "N/A"}
@@ -57,13 +58,13 @@ const OurArticle = ({ blogData }) => {
                   <ul className="tags flex">
                     <li><span className="text-white">{createdDate || "N/A"}</span></li>
                     <li className="ml-auto small">
-                      <Link
-                        href={`/news/${item.slug}`}
+                      <div
+                        
                         className="text-white hover:text-orange-400 flex items-center gap-3 font-semibold -mt-0.5"
                       >
                         {" "}
                         Read More <FaArrowRightLong />
-                      </Link>{" "}
+                      </div>{" "}
                     </li>
                   </ul>
                 </div>
@@ -81,7 +82,7 @@ const OurArticle = ({ blogData }) => {
                     {item.title || "N/A"}
                   </h3>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

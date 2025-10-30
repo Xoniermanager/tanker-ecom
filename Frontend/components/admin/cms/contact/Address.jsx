@@ -134,6 +134,7 @@ const Address = ({ addressData }) => {
                   onChange={(e) => handleAddressChange(i, "order", e)}
                   className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none"
                   placeholder="order"
+                  onWheel={(e) => e.target.blur()}
                 />
               </div>
               <div className="flex flex-col gap-2 col-span-2">

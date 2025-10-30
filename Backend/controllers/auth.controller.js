@@ -180,9 +180,11 @@ class AuthController {
             const response = await this.userService.refreshToken(req);
 
             res.cookie("accessToken", response.accessToken, {
-                httpOnly: false,
+                httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "Lax",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+
+                path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
 
@@ -252,16 +254,18 @@ class AuthController {
 
             res.clearCookie("refreshToken", {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None",
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+
                 path: "/",
 
             });
 
             res.clearCookie("accessToken", {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None",
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+
                 path: "/",
 
             });

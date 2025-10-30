@@ -3,9 +3,7 @@ const customError = require("../utils/error");
 const customResponse = require("../utils/response");
 
 class TestimonialController {
-    /**
-     * Get all testimonials (unpaginated).
-     */
+   
     getAllTestimonials = async (req, res, next) => {
         try {
             const testimonials = await testimonialService.getAllTestimonials();
@@ -15,21 +13,17 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Get all testimonials (unpaginated) for frontend (only active one).
-     */
+    
     getFrontendTestimonials = async (req, res, next) => {
         try {
-            const testimonials = await testimonialService.getAllTestimonials({ status: "active" }, 3);
+            const testimonials = await testimonialService.getFrontendTestimonials({ status: "active" }, 3);
             customResponse(res, "All testimonials fetched successfully", testimonials);
         } catch (error) {
             next(error);
         }
     };
 
-    /**
-     * Create a new testimonial.
-     */
+    
     createTestimonial = async (req, res, next) => {
         try {
             const data = req.body;
@@ -40,9 +34,7 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Get a testimonial by ID.
-     */
+    
     getTestimonialById = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -54,9 +46,7 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Update a testimonial by ID.
-     */
+    
     updateTestimonial = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -69,9 +59,7 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Delete a testimonial by ID.
-     */
+    
     deleteTestimonial = async (req, res, next) => {
         try {
             const id = req.params.id;
@@ -83,9 +71,7 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Bulk delete testimonials by IDs.
-     */
+    
     bulkDeleteTestimonials = async (req, res, next) => {
         try {
             const { ids = [] } = req.body;
@@ -96,9 +82,7 @@ class TestimonialController {
         }
     };
 
-    /**
-     * Toggle testimonial status (active/inactive).
-     */
+   
     updateTestimonialStatus = async (req, res, next) => {
         try {
             const testimonialId = req.params.id;

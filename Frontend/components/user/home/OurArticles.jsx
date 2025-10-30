@@ -9,15 +9,11 @@ import api from "../common/api";
 const OurArticles = ({ articleData }) => {
   const [blogData, setBlogData] = useState(null);
 
-
-  
-
   const getBlogsData = async () => {
     try {
       const response = await api.get(`/blogs/published`);
       if (response.status === 200) {
         setBlogData(response.data.data.data);
-       
       }
     } catch (error) {
       console.log(error);
@@ -54,59 +50,61 @@ const OurArticles = ({ articleData }) => {
           </h2>
         </div>
         <div className="flex flex-col md:flex-row items-start gap-7">
-          {blogData?.slice(0,4).map((item, index) => {
-            const date = new Date(item.createdAt).toLocaleDateString("en-GB",{
+          {blogData?.slice(0, 4).map((item, index) => {
+            const date = new Date(item.createdAt).toLocaleDateString("en-GB", {
               day: "2-digit",
-              month:"short",
-              year: "numeric"
-            })
-           return <div className="bg-white group w-full" key={index}>
-              <div className="w-full h-60 overflow-hidden">
-                <Image
-                  src={item.thumbnail.fullUrl}
-                  width={200}
-                  height={200}
-                  alt="img"
-                  className="w-full h-60 object-cover group-hover:scale-110"
-                  quality={100}
-                />
-              </div>
-              <div className="post-info">
-                <ul className="tags flex">
-                  <li className="text-white">{date}</li>
-                  <li className="ml-auto small">
-                    <Link
-                      href={`/news/${item.slug}`}
-                      className="text-white flex items-center gap-3 font-semibold -mt-0.5 hover:text-orange-400"
-                    >
-                      {" "}
-                      Read More <FaArrowRightLong />
-                    </Link>{" "}
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-col items-center gap-3 p-7 px-7 md:px-9 border-r-4 border-orange-400">
-                <div className="flex items-center justify-between w-full">
-                  <h5 className="flex items-center gap-1 text-orange-400 font-semibold text-sm">
-                    <span className="text-orange-400 text-sm">
-                      <FaUser />
-                    </span>{" "}
-                    By {item.author.name}
-                  </h5>
-                  {/* <h5 className="flex items-center gap-1 text-orange-400 font-semibold text-sm">
+              month: "short",
+              year: "numeric",
+            });
+            return (
+              <Link href={`/news/${item.slug}`} className="bg-white group w-full" key={index}>
+                <div className="w-full h-60 overflow-hidden">
+                  <Image
+                    src={item.thumbnail.fullUrl}
+                    width={200}
+                    height={200}
+                    alt="img"
+                    className="w-full h-60 object-cover group-hover:scale-110"
+                    quality={100}
+                  />
+                </div>
+                <div className="post-info">
+                  <ul className="tags flex">
+                    <li className="text-white">{date}</li>
+                    <li className="ml-auto small">
+                      <div
+                        
+                        className="text-white flex items-center gap-3 font-semibold -mt-0.5 hover:text-orange-400"
+                      >
+                        {" "}
+                        Read More <FaArrowRightLong />
+                      </div>{" "}
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex flex-col items-center gap-3 p-7 px-7 md:px-9 border-r-4 border-orange-400">
+                  <div className="flex items-center justify-between w-full">
+                    <h5 className="flex items-center gap-1 text-orange-400 font-semibold text-sm">
+                      <span className="text-orange-400 text-sm">
+                        <FaUser />
+                      </span>{" "}
+                      By {item.author.name}
+                    </h5>
+                    {/* <h5 className="flex items-center gap-1 text-orange-400 font-semibold text-sm">
                     <span className="text-orange-400 text-sm">
                       <FaComment />{" "}
                     </span>{" "}
                     0{item.comments} comments
                   </h5> */}
+                  </div>
+                  <h3 className="text-xl font-semibold w-full text-start text-purple-950 line-clamp-2 min-h-14 group-hover:underline">
+                    {" "}
+                    {item.title}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-semibold w-full text-start text-purple-950 line-clamp-2 min-h-14 group-hover:underline">
-                  {" "}
-                  {item.title}
-                </h3>
-              </div>
-            </div>
-})}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </>

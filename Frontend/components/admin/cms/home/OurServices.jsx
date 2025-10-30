@@ -207,6 +207,7 @@ const OurServices = ({serviceData}) => {
                     placeholder="1, 2, 3..."
                     value={service?.order}
                     onChange={(e) => handleServiceChange(index, e)}
+                    onWheel={(e) => e.target.blur()}
                   />
                 </div>
                 <div className="flex flex-col gap-2 col-span-2">

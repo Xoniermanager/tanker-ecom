@@ -95,7 +95,7 @@ const OurProducts = ({ productData }) => {
                 className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-3xl flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
               ></div>
               <div className="bg-white content-box p-3 w-[90%] md:w-4/5 -mt-52 mx-auto z-20 relative">
-                <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
+                <Link href={`/products/${item.slug}`} className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
                   <Image
                     src={item.images[0].source || "/images/dummy.jpg"}
                     width={75}
@@ -110,8 +110,8 @@ const OurProducts = ({ productData }) => {
                     {item.description}
                   </p>
 
-                  <Link
-                    href={`/products/${item.slug}`}
+                  <div
+                    
                     className="relative inline-flex items-center justify-start w-48 h-12 px-8 overflow-hidden text-lg font-bold text-purple-950 group rounded-md ml-4"
                   >
                     <span className="z-10 transition-all duration-300 transform group-hover:-translate-x-4">
@@ -120,8 +120,8 @@ const OurProducts = ({ productData }) => {
                     <span className="absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[150px] text-orange-400">
                       <FaCircleArrowRight />
                     </span>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               </div>
             </SwiperSlide>
           ))

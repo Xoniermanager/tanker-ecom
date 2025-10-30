@@ -67,6 +67,8 @@ const page = () => {
     return <FailedDataLoading/>;
   }
 
+  // const deliveryDate = orderData.order.products
+
   return (
     <div className=" bg-violet-50 flex items-center justify-center px-4 py-18">
       <div className="max-w-3xl w-full">
@@ -146,7 +148,7 @@ const page = () => {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Estimated Delivery</span>
-                    <span className="font-medium">Oct 09-12, 2025</span>
+                    <span className="font-medium">5 to 7 days</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Address</span>

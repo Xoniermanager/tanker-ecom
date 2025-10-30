@@ -480,12 +480,7 @@ class ProductService {
     }
   }
 
-  /**
-   * Updates an existing product by ID.
-   * @param {string} id - Product ID.
-   * @param {object} data - Updated product fields.
-   * @returns {Promise<object>} Updated product.
-   */
+  
   async updateProduct(id, data) {
     const session = await mongoose.startSession();
     try {
@@ -554,7 +549,7 @@ class ProductService {
       }
       session.startTransaction();
 
-      await inventoryRepository.bulkDelete(validIds, session);
+      await inventoryRepository.bulkDeleteByProductIds(validIds, session);
       const bulkDelete = await productRepository.bulkDelete(validIds, session);
       if (!bulkDelete) {
         throw customError("Bulk deletion failed", 400);

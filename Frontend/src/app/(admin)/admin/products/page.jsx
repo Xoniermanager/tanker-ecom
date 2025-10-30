@@ -182,6 +182,11 @@ const page = () => {
     );
   };
 
+  const handlePageLimit = (num)=>{
+    setPageLimit(num)
+    setCurrentPage(1)
+  }
+
   return (
     <>
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 min-h-screen flex flex-col gap-6">
@@ -199,7 +204,7 @@ const page = () => {
           errMessage={errMessage}
           searchInput={searchInput}
           setSearchInput={setSearchInput}
-          setPageLimit={setPageLimit}
+          handlePageLimit={handlePageLimit}
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
           handleCategoryChange={handleCategoryChange}
