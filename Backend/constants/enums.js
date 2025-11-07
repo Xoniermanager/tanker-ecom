@@ -228,9 +228,16 @@ PACKAGE_TYPE: Object.freeze({
     description: 'Stillage',
     region: 'Australia, New Zealand, United States'
   }
+}),
+
+
+BUCKET_NAME : Object.freeze({
+  INPUT: "input",
+  COMPLETE: "complete",
+  FAILED: "failed"
 })
 
-
-
-
 };
+
+
+

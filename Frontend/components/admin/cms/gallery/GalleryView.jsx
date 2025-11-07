@@ -218,13 +218,66 @@ export default function GalleryAdmin({
         ))}
         
       </div>
-       <div className="flex items-center gap-4 justify-center w-full col-span-3" >
-                
-                        {[...Array(totalPages)].map((item, index)=>(
-                            <button className={` ${Number(currentPage) === (index + 1) ? "bg-orange-400 text-white" : "bg-[#f6e7d3]"} hover:bg-orange-400 hover:text-white  h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`} key={index} onClick={()=>setCurrentPage(index+1)}>{index + 1}</button>
-                        ))}
-                        <button disabled={totalPages < 2} className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl" onClick={()=>setCurrentPage(Number(currentPage) + 1)}> <IoArrowForward /> </button>
-                        </div>
+   
+<div className="flex items-center gap-4 justify-center w-full col-span-3">
+  {/* Previous Button */}
+  <button
+    disabled={currentPage === 1}
+    className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
+    onClick={() => setCurrentPage(Number(currentPage) - 1)}
+  >
+    <IoArrowForward />
+  </button>
+
+  {/* Page Numbers */}
+  {(() => {
+    let startPage, endPage;
+    
+    if (totalPages <= 3) {
+      // If total pages are 3 or less, show all
+      startPage = 1;
+      endPage = totalPages;
+    } else if (currentPage === 1) {
+      // If on first page, show 1, 2, 3
+      startPage = 1;
+      endPage = 3;
+    } else if (currentPage === totalPages) {
+      // If on last page, show last 3 pages
+      startPage = totalPages - 2;
+      endPage = totalPages;
+    } else {
+      // Show current page in the middle
+      startPage = currentPage - 1;
+      endPage = currentPage + 1;
+    }
+
+    return [...Array(endPage - startPage + 1)].map((_, index) => {
+      const pageNum = startPage + index;
+      return (
+        <button
+          className={`${
+            Number(currentPage) === pageNum
+              ? "bg-orange-400 text-white"
+              : "bg-[#f6e7d3]"
+          } hover:bg-orange-400 hover:text-white h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+          key={pageNum}
+          onClick={() => setCurrentPage(pageNum)}
+        >
+          {pageNum}
+        </button>
+      );
+    });
+  })()}
+
+  {/* Next Button */}
+  <button
+    disabled={currentPage >= totalPages}
+    className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+    onClick={() => setCurrentPage(Number(currentPage) + 1)}
+  >
+    <IoArrowForward />
+  </button>
+</div>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className=" w-full" onClose={() => setIsOpen(false)}>

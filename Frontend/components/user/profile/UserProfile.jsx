@@ -13,6 +13,7 @@ import {
   FaUserCircle,
   FaUserEdit,
 } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 import { useAuth } from "../../../context/user/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,6 +21,7 @@ import Image from "next/image";
 const UserProfile = () => {
   const { userData } = useAuth();
   const [copied, setCopied] = useState(false);
+  const [showImagePopup, setShowImagePopup] = useState(false);
 
   const copyUserId = () => {
     navigator.clipboard.writeText(userData?._id || "not found");
@@ -75,6 +77,34 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-20 px-5 md:py-24 ">
+     
+      {showImagePopup && (
+        <div 
+          className="fixed inset-0 bg-black/10 backdrop-blur-sm bg-opacity-70 z-1150 flex items-center justify-center p-4"
+          onClick={() => setShowImagePopup(false)}
+        >
+          <div 
+            className="relative max-w-3xl max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowImagePopup(false)}
+              className="absolute -top-4 -right-4 bg-white group rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors z-10"
+              aria-label="Close"
+            >
+              <span className="text-2xl text-gray-700 group-hover:rotate-90 group-hover:text-red-500"><FaXmark /></span>
+            </button>
+            <Image
+              src={userData?.profileImage || "/images/admin-avatar.png"}
+              alt="Profile"
+              className="rounded-lg shadow-2xl max-w-full max-h-[90vh] object-contain"
+              width={800}
+              height={800}
+            />
+          </div>
+        </div>
+      )}
+
       <div className="bg-white rounded-3xl overflow-hidden">
         <div className="relative bg-purple-100 p-6 md:p-10">
           <div className="absolute inset-0 "></div>
@@ -82,12 +112,15 @@ const UserProfile = () => {
             <div className="flex items-center justify-between flex-col md:flex-row gap-4 lg:gap-6">
               <div className="flex items-center flex-col md:flex-row w-full gap-4 lg:gap-6 space-x-4 lg:space-x-8">
                 <div className="relative">
-                  {/* {userData?.profileImage ? ( */}
-                    <div className="w-24 lg:w-28 h-24 lg:h-28 rounded-full overflow-hidden border-4 border-white/30 shadow-xl">
+                  
+                    <div 
+                      className="w-24 lg:w-28 h-24 lg:h-28 rounded-full overflow-hidden border-4 border-white/30 shadow-xl cursor-pointer hover:opacity-90 transition-opacity group"
+                      onClick={() => setShowImagePopup(true)}
+                    >
                       <Image
                         src={userData?.profileImage || "/images/admin-avatar.png"}
                         alt="Profile"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105"
                         height={80}
                         width={80}
                       />
@@ -254,22 +287,6 @@ const UserProfile = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <FaGlobe className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                        Language
-                      </p>
-                      <p className="text-gray-900 font-semibold capitalize">
-                        {userData?.preferredLanguage }
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
 
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">

@@ -1,6 +1,8 @@
 import React from "react";
-import { FaBox, FaCheckCircle, FaClock, FaEdit } from "react-icons/fa";
+
 import CountUp from 'react-countup';
+import { MdOutlineEdit } from "react-icons/md";
+import { FaEye } from "react-icons/fa";
 import Link from "next/link";
 
 const Inventory = ({ inventoryData }) => {
@@ -12,11 +14,16 @@ const Inventory = ({ inventoryData }) => {
     );
   }
 
+  console.log("inventory data: ", inventoryData);
+
   return (
     <div className="w-full mx-auto bg-white shadow-[0_0_10px_#00000020] rounded-2xl p-6 border border-gray-100">
-      <div className="flex items-center justify-between gap-10">
+      <div className="flex items-center justify-between gap-10 mb-6">
       <h2 className="text-xl font-semibold text-purple-950 mb-5">Inventory View</h2>
-      <Link href={''}>  </Link>
+      <div className="flex items-center justify-center gap-4">
+      <Link href={`/admin/products/edit-inventory/${inventoryData?.product?._id}`} className="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2"> <MdOutlineEdit className="text-lg"/> Edit Inventory </Link>
+      <Link href={`/admin/products/view/${inventoryData?.product?.slug}`} className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition flex items-center gap-2"> <FaEye className="text-lg"/> View Product </Link>
+      </div>
       </div>
 
       <div className="bg-purple-50/70 p-5 px-7 grid grid-cols-2 gap-5 rounded-lg">

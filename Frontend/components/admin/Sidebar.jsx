@@ -110,7 +110,7 @@ const Sidebar = () => {
             {" "}
             <Link
               href={`/admin/dashboard`}
-              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
+              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl group rounded-tr-3xl ${
                 pathpop === "dashboard"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
                   : "bg-transparent  "
@@ -121,10 +121,10 @@ const Sidebar = () => {
                   pathpop === "dashboard" && "text-orange-600 bg-white"
                 }`}
               >
-                <HiOutlineChartBar />
+                <HiOutlineChartBar className="group-hover:scale-110 group-hover:text-orange-600 text-lg"/>
               </span>
               <span
-                className={`font-medium ${
+                className={`font-medium group-hover:text-orange-600 ${
                   pathpop === "dashboard" && "text-orange-600"
                 }`}
               >
@@ -473,7 +473,7 @@ const Sidebar = () => {
             {" "}
             <Link
               href={`/admin/customers`}
-              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
+              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl group rounded-tr-3xl ${
                 pathname.includes("customers")
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500 "
                   : "bg-transparent  "
@@ -484,10 +484,10 @@ const Sidebar = () => {
                   pathpop === "customers" && "text-orange-600 bg-white"
                 }`}
               >
-                <FaRegUser />
+                <FaRegUser className="group-hover:scale-110 group-hover:text-orange-600 text-lg"/>
               </span>
               <span
-                className={`font-medium ${
+                className={`font-medium group-hover:text-orange-600 ${
                   pathpop === "customers" && "text-orange-600"
                 }`}
               >
@@ -603,7 +603,7 @@ const Sidebar = () => {
             {" "}
             <Link
               href={`/admin/website-settings`}
-              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl rounded-tr-3xl ${
+              className={`flex items-center gap-3 px-5 py-2.5 rounded-bl-3xl group rounded-tr-3xl ${
                 pathpop === "website-settings"
                   ? "bg-amber-200/50 border-r-2 border-l-orange-600 border-l-2 border-r-orange-500"
                   : "bg-transparent  "
@@ -614,10 +614,10 @@ const Sidebar = () => {
                   pathpop === "website-settings" && "text-orange-600 bg-white"
                 }`}
               >
-                <IoSettingsOutline />
+                <IoSettingsOutline className="group-hover:scale-110 group-hover:text-orange-600 text-lg"/>
               </span>
               <span
-                className={`font-medium ${
+                className={`font-medium group-hover:text-orange-600 ${
                   pathpop === "website-settings" && "text-orange-600"
                 }`}
               >
