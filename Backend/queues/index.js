@@ -9,8 +9,8 @@ class TaskQueue {
         this.queue = new Queue(queueName, {
             connection: redisConfig,
             defaultJobOptions: {
-                removeOnComplete: 100, // Keep last 100 completed jobs
-                removeOnFail: 50, // Keep last 50 failed jobs
+                removeOnComplete: 100, 
+                removeOnFail: 50, 
                 attempts: 3,
                 backoff: {
                     type: 'exponential',
@@ -20,7 +20,7 @@ class TaskQueue {
             },
         });
 
-        // Initialize queue events for monitoring
+        
         this.queueEvents = new QueueEvents(queueName, { connection: redisConfig });
         this.setupEventListeners();
     }

@@ -2,9 +2,7 @@ const orderService = require("../services/order.service")
 const customResponse = require("../utils/response")
 
 class OrderController {
-    /**
-     * Create a new order for the logged-in user.
-     */
+    
     createOrder = async (req, res, next) => {
         try {
             const userId = req.user._id;
@@ -16,10 +14,7 @@ class OrderController {
         }
     }
 
-    /**
-     * Get a paginated list of orders.
-     * Admins can see all orders, users can see their own.
-     */
+   
     getOrders = async (req, res, next) => {
         try {
             const { page = 1, limit = 10, ...filters } = req.query;
@@ -35,10 +30,7 @@ class OrderController {
         }
     }
 
-    /**
-     * Get order details by order ID.
-     * Checks ownership unless user is an admin.
-     */
+    
     getOrderDetailById = async (req, res, next) => {
         try {
             const { orderId } = req.params;
@@ -49,10 +41,7 @@ class OrderController {
         }
     }
 
-    /**
-     * Get order details by order number.
-     * Checks ownership unless user is an admin.
-     */
+   
     getOrderByOrderNumber = async (req, res, next) => {
         try {
             const { orderNumber } = req.params;
@@ -74,11 +63,6 @@ class OrderController {
         }
     }
 
-    /**
-     * Change the status of an order.
-     * Can only be used by admin.
-     * Handles inventory adjustments if order is cancelled.
-     */
     changeOrderStatus = async (req, res, next) => {
         try {
             const { orderId } = req.params;
@@ -90,9 +74,7 @@ class OrderController {
         }
     }
 
-    /**
-     * Create a Stripe PaymentIntent for the given order.
-     */
+  
     initializePayment = async (req, res, next) => {
         try {
             const { orderId } = req.params;

@@ -13,7 +13,7 @@ const GalleryManagement = ({getGalleryData}) => {
   const [errMessage, setErrMessage] = useState(null);
   
   const [prevUrl, setPrevUrl] = useState(null);
-  const [tagInput, setTagInput] = useState("");
+  const [tagInputs, setTagInputs] = useState({});
 
 
   const generateClientId = () => `item-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
@@ -61,17 +61,17 @@ const GalleryManagement = ({getGalleryData}) => {
   };
 
   const addTag = (index) => {
-    const trimmedTag = tagInput.trim();
+    const trimmedTag = (tagInputs[index] || "").trim();
     if (trimmedTag && !formData.items[index].tags.includes(trimmedTag)) {
       const updatedItems = [...formData.items];
       updatedItems[index].tags.push(trimmedTag);
       setFormData({ ...formData, items: updatedItems });
-      setTagInput("");
+      setTagInputs({ ...tagInputs, [index]: "" });
     }
   };
 
   const handleTagKeyDown = (e, index) => {
-    if ((e.key === "Enter" || e.key === ",") && tagInput.trim()) {
+    if ((e.key === "Enter" || e.key === ",") && (tagInputs[index] || "").trim()) {
       e.preventDefault();
       addTag(index);
     }
@@ -110,6 +110,11 @@ const GalleryManagement = ({getGalleryData}) => {
   const deleteGalleryItem = (index) => {
     const updatedItems = formData.items.filter((_, idx) => idx !== index);
     setFormData({ ...formData, items: updatedItems });
+    
+    // Clean up the tagInput for this index
+    const newTagInputs = { ...tagInputs };
+    delete newTagInputs[index];
+    setTagInputs(newTagInputs);
   };
 
   const handleSubmit = async (e) => {
@@ -166,6 +171,7 @@ const GalleryManagement = ({getGalleryData}) => {
       },
     ],
       })
+      setTagInputs({});
       getGalleryData()
     }
   } catch (error) {
@@ -256,15 +262,15 @@ const GalleryManagement = ({getGalleryData}) => {
                     name="tags"
                     className="border border-gray-300 bg-white rounded-md px-5 py-3 outline-none flex-1"
                     placeholder="Type tag and press Enter"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
+                    value={tagInputs[index] || ""}
+                    onChange={(e) => setTagInputs({ ...tagInputs, [index]: e.target.value })}
                     onKeyDown={(e) => handleTagKeyDown(e, index)}
                   />
                   <button
                     type="button"
                     onClick={() => addTag(index)}
                     className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 disabled:bg-orange-300 font-medium group flex items-center gap-1"
-                    disabled={!tagInput.trim()}
+                    disabled={!(tagInputs[index] || "").trim()}
                   >
                     <IoMdAdd className="group-hover:rotate-90 text-xl" /> Add
                   </button>

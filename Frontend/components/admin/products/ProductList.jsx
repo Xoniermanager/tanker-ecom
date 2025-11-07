@@ -71,20 +71,21 @@ const ProductList = ({
                 <select
                   name="productCount"
                   id="productCount"
-                  className="p-2 w-32 rounded-lg border-1 outline-none border-slate-200"
+                  className="p-2 w-32 rounded-lg border-1 outline-none cursor-pointer border-slate-200"
                   onChange={(e) => handlePageLimit(e.target.value)}
                 >
                   <option value="10">10</option>
                   <option value="20">20</option>
                   <option value="30">30</option>
+                  <option value="50">50</option>
                 </select>
               </div>
-              <div className="px-5 py-2.5 bg-orange-400 group relative rounded-lg font-semibold text-white hover:bg-orange-500">
+              <div className="px-5 py-2.5 bg-orange-400 group relative cursor-pointer rounded-lg font-semibold text-white hover:bg-orange-500">
                 Actions
                 <ul className="p-4 w-[200px] absolute top-full -left-1/2 z-150 shadow-[0_0_10px_#00000010] hidden group-hover:block rounded-lg bg-white">
                   <li>
                     <button
-                      className="flex justify-between w-full items-center gap-2 hover:text-orange-500"
+                      className="flex justify-between w-full  hover:cursor-pointer items-center gap-2 hover:text-orange-500"
                       onClick={handleBulkDelete}
                     >
                       <span className="flex items-center gap-2">
@@ -362,13 +363,13 @@ const ProductList = ({
           <div className="w-[31%] flex flex-col gap-5 sticky top-24">
             <h3 className="text-xl font-semibold">Filter Products</h3>
             <div className="bg-white rounded-xl p-5 flex flex-col ">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between cursor-pointer hover:text-orange-400" onClick={() => setShowSearch(!showSearch)}>
                 <h3 className="font-medium">Keywords</h3>
                 <button
                   className={`hover:text-orange-500 ${
                     showSearch ? "rotate-180" : "rotate-0"
                   }`}
-                  onClick={() => setShowSearch(!showSearch)}
+                  
                 >
                   <FaAngleDown />
                 </button>
@@ -392,13 +393,13 @@ const ProductList = ({
             </div>
 
             <div className="bg-white rounded-xl p-5 flex flex-col ">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between hover:text-orange-400 cursor-pointer"  onClick={() => setShowCategory(!showCategory)}>
                 <h3 className="font-medium">Categories</h3>
                 <button
                   className={`hover:text-orange-500 ${
                     showCategory ? "rotate-180" : "rotate-0"
                   }`}
-                  onClick={() => setShowCategory(!showCategory)}
+                 
                 >
                   <FaAngleDown />
                 </button>

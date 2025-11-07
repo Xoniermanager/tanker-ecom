@@ -103,6 +103,11 @@ const Navbar = () => {
       name: "Orders query",
       path: "/orders/query"
     },
+    {
+      id:19,
+      name: "Dashboard",
+      path:"/dashboard"
+    }
 
 ]
 
@@ -163,7 +168,7 @@ const pathname = usePathname().split("/").pop()
           </button>
         </div>
         <div className="w-[30%] flex items-center justify-end gap-7">
-          <button
+          {/* <button
             className="relative cursor-pointer group"
             onClick={() => setShowNotification(true)}
           >
@@ -174,7 +179,7 @@ const pathname = usePathname().split("/").pop()
               {" "}
               2
             </span>
-          </button>
+          </button> */}
           {/* <button className="relative cursor-pointer group" onClick={()=>toast.info("Sorry Admin service is under development")}>
                <span className='text-2xl group-hover:text-orange-600'><IoCartOutline /></span>
                <span className='bg-red-500 h-4 w-4 flex rounded-full items-center justify-center text-white absolute -top-1.5 -right-1 text-[10px]'> 2</span>
