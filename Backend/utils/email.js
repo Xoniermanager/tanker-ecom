@@ -394,6 +394,8 @@ const generateAdminOrderNotificationEmail = (orderData) => {
 };
 
 async function sendOrderConfirmationEmail(order) {
+  const encryptedAddress = order.address.shippingAddress.address
+    const decreptedAddress = decrypt(encryptedAddress)
   const emailData = {
     customerName: ` ${order.firstName} ${order.lastName}`,
     orderNumber: order.orderNumber,
@@ -413,14 +415,14 @@ async function sendOrderConfirmationEmail(order) {
     // tax: order.tax || 0,
     total: order.totalPrice,
     shippingAddress: {
-      address: order.address.shippingAddress.address,
+      address: decreptedAddress,
       city: order.address.shippingAddress.city,
     
       zipCode: order.address.shippingAddress.pincode,
       country: order.address.shippingAddress.country,
       phone: order.phone
     },
-    estimatedDelivery: 'Update you soon'
+    estimatedDelivery: 'Please check in order detail'
   };
 
   const htmlContent = generateOrderConfirmationEmail(emailData);

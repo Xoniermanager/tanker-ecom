@@ -98,6 +98,16 @@ const Navbar = () => {
       name: "website settings",
       path: "/website-settings"
     },
+    {
+      id:18,
+      name: "Orders query",
+      path: "/orders/query"
+    },
+    {
+      id:19,
+      name: "Dashboard",
+      path:"/dashboard"
+    }
 
 ]
 
@@ -138,7 +148,7 @@ const pathname = usePathname().split("/").pop()
             {/* {searchData && <div className="backdrop-blur-sm fixed h-full w-full top-0 right-0 left-0 bottom-0 bg-black/10 z-8" onClick={()=>setSearchData("")}></div>} */}
             {searchData && <ul className="absolute w-full flex flex-col gap-2 top-[110%] left-0 p-5 px-7 bg-white rounded-lg shadow-[0_0_10px_#00000012] max-h-[400px] overflow-y-scroll overflow-hidden z-[10]">{relatedData.length> 0 ? relatedData.map((item, index)=>(
                
-                <li key={item.id} className="w-full group"><Link href={`/admin${item.path}`} className={`${pathname.includes(item.path.split("/").pop()) ? "text-orange-400 bg-orange-100/80": "bg-slate-100"} capitalize block w-full group-hover:text-orange-400 px-4 py-2 rounded-md  group-hover:bg-orange-100/80`} > <CgWebsite /> {item.name}</Link></li>
+                <li key={item.id} className="w-full group"><Link href={`/admin${item.path}`} className={`${pathname.includes(item.path.split("/").pop()) ? "text-orange-400 bg-orange-100/80": "bg-slate-100"} capitalize w-full group-hover:text-orange-400 px-4 py-2 rounded-md  group-hover:bg-orange-100/80 flex items-center gap-2 `} > <CgWebsite /> {item.name}</Link></li>
               
             )) : <p className="text-center"> sorry <span className="text-orange-400">"{searchData}"</span> page not found</p>}</ul>}
           </div>
@@ -158,7 +168,7 @@ const pathname = usePathname().split("/").pop()
           </button>
         </div>
         <div className="w-[30%] flex items-center justify-end gap-7">
-          <button
+          {/* <button
             className="relative cursor-pointer group"
             onClick={() => setShowNotification(true)}
           >
@@ -169,7 +179,7 @@ const pathname = usePathname().split("/").pop()
               {" "}
               2
             </span>
-          </button>
+          </button> */}
           {/* <button className="relative cursor-pointer group" onClick={()=>toast.info("Sorry Admin service is under development")}>
                <span className='text-2xl group-hover:text-orange-600'><IoCartOutline /></span>
                <span className='bg-red-500 h-4 w-4 flex rounded-full items-center justify-center text-white absolute -top-1.5 -right-1 text-[10px]'> 2</span>

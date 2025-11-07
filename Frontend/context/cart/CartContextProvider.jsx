@@ -59,7 +59,7 @@ const CartContextProvider = ({ children }) => {
         
         if (response.status === 200) {
           localStorage.removeItem("guestCart");
-          toast.success("Cart synced successfully!");
+          // toast.success("Cart synced successfully!");
           setHasSyncedGuestCart(true);
           await fetchCartData();
         }

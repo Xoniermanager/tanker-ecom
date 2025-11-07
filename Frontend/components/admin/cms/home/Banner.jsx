@@ -65,10 +65,12 @@ const Banner = ({ homeData }) => {
       return
     }
 
-    setErrMessage(null)
+    setErrMessage(null);
+    console.log("file: ", file)
     const fileURL = URL.createObjectURL(file)
+
     setPreview(fileURL)
-    
+    console.log("preview url: ", fileURL)
 
     setFormData(prev => ({
       ...prev,
@@ -255,14 +257,22 @@ const Banner = ({ homeData }) => {
               <div className="col-span-2">
                 <label className='font-medium text-sm'>Preview:</label>
                 <div className='mt-2'>
-                  {formData.thumbnail.type === "image" ? (
-                    <img src={preview} alt="Preview" className='rounded-md w-full max-h-[250px] object-contain' />
-                  ) : (
-                    <video controls className='rounded-md w-full max-h-[250px] object-contain'>
-                      <source src={preview} />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
+                  {formData.thumbnail.type === "video" ? (
+  <video
+    key={preview} 
+    controls
+    className='rounded-md w-full max-h-[250px] object-contain'
+  >
+    <source src={preview} />
+    Your browser does not support the video tag.
+  </video>
+) : (
+  <img
+    src={preview}
+    alt="Preview"
+    className='rounded-md w-full max-h-[250px] object-contain'
+  />
+)}
                 </div>
               </div>
             )}
@@ -274,7 +284,6 @@ const Banner = ({ homeData }) => {
           <p className='text-red-500'>{errMessage}</p>
         </div>}
 
-      
         <div className="col-span-2 flex justify-end">
           <button
             type="submit"
