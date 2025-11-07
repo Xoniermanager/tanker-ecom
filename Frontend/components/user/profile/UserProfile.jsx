@@ -80,7 +80,7 @@ const UserProfile = () => {
      
       {showImagePopup && (
         <div 
-          className="fixed inset-0 bg-black/10 backdrop-blur-sm bg-opacity-70 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/10 backdrop-blur-sm bg-opacity-70 z-1150 flex items-center justify-center p-4"
           onClick={() => setShowImagePopup(false)}
         >
           <div 
