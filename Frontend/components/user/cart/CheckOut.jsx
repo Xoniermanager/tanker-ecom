@@ -235,6 +235,7 @@ const CheckOut = ({
                   placeholder="Zip Code"
                   value={formData.shippingAddress.pincode}
                   onChange={handleChange}
+                  onWheel={(e) => e.target.blur()}
                   required
                 />
               </div>
@@ -296,10 +297,10 @@ const CheckOut = ({
                       Choose your Country{" "}
                     </option>
                     {Object.values(COUNTRIES).map((item, i) => (
-                      <option value={item.value} className="capitalize" key={i}>
-                        {item.name}
-                      </option>
-                    ))}
+                    <option value={item.code} className="capitalize" key={i}>
+                      {item.name}
+                    </option>
+                  ))}
                   </select>
                 </div>
                 <div className="flex flex-col gap-2 col-span-2 md:col-span-1">
@@ -338,6 +339,7 @@ const CheckOut = ({
                     className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
                     placeholder="Zip Code"
                     value={formData.billingAddress.pincode}
+                    onWheel={(e) => e.target.blur()}
                     onChange={handleChange}
                     required
                   />

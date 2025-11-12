@@ -3,14 +3,9 @@ const siteSettingRepository = require("../repositories/site-setting.repository")
 const customError = require("../utils/error");
 const mongoose = require("mongoose");
 
-/**
- * SiteSettingService handles reading and updating site settings.
- */
+
 class SiteSettingService {
-    /**
-     * Returns the current site settings.
-     * @returns {Promise<Object|null>}
-     */
+   
     async getCurrentSettings() {
         const settings = await siteSettingRepository.getCurrentSettings();
         if (!settings) {
@@ -19,11 +14,6 @@ class SiteSettingService {
         return settings;
     }
 
-    /**
-     * Updates or creates the site settings document.
-     * @param {Object} updateData - The updated site settings payload.
-     * @returns {Promise<Object>} - The updated site settings.
-     */
     async upsertSettings(updateData) {
         const session = await mongoose.startSession();
         try {
