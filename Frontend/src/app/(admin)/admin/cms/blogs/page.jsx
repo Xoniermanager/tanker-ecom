@@ -426,7 +426,7 @@ const Page = () => {
   }
 
   return (
-    <div className="pl-86 pt-26 p-6 w-full bg-violet-50 flex flex-col gap-6">
+    <div className="pl-86 pt-26 p-6 w-full bg-violet-50 flex flex-col gap-6 h-[100vh]">
       <ul className="p-4 bg-white rounded-xl flex items-center justify-start gap-4 shadow-[0_0_15px_#00000020]">
         <li>
           <button

@@ -33,7 +33,7 @@ const OurArticle = ({ blogData }) => {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-start gap-7 max-w-7xl mx-auto">
-          {blogData?.map((item, index) => {
+          {(blogData?.length > 0) ? blogData?.map((item, index) => {
             const createdDate = new Date(item.createdAt).toLocaleDateString(
               "en-GB",
               {
@@ -84,7 +84,11 @@ const OurArticle = ({ blogData }) => {
                 </div>
               </Link>
             );
-          })}
+          }): (
+            <div className="col-span-1 md:col-span-2 lg:col-span-4">
+               <p className="text-center text-slate-600"> Sorry currently no news available </p>
+            </div>
+          )}
         </div>
       </div>
     </>

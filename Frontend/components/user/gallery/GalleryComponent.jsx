@@ -13,7 +13,7 @@ const GalleryComponent = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
- console.log("current page: ", currentPage)
+
   useEffect(() => {
     const handleEscapeKey = (event) => {
       if (event.key === "Escape") {
@@ -77,7 +77,7 @@ const handlePrevImage = () => {
     <>
       <div className="py-22 md:py-28 max-w-7xl px-6 mx-auto flex flex-col gap-12">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {blogData?.map((item, index) => (
+          {(blogData.length > 0 )? blogData?.map((item, index) => (
             <div
               style={{ backgroundImage: `url(${item.image.fullUrl})` }}
               className="p-6 w-full h-72 md:h-[450px] hover:-translate-y-3 flex items-end bg-cover bg-center bg-no-repeat group cursor-pointer transition-transform duration-300"
@@ -93,12 +93,14 @@ const handlePrevImage = () => {
                 </h2>
               </div>
             </div>
-          ))}
+          )): <div className="col-span-1 md:col-span-2 lg:col-span-3">
+            <p className="text-center text-slate-600">Gallery images not found</p>
+            </div>}
         </div>
         
       
                     
-<div className="flex items-center gap-4 justify-center w-full">
+{(blogData.length > 0 ) && <div className="flex items-center gap-4 justify-center w-full">
 
   <button
     disabled={Number(currentPage) <= 1}
@@ -153,7 +155,7 @@ const handlePrevImage = () => {
   >
     <IoArrowForward />
   </button>
-</div>
+</div>}
       </div>
 
      

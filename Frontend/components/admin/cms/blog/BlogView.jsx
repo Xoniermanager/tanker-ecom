@@ -13,7 +13,7 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
    <div className="w-full  flex flex-col items-center justify-between my-4">
          
          <div className='grid grid-cols-3 gap-6 w-full '>
-          {blogData?.map((item,i)=>{
+          {(blogData.length > 0) ? blogData?.map((item,i)=>{
                      const data = ""
                   return (
                       <div className='w-full bg-white p-6 rounded-xl flex flex-col gap-3 shadow-[0_0_10px_#00000008] hover:shadow-[0_0_14px_#00000018] ' key={i}>
@@ -60,7 +60,8 @@ const BlogView = ({blogData, showDeletePopup, setShowDeletePopup, isLoading, err
                                         </div>
                       </div>
                   )
-                })}
+                }): <div className='col-span-3'>
+                  <p className='text-center text-slate-600'>Blog data not found</p></div>}
          </div>
       
     </div>

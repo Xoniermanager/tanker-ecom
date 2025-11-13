@@ -4,9 +4,7 @@ const customResponse = require("../utils/response");
 const { uploadImage } = require("../utils/storage");
 
 class GalleryController {
-    /**
-     * Get all gallery items.
-     */
+   
     getGallery = async (req, res, next) => {
         try {
             const { page = 1, limit = 10 } = req.query;
@@ -17,9 +15,7 @@ class GalleryController {
         }
     };
 
-    /**
-     * Get all gallery items for frontend (only active one).
-     */
+ 
     getFrontendGallery = async (req, res, next) => {
         try {
             const { page = 1, limit = 10 } = req.query;
@@ -30,9 +26,7 @@ class GalleryController {
         }
     };
 
-    /**
-     * Get gallery items filtered by tag.
-     */
+  
     getGalleryByTags = async (req, res, next) => {
         try {
             const { tags = [], page = 1, limit = 10 } = req.query;
@@ -44,9 +38,6 @@ class GalleryController {
         }
     };
 
-    /**
-     * Add gallery items (bulk create).
-     */
     addGalleryItems = async (req, res, next) => {
         try {
             const items = req.body.items || "[]";
@@ -95,9 +86,7 @@ class GalleryController {
         }
     };
 
-    /**
-     * Update gallery items (bulk create).
-     */
+
     updateGalleryItems = async (req, res, next) => {
         try {
             const items = req.body.items || "[]";
@@ -132,9 +121,7 @@ class GalleryController {
         }
     };
 
-    /**
-     * Delete gallery items in bulk by IDs.
-     */
+
     deleteGalleryItems = async (req, res, next) => {
         try {
             const { ids = [] } = req.body;

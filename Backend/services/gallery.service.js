@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const galleryRepository = require("../repositories/cms/gallery.repository");
-const { deleteImage } = require("../utils/storage");
+const { deleteImage, getBucketImageKey } = require("../utils/storage");
 const customError = require("../utils/error");
 
 /**
@@ -57,11 +57,7 @@ class GalleryService {
         }
     }
 
-    /**
-     * Bulk deletes gallery items by their IDs.
-     * @param {string[]} ids - Array of gallery item IDs to delete.
-     * @returns {Promise<Object>} Deletion result with count.
-     */
+   
     async bulkDeleteGallery(ids = []) {
         const session = await mongoose.startSession();
         try {
@@ -69,10 +65,10 @@ class GalleryService {
 
             const result = await galleryRepository.bulkDelete(ids, session);
 
-            // remove images from storage also
             for (const id of ids) {
                 const item = await galleryRepository.findById(id);
-                deleteImage(item.image.source);
+                const key = getBucketImageKey(item.image.source)
+                await deleteImage(key);
             }
 
             await session.commitTransaction();

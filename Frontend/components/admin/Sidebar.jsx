@@ -77,7 +77,7 @@ const Sidebar = () => {
       <div className="bg-white flex items-center gap-4 p-3 relative rounded-lg cursor-pointer" onMouseEnter={()=>setInView(true)} onMouseLeave={()=>setInView(false)}>
         <Link href={'/admin/profile'} className="flex items-center gap-4" ><Image
           className="bg-cover rounded-full w-11 h-11"
-          src={userData?.profileImage ||  "https://res.cloudinary.com/doyyiy2p6/image/upload/v1754909790/uploads/1754909790058-f48203d0-c195-4f5b-83ed-3c58043d3735-employee_one.jpg.jpg"}
+          src={userData?.profileImage ||  "/images/admin-avatar.png"}
           height={40}
           width={40}
           alt="user"
