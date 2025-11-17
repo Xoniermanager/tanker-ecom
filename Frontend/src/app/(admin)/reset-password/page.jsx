@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import api from "../../../../../components/user/common/api";
+import api from "../../../../components/user/common/api";
 import { toast } from "react-toastify";
 import { FaEnvelope } from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
@@ -23,7 +23,7 @@ const page = () => {
       if (response.status === 200) {
         localStorage.setItem("verifyEmail", email);
         toast.success("OTP sent successfully! Please check your inbox.");
-        router.push(`/admin/verify-otp`)
+        router.push(`/verify-admin-otp`)
         setEmail("");
       }
     } catch (error) {

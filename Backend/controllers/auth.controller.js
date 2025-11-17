@@ -299,6 +299,17 @@ class AuthController {
             next(error)
         }
     }
+
+    removeProfileImage = async(req,res,next)=>{
+        try {
+            const id = req.user._id;
+            const name = req.user.fullName;
+            await this.userService.removeProfileImage(id, name);
+            return customResponse(res, `${name} profile deleted successfully`);
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 exports.AuthController = AuthController;

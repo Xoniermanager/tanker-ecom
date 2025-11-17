@@ -142,7 +142,7 @@ export default function GalleryAdmin({
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {galleryData?.map((item) => (
+        {(galleryData?.length > 0) ? galleryData?.map((item) => (
           <div
             key={item.id}
             className="bg-white shadow rounded-xl overflow-hidden hover:shadow-xl group"
@@ -215,12 +215,14 @@ export default function GalleryAdmin({
               </div>
             </div>
           </div>
-        ))}
+        )): <div className="col-span-3 text-center">
+          <p>Gallery images not found</p>
+          </div>}
         
       </div>
    
-<div className="flex items-center gap-4 justify-center w-full col-span-3">
-  {/* Previous Button */}
+{(galleryData?.length > 0) &&<div className="flex items-center gap-4 justify-center w-full col-span-3">
+  
   <button
     disabled={currentPage === 1}
     className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
@@ -229,24 +231,24 @@ export default function GalleryAdmin({
     <IoArrowForward />
   </button>
 
-  {/* Page Numbers */}
+ 
   {(() => {
     let startPage, endPage;
     
     if (totalPages <= 3) {
-      // If total pages are 3 or less, show all
+     
       startPage = 1;
       endPage = totalPages;
     } else if (currentPage === 1) {
-      // If on first page, show 1, 2, 3
+     
       startPage = 1;
       endPage = 3;
     } else if (currentPage === totalPages) {
-      // If on last page, show last 3 pages
+      
       startPage = totalPages - 2;
       endPage = totalPages;
     } else {
-      // Show current page in the middle
+      
       startPage = currentPage - 1;
       endPage = currentPage + 1;
     }
@@ -269,7 +271,7 @@ export default function GalleryAdmin({
     });
   })()}
 
-  {/* Next Button */}
+  
   <button
     disabled={currentPage >= totalPages}
     className="h-12 w-12 rounded-full border-white bg-[#42666f] disabled:bg-[#42666f68] hover:bg-[#334f56] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
@@ -277,7 +279,7 @@ export default function GalleryAdmin({
   >
     <IoArrowForward />
   </button>
-</div>
+</div>}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className=" w-full" onClose={() => setIsOpen(false)}>

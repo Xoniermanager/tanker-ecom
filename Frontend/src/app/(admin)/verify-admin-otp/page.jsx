@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import api from "../../../../../components/user/common/api";
+import api from "../../../../components/user/common/api";
 import { IoPlayBackOutline } from "react-icons/io5";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaEye,  FaEyeSlash } from "react-icons/fa";

@@ -11,13 +11,7 @@ const productCategoryRepository = require("../repositories/product/product-categ
 const summaryFields = "";
 
 class ProductService {
-  /**
-   * Retrieves paginated products with optional filters.
-   * @param {number} [page=1] - The page number for pagination.
-   * @param {number} [limit=10] - Number of products per page.
-   * @param {object} [filters={}] - Filters (category, status, name).
-   * @returns {Promise<object>} Paginated list of products.
-   */
+ 
   async getAllProducts(page = 1, limit = 10, filters = {}) {
     const query = {};
 
@@ -76,11 +70,7 @@ class ProductService {
     );
   }
 
-  /**
-   * Fetches a single product by its slug and includes inventory quantity.
-   * @param {string} slug - The product slug.
-   * @returns {Promise<object>} Product details with inventory quantity.
-   */
+
   async getProductBySlug(slug) {
     try {
       if (!slug || typeof slug !== "string") {
@@ -513,11 +503,7 @@ class ProductService {
     }
   }
 
-  /**
-   * Deletes a product and its inventory entry.
-   * @param {string} id - Product ID.
-   * @returns {Promise<object>} Deleted product.
-   */
+ 
   async deleteProduct(id) {
     const session = await mongoose.startSession();
     try {
@@ -564,11 +550,7 @@ class ProductService {
     }
   };
 
-  /**
-   * Toggles a product's status between 'active' and 'inactive'.
-   * @param {string} productId - Product ID.
-   * @returns {Promise<string>} New product status.
-   */
+ 
   async toggleProductStatus(productId) {
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       throw customError("Invalid product ID");
@@ -586,10 +568,7 @@ class ProductService {
     return newStatus;
   }
 
-  /**
-   * Fetch all unique brands from products.
-   * @returns {Promise<string[]>} List of unique brand names.
-   */
+ 
   async getBrandsForFilter() {
     return productRepository.getAllUniqueBrands();
   }

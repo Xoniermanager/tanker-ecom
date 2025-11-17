@@ -122,11 +122,12 @@ const Footer = ({ siteData }) => {
         </ul>
 
         <ul className=" flex flex-col  gap-6 md:w-[46%] lg:w-[22%]">
-          {blogData && (blogData?.slice(0,2)?.map((item, index)=>(
-<li key={item._id}>
-          <h4 className="text-lg md:text-[22px] font-semibold capitalize text-white tracking-wide">
+           <h4 className="text-lg md:text-[22px] font-semibold capitalize text-white tracking-wide">
             Latest post
           </h4>
+          {(blogData?.length>0) ? (blogData?.slice(0,2)?.map((item, index)=>(
+<li key={item._id}>
+         
           <div className="flex flex-col gap-2 group">
             <span className="text-white/70 group-hover:text-orange-300 text-sm md:text-base">{new Date(item?.createdAt).toLocaleDateString('en-NZ', {
   day: '2-digit',
@@ -144,6 +145,8 @@ const Footer = ({ siteData }) => {
            </li>
           ))
           
+):(
+  <p className="text-white">Currently have no posts</p>
 )}
         </ul>
         <div className="flex flex-col gap-5 md:gap-6 md:w-[46%] lg:w-[20%]">

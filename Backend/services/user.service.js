@@ -11,6 +11,7 @@ const { generateOtp, sendOtpEmail } = require("../utils/otp");
 const { OTP_EXPIRY_DURATION, USER_STATUS } = require("../constants/enums");
 const { default: mongoose, startSession, Types } = require("mongoose");
 const { tryCatch } = require("bullmq");
+const { getBucketImageKey, deleteImage } = require("../utils/storage");
 
 class UserService {
  
@@ -79,11 +80,7 @@ class UserService {
     return { message: "Email verified successfully" };
   }
 
-  /**
-   * Sends OTP to user's email after validating credentials (for login).
-   * @param {Object} param0 - { email, password, role }
-   * @returns {Promise<boolean>}
-   */
+ 
   async requestLoginOtp({ email, password, role }) {
     try {
       await this.validateUserAndPassword(email, password, role);
@@ -104,11 +101,7 @@ class UserService {
     }
   }
 
-  /**
-   * Verifies OTP and logs in the user.
-   * @param {Object} param0 - { email, otp, password, role }
-   * @returns {Promise<Object>} - Access & refresh tokens + user
-   */
+ 
   async verifyLoginOtp({ email, otp, password, role }) {
     const isOtpValid = await this.validateOtp(email, otp, "login_otp");
     if (!isOtpValid) throw customError("Invalid or expired OTP", 400);
@@ -125,11 +118,7 @@ class UserService {
     };
   }
 
-  /**
-   * Requests OTP for password reset.
-   * @param {Object} param0 - { email }
-   * @returns {Promise<boolean>}
-   */
+ 
   async requestPasswordReset({ email }) {
     const user = await userRepository.findOne({ companyEmail: email });
     if (!user) throw customError("User not found", 400);
@@ -155,11 +144,7 @@ class UserService {
     return true;
   }
 
-  /**
-   * Verifies OTP and resets the password.
-   * @param {Object} param0 - { email, otp, newPassword }
-   * @returns {Promise<Object>} - Success message
-   */
+
   async resetPassword({ email, otp, newPassword }) {
     const isOtpValid = await this.validateOtp(email, otp, "password_reset");
     if (!isOtpValid) throw customError("Invalid or expired OTP", 400);
@@ -178,13 +163,7 @@ class UserService {
     return { message: "Password has been reset successfully." };
   }
 
-  /**
-   * Resends the email verification OTP if none is active.
-   *
-   * @param {string} email - Email to resend OTP for.
-   * @returns {Promise<Object>} - Success message
-   * @throws {Error} - If user not found or already verified or OTP recently sent.
-   */
+ 
   async resendEmailVerificationOtp(email) {
     const user = await userRepository.findOne({ companyEmail: email });
     if (!user) throw customError("User not found", 400);
@@ -197,27 +176,13 @@ class UserService {
     return { message: "Email verification OTP resent successfully" };
   }
 
-  /**
-   * Resends the login OTP if none is active.
-   *
-   * @param {Object} param0 - Object with email, password, and role
-   * @param {string} param0.email
-   * @param {string} param0.password
-   * @param {string} param0.role
-   * @returns {Promise<Object>} - Success message
-   * @throws {Error} - If credentials are invalid or OTP recently sent.
-   */
+
   async resendLoginOtp({ email, password, role }) {
     await this.validateUserAndPassword(email, password, role);
     await this.resendOtpHelper(email, "login_otp");
     return { message: "Login OTP resent successfully" };
   }
 
-  /**
-   * Refreshes the access token using the refresh token.
-   * @param {Object} req - Express request with cookie.
-   * @returns {Promise<Object>} - New access token
-   */
   async refreshToken(req) {
     const refreshToken = req.cookies.refreshToken;
 
@@ -310,15 +275,6 @@ class UserService {
     }
   };
 
-  // ========== Helper Methods ==========
-
-  /**
-   * Validates email and password for a user.
-   * @param {string} email
-   * @param {string} password
-   * @param {string} role
-   * @returns {Promise<Object>} - User object if valid.
-   */
   async validateUserAndPassword(email, password, role) {
     const user = await userRepository.findByEmailAndRole(email, role);
     if (!user) throw customError("User not found", 400);
@@ -341,13 +297,6 @@ class UserService {
     return user;
   }
 
-  /**
-   * Validates an OTP for a specific purpose.
-   * @param {string} email
-   * @param {string} otp
-   * @param {string} type - OTP type: 'login_otp' | 'email_verification' | 'password_reset'
-   * @returns {Promise<boolean>}
-   */
   async validateOtp(email, otp, type) {
     const otpData = await userRepository.findLatestOtpByEmailAndType(
       email,
@@ -361,16 +310,7 @@ class UserService {
     return true;
   }
 
-  /**
-   * Sends a new OTP if no active OTP exists for the user and purpose.
-   *
-   * @private
-   * @param {string} email - The user's email address.
-   * @param {string} type - OTP type: 'email_verification' | 'login_otp'
-   * @param {string} [templateType] - Optional template type for the email content.
-   * @returns {Promise<void>}
-   * @throws {Error} - If an active OTP exists that hasn't expired.
-   */
+
   async resendOtpHelper(email, type, templateType = type) {
     const existingOtp = await userRepository.findLatestOtpByEmailAndType(
       email,
@@ -504,6 +444,35 @@ class UserService {
       await session.endSession();
     }
   };
+
+  removeProfileImage =async(userId, name)=>{
+    const session = await startSession();
+    try {
+      session.startTransaction()
+      const result = await userRepository.findById(userId, session);
+
+      if(!result){
+        throw customError(`${name} profile  not found`);
+      }
+      
+      if(result.profileImage){
+       const key = getBucketImageKey(result.profileImage)
+       await deleteImage(key)
+      }
+
+      const removeImage = await userRepository.findByIdAndUpdate(userId, {profileImage: null}, session);
+      if(!removeImage){
+        throw customError(`${name} profile image not delete`);
+      }
+      await session.commitTransaction();
+      return true;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error
+    } finally{
+      await session.endSession()
+    }
+  }
 }
 
 module.exports = { UserService };

@@ -24,7 +24,7 @@ const uploadImage = async (buffer, filename, folder = "uploads", mimetype = "ima
             Key: `${folder}/${uniqueName}`,
             Body: buffer,
             ContentType: mimetype,
-            ACL: "public-read",
+            // ACL: "public-read",
         };
 
         const result = await s3.upload(params).promise();
@@ -48,7 +48,7 @@ const uploadImage = async (buffer, filename, folder = "uploads", mimetype = "ima
     }
 };
 
-// ------------------ DELETE FUNCTION ------------------ //
+
 const deleteImage = async (key) => {
     if (!key) return;
 
@@ -57,6 +57,7 @@ const deleteImage = async (key) => {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: key,
         };
+       
         await s3.deleteObject(params).promise();
     } else {
         const fullPath = path.join(__dirname, "..", key);
@@ -66,15 +67,21 @@ const deleteImage = async (key) => {
     }
 };
 
-// ------------------ Get Public URL of File ------------------ //
+const getBucketImageKey = (source)=>{
+  const key = source.split(".com/")
+  return key.pop()
+}
+
+
 function getPublicFileUrl(keyOrUrl) {
     const storageDriver = process.env.STORAGE_DRIVER || "local";
 
     if (!keyOrUrl) return null;
 
     if (storageDriver === "s3") {
-        const bucketBaseUrl = process.env.AWS_PUBLIC_URL;
-        return `${bucketBaseUrl}/${keyOrUrl}`;
+        // const bucketBaseUrl = process.env.AWS_PUBLIC_URL;
+        // return `${bucketBaseUrl}/${keyOrUrl}`;
+        return keyOrUrl
     }
 
     if ( storageDriver === "cloudinary") return keyOrUrl
@@ -87,5 +94,6 @@ function getPublicFileUrl(keyOrUrl) {
 module.exports = {
     uploadImage,
     deleteImage,
-    getPublicFileUrl
+    getPublicFileUrl,
+    getBucketImageKey
 };

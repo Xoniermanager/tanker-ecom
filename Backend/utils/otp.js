@@ -1,11 +1,7 @@
 const queueManager = require("../queues/manager");
 const { sendEmail } = require("./email");
 
-/**
- * Generate a 6-digit OTP (One-Time Password).
- *
- * @returns {string} - A 6-digit OTP.
- */
+
 function generateOtp() {
     if (process.env.NODE_ENV !== 'production')
         return "123456";
@@ -14,13 +10,7 @@ function generateOtp() {
     return otp.toString().padStart(6, "0");
 }
 
-/**
- * Get OTP subject and message based on the OTP type.
- *
- * @param {string} otp - The generated OTP code.
- * @param {string} type - The purpose of the OTP (e.g., 'email_verification', 'login_otp', 'password_reset').
- * @returns {{ subject: string, text: string }}
- */
+
 function getOtpEmailContent(otp, type = "generic") {
     switch (type) {
         case "email_verification":
@@ -46,14 +36,7 @@ function getOtpEmailContent(otp, type = "generic") {
     }
 }
 
-/**
- * Send an OTP email based on its purpose/type.
- *
- * @param {string} email - The recipient's email address.
- * @param {string} otp - The OTP code to send.
- * @param {string} [type='generic'] - The OTP type/purpose.
- * @returns {Promise<void>}
- */
+
 async function sendOtpEmail(email, otp, type = "generic") {
     try {
         const { subject, text } = getOtpEmailContent(otp, type);

@@ -2,10 +2,7 @@ const Stripe = require("stripe");
 const customError = require("../utils/error");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-/**
- * Stripe Payment Service
- * Handles creating and managing payments.
- */
+
 class StripeService {
     
     async createPaymentIntent(amount, currency = "nzd") {
@@ -94,11 +91,7 @@ class StripeService {
         }
     }
 
-    /**
-     * Retrieve a Stripe Session by ID
-     * @param {String} sessionId
-     * @returns {Object} session
-     */
+   
     async getSession(sessionId) {
         try {
             const session = await stripe.checkout.sessions.retrieve(sessionId);

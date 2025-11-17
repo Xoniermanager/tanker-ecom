@@ -34,9 +34,7 @@ const seedAppConfig = async () => {
             console.log("Admin user created successfully:", admin.companyEmail);
         }
 
-        /**
-         ** Seed Default Site Settings
-         */
+        
         console.log("Seeding site settings...");
 
         const existingSettings = await SiteSetting.findOne();

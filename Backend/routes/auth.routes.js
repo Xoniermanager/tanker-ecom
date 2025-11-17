@@ -70,6 +70,7 @@ router.get('/all-users', authorize(['admin']), authController.getall);
 router.post('/activate/:id', authorize(['admin']), authController.activate);
 router.post('/deactivate/:id', authorize(['admin']), authController.deactivate);
 router.put('/profile-update', authorize(['admin', 'user']), upload.single("file"), validateUpdateUser, authController.updateProfile);
+router.route("/remove-profile-img").patch(authorize(['admin', 'user']), authController.removeProfileImage)
 
 
 module.exports = router;
