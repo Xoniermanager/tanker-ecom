@@ -357,7 +357,7 @@ const UserProfileUpdate = () => {
                                         >
                                             <option value="">Select Country</option>
                                             {Object.values(COUNTRIES).map((country) => (
-                                                <option key={country.code} value={country.value}>{country.name}</option>
+                                                <option key={country?.code} value={country?.value}>{country.name}</option>
                                             ))}
                                         </select>
                                     </div>
