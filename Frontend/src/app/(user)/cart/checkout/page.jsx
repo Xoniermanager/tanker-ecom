@@ -1,4 +1,4 @@
-// pages/checkout/page.js (Fixed)
+
 "use client";
 import React, { useState, useEffect } from "react";
 import PageBanner from "../../../../../components/user/common/PageBanner";
@@ -19,7 +19,7 @@ const Page = () => {
     fetchCartData,
     shippingPrice,
     setShippingPrice,
-    setSelectedCountry, // Get this from context
+    setSelectedCountry, 
   } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
@@ -116,7 +116,7 @@ const Page = () => {
         ...prev,
         paymentMethod: PAYMENT_METHODS.COD,
       }));
-      // Shipping price will be automatically set to 0 by the context
+      
     }
   }, [formData.shippingAddress.country, setSelectedCountry]);
 

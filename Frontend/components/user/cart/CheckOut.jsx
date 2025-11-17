@@ -192,8 +192,8 @@ const CheckOut = ({
                     Choose your Country{" "}
                   </option>
                   {Object.values(COUNTRIES).map((item, i) => (
-                    <option value={item.code} className="capitalize" key={i}>
-                      {item.name}
+                    <option value={item?.code} className="capitalize" key={i}>
+                      {item?.name}
                     </option>
                   ))}
                 </select>
@@ -205,7 +205,7 @@ const CheckOut = ({
                   name="shippingAddress.city"
                   className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
                   placeholder="Enter you address"
-                  value={formData.shippingAddress.city}
+                  value={formData?.shippingAddress?.city}
                   onChange={handleChange}
                   required
                 />
@@ -233,7 +233,7 @@ const CheckOut = ({
                   name="shippingAddress.pincode"
                   className="border-stone-200 border-1 rounded-md bg-white outline-none px-5 py-3"
                   placeholder="Zip Code"
-                  value={formData.shippingAddress.pincode}
+                  value={formData?.shippingAddress?.pincode}
                   onChange={handleChange}
                   onWheel={(e) => e.target.blur()}
                   required
@@ -297,8 +297,8 @@ const CheckOut = ({
                       Choose your Country{" "}
                     </option>
                     {Object.values(COUNTRIES).map((item, i) => (
-                    <option value={item.code} className="capitalize" key={i}>
-                      {item.name}
+                    <option value={item?.code} className="capitalize" key={i}>
+                      {item?.name}
                     </option>
                   ))}
                   </select>
