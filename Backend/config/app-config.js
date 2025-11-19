@@ -19,7 +19,7 @@ const seedAppConfig = async () => {
             console.log("Admin already exists. Skipping admin seeding.");
         } else {
             const admin = new User({
-                "companyEmail": "admin@company.com",
+                "companyEmail": "sales@tankersolutions.co.nz",
                 "companyName": "Tanker Ecom Solutions",
                 "fullName": "Admin",
                 "designation": "Admin",

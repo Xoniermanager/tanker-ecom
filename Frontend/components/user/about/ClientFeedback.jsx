@@ -5,17 +5,16 @@ import { GoDotFill } from "react-icons/go";
 
 const ClientFeedback = ({ testimonialData, testimonials }) => {
   const [show, setShow] = useState(0);
-    const intervalRef = useRef(null);
+  const intervalRef = useRef(null);
 
   const startAutoScroll = () => {
     if (!testimonials || testimonials.length === 0) return;
-    stopAutoScroll(); 
+    stopAutoScroll();
     intervalRef.current = setInterval(() => {
       setShow((prev) => (prev + 1) % testimonials.length);
     }, 4000);
   };
 
-  
   const stopAutoScroll = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -71,66 +70,63 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
               />
             </div>
           </div>
-           
-          
-<div className="md:w-[58%] bg-white p-5 md:p-9 px-8 md:px-14 rounded-[50px] rounded-tl-none flex flex-col gap-6" onMouseEnter={stopAutoScroll}
-          onMouseLeave={startAutoScroll}>
-  <div className="flex justify-between items-center">
-    <Image
-      src={"/images/quote.png"}
-      width={80}
-      height={80}
-      alt="quote"
-      className="w-14 md:w-22"
-    />
-    <Image
-      src={"/images/shape_22.png"}
-      width={80}
-      height={80}
-      alt="quote"
-      className="w-14 md:w-22"
-    />
-  </div>
 
-  <div
-    key={show}
-    className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
-  >
-    {testimonials[show]?.message}
-  </div>
+          <div
+            className="md:w-[58%] bg-white p-5 md:p-9 px-8 md:px-14 rounded-[50px] rounded-tl-none flex flex-col gap-6"
+            onMouseEnter={stopAutoScroll}
+            onMouseLeave={startAutoScroll}
+          >
+            <div className="flex justify-between items-center">
+              <Image
+                src={"/images/quote.png"}
+                width={80}
+                height={80}
+                alt="quote"
+                className="w-14 md:w-22"
+              />
+              <Image
+                src={"/images/shape_22.png"}
+                width={80}
+                height={80}
+                alt="quote"
+                className="w-14 md:w-22"
+              />
+            </div>
 
-  <div className="flex justify-between items-center gap-12">
-    
-    <div className="flex justify-center slick-dots relative w-full md:w-1/2">
-      {testimonials.slice(0,3).map((_, index) => (
-        <button
-          key={index}
-          onClick={() => setShow(index)}
-          className={`${
-            show === index
-              ? "text-orange-400 scale-130"
-              : "scale-100 text-[#d0c1a2]"
-          } text-xl transition-all duration-300`}
-        >
-          <GoDotFill />
-        </button>
-      ))}
-    </div>
+            <div
+              // key={show}
+              className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
+            >
+              {testimonials[show]?.message}
+            </div>
 
-    
-    <div className="w-1/2 flex flex-col items-end">
-      <h4 className="font-bold text-xl md:text-2xl text-purple-950 transition-all duration-700 ease-in-out opacity-0 animate-fade-in ">
-        {testimonials[show]?.name}
-      </h4>
-      <span className="font-bold text-end md:text-start text-orange-400 text-sm md:text-base transition-all duration-700 ease-in-out opacity-0 animate-fade-in">
-        {testimonials[show]?.designation}
-      </span>
-    </div>
-  </div>
-</div>
+            <div className="flex justify-between items-center gap-12">
+              <div className="flex justify-center slick-dots relative w-full md:w-1/2">
+                {testimonials?.slice(0, 3).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setShow(index)}
+                    className={`${
+                      show === index
+                        ? "text-orange-400 scale-130"
+                        : "scale-100 text-[#d0c1a2]"
+                    } text-xl transition-all duration-300`}
+                  >
+                    <GoDotFill />
+                  </button>
+                ))}
+              </div>
 
-
-          
+              <div className="w-1/2 flex flex-col items-end">
+                <h4 className="font-bold text-xl md:text-2xl text-purple-950 transition-all duration-700 ease-in-out opacity-0 animate-fade-in ">
+                  {testimonials[show]?.name}
+                </h4>
+                <span className="font-bold text-end md:text-start text-orange-400 text-sm md:text-base transition-all duration-700 ease-in-out opacity-0 animate-fade-in">
+                  {testimonials[show]?.designation}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
