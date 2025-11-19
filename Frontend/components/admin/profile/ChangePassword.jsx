@@ -6,8 +6,8 @@ const ChangePassword = ({passwordData, handlePasswordChange, handlePasswordDataC
     const [newPassShow, setNewPassShow] = useState(false)
     const [conPassShow, setConPassShow] = useState(false)
   return (
-    <div className='bg-white rounded-lg p-6 px-8 flex flex-col gap-4'>
-      <h2 className='font-semibold text-2xl'>Basic Information</h2>
+    <div className='bg-white rounded-lg p-6 px-8 flex flex-col gap-8'>
+      <h2 className='font-semibold text-2xl'><span className='text-red-500'>*</span> Change Admin Password</h2>
       <form onSubmit={handlePasswordChange} className='grid grid-cols-2 gap-5'>
          <div className="flex flex-col gap-2 col-span-2">
             <label htmlFor="oldPassword">Old Password</label>

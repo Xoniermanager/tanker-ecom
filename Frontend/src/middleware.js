@@ -1,80 +1,88 @@
 import { NextResponse } from "next/server";
-import { useCart } from "../context/cart/CartContext";
+import { USER_ROLES } from "../constants/enums";
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-
   const backendURL = process.env.NEXT_PUBLIC_SERVER_URL;
+
   const isAdminRoute = pathname.startsWith("/admin");
-  const isCheckoutRoute = pathname.startsWith("/cart/checkout");
+  const isAdminLoginPage = pathname === "/admin"; 
   const isOrderRoute = pathname.startsWith("/orders");
-  const isProfileRoute = pathname.startsWith("/profile")
-  const isLoginPage = pathname === "/admin";
+  const isProfileRoute = pathname.startsWith("/profile");
+  const isCheckoutRoute = pathname.startsWith("/cart/checkout");
 
-  let isAuthenticated;
+  let isAuthenticated = false;
+  let user = null;
 
-  const checkAuth = async () => {
+
+  try {
     const res = await fetch(`${backendURL}/auth/me`, {
       method: "GET",
-      credentials: "include",
       headers: {
         cookie: request.headers.get("cookie") || "",
       },
-      
     });
-   
-    isAuthenticated = res.status === 200;
-  };
-  await checkAuth();
 
+    if (res.status === 200) {
+      const json = await res.json();
+      user = json?.data;
+      isAuthenticated = true;
+    }
+  } catch (err) {
+    isAuthenticated = false
+  }
 
+  const role = user?.role;
+
+  
   if (isAdminRoute) {
-    if (!isAuthenticated && !isLoginPage) {
+    console.log("User role: ", role);
+
+   
+    if (!isAdminLoginPage && (!isAuthenticated || role !== USER_ROLES.ADMIN)) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    if (isAuthenticated && isLoginPage) {
+   
+    if (isAdminLoginPage && isAuthenticated && role === USER_ROLES.ADMIN) {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
 
-  if (isOrderRoute) {
-    if (!isAuthenticated && isOrderRoute) {
+  if (isOrderRoute || isProfileRoute) {
+    if (!isAuthenticated) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  if(isProfileRoute){
-    if(!isAuthenticated && isProfileRoute) {
-      return NextResponse.redirect(new URL("/login", request.url)) }
-  }
 
   if (isCheckoutRoute) {
     try {
-      const res = await fetch(`${backendURL}/cart`, {
+      const cartRes = await fetch(`${backendURL}/cart`, {
         method: "GET",
-        credentials: "include",
         headers: {
-        cookie: request.headers.get("cookie") || "",
-      }
+          cookie: request.headers.get("cookie") || "",
+        },
       });
 
-      if (res.status === 200) {
-        const response = await res.json();
-        const data = response.data.items;
-       
-        if (!data || !Array.isArray(data) || (data.length <= 0)) {
+      if (cartRes.status === 200) {
+        const cartJson = await cartRes.json();
+        const items = cartJson?.data?.items;
+
+        if (!Array.isArray(items) || items.length === 0) {
           return NextResponse.redirect(new URL("/cart", request.url));
         }
+      } else {
+        return NextResponse.redirect(new URL("/cart", request.url));
       }
-    } catch (error) {
-      
+    } catch (err) {
       return NextResponse.redirect(new URL("/cart", request.url));
     }
   }
 
   return NextResponse.next();
 }
+
 
 export const config = {
   matcher: [
@@ -83,6 +91,6 @@ export const config = {
     "/cart/checkout",
     "/cart/checkout/:path*",
     "/orders/:path*",
-    "/profile/:path*"
+    "/profile/:path*",
   ],
 };

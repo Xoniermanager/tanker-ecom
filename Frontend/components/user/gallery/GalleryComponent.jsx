@@ -37,7 +37,7 @@ const GalleryComponent = ({
 
  useEffect(() => {
   const handleKeyNavigation = (event) => {
-    if (!isModalOpen || !blogData || blogData.length === 0) return;
+    if (!isModalOpen || !blogData || blogData?.length === 0) return;
     
     if (event.key === "ArrowLeft") {
       handlePrevImage();
@@ -60,16 +60,16 @@ const GalleryComponent = ({
   };
 
  const handleNextImage = () => {
-  if (!blogData || blogData.length === 0) return;
+  if (!blogData || blogData?.length === 0) return;
   setCurrentImageIndex((prevIndex) => 
-    prevIndex === blogData.length - 1 ? 0 : prevIndex + 1
+    prevIndex === blogData?.length - 1 ? 0 : prevIndex + 1
   );
 };
 
 const handlePrevImage = () => {
-  if (!blogData || blogData.length === 0) return;
+  if (!blogData || blogData?.length === 0) return;
   setCurrentImageIndex((prevIndex) => 
-    prevIndex === 0 ? blogData.length - 1 : prevIndex - 1
+    prevIndex === 0 ? blogData?.length - 1 : prevIndex - 1
   );
 };
 
@@ -77,7 +77,7 @@ const handlePrevImage = () => {
     <>
       <div className="py-22 md:py-28 max-w-7xl px-6 mx-auto flex flex-col gap-12">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {(blogData.length > 0 )? blogData?.map((item, index) => (
+          {(blogData?.length > 0 )? blogData?.map((item, index) => (
             <div
               style={{ backgroundImage: `url(${item.image.fullUrl})` }}
               className="p-6 w-full h-72 md:h-[450px] hover:-translate-y-3 flex items-end bg-cover bg-center bg-no-repeat group cursor-pointer transition-transform duration-300"
@@ -100,7 +100,7 @@ const handlePrevImage = () => {
         
       
                     
-{(blogData.length > 0 ) && <div className="flex items-center gap-4 justify-center w-full">
+{(blogData?.length > 0 ) && <div className="flex items-center gap-4 justify-center w-full">
 
   <button
     disabled={Number(currentPage) <= 1}
@@ -199,7 +199,7 @@ const handlePrevImage = () => {
                 {blogData[currentImageIndex]?.title}
               </h3>
               <p className="text-sm text-white">
-                {currentImageIndex + 1} of {blogData.length}
+                {currentImageIndex + 1} of {blogData?.length}
               </p>
             </div>
           </div>

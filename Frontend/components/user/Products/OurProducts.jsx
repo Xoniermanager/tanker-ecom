@@ -13,21 +13,19 @@ import api from "../common/api";
 import BlockPageLoader from "../../common/BlockPageLoader";
 import { STOCK_STATUS } from "../../../constants/enums";
 
-const OurProducts = ({
- 
-}) => {
+const OurProducts = ({}) => {
   const [productData, setProductData] = useState(null);
-    const [categoryData, setCategoryData] = useState(null);
-    const [brandData, setBrandData] = useState(null)
-    const [isLoading, setIsLoading] = useState(false);
-    const [filterCategory, setFilterCategory] = useState(null)
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filterByName, setFilterByName] = useState(null)
-    const [filterBrand, setFilterBrand] = useState(null)
-    const [errMessage, setErrMessage] = useState(false)
-    const [totalPages, setTotalPages] = useState(1)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [pageLimit, setPageLimit] = useState(6)
+  const [categoryData, setCategoryData] = useState(null);
+  const [brandData, setBrandData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterCategory, setFilterCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterByName, setFilterByName] = useState(null);
+  const [filterBrand, setFilterBrand] = useState(null);
+  const [errMessage, setErrMessage] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageLimit, setPageLimit] = useState(6);
   const [activePage, setActivePage] = useState(1);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -35,14 +33,20 @@ const OurProducts = ({
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await api.get(`/products/frontend?limit=${pageLimit}&page=${currentPage}&${filterCategory ? `category=${filterCategory}` : ""}&${filterByName ? `name=${filterByName}` : ""}&${filterBrand ? `brand=${filterBrand}` : ""}`);
-      if(response.status === 200){
+      const response = await api.get(
+        `/products/frontend?limit=${pageLimit}&page=${currentPage}&${
+          filterCategory ? `category=${filterCategory}` : ""
+        }&${filterByName ? `name=${filterByName}` : ""}&${
+          filterBrand ? `brand=${filterBrand}` : ""
+        }`
+      );
+      if (response.status === 200) {
         setProductData(response?.data?.data.data || null);
-        console.log("prodcut: ", response?.data?.data.data )
-        
-        setTotalPages(response?.data?.data?.totalPages)
-        setPageLimit(response?.data?.data?.limit)
-        setCurrentPage(response?.data?.data?.page)
+        console.log("prodcut: ", response?.data?.data.data);
+
+        setTotalPages(response?.data?.data?.totalPages);
+        setPageLimit(response?.data?.data?.limit);
+        setCurrentPage(response?.data?.data?.page);
       }
     } catch (error) {
       const message =
@@ -56,14 +60,14 @@ const OurProducts = ({
     }
   };
 
-  const fetchCategories = async()=>{
+  const fetchCategories = async () => {
     try {
-      const response = await api.get(`/product-categories/active`)
-      if(response.status === 200){
-        setCategoryData(response.data.data)
+      const response = await api.get(`/product-categories/active`);
+      if (response.status === 200) {
+        setCategoryData(response.data.data);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       const message =
         (Array.isArray(error?.response?.data?.errors) &&
           error.response.data.errors[0]?.message) ||
@@ -71,50 +75,49 @@ const OurProducts = ({
         "Something went wrong";
       setErrMessage(message);
     }
-  }
+  };
 
-  const fetchBrand = async()=>{
+  const fetchBrand = async () => {
     try {
-      const response = await api.get(`/products/brands`)
-      if(response.status === 200){
-         setBrandData(response.data.data)
+      const response = await api.get(`/products/brands`);
+      if (response.status === 200) {
+        setBrandData(response.data.data);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  
   useEffect(() => {
     fetchCategories();
-    fetchBrand()
-  }, [])
+    fetchBrand();
+  }, []);
 
   useEffect(() => {
-  const delayDebounce = setTimeout(() => {
-    setFilterByName(searchTerm);  
-    setCurrentPage(1);           
-  }, 500);
+    const delayDebounce = setTimeout(() => {
+      setFilterByName(searchTerm);
+      setCurrentPage(1);
+    }, 500);
 
-  return () => clearTimeout(delayDebounce);
-}, [searchTerm]);
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   useEffect(() => {
-      fetchData();
-    }, [currentPage, pageLimit, filterCategory, filterByName, filterBrand]);
+    fetchData();
+  }, [currentPage, pageLimit, filterCategory, filterByName, filterBrand]);
 
-    const handleBrandFilter = (e) =>{
-      setFilterBrand(e)
-      setCurrentPage(1)
-    }
-    const handleCategoryFilter = (e) =>{
-      setFilterCategory(e)
-      setCurrentPage(1)
-    }
-  
-    if(isLoading){
-      <BlockPageLoader/>
-    }
+  const handleBrandFilter = (e) => {
+    setFilterBrand(e);
+    setCurrentPage(1);
+  };
+  const handleCategoryFilter = (e) => {
+    setFilterCategory(e);
+    setCurrentPage(1);
+  };
+
+  if (isLoading) {
+    <BlockPageLoader />;
+  }
 
   return (
     <div className="w-full my-22 md:py-28 px-6 flex flex-col gap-10">
@@ -126,7 +129,10 @@ const OurProducts = ({
           </span>
           <Image src="/images/arrows.png" width={43} height={11} alt="arrow" />
         </div>
-        <h2 className="font-black text-5xl lg:text-7xl text-center text-purple-950"> Our Products </h2>
+        <h2 className="font-black text-5xl lg:text-7xl text-center text-purple-950">
+          {" "}
+          Our Products{" "}
+        </h2>
         <p className="text-zinc-500 md:w-1/2 text-center md:text-lg font-medium">
           Tanker Solutions is the New Zealand distributor for some of the very
           best global petroleum equipment suppliers for tankers and tank
@@ -146,7 +152,7 @@ const OurProducts = ({
               className="w-full outline-none"
               placeholder="Search here..."
               value={searchTerm}
-  onChange={(e)=>setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -159,14 +165,16 @@ const OurProducts = ({
             name="brand"
             id="brand"
             className="border-gray-200 border-1 px-1 py-3 rounded-xl font-medium bg-gray-50"
-            onChange={(e)=>handleBrandFilter(e.target.value)}
+            onChange={(e) => handleBrandFilter(e.target.value)}
           >
-             <option value="" hidden>
+            <option value="" hidden>
               Choose Brand
             </option>
             <option value="">All Brands</option>
-            {brandData?.map((item,i)=>(
-             <option value={item.value} key={i}>{item.label}</option>
+            {brandData?.map((item, i) => (
+              <option value={item.value} key={i}>
+                {item.label}
+              </option>
             ))}
           </select>
         </div>
@@ -186,113 +194,127 @@ const OurProducts = ({
             </option>
             <option value="">All Categories</option>
             {categoryData?.map((item, index) => (
-              <option value={item._id} key={item._id}>{item.name}</option>
+              <option value={item._id} key={item._id}>
+                {item.name}
+              </option>
             ))}
           </select>
         </div>
-       
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full mx-auto">
-        {productData?.length > 0  ? productData?.map((item, index) => (
-          <Link href={`/products/${item.slug}`} className="main-box w-full" key={index}>
-            <div
-              style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
-              className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-[46px] flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
-            ></div>
-            <div className="bg-white content-box p-3 w-[88%] md:w-4/5 -mt-52 mx-auto z-20 relative">
-              <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
-                <Image
-                  src={item.images[0]?.source || "/images/dummy.jpg"}
-                  width={75}
-                  height={75}
-                  alt="truck icon"
-                  className="h-16 w-20 object-contain"
-                />
-                <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
-                  {item.name}
-                </h3>
-                <p className="text-zinc-500 font-medium text-base text-center leading-7 md:leading-8 line-clamp-3 h-20 md:h-22">
-                  {item.shortDescription}
-                </p>
+        {productData?.length > 0 ? (
+          productData?.map((item, index) => (
+            <Link
+              href={`/products/${item.slug}`}
+              className="main-box w-full"
+              key={index}
+            >
+              <div
+                style={{ backgroundImage: `url('/images/truckOne.jpg')` }}
+                className="bg-purple-200 product-truck-img relative bg-cover bg-center rounded-[46px] flex items-center justify-center text-2xl font-bold h-74 overflow-hidden"
+              ></div>
+              <div className="bg-white content-box p-3 w-[88%] md:w-4/5 -mt-52 mx-auto z-20 relative">
+                <div className="border-2 border-orange-400 border-dashed p-6 flex items-center flex-col justify-between gap-5">
+                  <Image
+                    src={item.images[0]?.source || "/images/dummy.jpg"}
+                    width={75}
+                    height={75}
+                    alt="truck icon"
+                    className="h-16 w-20 object-contain"
+                  />
+                  <h3 className="text-2xl font-bold text-purple-950 text-center truncate w-full capitalize">
+                    {item.name}
+                  </h3>
+                  <p className="text-zinc-500 font-medium text-base text-center leading-7 md:leading-8 line-clamp-3 h-20 md:h-22">
+                    {item.shortDescription}
+                  </p>
 
-                  <div
-                  
-                  className="relative inline-flex items-center justify-start w-46 h-12 px-8 overflow-hidden capitalize text-lg font-bold text-purple-950 group rounded-md ml-4"
-                >
-                  <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "" : "text-red-500"} z-10 transition-all duration-300 transform group-hover:-translate-x-4`}>
-                   {(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "view product" : "Out of stock" }
-                  </span>
-                  <span className={`${(item.inventory.status === STOCK_STATUS.IN_STOCK) ? "text-orange-400" :"text-red-500"} absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[140px] `}>
-                    <FaCircleArrowRight />
-                  </span>
+                  <div className="relative inline-flex items-center justify-start w-46 h-12 px-8 overflow-hidden capitalize text-lg font-bold text-purple-950 group rounded-md ml-4">
+                    <span
+                      className={`${
+                        item.inventory.status === STOCK_STATUS.IN_STOCK
+                          ? ""
+                          : "text-red-500"
+                      } z-10 transition-all duration-300 transform group-hover:-translate-x-4`}
+                    >
+                      {item.inventory.status === STOCK_STATUS.IN_STOCK
+                        ? "view product"
+                        : "Out of stock"}
+                    </span>
+                    <span
+                      className={`${
+                        item.inventory.status === STOCK_STATUS.IN_STOCK
+                          ? "text-orange-400"
+                          : "text-red-500"
+                      } absolute -left-0 z-0 transition-all duration-300 transform group-hover:translate-x-[140px] `}
+                    >
+                      <FaCircleArrowRight />
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        )) : (
-          <div className="flex items-center justify-center w-full col-span-3 text-stone-500"> Product data not found</div>
+            </Link>
+          ))
+        ) : (
+          <div className="flex items-center justify-center w-full col-span-3 text-stone-500">
+            {" "}
+            Product data not found
+          </div>
         )}
       </div>
-      <div className="flex items-center gap-4 justify-center">
-  {/* Previous Button */}
-  <button
-    className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
-    onClick={() => setCurrentPage(Number(currentPage) - 1)}
-    disabled={currentPage === 1}
-  >
-    <IoArrowForward />
-  </button>
-
-
-  {(() => {
-    let startPage, endPage;
-
-    if (totalPages <= 3) {
-
-      startPage = 1;
-      endPage = totalPages;
-    } else if (currentPage === 1) {
-
-      startPage = 1;
-      endPage = 3;
-    } else if (currentPage === totalPages) {
-
-      startPage = totalPages - 2;
-      endPage = totalPages;
-    } else {
-   
-      startPage = currentPage - 1;
-      endPage = currentPage + 1;
-    }
-
-    return [...Array(endPage - startPage + 1)].map((_, index) => {
-      const pageNumber = startPage + index;
-      return (
+      {(productData?.length>0)&&<div className="flex items-center gap-4 justify-center">
         <button
-          className={`${
-            currentPage === pageNumber
-              ? "bg-orange-400 text-white"
-              : "bg-[#f6e7d3]"
-          } hover:bg-orange-400 hover:text-white h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
-          key={pageNumber}
-          onClick={() => setCurrentPage(pageNumber)}
+          className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
+          onClick={() => setCurrentPage(Number(currentPage) - 1)}
+          disabled={currentPage === 1}
         >
-          {pageNumber}
+          <IoArrowForward />
         </button>
-      );
-    });
-  })()}
 
+        {(() => {
+          let startPage, endPage;
 
-  <button
-    className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
-    onClick={() => setCurrentPage(Number(currentPage) + 1)}
-    disabled={totalPages === currentPage}
-  >
-    <IoArrowForward />
-  </button>
-</div>
+          if (totalPages <= 3) {
+            startPage = 1;
+            endPage = totalPages;
+          } else if (currentPage === 1) {
+            startPage = 1;
+            endPage = 3;
+          } else if (currentPage === totalPages) {
+            startPage = totalPages - 2;
+            endPage = totalPages;
+          } else {
+            startPage = currentPage - 1;
+            endPage = currentPage + 1;
+          }
+
+          return [...Array(endPage - startPage + 1)].map((_, index) => {
+            const pageNumber = startPage + index;
+            return (
+              <button
+                className={`${
+                  currentPage === pageNumber
+                    ? "bg-orange-400 text-white"
+                    : "bg-[#f6e7d3]"
+                } hover:bg-orange-400 hover:text-white h-12 w-12 rounded-full border-white text-purple-950 font-bold border-1 border-dashed text-lg`}
+                key={pageNumber}
+                onClick={() => setCurrentPage(pageNumber)}
+              >
+                {pageNumber}
+              </button>
+            );
+          });
+        })()}
+
+        <button
+          className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl"
+          onClick={() => setCurrentPage(Number(currentPage) + 1)}
+          disabled={totalPages === currentPage}
+        >
+          <IoArrowForward />
+        </button>
+      </div>}
     </div>
   );
 };

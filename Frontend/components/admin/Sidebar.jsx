@@ -90,10 +90,10 @@ const Sidebar = () => {
          <motion.ul
         
         className="absolute top-[100%] w-full flex flex-col gap-1 left-0 bg-white p-4 rounded-lg shadow-[0_0_10px_#00000020]" 
-        initial={{ opacity: 0, y: 50, display:"none"}}
+        initial={{ opacity: 0, y: 20, display:"none"}}
         animate={inView ? { opacity: 1, y: 0, display:"block" } : {}}
-        exit={{ opacity: 0, y: 50 }}
-        transition={{ duration: 0.4 }}
+        exit={{ opacity: 0, y: 40 }}
+        transition={{ duration: 0.2 }}
         
       >
       

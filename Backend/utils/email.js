@@ -80,7 +80,7 @@ const generateOrderConfirmationEmail = (orderData) => {
                   <div style="display: inline-block; background-color: #10b981; border-radius: 50%; width: 60px; height: 60px; text-align: center; line-height: 60px; margin-bottom: 20px;">
                     <span style="color: #ffffff; font-size: 30px;">✓</span>
                   </div>
-                  <h2 style="margin: 0 0 10px 0; color: #1f2937; font-size: 24px;">Hi ${customerName},</h2>
+                  <h2 style="margin: 0 0 10px 0; color: #1f2937; font-size: 24px; text-transform: capitalize;">Hi ${customerName},</h2>
                   <p style="margin: 0; color: #6b7280; font-size: 16px; line-height: 1.6;">
             We have received your quotation request successfully. Our team will review the details and get in touch with you shortly for the next steps.
                   </p>

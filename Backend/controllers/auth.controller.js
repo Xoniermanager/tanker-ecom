@@ -25,7 +25,6 @@ class AuthController {
     verifyEmailOtp = async (req, res, next) => {
         try {
 
-
             const { email, otp } = req.body;
             const response = await this.userService.verifyEmailOtp(email, otp);
             customResponse(res, response.message);
@@ -74,7 +73,7 @@ class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
                 path: "/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
             });
@@ -83,7 +82,7 @@ class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
                 path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
             });
@@ -106,7 +105,7 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
 
                 path: "/",
                 maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
@@ -115,7 +114,7 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
 
                 path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
@@ -182,7 +181,7 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
 
                 path: "/",
                 maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
@@ -197,6 +196,7 @@ class AuthController {
     getMe = async (req, res, next) => {
         try {
             const user = await this.userService.getMe(req);
+            
             customResponse(res, "user Data get successfully", user);
         } catch (error) {
             next(error);
@@ -255,7 +255,7 @@ class AuthController {
             res.clearCookie("refreshToken", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
 
                 path: "/",
 
@@ -264,7 +264,7 @@ class AuthController {
             res.clearCookie("accessToken", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+                sameSite: "Lax", 
 
                 path: "/",
 

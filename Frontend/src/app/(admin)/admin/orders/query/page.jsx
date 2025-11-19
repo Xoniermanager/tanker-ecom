@@ -47,10 +47,15 @@ const [orderData, setOrderData] = useState(null);
          
         }, [currentPage, pageLimit, totalPages, orderStatus]);
 
+        const handleListLimit = (limit) =>{
+           setCurrentPage(1);
+           setPageLimit(limit)
+        }
+
   return (
     <>
       <div className='pl-86 pt-26 p-6 w-full bg-violet-50 flex flex-col gap-6'>
-        <QueryOrderTable orderData={orderData} setTotalPages={setTotalPages} totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} setPageLimit={setPageLimit} setOrderStatus={setOrderStatus} orderStatus={orderStatus}/>
+        <QueryOrderTable orderData={orderData} setTotalPages={setTotalPages} totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} setPageLimit={setPageLimit} setOrderStatus={setOrderStatus} orderStatus={orderStatus} handleListLimit={handleListLimit}/>
       </div>
     </>
   )
