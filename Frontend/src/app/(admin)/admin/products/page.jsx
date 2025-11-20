@@ -26,7 +26,7 @@ const page = () => {
 
   const getCategoryData = async () => {
     try {
-      const response = await api.get(`/product-categories`);
+      const response = await api.get(`/product-categories/active`);
       if (response.status === 200) {
         setCategoryData(response.data.data);
       }
