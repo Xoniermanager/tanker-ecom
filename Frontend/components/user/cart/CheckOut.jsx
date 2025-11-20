@@ -35,7 +35,7 @@ const CheckOut = ({
     e.preventDefault();
 
     if(((formData.shippingAddress.country !== "NZ"))){
-      console.log("handle submit quote call")
+     
       return handleSubmitQuote()
     }
 

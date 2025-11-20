@@ -72,7 +72,7 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                
                 sameSite: "Lax", 
                 path: "/",
@@ -82,7 +82,7 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                
                 sameSite: "Lax", 
                 path: "/",
@@ -106,7 +106,7 @@ class AuthController {
             res.cookie("refreshToken", response.refreshToken, {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                 sameSite: "Lax", 
 
         path: "/",
@@ -116,7 +116,7 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                 sameSite: "Lax", 
 
         path: "/",
@@ -184,7 +184,7 @@ class AuthController {
             res.cookie("accessToken", response.accessToken, {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                 sameSite: "Lax", 
 
         path: "/",
@@ -256,7 +256,7 @@ class AuthController {
             res.clearCookie("refreshToken", {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                 sameSite: "Lax", 
 
         path: "/",
@@ -265,7 +265,7 @@ class AuthController {
             res.clearCookie("accessToken", {
                 httpOnly: true,
                 // secure: process.env.NODE_ENV === "production",
-                secure: true,
+                secure: false,
                 sameSite: "Lax", 
 
         path: "/",

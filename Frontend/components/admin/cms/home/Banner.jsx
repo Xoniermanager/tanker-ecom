@@ -66,11 +66,11 @@ const Banner = ({ homeData }) => {
     }
 
     setErrMessage(null);
-    console.log("file: ", file)
+    
     const fileURL = URL.createObjectURL(file)
 
     setPreview(fileURL)
-    console.log("preview url: ", fileURL)
+    
 
     setFormData(prev => ({
       ...prev,
