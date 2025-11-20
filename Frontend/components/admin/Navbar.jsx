@@ -10,6 +10,7 @@ import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { SegmentPrefixRSCPathnameNormalizer } from "next/dist/server/normalizers/request/segment-prefix-rsc";
 import { CgWebsite } from "react-icons/cg";
+import { FaRedo } from "react-icons/fa";
 
 const Navbar = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -166,6 +167,12 @@ const pathname = usePathname().split("/").pop()
           >
             <FaArrowRight />
           </button>
+          {/* <button
+  className="h-9 w-9 rounded-full bg-orange-100 hover:bg-orange-400 text-orange-400 hover:text-white flex items-center justify-center"
+  onClick={() => router.refresh()}
+>
+  <FaRedo /> 
+</button> */}
         </div>
         <div className="w-[30%] flex items-center justify-end gap-7">
           {/* <button

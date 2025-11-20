@@ -17,7 +17,8 @@ class ProductCategoryController {
 
     async getAllCategories(req,res,next){
         try {
-           const result = await productCategoryService.getAllCategory();
+            const {page = 1, limit = 10, ...filters} = req.query;
+           const result = await productCategoryService.getAllCategory(page, limit, filters);
            return customResponse(res, "Category data get successfully", result)
         } catch (error) {
             next(error)

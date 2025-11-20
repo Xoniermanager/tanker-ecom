@@ -10,6 +10,12 @@ const page = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageLimit, setPageLimit] = useState(10);
+  const [searchName, setSearchName] = useState("");
+
   const [deleteCat, setDeleteCat] = useState({id:null, name:null})
   const [updatedCat, setUpdatedCat] = useState({id:null, name:null})
   const [isLoading, setIsLoading] = useState(false);
@@ -35,9 +41,7 @@ const page = () => {
     else{
       setFormData({ ...formData, [name]: value });
     }
-      
   };
-
 
   const handleUpdatedChange = (e) => {
     const { name, value } = e.target;
@@ -45,39 +49,55 @@ const page = () => {
       const newValue = value.replace(" ", "_");
       setUpdateFormData({ ...updateFormData, [name]: newValue });
     }else{
-
       setUpdateFormData({ ...updateFormData, [name]: value });
     }
-
   };
 
   const handleDeleteCategory = (ids, name)=>{
-        setShowDeletePopup(true);
-        setDeleteCat({id:ids, name: name})
+    setShowDeletePopup(true);
+    setDeleteCat({id:ids, name: name})
+  }
 
-    }
-
-  // get category data
-
+  // get category data with pagination
   const getCategory = async()=>{
-      try {
-          const response = await api.get(`/product-categories`);
-          if(response.status === 200){
-            setCategoryData(response.data.data)
-            
-          }
-
-      } catch (error) {
-          console.error(error)
+    try {
+      // Build query string with all parameters
+      const queryParams = new URLSearchParams({
+        page: currentPage,
+        limit: pageLimit,
+      });
+      
+      if(searchName.trim()) {
+        queryParams.append('name', searchName.trim());
       }
+
+      const response = await api.get(`/product-categories?${queryParams.toString()}`);
+      if(response.status === 200){
+        setCategoryData(response.data.data.data) 
+        setTotalPages(response.data.data.totalPages || 1)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
     getCategory()
-  }, [])
+  }, [currentPage, pageLimit, searchName])
+
+  // Handle search with debounce
+  const handleSearch = (value) => {
+    setSearchName(value);
+    setCurrentPage(1); // Reset to first page when searching
+  }
+
+  // Handle limit change
+  const handleListLimit = (value) => {
+    setPageLimit(Number(value));
+    setCurrentPage(1); // Reset to first page when changing limit
+  }
 
   // handle delete
-
   const handleDelete = async()=>{
     setIsLoading(true)
     setErrMessage(null)
@@ -114,9 +134,9 @@ const page = () => {
       if(response.status === 200){
         toast.success('Category created successfully');
         setFormData({
-name: "",
-    slug:"",
-    description: "",
+          name: "",
+          slug:"",
+          description: "",
         })
         getCategory()
       }
@@ -134,7 +154,6 @@ name: "",
   };
 
   // handle update
-
   const handleEdit = (id,name)=>{
     setShowEditPopup(true)
     setUpdatedCat({id,name})
@@ -143,7 +162,7 @@ name: "",
   }
 
   const handleUpdateSubmit = async(e)=>{
-     e.preventDefault();
+    e.preventDefault();
     setIsLoading(true)
     setErrMessage(null)
     try {
@@ -169,7 +188,6 @@ name: "",
     }
   }
 
-
   const handleToggleStatus = async(id)=>{
     try {
       const response = await api.patch(`/product-categories/status/${id}`)
@@ -187,6 +205,7 @@ name: "",
         setErrMessage(message)
     }
   }
+
   return (
     <>
       <div className="pl-86 pt-26 p-6 w-full bg-violet-50 flex flex-col gap-6">
@@ -197,7 +216,32 @@ name: "",
           isLoading={isLoading}
           errMessage={errMessage}
         />
-        <CategoryList categoryData={categoryData} showDeletePopup={showDeletePopup} setShowDeletePopup={setShowDeletePopup} isLoading={isLoading} errMessage={errMessage} handleDelete={handleDelete} handleDeleteCategory={handleDeleteCategory} deleteCat={deleteCat} showEditPopup={showEditPopup} setShowEditPopup={setShowEditPopup} updateFormData={updateFormData} setUpdateFormData={setUpdateFormData} handleUpdatedChange={handleUpdatedChange} handleUpdateSubmit={handleUpdateSubmit} handleEdit={handleEdit} handleToggleStatus={handleToggleStatus}/>
+        <CategoryList 
+          categoryData={categoryData} 
+          showDeletePopup={showDeletePopup} 
+          setShowDeletePopup={setShowDeletePopup} 
+          isLoading={isLoading} 
+          errMessage={errMessage} 
+          handleDelete={handleDelete} 
+          handleDeleteCategory={handleDeleteCategory} 
+          deleteCat={deleteCat} 
+          showEditPopup={showEditPopup} 
+          setShowEditPopup={setShowEditPopup} 
+          updateFormData={updateFormData} 
+          setUpdateFormData={setUpdateFormData} 
+          handleUpdatedChange={handleUpdatedChange} 
+          handleUpdateSubmit={handleUpdateSubmit} 
+          handleEdit={handleEdit} 
+          handleToggleStatus={handleToggleStatus}
+          // Pagination props
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          pageLimit={pageLimit}
+          handleListLimit={handleListLimit}
+          searchName={searchName}
+          handleSearch={handleSearch}
+        />
       </div>
     </>
   );

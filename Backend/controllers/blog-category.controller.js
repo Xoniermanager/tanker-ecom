@@ -2,9 +2,7 @@ const blogCategoryService = require("../services/blog-category.service");
 const customResponse = require("../utils/response");
 
 class BlogCategoryController {
-    /**
-     * Get all blog categories.
-     */
+    
     getAllCategories = async (req, res, next) => {
         try {
             const categories = await blogCategoryService.getAllCategories();
@@ -14,9 +12,7 @@ class BlogCategoryController {
         }
     };
 
-    /**
-     * Get category details by slug.
-     */
+    
     getCategoryBySlug = async (req, res, next) => {
         try {
             const slug = req.params.slug;
@@ -27,9 +23,7 @@ class BlogCategoryController {
         }
     };
 
-    /**
-     * Create a new blog category.
-     */
+   
     createCategory = async (req, res, next) => {
         try {
             const data = req.body;
@@ -40,9 +34,7 @@ class BlogCategoryController {
         }
     };
 
-    /**
-     * Update a blog category.
-     */
+   
     updateCategory = async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -54,9 +46,7 @@ class BlogCategoryController {
         }
     };
 
-    /**
-     * Delete a blog category.
-     */
+    
     deleteCategory = async (req, res, next) => {
         try {
             const { id } = req.params;

@@ -14,7 +14,7 @@ const Inventory = ({ inventoryData }) => {
     );
   }
 
-  console.log("inventory data: ", inventoryData);
+
 
   return (
     <div className="w-full mx-auto bg-white shadow-[0_0_10px_#00000020] rounded-2xl p-6 border border-gray-100">

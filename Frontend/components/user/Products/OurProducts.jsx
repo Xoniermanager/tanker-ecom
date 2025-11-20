@@ -42,7 +42,7 @@ const OurProducts = ({}) => {
       );
       if (response.status === 200) {
         setProductData(response?.data?.data.data || null);
-        console.log("prodcut: ", response?.data?.data.data);
+        
 
         setTotalPages(response?.data?.data?.totalPages);
         setPageLimit(response?.data?.data?.limit);

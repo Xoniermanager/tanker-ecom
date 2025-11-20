@@ -33,9 +33,17 @@ class productCategoryService {
         
     }
 
-    async getAllCategory(filters = {}, session = null){
+    async getAllCategory(page, limit, filters = {}){
         try {
-            const result = await ProductCategoryRepository.findAll(filters, projections, {createdAt: -1})
+            const query = {}
+            if(filters.name){
+               query.name = { $regex: filters.name, $options: "i" };
+            }
+
+            if(filters.slug){
+                query.slug = {$regex: query.slug, $options: "i"}
+            }
+            const result = await ProductCategoryRepository.paginate(query, page, limit, {createdAt:-1}, null, projections)
             return result
         } catch (error) {
             throw error

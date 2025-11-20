@@ -193,7 +193,7 @@ const UpdateProductForm = ({
     }
   };
 
-  console.log(formData)
+
 
   const removeImage = (index) => {
   const existingImagesCount = formData.images.length;

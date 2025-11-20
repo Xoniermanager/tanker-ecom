@@ -36,7 +36,7 @@ export async function middleware(request) {
 
   
   if (isAdminRoute) {
-    console.log("User role: ", role);
+  
 
    
     if (!isAdminLoginPage && (!isAuthenticated || role !== USER_ROLES.ADMIN)) {

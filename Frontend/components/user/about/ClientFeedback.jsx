@@ -97,12 +97,12 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
               // key={show}
               className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
             >
-              {testimonials[show]?.message}
+              {testimonials?.[show]?.message}
             </div>
 
             <div className="flex justify-between items-center gap-12">
               <div className="flex justify-center slick-dots relative w-full md:w-1/2">
-                {testimonials?.slice(0, 3).map((_, index) => (
+                {testimonials?.slice(0, 3)?.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setShow(index)}
@@ -119,10 +119,10 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
 
               <div className="w-1/2 flex flex-col items-end">
                 <h4 className="font-bold text-xl md:text-2xl text-purple-950 transition-all duration-700 ease-in-out opacity-0 animate-fade-in ">
-                  {testimonials[show]?.name}
+                  {testimonials?.[show]?.name}
                 </h4>
                 <span className="font-bold text-end md:text-start text-orange-400 text-sm md:text-base transition-all duration-700 ease-in-out opacity-0 animate-fade-in">
-                  {testimonials[show]?.designation}
+              {testimonials?.[show]?.designation}
                 </span>
               </div>
             </div>
