@@ -158,6 +158,7 @@ const page = () => {
     setSelectedCategories((prev) =>
       prev.includes(id) ? prev.filter((catId) => catId !== id) : [...prev, id]
     );
+    setCurrentPage(1)
   };
 
   const handleToggleStatus = async (id) => {

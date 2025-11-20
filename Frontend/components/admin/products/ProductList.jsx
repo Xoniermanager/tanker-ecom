@@ -302,7 +302,7 @@ const ProductList = ({
                 )}
               </table>
             </div>
-            <div className="flex items-center gap-4 justify-center">
+            {(productData?.length> 0) && <div className="flex items-center gap-4 justify-center">
               <button
                 className="h-12 w-12 rounded-full border-white bg-[#42666f] hover:bg-[#334f56] disabled:bg-[#588c99] font-bold border-1 border-dashed text-white flex items-center justify-center text-2xl rotate-180"
                 onClick={() => setCurrentPage(Number(currentPage) - 1)}
@@ -354,7 +354,7 @@ const ProductList = ({
               >
                 <IoArrowForward />
               </button>
-            </div>
+            </div>}
             <div className="flex items-center gap-1 justify-center mt-2">
               <span className="text-sm text-gray-500">{totalProducts} - total products | {totalPages} - total pages</span>
             </div>
@@ -364,7 +364,7 @@ const ProductList = ({
             <h3 className="text-xl font-semibold">Filter Products</h3>
             <div className="bg-white rounded-xl p-5 flex flex-col ">
               <div className="flex items-center justify-between cursor-pointer hover:text-orange-400" onClick={() => setShowSearch(!showSearch)}>
-                <h3 className="font-medium">Keywords</h3>
+                <h3 className="font-medium">By Name</h3>
                 <button
                   className={`hover:text-orange-500 ${
                     showSearch ? "rotate-180" : "rotate-0"
@@ -382,7 +382,7 @@ const ProductList = ({
                 <input
                   type="text"
                   className="outline-none w-full"
-                  placeholder="Enter keywords"
+                  placeholder="Enter product name..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                 />
