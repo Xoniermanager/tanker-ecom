@@ -21,32 +21,28 @@ class AuthController {
     }
   };
 
-  
-    verifyEmailOtp = async (req, res, next) => {
-        try {
+  verifyEmailOtp = async (req, res, next) => {
+    try {
+      const { email, otp } = req.body;
+      const response = await this.userService.verifyEmailOtp(email, otp);
+      customResponse(res, response.message);
+    } catch (error) {
+      next(error);
+    }
+  };
 
-
-            const { email, otp } = req.body;
-            const response = await this.userService.verifyEmailOtp(email, otp);
-            customResponse(res, response.message);
-        } catch (error) {
-            next(error);
-        }
-    };
-
-   
-    requestLoginOtp = async (req, res, next) => {
-        try {
-            const payload = {
-                ...req.body,
-                role: "user",
-            };
-            await this.userService.requestLoginOtp(payload);
-            customResponse(res, "OTP sent for login.");
-        } catch (error) {
-            next(error);
-        }
-    };
+  requestLoginOtp = async (req, res, next) => {
+    try {
+      const payload = {
+        ...req.body,
+        role: "user",
+      };
+      await this.userService.requestLoginOtp(payload);
+      customResponse(res, "OTP sent for login.");
+    } catch (error) {
+      next(error);
+    }
+  };
 
   requestAdminLoginOtp = async (req, res, next) => {
     try {
@@ -69,25 +65,25 @@ class AuthController {
       };
       const response = await this.userService.verifyLoginOtp(payload);
 
-            res.cookie("refreshToken", response.refreshToken, {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-               
-                sameSite: "Lax", 
-                path: "/",
-                maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
-            });
+      res.cookie("refreshToken", response.refreshToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
 
-            res.cookie("accessToken", response.accessToken, {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-               
-                sameSite: "Lax", 
-                path: "/",
-                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
-            });
+        sameSite: "Lax",
+        path: "/",
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+      });
+
+      res.cookie("accessToken", response.accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+
+        sameSite: "Lax",
+        path: "/",
+        maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
+      });
 
       customResponse(res, "Login successful", response.returnData);
     } catch (error) {
@@ -103,21 +99,21 @@ class AuthController {
       };
       const response = await this.userService.verifyLoginOtp(payload);
 
-            res.cookie("refreshToken", response.refreshToken, {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-                sameSite: "Lax", 
+      res.cookie("refreshToken", response.refreshToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+        sameSite: "Lax",
 
         path: "/",
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
 
-            res.cookie("accessToken", response.accessToken, {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-                sameSite: "Lax", 
+      res.cookie("accessToken", response.accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+        sameSite: "Lax",
 
         path: "/",
         maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
@@ -181,11 +177,11 @@ class AuthController {
     try {
       const response = await this.userService.refreshToken(req);
 
-            res.cookie("accessToken", response.accessToken, {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-                sameSite: "Lax", 
+      res.cookie("accessToken", response.accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+        sameSite: "Lax",
 
         path: "/",
         maxAge: 2 * 24 * 60 * 60 * 1000, // 2 days
@@ -197,14 +193,14 @@ class AuthController {
     }
   };
 
-    getMe = async (req, res, next) => {
-        try {
-            const user = await this.userService.getMe(req);
-            customResponse(res, "user Data get successfully", user);
-        } catch (error) {
-            next(error);
-        }
+  getMe = async (req, res, next) => {
+    try {
+      const user = await this.userService.getMe(req);
+      customResponse(res, "user Data get successfully", user);
+    } catch (error) {
+      next(error);
     }
+  };
 
   getUserByID = async (req, res, next) => {
     try {
@@ -250,23 +246,22 @@ class AuthController {
     }
   };
 
-    logout = async (req, res, next) => {
-        try {
-
-            res.clearCookie("refreshToken", {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-                sameSite: "Lax", 
+  logout = async (req, res, next) => {
+    try {
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+        sameSite: "Lax",
 
         path: "/",
       });
 
-            res.clearCookie("accessToken", {
-                httpOnly: true,
-                // secure: process.env.NODE_ENV === "production",
-                secure: false,
-                sameSite: "Lax", 
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: false,
+        sameSite: "Lax",
 
         path: "/",
       });
