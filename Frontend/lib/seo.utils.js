@@ -21,7 +21,7 @@ export async function getSiteSettings() {
 export async function getPageData(endpoint) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`, {
-      cache: 'no-store',
+      next: { revalidate: revalidateTime },
     });
     
     if (!response.ok) {
