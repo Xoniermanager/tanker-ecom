@@ -379,7 +379,7 @@ getOrderCountWithSaleCount = async (monthNumber, session, year = null) => {
         }
       ]).session(session);
 
-      console.log("weekly data: ", weeklyData)
+
       
       const weekData = weeklyData[0] || { totalSales: 0, orderCount: 0 };
       

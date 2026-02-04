@@ -56,7 +56,7 @@ const ProfileSettingComponent = () => {
     try {
       const response = await api.get(``, {withCredentials: true})
     } catch (error) {
-      console.error(error)
+      // console.error(error)
     }
     finally{
       setIsLoading(false)

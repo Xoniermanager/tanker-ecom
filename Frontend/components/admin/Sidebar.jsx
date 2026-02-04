@@ -40,7 +40,6 @@ const Sidebar = () => {
   const {userData, fetchUserData} = useAuth()
 
 
-
   const handleLogout = async () => {
     setIsLoading(true)
       try {
@@ -53,7 +52,7 @@ const Sidebar = () => {
           await fetchUserData();
         }
       } catch (error) {
-        console.error("Logout error:", error);
+        // console.error("Logout error:", error);
         toast.error('Logout failed');
       }
       finally{

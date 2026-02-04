@@ -231,12 +231,12 @@ const UpdateProductForm = ({
 
   const getCategoryData = async (req, res) => {
     try {
-      const response = await api.get(`/product-categories`);
-      if (response.status === 200) {
+      const response = await api.get(`/product-categories/active`);
+      if (response.status === 200 || response.status === 304) {
         setCategories(response.data.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -372,7 +372,7 @@ const UpdateProductForm = ({
         toast.success(`${formData.name} Product updated successfully`);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       const message =
         (Array.isArray(error?.response?.data?.errors) &&
           error.response.data.errors[0]?.message) ||
