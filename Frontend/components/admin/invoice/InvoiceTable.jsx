@@ -107,17 +107,7 @@ const InvoiceTable = () => {
   const menuRef = useRef()
 
   
-  const getCustomerData = async()=>{
-    try {
-        
-    } catch (error) {
-        console.log(error)
-    }
-  }
 
-  useEffect(() => {
-    getCustomerData()
-  }, [])
   
 
   const handleDelete = async(id)=>{

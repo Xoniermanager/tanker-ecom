@@ -225,7 +225,7 @@ class ProductService {
         if (existingCatName.includes(item)) {
           continue;
         }
-        console.log("item: ", item);
+
         const slug = await generateSlugIfNeeded(
           item,
           null,
@@ -247,7 +247,7 @@ class ProductService {
           session
         );
         if (!createNewCat || createNewCat.length === 0) {
-          console.log("error: ", createNewCat);
+        
           throw customError("New categories creation failed", 400);
         }
         createNewCat.forEach((cat) => {
@@ -418,7 +418,7 @@ class ProductService {
           );
 
           newProducts.push(finalProductData);
-          console.log("final product: ", finalProductData)
+
           productInventory.push({
             rowNumber,
             quantity: productData.quantity,
@@ -433,7 +433,7 @@ class ProductService {
             error: rowError.message,
           });
 
-          console.error(`Error processing row ${rowNumber}:`, rowError.message);
+
         }
       }
 
@@ -441,8 +441,7 @@ class ProductService {
         newProducts,
         session
       );
-      console.log("created products: ", createdProducts)
-      console.log("new products: ", newProducts)
+
       if (!createdProducts || createdProducts.length === 0) {
         throw customError("Product bulk creation failed", 400);
       }
@@ -529,7 +528,7 @@ class ProductService {
         throw customError("please provide an array of product IDs", 400);
       }
       const validIds = ids.filter((item) => Types.ObjectId.isValid(item));
-      console.log("valid ids: ", validIds);
+
       if (ids.length !== validIds.length) {
         throw customError("Some ids are invalid", 400);
       }

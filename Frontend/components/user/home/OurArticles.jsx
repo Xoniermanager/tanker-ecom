@@ -16,7 +16,7 @@ const OurArticles = ({ articleData }) => {
         setBlogData(response.data.data.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

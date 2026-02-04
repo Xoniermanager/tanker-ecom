@@ -98,13 +98,7 @@ const NotificationSidebar = ({showNotification, setShowNotification}) => {
        setActive(active !== index ? index : null)
     }
 
-    const handleDelete = async()=>{
-        try {
-            
-        } catch (error) {
-            console.error(error)
-        }
-    }
+   
 
   return (
     <>

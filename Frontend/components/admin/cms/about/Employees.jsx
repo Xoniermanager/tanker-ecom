@@ -110,7 +110,7 @@ const Employees = ({ EmployeeData }) => {
         setErrMessage(null);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       const message =
         (Array.isArray(error?.response?.data?.errors) &&
           error.response.data.errors[0]?.message) ||

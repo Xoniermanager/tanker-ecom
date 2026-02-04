@@ -15,14 +15,14 @@ async function main() {
   try {
     await sftp.connect(config);
 
-    console.log('✅ Connected to SFTP server');
+    console.log(' Connected to SFTP server');
 
     const fileList = await sftp.list('/');
-    console.log('📁 Remote files:', fileList);
+    console.log(' Remote files:', fileList);
 
     // Example: upload a file
     // await sftp.fastPut('./local-file.txt', '/remote/path/remote-file.txt');
-    // console.log('⬆️ File uploaded successfully');
+    // console.log('File uploaded successfully');
 
     // // Example: download a file
     await sftp.fastGet('/EXOStockItems.csv', 'downloaded.csv');
@@ -30,12 +30,12 @@ async function main() {
     console.log(data)
 })
     console.log(data)
-    console.log('⬇️ File downloaded successfully');
+    console.log(' File downloaded successfully');
   } catch (err) {
-    console.error('❌ SFTP error:', err.message);
+    console.error(' SFTP error:', err.message);
   } finally {
     await sftp.end();
-    console.log('🔒 Connection closed');
+    console.log(' Connection closed');
   }
 }
 

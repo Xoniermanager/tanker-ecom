@@ -62,7 +62,7 @@ const ContactComponent = ({ addressData, contactsData }) => {
         });
       }
     } catch (error) {
-      console.error("Form submission error:", error);
+      // console.error("Form submission error:", error);
       const message =
         (Array.isArray(error?.response?.data?.errors) &&
           error.response.data.errors[0]?.message) ||
