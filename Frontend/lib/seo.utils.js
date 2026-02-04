@@ -2,7 +2,9 @@
 
 export async function getSiteSettings() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`, {
+      cache: 'no-store'
+    });
     
     if (!response.ok) {
       throw new Error('Failed to fetch site settings');
@@ -19,7 +21,7 @@ export async function getSiteSettings() {
 export async function getPageData(endpoint) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`, {
-      next: { revalidate: revalidateTime },
+      cache: 'no-store',
     });
     
     if (!response.ok) {
