@@ -18,11 +18,9 @@ export async function getSiteSettings() {
 }
 
 
-export async function getPageData(endpoint, revalidateTime = 3600) {
+export async function getPageData(endpoint) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`, {
-      next: { revalidate: revalidateTime },
-    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`);
     
     if (!response.ok) {
       throw new Error(`Failed to fetch data from ${endpoint}`);
