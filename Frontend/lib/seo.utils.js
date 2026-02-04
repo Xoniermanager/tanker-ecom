@@ -2,9 +2,7 @@
 
 export async function getSiteSettings() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`, {
-      // next: { revalidate: 3600 },
-    });
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`);
     
     if (!response.ok) {
       throw new Error('Failed to fetch site settings');
@@ -20,7 +18,9 @@ export async function getSiteSettings() {
 
 export async function getPageData(endpoint) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endpoint}`, {
+      next: { revalidate: revalidateTime },
+    });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch data from ${endpoint}`);
