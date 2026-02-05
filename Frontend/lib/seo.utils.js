@@ -3,7 +3,7 @@
 export async function getSiteSettings() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/site-settings`, {
-      // next: { revalidate: 3600 },
+      next: { revalidate: 1 },
     });
     
     if (!response.ok) {
