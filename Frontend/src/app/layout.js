@@ -32,3 +32,5 @@ export async function generateMetadata({ params, searchParams, pathname }) {
 
   return createMetadata(siteData, { currentPath: pathname });
 }
+
+export const dynamic = 'force-dynamic';
