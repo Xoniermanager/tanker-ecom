@@ -95,7 +95,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
 
             <div
               // key={show}
-              className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in max-h-78 line-clamp-5"
+              className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in max-h-58 sm:max-h-58 lg:max-h-78 overflow-y-scroll"
             >
               {testimonials?.[show]?.message}
             </div>
