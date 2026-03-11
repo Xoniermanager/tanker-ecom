@@ -83,7 +83,7 @@ const ViewTestimonials = ({testimonialData, handleDelete, isLoading, errMessage,
 
         return (
             <div className='w-full bg-white p-6 rounded-xl flex flex-col gap-2.5 shadow-[0_0_10px_#00000008] hover:shadow-[0_0_14px_#00000018] ' key={i}>
-              <p className='text-[#7b7b7b] font-light line-clamp-5 h-[150px] mb-5 p-4 bg-purple-50 rounded-lg'>{item.message}</p>
+              <p className='text-[#7b7b7b] font-light line-clamp-5 h-[150px] mb-5 p-4 bg-purple-50 rounded-lg overflow-y-scroll'>{item.message}</p>
 
               <div className="flex flex-col gap-0.5">
                 <h3 className='text-purple-900 text-xl font-semibold capitalize'>{item.name}</h3>

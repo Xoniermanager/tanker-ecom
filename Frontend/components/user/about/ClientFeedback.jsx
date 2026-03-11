@@ -12,7 +12,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
     stopAutoScroll();
     intervalRef.current = setInterval(() => {
       setShow((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
+    }, 12000);
   };
 
   const stopAutoScroll = () => {
@@ -95,7 +95,7 @@ const ClientFeedback = ({ testimonialData, testimonials }) => {
 
             <div
               // key={show}
-              className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in "
+              className="text-purple-950 font-bold text-xl md:text-3xl leading-10 md:leading-16 transition-all duration-900 ease-in-out opacity-0 animate-fade-in max-h-78 line-clamp-5"
             >
               {testimonials?.[show]?.message}
             </div>
