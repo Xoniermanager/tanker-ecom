@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { decrypt } = require('../plugins/encryptionPlugin');
 
 const mailTransporter = nodemailer.createTransport({
+
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
     secure: false,
@@ -28,6 +29,8 @@ async function sendEmail({ to, subject, text, html }) {
         text: text,
         html: html
     };
+
+    
 
     try {
         const info = await mailTransporter.sendMail(mailOptions);

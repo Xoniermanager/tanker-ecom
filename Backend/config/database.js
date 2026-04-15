@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 class MongoDB {
     constructor() {
         if (MongoDB.instance) {

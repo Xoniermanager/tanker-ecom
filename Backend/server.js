@@ -30,11 +30,13 @@ const { uploadImage, getPublicFileUrl } = require("./utils/storage");
 const customResponse = require("./utils/response");
 const authorize = require("./middlewares/auth");
 const queueManager = require("./queues/manager");
+const { startS3ProcessorCron } = require("./jobs/s3ProductProcessor.job")
 
 const startServer = async () => {
   try {
     // Connect to MongoDB
     await mongoDB.connect();
+    startS3ProcessorCron({ runOnStart: true });
 
     const app = express();
     const PORT = process.env.PORT || 3000;
