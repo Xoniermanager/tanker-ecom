@@ -5,7 +5,7 @@ const inventoryRepository = require("../repositories/product/inventory.repositor
 const ProductCategoryRepository = require("../repositories/product/product-category.repository");
 const customError = require("../utils/error");
 const { generateSlugIfNeeded, generateBulkSlug } = require("../utils/slug");
-const { PRODUCT_STATUS } = require("../constants/enums");
+const { PRODUCT_STATUS, STOCK_STATUS } = require("../constants/enums");
 const productCategoryRepository = require("../repositories/product/product-category.repository");
 
 const summaryFields = "";
@@ -113,7 +113,7 @@ class ProductService {
       const product = await productRepository.create(data, session);
 
       await inventoryRepository.create(
-        { product: product._id, quantity: data.initialQuantity || 0 },
+        { product: product._id, quantity: data.initialQuantity || 0, status: data?.initialQuantity ? STOCK_STATUS.IN_STOCK : STOCK_STATUS.OUT_OF_STOCK },
         session
       );
 
@@ -392,6 +392,7 @@ class ProductService {
       const inventoryData = createdProducts.map((product, index) => ({
         product: product._id,
         quantity: productInventory[index].quantity,
+        status: (productInventory[index]?.quantity && (productInventory[index]?.quantity > 0))  ? STOCK_STATUS.IN_STOCK : STOCK_STATUS.OUT_OF_STOCK
       }));
 
 

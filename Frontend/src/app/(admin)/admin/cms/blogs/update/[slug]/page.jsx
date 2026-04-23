@@ -49,7 +49,7 @@ const page = () => {
             type: "image",
           },
           tags: blog.tags || [],
-          categories: [blog?.categories[0]._id] || [],
+          categories: [blog?.categories[0]?._id] || [],
           content: blog.content || "",
           seo: {
             metaTitle: blog.seo.metaTitle || "",

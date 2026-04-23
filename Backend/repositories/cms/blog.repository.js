@@ -32,6 +32,12 @@ class BlogRepository extends BaseRepository {
         return blogObj;
     }
 
+    async FindByCategory(categoryId, session = null){
+        const blog = await this.model.findOne({categories: categoryId}).session(session)
+
+        return blog
+    }
+
     /**
      * Creates a new blog post.
      * @param {Object} data - Blog data.

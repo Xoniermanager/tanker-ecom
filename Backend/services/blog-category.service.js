@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 const categoryRepository = require("../repositories/cms/blog-category.repository");
 const customError = require("../utils/error");
 const { generateSlugIfNeeded } = require("../utils/slug");
+const blogRepository = require("../repositories/cms/blog.repository")
 
 class BlogCategoryService {
+    constructor(){
+        this.blogRepo = blogRepository
+    }
     /**
      * Get all blog categories (no pagination).
      * @param {Object} filters 
@@ -78,17 +82,32 @@ class BlogCategoryService {
             await session.abortTransaction();
             throw err;
         } finally {
-            session.endSession();
+            session.endSession();  
         }
     }
 
-    /**
-     * Delete a blog category by ID.
-     * @param {String|ObjectId} id 
-     * @returns {Promise<Object|null>}
-     */
+    
     async deleteCategory(id) {
-        return await categoryRepository.deleteById(id);
+        try{
+          if(!mongoose.Types.ObjectId.isValid(id)){
+            throw customError("Invalid object id", 400)
+          }
+          const isExist = await this.blogRepo.FindByCategory(id)
+          if(isExist){
+            throw customError(`This category are used in ${isExist?.title ?? ""} blog so please change blog category first`, 400)
+          }
+          const deleted = await categoryRepository.deleteById(id);
+          
+          if(!deleted){
+            throw customError(`Category deletion failed`)
+          }
+
+
+         return deleted;
+        } catch(err){
+            throw err
+        }
+        
     }
 }
 

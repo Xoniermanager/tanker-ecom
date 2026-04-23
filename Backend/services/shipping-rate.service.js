@@ -17,20 +17,19 @@ class ShippingRateService {
           code: "LCL",
         },
         origin: {
-            freightRequiredDateTime: pickupDate,
-            freightRequiredDateTimeZone: "New Zealand Standard Time",
-            address:{
-                suburb: "Cannons Creek",
-                postCode: "5022",
-                city: "Auckland",
-                countryCode: "NZ"
-            }
+          freightRequiredDateTime: pickupDate,
+          freightRequiredDateTimeZone: "New Zealand Standard Time",
+          address:{
+            suburb: "Cannons Creek",
+            postCode: "5022",
+            city: "Auckland",
+            countryCode: "NZ"
+          }
         },
         destination: payload.destination,
         freightDetails: payload.freightDetails,
       };
 
-      console.log("new payload: ", newPayload)
 
       const response = await mainfreightApi.post(
         `/Rate?region=${process.env.TRANSPORT_REGION}`, 
