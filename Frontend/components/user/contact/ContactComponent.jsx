@@ -139,10 +139,10 @@ const ContactComponent = ({ addressData, contactsData }) => {
                 >
                   <div className="flex flex-col gap-2 w-full">
                     <h4 className="font-black text-purple-950 text-xl md:text-2xl tracking-wide">
-                      Additional Contact
+                      The Paintshop
                     </h4>
                     <p className="text-zinc-500 text-sm md:text-lg font-medium">
-                      The Paintshop 28 Mohuia Cres Elsdon Porirua
+                      28 Mohuia Cres Elsdon Porirua
                       <br/>
 <span className="flex items-center gap-1.5" >
 <LuPhoneCall  /> 027 525 0024
