@@ -9,6 +9,8 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import api from "../common/api";
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
+import { LuPhoneCall } from "react-icons/lu";
+import { MdAlternateEmail } from "react-icons/md";
 
 const ContactComponent = ({ addressData, contactsData }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -111,9 +113,9 @@ const ContactComponent = ({ addressData, contactsData }) => {
                 </p>
               </div>
               {listData.map((item, i) => (
-                <Link
+                <div
                   key={i}
-                  href={"/"}
+                  
                   className="bg-white rounded-4xl p-4 md:p-5 px-6 md:px-7 flex items-center gap-8 hover:shadow-[0_0_16px_#00000012] hover:scale-103 group"
                 >
                   <div className="flex flex-col gap-2 w-full">
@@ -127,19 +129,43 @@ const ContactComponent = ({ addressData, contactsData }) => {
                   <div className="h-12 md:h-18 w-14 md:w-12 min-w-12 md:min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-2xl md:text-4xl">
                     <IoLocationOutline className="group-hover:scale-108 duration-500" />
                   </div>
-                </Link>
+                </div>
+
               ))}
+              <div
+                
+                  
+                  className="bg-white rounded-4xl p-4 md:p-5 px-6 md:px-7 flex items-center gap-8 hover:shadow-[0_0_16px_#00000012] hover:scale-103 group"
+                >
+                  <div className="flex flex-col gap-2 w-full">
+                    <h4 className="font-black text-purple-950 text-xl md:text-2xl tracking-wide">
+                      Additional Contact
+                    </h4>
+                    <p className="text-zinc-500 text-sm md:text-lg font-medium">
+                      The Paintshop 28 Mohuia Cres Elsdon Porirua
+                      <br/>
+<span className="flex items-center gap-1.5" >
+<LuPhoneCall  /> 027 525 0024
+</span>
+
+<span className="flex items-center gap-1.5" ><MdAlternateEmail /> seb@tankersolutions.co.nz</span> 
+                    </p>
+                  </div>
+                  <div className="h-12 md:h-18 w-14 md:w-12 min-w-12 md:min-w-18 bg-orange-400 text-white rounded-full flex items-center justify-center text-2xl md:text-4xl">
+                    <IoLocationOutline className="group-hover:scale-108 duration-500" />
+                  </div>
+                </div>
             </div>
             <div className="w-full md:w-[57%] flex flex-col gap-4">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3176.9699898533486!2d174.8303477!3d-41.1384791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6d3f531165bb3595%3A0xa90c817be87ab284!2s8%20Makaro%20Street%2C%20Elsdon%2C%20Porirua%205022%2C%20New%20Zealand!5e1!3m2!1sen!2sin!4v1751610971477!5m2!1sen!2sin"
                 width="600"
-                height="550"
+                height="600"
                 style={{ border: "8" }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="rounded-2xl h-60 md:h-[550px] border-8 border-white w-full"
+                className="rounded-2xl h-60 md:h-[700px] border-8 border-white w-full"
               />
             </div>
           </div>

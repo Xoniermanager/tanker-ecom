@@ -54,13 +54,13 @@ const UserProfileUpdate = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validate file type
+            
             if (!file.type.startsWith('image/')) {
                 setErrMessage('Please select a valid image file');
                 return;
             }
             
-            // Validate file size (max 5MB)
+            
             if (file.size > 5 * 1024 * 1024) {
                 setErrMessage('Image size should not exceed 5MB');
                 return;
